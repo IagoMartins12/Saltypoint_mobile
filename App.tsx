@@ -1,32 +1,46 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 
 import TabNavigator from './src/navigators/TabNavigator';
+import LoginScreen from './src/screens/LoginScreen';
+import RegisterScreen from './src/screens/RegisterScreen';
+import MainScreen from './src/screens/MainScreen';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Navigator
+        initialRouteName="MainScreen"
+        screenOptions={{headerShown: false}}>
+        <Stack.Screen
+          name="MainScreen"
+          component={MainScreen}
+          options={{animation: 'slide_from_left'}}
+        />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{animation: 'slide_from_left'}}
+        />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{animation: 'slide_from_right'}}
+        />
         <Stack.Screen
           name="Tab"
           component={TabNavigator}
           options={{animation: 'slide_from_bottom'}}
         />
-        {/* <Stack.Screen
-          name="Details"
-          component={DetailsScreen}
-          options={{animation: 'slide_from_bottom'}}></Stack.Screen>
-        <Stack.Screen
-          name="Payment"
-          component={PaymentScreen}
-          options={{animation: 'slide_from_bottom'}}></Stack.Screen> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
+
 const styles = StyleSheet.create({});
+
 export default App;

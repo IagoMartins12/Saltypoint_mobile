@@ -9,33 +9,33 @@ import {
 } from '../../services';
 
 export const FetchData = () => {
-  const {setCategorys, setProducts, setTypePagament, setStates} =
-    useGlobalStore();
+  // const {setCategorys, setProducts, setTypePagament, setStates} =
+  //   useGlobalStore();
 
-  const {isLogged} = useAuth();
+  // const {isLogged} = useAuth();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [categoryData, productData, typePagamentData, statesDate] =
-          await Promise.all([
-            getCategories(),
-            getProducts(),
-            getTypePagaments(),
-            getStates(),
-          ]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const [categoryData, productData, typePagamentData, statesDate] =
+  //         await Promise.all([
+  //           getCategories(),
+  //           getProducts(),
+  //           getTypePagaments(),
+  //           getStates(),
+  //         ]);
 
-        setCategorys(categoryData);
-        setProducts(productData);
-        setTypePagament(typePagamentData);
-        setStates(statesDate);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  //       setCategorys(categoryData);
+  //       setProducts(productData);
+  //       setTypePagament(typePagamentData);
+  //       setStates(statesDate);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   return <></>;
 };
