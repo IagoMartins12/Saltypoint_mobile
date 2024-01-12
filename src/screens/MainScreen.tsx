@@ -1,25 +1,13 @@
 import {
-  Alert,
-  Button,
   Dimensions,
   ImageBackground,
-  ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React from 'react';
-import {
-  BORDERRADIUS,
-  COLORS,
-  FONTFAMILY,
-  FONTSIZE,
-  SPACING,
-} from '../theme/theme';
-import {Controller, useForm} from 'react-hook-form';
-import {InputComponent} from '../components/Input';
+import {BORDERRADIUS, COLORS, FONTSIZE} from '../theme/theme';
 
 const MainScreen = ({navigation}: any) => {
   const buttonRegister = () => {
@@ -28,6 +16,10 @@ const MainScreen = ({navigation}: any) => {
 
   const buttonLogin = () => {
     navigation.push('Login');
+  };
+
+  const buttonHome = () => {
+    navigation.push('Tab');
   };
 
   return (
@@ -61,7 +53,9 @@ const MainScreen = ({navigation}: any) => {
             </TouchableOpacity>
           </View>
 
-          <Text style={styles.noAuthText}>Continuar sem se autenticar</Text>
+          <Text style={styles.noAuthText} onPress={buttonHome}>
+            Continuar sem se autenticar
+          </Text>
         </View>
       </View>
     </View>

@@ -12,6 +12,11 @@ import {InputComponent} from '../components/Input';
 import LoginAnimation from '../components/Lottie/LoginAnimation';
 import CustomIcon from '../components/CustomIcon';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  GestureHandlerRootView,
+  PanGestureHandler,
+  State,
+} from 'react-native-gesture-handler';
 
 const LoginScreen = ({
   navigation,
@@ -25,74 +30,94 @@ const LoginScreen = ({
     navigation.push('Register');
   };
 
+  const onSwipeRight = () => {
+    // Navegar para a página desejada
+    navigation.navigate('MainScreen');
+  };
+
   return (
-    <View style={styles.loginMainView}>
-      <View style={styles.imageContainer}>
-        <LoginAnimation />
-        <View style={styles.brandwView}>
-          <Text style={styles.brandwViewText}>Bem-vindo de volta! </Text>
-          <Text style={styles.brandwViewSubText}>
-            Faça o login para se autenticar e realizar o seu pedido
-          </Text>
-        </View>
-      </View>
-      <View style={styles.subContainer}>
-        <View style={styles.bottomView}>
-          {/* Form  */}
-          <View style={styles.mainContainer}>
-            <InputComponent
-              control={control}
-              name="Email"
-              style={styles.InputContainerComponent}
-              text="Email "
-              placeholder="Email: "
-            />
-
-            <InputComponent
-              control={control}
-              name="Senha"
-              style={styles.InputContainerComponent}
-              text="Senha "
-              placeholder="Senha: "
-              isPassword
-            />
-
-            <View style={styles.forgetPasswordDiv}>
-              <Text style={{textDecorationLine: 'underline'}}>
-                Esqueci minha senha
+    <GestureHandlerRootView style={{flex: 1}}>
+      <PanGestureHandler
+        onHandlerStateChange={({nativeEvent}) => {
+          if (
+            nativeEvent.state === State.END &&
+            nativeEvent.translationX < 50
+          ) {
+            onSwipeRight();
+          }
+        }}>
+        <View style={styles.loginMainView} collapsable>
+          <View style={styles.imageContainer}>
+            <LoginAnimation />
+            <View style={styles.brandwView}>
+              <Text style={styles.brandwViewText}>Bem-vindo de volta! </Text>
+              <Text style={styles.brandwViewSubText}>
+                Faça o login para se autenticar e realizar o seu pedido
               </Text>
             </View>
+          </View>
+          <View style={styles.subContainer}>
+            <View style={styles.bottomView}>
+              {/* Form  */}
+              <View style={styles.mainContainer}>
+                <InputComponent
+                  control={control}
+                  name="Email"
+                  style={styles.InputContainerComponent}
+                  text="Email "
+                  placeholder="Email: "
+                />
 
-            <View style={styles.buttonDiv}>
-              <TouchableOpacity
-                onPress={handleSubmit(onSubmit)}
-                style={styles.buttonStyle}>
-                <Text style={{color: '#FFFFFF'}}>Continuar</Text>
-              </TouchableOpacity>
+                <InputComponent
+                  control={control}
+                  name="Senha"
+                  style={styles.InputContainerComponent}
+                  text="Senha "
+                  placeholder="Senha: "
+                  isPassword
+                />
 
-              <TouchableOpacity
-                onPress={handleSubmit(onSubmit)}
-                style={styles.googleButton}>
-                <Text style={{color: '#000000'}}>Continuar com Google</Text>
-              </TouchableOpacity>
+                <View style={styles.forgetPasswordDiv}>
+                  <Text style={{textDecorationLine: 'underline'}}>
+                    Esqueci minha senha
+                  </Text>
+                </View>
+
+                <View style={styles.buttonDiv}>
+                  <TouchableOpacity
+                    onPress={handleSubmit(onSubmit)}
+                    style={styles.buttonStyle}>
+                    <Text style={{color: '#FFFFFF'}}>Continuar</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={handleSubmit(onSubmit)}
+                    style={styles.googleButton}>
+                    <Text style={{color: '#000000'}}>Continuar com Google</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.registerText}>
+                  <Text>
+                    Não possui conta?{' '}
+                    <Text
+                      style={{
+                        color: '#031475',
+                        textDecorationLine: 'underline',
+                      }}
+                      onPress={buttonPressHandler}>
+                      Se cadastre
+                    </Text>
+                  </Text>
+                </View>
+
+                <CustomIcon name="left" />
+              </View>
             </View>
-
-            <View style={styles.registerText}>
-              <Text>
-                Não possui conta?{' '}
-                <Text
-                  style={{color: '#031475', textDecorationLine: 'underline'}}
-                  onPress={buttonPressHandler}>
-                  Se cadastre
-                </Text>
-              </Text>
-            </View>
-
-            <CustomIcon name="left" />
           </View>
         </View>
-      </View>
-    </View>
+      </PanGestureHandler>
+    </GestureHandlerRootView>
   );
 };
 

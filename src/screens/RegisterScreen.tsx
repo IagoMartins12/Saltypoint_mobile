@@ -1,24 +1,28 @@
 import {
   Dimensions,
-  ImageBackground,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React from 'react';
-import {
-  BORDERRADIUS,
-  COLORS,
-  FONTFAMILY,
-  FONTSIZE,
-  SPACING,
-} from '../theme/theme';
-import {Controller, useForm} from 'react-hook-form';
+import {BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE} from '../theme/theme';
+import {useForm} from 'react-hook-form';
 import {InputComponent} from '../components/Input';
+import CustomIcon from '../components/CustomIcon';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  GestureHandlerRootView,
+  PanGestureHandler,
+  State,
+} from 'react-native-gesture-handler';
+import PizzaAnimation from '../components/Lottie/PizzaAnimation';
 
-const RegisterScreen = ({navigation}: any) => {
+const RegisterScreen = ({
+  navigation,
+}: {
+  navigation: NativeStackNavigationProp<any>;
+}) => {
   const {control, handleSubmit} = useForm();
   const onSubmit = (data: any) => console.log(data);
 
@@ -26,72 +30,91 @@ const RegisterScreen = ({navigation}: any) => {
     navigation.push('Login');
   };
 
+  const onSwipeRight = () => {
+    // Navegar para a página desejada
+    navigation.navigate('MainScreen');
+  };
+
   return (
-    <View style={styles.loginMainView}>
-      <ImageBackground
-        style={styles.bgStyle}
-        source={require('../assets/pizzaBg.jpg')}>
-        <View style={styles.brandwView}>
-          <Text style={styles.brandwViewText}> Salty Point</Text>
-        </View>
-      </ImageBackground>
-
-      <View style={styles.subContainer}>
-        <View style={styles.bottomView}>
-          <View style={{padding: 40, gap: 4}}>
-            <Text style={styles.WelcomeText}> Bem-vindo! </Text>
-            <Text style={{textAlign: 'center'}}>
-              Já possui conta?{' '}
-              <Text style={styles.WelcomeSubText} onPress={buttonPressHandler}>
-                Faça o login
+    <GestureHandlerRootView style={{flex: 1}}>
+      <PanGestureHandler
+        onHandlerStateChange={({nativeEvent}) => {
+          if (
+            nativeEvent.state === State.END &&
+            nativeEvent.translationX > 50
+          ) {
+            onSwipeRight();
+          }
+        }}>
+        <View style={styles.loginMainView} collapsable>
+          <View style={styles.imageContainer}>
+            <PizzaAnimation />
+            <View style={styles.brandwView}>
+              <Text style={styles.brandwViewText}>Bem-vindo!</Text>
+              <Text style={styles.brandwViewSubText}>
+                Se cadastre para realizar os seus pedidos
               </Text>
-            </Text>
+            </View>
           </View>
+          <View style={styles.subContainer}>
+            <View style={styles.bottomView}>
+              {/* Form  */}
+              <View style={styles.mainContainer}>
+                <InputComponent
+                  control={control}
+                  name="Email"
+                  style={styles.InputContainerComponent}
+                  text="Email "
+                  placeholder="Email: "
+                />
 
-          {/* Form  */}
-          <View style={styles.mainContainer}>
-            <InputComponent
-              control={control}
-              name="email"
-              style={styles.InputContainerComponent}
-              text="Email "
-              placeholder="Email: "
-            />
+                <InputComponent
+                  control={control}
+                  name="Senha"
+                  style={styles.InputContainerComponent}
+                  text="Senha "
+                  placeholder="Senha: "
+                  isPassword
+                />
 
-            <InputComponent
-              control={control}
-              name="password"
-              style={styles.InputContainerComponent}
-              text="Senha "
-              placeholder="Senha: "
-              isPassword
-            />
+                <InputComponent
+                  control={control}
+                  name="confirmPassword"
+                  style={styles.InputContainerComponent}
+                  text="Confirme a senha "
+                  placeholder="Confirme a senha: "
+                  isPassword
+                />
 
-            <InputComponent
-              control={control}
-              name="confirmPassword"
-              style={styles.InputContainerComponent}
-              text="Confirmar senha "
-              placeholder="Confirmar senha: "
-              isPassword
-            />
+                <View style={styles.buttonDiv}>
+                  <TouchableOpacity
+                    onPress={handleSubmit(onSubmit)}
+                    style={styles.buttonStyle}>
+                    <Text style={{color: '#FFFFFF'}}>Registrar</Text>
+                  </TouchableOpacity>
+                </View>
 
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                paddingTop: 5,
-              }}>
-              <TouchableOpacity
-                onPress={handleSubmit(onSubmit)}
-                style={styles.buttonStyle}>
-                <Text style={{color: '#FFFFFF'}}>Registrar</Text>
-              </TouchableOpacity>
+                <View style={styles.registerText}>
+                  <Text>
+                    Já possui conta?{' '}
+                    <Text
+                      style={{
+                        color: '#031475',
+                        textDecorationLine: 'underline',
+                      }}
+                      onPress={buttonPressHandler}>
+                      Faça o login
+                    </Text>
+                  </Text>
+                </View>
+
+                <CustomIcon name="left" />
+              </View>
             </View>
           </View>
         </View>
-      </View>
-    </View>
+      </PanGestureHandler>
+    </GestureHandlerRootView>
   );
 };
 
@@ -102,63 +125,52 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  bgStyle: {
-    height: Dimensions.get('window').height / 2.5,
+  scrollViewContentContainer: {
+    flexGrow: 1,
   },
 
-  brandwView: {
+  imageContainer: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  brandwView: {
     justifyContent: 'center',
     alignItems: 'center',
+    bottom: 25,
   },
 
   brandwViewText: {
-    color: '#FFFFFF',
     fontSize: FONTSIZE.size_28,
     fontFamily: FONTFAMILY.poppins_semibold,
+    fontWeight: '700',
+    color: COLORS.primaryBlackHex,
+  },
+
+  brandwViewSubText: {
+    fontSize: FONTSIZE.size_18,
+    fontFamily: FONTFAMILY.poppins_medium,
+    textAlign: 'center',
+    paddingHorizontal: 60,
+    color: COLORS.primaryLightGreyHex,
   },
 
   bottomView: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    bottom: 50,
-    borderTopStartRadius: 60,
-    borderTopEndRadius: 60,
-  },
-
-  MainDiv: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-
-  optinsText: {
-    fontSize: FONTSIZE.size_18,
-    textAlign: 'center',
-  },
-
-  WelcomeText: {
-    fontSize: FONTSIZE.size_28,
-    color: COLORS.primaryBlackHex,
-    textAlign: 'center',
-  },
-
-  WelcomeSubText: {
-    fontStyle: 'italic',
-    color: 'red',
-    textDecorationLine: 'underline',
-    textAlign: 'center',
   },
 
   mainContainer: {
     marginHorizontal: 40,
     justifyContent: 'center',
     gap: 15,
+    paddingVertical: 25,
   },
 
   subContainer: {
     backgroundColor: '#FFFFFF',
-    flex: 1,
+    flex: 1.5,
   },
+
   InputContainerComponent: {
     flexDirection: 'row',
     borderRadius: BORDERRADIUS.radius_10,
@@ -166,13 +178,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
   },
 
-  buttonStyle: {
-    width: Dimensions.get('screen').width / 1.5,
-    borderRadius: BORDERRADIUS.radius_10,
-    backgroundColor: COLORS.primaryRedHex,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
+  optinsText: {
+    fontSize: FONTSIZE.size_18,
+    textAlign: 'center',
   },
 
   forgetPasswordDiv: {
@@ -180,16 +188,34 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  socialMainDiv: {
-    flexDirection: 'row',
+  registerText: {
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
   },
 
-  socialDiv: {
-    width: 50,
-    height: 50,
-    borderRadius: 100,
-    backgroundColor: 'blue',
+  buttonDiv: {
+    gap: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+
+  buttonStyle: {
+    width: Dimensions.get('screen').width / 1.25,
+    borderRadius: BORDERRADIUS.radius_20,
+    backgroundColor: COLORS.primaryRedHex,
+    height: 45,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  googleButton: {
+    width: Dimensions.get('screen').width / 1.25,
+    borderRadius: BORDERRADIUS.radius_20,
+    height: 45,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: '#130241',
+    borderWidth: 1.25,
   },
 });

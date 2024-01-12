@@ -3,13 +3,12 @@ import React from 'react';
 import LottieView from 'lottie-react-native';
 import {COLORS, FONTFAMILY, FONTSIZE} from '../../../theme/theme';
 
-
-const LoginAnimation = () => {
+const BikeAnimation = () => {
   return (
     <View style={styles.EmptyCartContainer}>
       <LottieView
         style={styles.LottieStyle}
-        source={require('../../../lottie/pizzaLogin.json')}
+        source={require('../../../lottie/bikeAnimation.json')}
         autoPlay
         loop
       />
@@ -33,4 +32,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginAnimation;
+export default BikeAnimation;
