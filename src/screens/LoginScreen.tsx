@@ -1,28 +1,23 @@
 import {
-  Alert,
-  Button,
   Dimensions,
-  ImageBackground,
-  ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React from 'react';
-import {
-  BORDERRADIUS,
-  COLORS,
-  FONTFAMILY,
-  FONTSIZE,
-  SPACING,
-} from '../theme/theme';
-import {Controller, useForm} from 'react-hook-form';
+import {BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE} from '../theme/theme';
+import {useForm} from 'react-hook-form';
 import {InputComponent} from '../components/Input';
 import LoginAnimation from '../components/Lottie/LoginAnimation';
+import CustomIcon from '../components/CustomIcon';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-const LoginScreen = ({navigation}: any) => {
+const LoginScreen = ({
+  navigation,
+}: {
+  navigation: NativeStackNavigationProp<any>;
+}) => {
   const {control, handleSubmit} = useForm();
   const onSubmit = (data: any) => console.log(data);
 
@@ -32,14 +27,6 @@ const LoginScreen = ({navigation}: any) => {
 
   return (
     <View style={styles.loginMainView}>
-      {/* <ImageBackground
-        style={styles.bgStyle}
-        source={require('../assets/pizzaBg.jpg')}>
-        <View style={styles.brandwView}>
-          <Text style={styles.brandwViewText}> Salty Point</Text>
-        </View>
-      </ImageBackground> */}
-
       <View style={styles.imageContainer}>
         <LoginAnimation />
         <View style={styles.brandwView}>
@@ -51,16 +38,6 @@ const LoginScreen = ({navigation}: any) => {
       </View>
       <View style={styles.subContainer}>
         <View style={styles.bottomView}>
-          {/* <View style={{padding: 40, gap: 4}}>
-            <Text style={styles.WelcomeText}> Bem-vindo de volta! </Text>
-            <Text style={{textAlign: 'center'}}>
-              Não possui uma conta?{' '}
-              <Text style={styles.WelcomeSubText} onPress={buttonPressHandler}>
-                Se cadastre
-              </Text>
-            </Text>
-          </View> */}
-
           {/* Form  */}
           <View style={styles.mainContainer}>
             <InputComponent
@@ -85,15 +62,33 @@ const LoginScreen = ({navigation}: any) => {
                 Esqueci minha senha
               </Text>
             </View>
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+
+            <View style={styles.buttonDiv}>
               <TouchableOpacity
                 onPress={handleSubmit(onSubmit)}
                 style={styles.buttonStyle}>
                 <Text style={{color: '#FFFFFF'}}>Continuar</Text>
               </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={handleSubmit(onSubmit)}
+                style={styles.googleButton}>
+                <Text style={{color: '#000000'}}>Continuar com Google</Text>
+              </TouchableOpacity>
             </View>
 
-            {/* <Text style={styles.optinsText}> Ou entre com: </Text> */}
+            <View style={styles.registerText}>
+              <Text>
+                Não possui conta?{' '}
+                <Text
+                  style={{color: '#031475', textDecorationLine: 'underline'}}
+                  onPress={buttonPressHandler}>
+                  Se cadastre
+                </Text>
+              </Text>
+            </View>
+
+            <CustomIcon name="left" />
           </View>
         </View>
       </View>
@@ -110,12 +105,12 @@ const styles = StyleSheet.create({
 
   imageContainer: {
     flex: 1,
-
     backgroundColor: '#FFFFFF',
   },
   brandwView: {
     justifyContent: 'center',
     alignItems: 'center',
+    bottom: 25,
   },
 
   brandwViewText: {
@@ -138,48 +133,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
 
-  MainDiv: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-
-  WelcomeText: {
-    fontSize: FONTSIZE.size_28,
-    color: COLORS.primaryBlackHex,
-    textAlign: 'center',
-  },
-
-  WelcomeSubText: {
-    fontStyle: 'italic',
-    color: 'red',
-    textDecorationLine: 'underline',
-    textAlign: 'center',
-  },
-
   mainContainer: {
     marginHorizontal: 40,
     justifyContent: 'center',
     gap: 15,
+    paddingVertical: 25,
   },
 
   subContainer: {
     backgroundColor: '#FFFFFF',
     flex: 1.5,
   },
+
   InputContainerComponent: {
     flexDirection: 'row',
     borderRadius: BORDERRADIUS.radius_10,
     borderBottomColor: COLORS.primaryOrangeHex,
     borderBottomWidth: 2,
-  },
-
-  buttonStyle: {
-    width: Dimensions.get('screen').width / 1.5,
-    borderRadius: BORDERRADIUS.radius_10,
-    backgroundColor: COLORS.primaryRedHex,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 
   optinsText: {
@@ -192,16 +162,34 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  socialMainDiv: {
-    flexDirection: 'row',
+  registerText: {
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
   },
 
-  socialDiv: {
-    width: 50,
-    height: 50,
-    borderRadius: 100,
-    backgroundColor: 'blue',
+  buttonDiv: {
+    gap: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+
+  buttonStyle: {
+    width: Dimensions.get('screen').width / 1.25,
+    borderRadius: BORDERRADIUS.radius_20,
+    backgroundColor: COLORS.primaryRedHex,
+    height: 45,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  googleButton: {
+    width: Dimensions.get('screen').width / 1.25,
+    borderRadius: BORDERRADIUS.radius_20,
+    height: 45,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: '#130241',
+    borderWidth: 1.25,
   },
 });

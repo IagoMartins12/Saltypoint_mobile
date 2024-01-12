@@ -16,7 +16,6 @@ const LoginAnimation: React.FC<loginAnimationProps> = ({title}) => {
         autoPlay
         loop
       />
-      <Text style={styles.LottieText}>{title}</Text>
     </View>
   );
 };
@@ -27,7 +26,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   LottieStyle: {
-    height: 300,
+    height: 350,
   },
   LottieText: {
     fontFamily: FONTFAMILY.poppins_medium,
