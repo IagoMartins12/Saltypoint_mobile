@@ -7,10 +7,11 @@ import {
 } from 'react-native';
 import {BORDERRADIUS, COLORS, FONTSIZE, SPACING} from '../../theme/theme';
 import CustomIcon from '../CustomIcon';
+import {global} from '../../style';
 
 const ProductCard = () => {
   return (
-    <View style={styles.mainDiv}>
+    <View style={[styles.mainDiv, global.shadow]}>
       <View style={styles.PointsText}>
         <CustomIcon name="reply" size={11} color="#ffffff" />
         <Text style={{color: '#ffffff'}}> Ganhe 5 pontos </Text>
@@ -18,7 +19,7 @@ const ProductCard = () => {
 
       <ImageBackground
         source={require('../../assets/pizzaCard.jpg')}
-        style={styles.CartItemImage}>
+        style={[styles.CartItemImage, styles.imageWithBorder]}>
         <View style={styles.CardRatingContainer}>
           <CustomIcon name={'heart'} color={'#ffffff'} size={20} />
         </View>
@@ -34,7 +35,7 @@ const ProductCard = () => {
 
         <View style={styles.infoDiv}>
           <Text style={styles.priceText}> R$ 30,00</Text>
-          <CustomIcon name="cart-plus" size={25} />
+          {/* <CustomIcon name="cart-plus" size={25} /> */}
         </View>
       </View>
     </View>
@@ -44,7 +45,7 @@ const ProductCard = () => {
 const styles = StyleSheet.create({
   mainDiv: {
     backgroundColor: '#ffffff',
-    height: Dimensions.get('window').height / 3.6,
+    height: Dimensions.get('window').height / 3.25,
     width: Dimensions.get('window').width / 2.4,
     borderRadius: BORDERRADIUS.radius_15,
   },
@@ -59,8 +60,14 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
   },
   CartItemImage: {
-    height: 120,
+    height: 140,
     width: 'auto',
+  },
+  imageWithBorder: {
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+
+    overflow: 'hidden',
   },
   productTitle: {
     fontSize: FONTSIZE.size_16,

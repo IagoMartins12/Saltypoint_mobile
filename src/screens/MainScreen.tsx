@@ -42,20 +42,24 @@ const MainScreen = ({navigation}: any) => {
             </View>
           </View>
 
-          <View style={styles.buttonsDiv}>
-            <TouchableOpacity style={styles.firstButton} onPress={buttonLogin}>
-              <Text style={{color: '#FFFFFF'}}>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.secondButton}
-              onPress={buttonRegister}>
-              <Text style={{color: '#000000'}}>Cadastro</Text>
-            </TouchableOpacity>
-          </View>
+          <View>
+            <View style={styles.buttonsDiv}>
+              <TouchableOpacity
+                style={styles.firstButton}
+                onPress={buttonLogin}>
+                <Text style={{color: '#FFFFFF'}}>Login</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.secondButton}
+                onPress={buttonRegister}>
+                <Text style={{color: '#000000'}}>Cadastro</Text>
+              </TouchableOpacity>
+            </View>
 
-          <Text style={styles.noAuthText} onPress={buttonHome}>
-            Continuar sem se autenticar
-          </Text>
+            <Text style={styles.noAuthText} onPress={buttonHome}>
+              Continuar sem se autenticar
+            </Text>
+          </View>
         </View>
       </View>
     </View>
@@ -70,7 +74,7 @@ const styles = StyleSheet.create({
   },
 
   bgStyle: {
-    height: Dimensions.get('window').height / 2,
+    height: Dimensions.get('window').height / 2.25,
     opacity: 0.75,
   },
 

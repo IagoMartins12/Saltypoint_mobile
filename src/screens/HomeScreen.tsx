@@ -19,6 +19,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import ProductCard from '../components/ProductCard';
 import ProductCardHorizontal from '../components/ProductCardHorizontal';
 import CustomIcon from '../components/CustomIcon';
+import {global} from '../style';
 const categories = [
   'Todos',
   'Pizza',
@@ -58,7 +59,7 @@ const HomeScreen = ({
   ];
 
   return (
-    <View style={styles.mainContainer}>
+    <View style={global.mainContainer}>
       <View>
         <View style={styles.textDiv}>
           <Text style={styles.mainText}>
@@ -143,7 +144,13 @@ const HomeScreen = ({
       </View>
 
       <ScrollView
-        contentContainerStyle={styles.productsDiv}
+        contentContainerStyle={[
+          styles.productsDiv,
+          {
+            flexDirection: currentCard === 0 ? 'row' : 'column',
+            flexWrap: currentCard === 0 ? 'wrap' : 'nowrap',
+          },
+        ]}
         showsVerticalScrollIndicator={false}>
         {currentCard === 0 ? (
           <>
@@ -156,14 +163,14 @@ const HomeScreen = ({
             <ProductCard />
           </>
         ) : (
-          <>
+          <View style={{rowGap: 15, flex: 1}}>
             <ProductCardHorizontal />
             <ProductCardHorizontal />
             <ProductCardHorizontal />
             <ProductCardHorizontal />
             <ProductCardHorizontal />
             <ProductCardHorizontal />
-          </>
+          </View>
         )}
       </ScrollView>
     </View>
@@ -196,9 +203,6 @@ const styles = StyleSheet.create({
   pointsDiv: {},
 
   productsDiv: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    height: 'auto',
     rowGap: 25,
     justifyContent: 'space-around',
     marginBottom: 100,

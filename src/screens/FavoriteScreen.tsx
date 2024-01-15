@@ -8,6 +8,7 @@ import {
 } from 'react-native-gesture-handler';
 import ProductCardHorizontal from '../components/ProductCardHorizontal';
 import TitleSection from '../components/TitleSection';
+import {global} from '../style';
 
 const FavoriteScreen = ({
   navigation,
@@ -26,17 +27,15 @@ const FavoriteScreen = ({
 
   return (
     <ScrollView
-      style={styles.mainContainer}
+      style={global.mainContainer}
       showsVerticalScrollIndicator={false}>
+      <TitleSection title="Favoritos" />
       <View style={styles.productsDiv}>
-        <TitleSection title="Favoritos" />
-        <>
-          <ProductCardHorizontal showPoints={false} />
-          <ProductCardHorizontal showPoints={false} />
-          <ProductCardHorizontal showPoints={false} />
-          <ProductCardHorizontal showPoints={false} />
-          <ProductCardHorizontal showPoints={false} />
-        </>
+        <ProductCardHorizontal showPoints={false} />
+        <ProductCardHorizontal showPoints={false} />
+        <ProductCardHorizontal showPoints={false} />
+        <ProductCardHorizontal showPoints={false} />
+        <ProductCardHorizontal showPoints={false} />
       </View>
     </ScrollView>
   );
@@ -49,11 +48,8 @@ const styles = StyleSheet.create({
     marginVertical: 30,
   },
   productsDiv: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    height: 'auto',
     rowGap: 10,
-    justifyContent: 'space-around',
+    marginTop: 15,
     marginBottom: 40,
   },
 });

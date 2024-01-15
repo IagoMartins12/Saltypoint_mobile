@@ -5,9 +5,11 @@ import {
   View,
   Text,
   ImageBackground,
+  Platform,
 } from 'react-native';
 import {BORDERRADIUS, COLORS, FONTSIZE, SPACING} from '../../theme/theme';
 import CustomIcon from '../CustomIcon';
+import {global} from '../../style';
 
 interface ProductCardHorizontalProps {
   showPoints?: boolean;
@@ -28,18 +30,17 @@ const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
   };
 
   return (
-    <View style={styles.mainDiv}>
+    <View style={[styles.mainDiv]}>
       {renderPointsText()}
 
       <View style={styles.cardContainer}>
         <ImageBackground
           source={require('../../assets/pizzaCard.jpg')}
-          style={styles.cardItemImage}>
+          style={[styles.cardItemImage, styles.imageWithBorder]}>
           <View style={styles.cardRatingContainer}>
             <CustomIcon name={'heart'} color={'#ffffff'} size={20} />
           </View>
         </ImageBackground>
-
         <View style={styles.cardInfoContainer}>
           <Text style={styles.productTitle}>Pizza de portuguesa</Text>
 
@@ -50,7 +51,7 @@ const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
 
           <View style={styles.infoDiv}>
             <Text style={styles.priceText}> R$ 30,00</Text>
-            <CustomIcon name="cart-plus" size={25} />
+            {/* <CustomIcon name="cart-plus" size={25} /> */}
           </View>
         </View>
       </View>
@@ -60,9 +61,12 @@ const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
 
 const styles = StyleSheet.create({
   mainDiv: {
-    backgroundColor: '#ffffff',
-    height: Dimensions.get('window').height / 5,
-    width: Dimensions.get('window').width,
+    borderBottomEndRadius: 25,
+    borderBottomLeftRadius: 26,
+    height: Dimensions.get('window').height / 4.5,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    flex: 1,
   },
   pointsText: {
     flexDirection: 'row',
@@ -70,6 +74,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#2505b3',
     borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
     paddingBottom: 2,
     gap: 5,
   },
@@ -78,10 +83,15 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 50,
   },
+  imageWithBorder: {
+    borderRadius: 15, // Ajuste o valor conforme necessário
+    overflow: 'hidden', // Garante que a borda seja aplicada corretamente
+    height: '98%', // Define a altura da imagem em 95% da altura do componente pai
+    alignSelf: 'center',
+    marginLeft: 7,
+  },
   cardItemImage: {
     width: Dimensions.get('window').width / 2.25,
-    height: 'auto',
-    borderRadius: 50,
   },
   cardInfoContainer: {
     paddingLeft: 7,
@@ -121,6 +131,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     right: 10,
+  },
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+    elevation: 1,
   },
 });
 
