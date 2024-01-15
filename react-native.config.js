@@ -4,4 +4,5 @@ module.exports = {
     android: {},
   },
   assets: ['./src/assets'],
+  // assets: ['./src/fonts/'], // stays the same
 };

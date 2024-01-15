@@ -7,6 +7,7 @@ import CartScreen from '../screens/CartScreen';
 import CustomIcon from '../components/CustomIcon';
 import FavoriteScreen from '../screens/FavoriteScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import SearchScreen from '../screens/SearchScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,13 +38,14 @@ const TabNavigator = () => {
               color={
                 focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
               }
+              pack="Feather"
             />
           ),
         }}></Tab.Screen>
 
       <Tab.Screen
         name="Search"
-        component={CartScreen}
+        component={SearchScreen}
         options={{
           tabBarIcon: ({focused, color, size}) => (
             <CustomIcon
@@ -52,6 +54,7 @@ const TabNavigator = () => {
               color={
                 focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
               }
+              pack="Feather"
             />
           ),
         }}></Tab.Screen>
@@ -62,11 +65,12 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({focused, color, size}) => (
             <CustomIcon
-              name="cart"
+              name="shopping-cart"
               size={25}
               color={
                 focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
               }
+              pack="Feather"
             />
           ),
         }}></Tab.Screen>
@@ -76,11 +80,12 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({focused, color, size}) => (
             <CustomIcon
-              name="like"
+              name="heart"
               size={25}
               color={
                 focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
               }
+              pack="Feather"
             />
           ),
         }}></Tab.Screen>
@@ -90,11 +95,12 @@ const TabNavigator = () => {
         options={{
           tabBarIcon: ({focused, color, size}) => (
             <CustomIcon
-              name="bell"
+              name="settings"
               size={25}
               color={
                 focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
               }
+              pack="Feather"
             />
           ),
         }}></Tab.Screen>
