@@ -41,7 +41,25 @@ const TabNavigator = () => {
               pack="Feather"
             />
           ),
-        }}></Tab.Screen>
+        }}
+      />
+
+      <Tab.Screen
+        name="Reward"
+        component={HomeScreen}
+        options={{
+          tabBarIcon: ({focused, color, size}) => (
+            <CustomIcon
+              name="award"
+              size={25}
+              color={
+                focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
+              }
+              pack="Feather"
+            />
+          ),
+        }}
+      />
 
       <Tab.Screen
         name="Search"
@@ -57,7 +75,8 @@ const TabNavigator = () => {
               pack="Feather"
             />
           ),
-        }}></Tab.Screen>
+        }}
+      />
 
       <Tab.Screen
         name="Cart"
@@ -73,7 +92,9 @@ const TabNavigator = () => {
               pack="Feather"
             />
           ),
-        }}></Tab.Screen>
+        }}
+      />
+
       <Tab.Screen
         name="Favorite"
         component={FavoriteScreen}
@@ -88,7 +109,8 @@ const TabNavigator = () => {
               pack="Feather"
             />
           ),
-        }}></Tab.Screen>
+        }}
+      />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
@@ -103,7 +125,8 @@ const TabNavigator = () => {
               pack="Feather"
             />
           ),
-        }}></Tab.Screen>
+        }}
+      />
     </Tab.Navigator>
   );
 };

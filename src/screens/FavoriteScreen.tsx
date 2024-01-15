@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
@@ -6,6 +6,8 @@ import {
   PanGestureHandler,
   State,
 } from 'react-native-gesture-handler';
+import ProductCardHorizontal from '../components/ProductCardHorizontal';
+import TitleSection from '../components/TitleSection';
 
 const FavoriteScreen = ({
   navigation,
@@ -23,28 +25,20 @@ const FavoriteScreen = ({
   };
 
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <PanGestureHandler
-        onHandlerStateChange={({nativeEvent}) => {
-          if (
-            nativeEvent.state === State.END &&
-            nativeEvent.translationX < 50
-          ) {
-            onSwipeRight();
-          }
-
-          if (
-            nativeEvent.state === State.END &&
-            nativeEvent.translationX > 50
-          ) {
-            onSwipeLeft();
-          }
-        }}>
-        <View style={styles.mainContainer}>
-          <Text>FavoriteScreen</Text>
-        </View>
-      </PanGestureHandler>
-    </GestureHandlerRootView>
+    <ScrollView
+      style={styles.mainContainer}
+      showsVerticalScrollIndicator={false}>
+      <View style={styles.productsDiv}>
+        <TitleSection title="Favoritos" />
+        <>
+          <ProductCardHorizontal showPoints={false} />
+          <ProductCardHorizontal showPoints={false} />
+          <ProductCardHorizontal showPoints={false} />
+          <ProductCardHorizontal showPoints={false} />
+          <ProductCardHorizontal showPoints={false} />
+        </>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -53,6 +47,14 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 20,
     marginVertical: 30,
+  },
+  productsDiv: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    height: 'auto',
+    rowGap: 10,
+    justifyContent: 'space-around',
+    marginBottom: 40,
   },
 });
 
