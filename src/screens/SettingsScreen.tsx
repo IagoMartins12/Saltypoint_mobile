@@ -12,6 +12,7 @@ const SettingsScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const handleNavigate = (name: string) => {
+    console.log('name', name);
     navigation.push(name);
   };
 
@@ -20,43 +21,58 @@ const SettingsScreen = ({
       label: 'Minha conta',
       icon: 'user',
       pack: 'SimpleLineIcons' as PackNames,
-      onClick: handleNavigate('house'),
+      onClick: () => {
+        console.log('clicouu');
+        handleNavigate('Profile');
+      },
     },
     {
       label: 'Meus endereços',
       icon: 'home',
       pack: 'SimpleLineIcons' as PackNames,
-      onClick: handleNavigate('house'),
+      onClick: () => {
+        handleNavigate('Address');
+      },
     },
     {
       label: 'Meus pedidos',
       icon: 'briefcase',
       pack: 'SimpleLineIcons' as PackNames,
-      onClick: handleNavigate('house'),
+      onClick: () => {
+        handleNavigate('Order');
+      },
     },
     {
       label: 'Meus cupons',
       icon: 'tag',
       pack: 'SimpleLineIcons' as PackNames,
-      onClick: handleNavigate('house'),
+      onClick: () => {
+        handleNavigate('Coupons');
+      },
     },
     {
       label: 'Programa de fidelidade',
       icon: 'badge',
       pack: 'SimpleLineIcons' as PackNames,
-      onClick: handleNavigate('house'),
+      onClick: () => {
+        handleNavigate('Fidelity');
+      },
     },
     {
       label: 'Termos de uso e privacidade',
       icon: 'shield',
       pack: 'SimpleLineIcons' as PackNames,
-      onClick: handleNavigate('house'),
+      onClick: () => {
+        handleNavigate('Profile');
+      },
     },
     {
       label: 'Sair',
       icon: 'logout',
       pack: 'SimpleLineIcons' as PackNames,
-      onClick: handleNavigate('house'),
+      onClick: () => {
+        handleNavigate('Profile');
+      },
     },
   ];
 
@@ -87,6 +103,7 @@ const SettingsScreen = ({
             label={option.label}
             pack={option.pack}
             key={key}
+            onClick={option.onClick}
           />
         ))}
       </View>

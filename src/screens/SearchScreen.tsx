@@ -67,7 +67,7 @@ const SearchScreen = ({
         </>
       ) : (
         <>
-          <View style={{marginVertical: 10, gap: 15}}>
+          <View style={{marginVertical: 20, gap: 10}}>
             <Text style={styles.categoryText}>Categorias</Text>
 
             <ScrollView

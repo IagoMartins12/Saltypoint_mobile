@@ -8,7 +8,6 @@ import {
 import React from 'react';
 import {BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE} from '../theme/theme';
 import {useForm} from 'react-hook-form';
-import {InputComponent, StyledInputComponent} from '../components/Input';
 import LoginAnimation from '../components/Lottie/LoginAnimation';
 import CustomIcon from '../components/CustomIcon';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -17,6 +16,7 @@ import {
   PanGestureHandler,
   State,
 } from 'react-native-gesture-handler';
+import StyledInputComponent from '../components/Input';
 
 const LoginScreen = ({
   navigation,
@@ -63,14 +63,12 @@ const LoginScreen = ({
                 <StyledInputComponent
                   control={control}
                   name="Email"
-                  text="Email "
                   placeholder="Email: "
                 />
 
                 <StyledInputComponent
                   control={control}
                   name="Senha"
-                  text="Senha "
                   placeholder="Senha: "
                   isPassword
                 />

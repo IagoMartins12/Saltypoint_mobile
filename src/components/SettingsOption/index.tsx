@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import CustomIcon, {PackNames} from '../CustomIcon';
 import {FONTSIZE} from '../../theme/theme';
 
@@ -15,7 +15,8 @@ const SettingsOption: React.FC<optionProps> = ({
   pack = 'FontAwesome',
 }) => {
   return (
-    <View
+    <TouchableOpacity
+      onPress={onClick}
       style={{
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -43,7 +44,7 @@ const SettingsOption: React.FC<optionProps> = ({
           color="#000000f8"
         />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -8,7 +8,6 @@ import {
 import React from 'react';
 import {BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE} from '../theme/theme';
 import {useForm} from 'react-hook-form';
-import {InputComponent, StyledInputComponent} from '../components/Input';
 import CustomIcon from '../components/CustomIcon';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
@@ -17,6 +16,7 @@ import {
   State,
 } from 'react-native-gesture-handler';
 import PizzaAnimation from '../components/Lottie/PizzaAnimation';
+import StyledInputComponent from '../components/Input';
 
 const RegisterScreen = ({
   navigation,
@@ -63,14 +63,12 @@ const RegisterScreen = ({
                 <StyledInputComponent
                   control={control}
                   name="Email"
-                  text="Email "
                   placeholder="Email: "
                 />
 
                 <StyledInputComponent
                   control={control}
                   name="Senha"
-                  text="Senha "
                   placeholder="Senha: "
                   isPassword
                 />
@@ -78,7 +76,6 @@ const RegisterScreen = ({
                 <StyledInputComponent
                   control={control}
                   name="confirmPassword"
-                  text="Confirme a senha "
                   placeholder="Confirme a senha: "
                   isPassword
                 />
