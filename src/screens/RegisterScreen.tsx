@@ -8,7 +8,7 @@ import {
 import React from 'react';
 import {BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE} from '../theme/theme';
 import {useForm} from 'react-hook-form';
-import {InputComponent} from '../components/Input';
+import {InputComponent, StyledInputComponent} from '../components/Input';
 import CustomIcon from '../components/CustomIcon';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
@@ -60,27 +60,24 @@ const RegisterScreen = ({
             <View style={styles.bottomView}>
               {/* Form  */}
               <View style={styles.mainContainer}>
-                <InputComponent
+                <StyledInputComponent
                   control={control}
                   name="Email"
-                  style={styles.InputContainerComponent}
                   text="Email "
                   placeholder="Email: "
                 />
 
-                <InputComponent
+                <StyledInputComponent
                   control={control}
                   name="Senha"
-                  style={styles.InputContainerComponent}
                   text="Senha "
                   placeholder="Senha: "
                   isPassword
                 />
 
-                <InputComponent
+                <StyledInputComponent
                   control={control}
                   name="confirmPassword"
-                  style={styles.InputContainerComponent}
                   text="Confirme a senha "
                   placeholder="Confirme a senha: "
                   isPassword

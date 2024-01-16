@@ -8,7 +8,7 @@ import {
 import React from 'react';
 import {BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE} from '../theme/theme';
 import {useForm} from 'react-hook-form';
-import {InputComponent} from '../components/Input';
+import {InputComponent, StyledInputComponent} from '../components/Input';
 import LoginAnimation from '../components/Lottie/LoginAnimation';
 import CustomIcon from '../components/CustomIcon';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -60,18 +60,16 @@ const LoginScreen = ({
             <View style={styles.bottomView}>
               {/* Form  */}
               <View style={styles.mainContainer}>
-                <InputComponent
+                <StyledInputComponent
                   control={control}
                   name="Email"
-                  style={styles.InputContainerComponent}
                   text="Email "
                   placeholder="Email: "
                 />
 
-                <InputComponent
+                <StyledInputComponent
                   control={control}
                   name="Senha"
-                  style={styles.InputContainerComponent}
                   text="Senha "
                   placeholder="Senha: "
                   isPassword
@@ -110,8 +108,6 @@ const LoginScreen = ({
                     </Text>
                   </Text>
                 </View>
-
-                <CustomIcon name="left" />
               </View>
             </View>
           </View>
@@ -174,7 +170,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: BORDERRADIUS.radius_10,
     borderBottomColor: COLORS.primaryOrangeHex,
-    borderBottomWidth: 2,
   },
 
   optinsText: {

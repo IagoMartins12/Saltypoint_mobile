@@ -15,16 +15,6 @@ const FavoriteScreen = ({
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
-  const onSwipeRight = () => {
-    // Navegar para a página desejada
-    navigation.navigate('Profile');
-  };
-
-  const onSwipeLeft = () => {
-    // Navegar para a página desejada
-    navigation.navigate('Cart');
-  };
-
   return (
     <ScrollView
       style={global.mainContainer}

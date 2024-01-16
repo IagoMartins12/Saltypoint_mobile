@@ -1,12 +1,20 @@
+import {useState} from 'react';
 import {Control, Controller, FieldValues} from 'react-hook-form';
-import {StyleProp, Text, TextInput, View, ViewStyle} from 'react-native';
+import {
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  ViewStyle,
+} from 'react-native';
+import {BORDERRADIUS, COLORS, FONTSIZE} from '../../theme/theme';
 
 interface InputProps {
   name: string;
   placeholder?: string;
-  text: string;
+  text?: string;
   control: Control<FieldValues, any>;
-  style: StyleProp<ViewStyle>;
   isPassword?: boolean;
 }
 export const InputComponent: React.FC<InputProps> = ({
@@ -14,7 +22,6 @@ export const InputComponent: React.FC<InputProps> = ({
   name,
   text,
   placeholder,
-  style,
   isPassword = false,
 }) => {
   return (
@@ -24,7 +31,7 @@ export const InputComponent: React.FC<InputProps> = ({
         control={control}
         rules={{required: true}}
         render={({field: {onChange, onBlur, value}}) => (
-          <View style={style}>
+          <View style={styles.InputContainerComponent}>
             <TextInput
               placeholder={placeholder}
               onBlur={onBlur}
@@ -40,3 +47,67 @@ export const InputComponent: React.FC<InputProps> = ({
     </View>
   );
 };
+
+export const StyledInputComponent: React.FC<InputProps> = ({
+  control,
+  name,
+  placeholder,
+  isPassword,
+}) => {
+  const [isFocused, setIsFocused] = useState(false);
+
+  return (
+    <>
+      <Controller
+        control={control}
+        rules={{required: true}}
+        render={({field: {onChange, onBlur, value}}) => (
+          <View
+            style={[
+              styles.InputContainerComponent,
+              {
+                borderColor: isFocused ? 'blue' : 'black',
+                borderWidth: 0.5,
+                position: 'relative',
+              },
+            ]}>
+            <TextInput
+              placeholder={isFocused ? '' : placeholder}
+              onBlur={() => {
+                onBlur();
+                setIsFocused(false);
+              }}
+              onFocus={() => setIsFocused(true)}
+              onChangeText={onChange}
+              value={value}
+              style={{flex: 1, paddingVertical: 7, paddingLeft: 10}}
+              secureTextEntry={isPassword}
+            />
+            {isFocused || value ? (
+              <Text
+                style={{
+                  position: 'absolute',
+                  left: 6,
+                  top: -10,
+                  backgroundColor: 'white',
+                  paddingHorizontal: 4,
+                  fontSize: FONTSIZE.size_14,
+                  color: isFocused ? 'blue' : '#000000',
+                }}>
+                {placeholder}
+              </Text>
+            ) : null}
+          </View>
+        )}
+        name={name}
+      />
+    </>
+  );
+};
+
+const styles = StyleSheet.create({
+  InputContainerComponent: {
+    flexDirection: 'row',
+    borderRadius: BORDERRADIUS.radius_10,
+  },
+});
