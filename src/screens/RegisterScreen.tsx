@@ -107,8 +107,6 @@ const RegisterScreen = ({
                     </Text>
                   </Text>
                 </View>
-
-                <CustomIcon name="left" />
               </View>
             </View>
           </View>

@@ -17,6 +17,7 @@ interface SearchProps {
   setOnFocus: React.Dispatch<React.SetStateAction<boolean>>;
   searchText: string;
   setSearchText: React.Dispatch<React.SetStateAction<string>>;
+  buttonPressHandler: () => void;
 }
 
 const SearchComponent: React.FC<SearchProps> = ({
@@ -24,6 +25,7 @@ const SearchComponent: React.FC<SearchProps> = ({
   onFocus,
   searchText,
   setSearchText,
+  buttonPressHandler,
   width = '100%',
 }) => {
   const onCancelPress = () => {
@@ -37,11 +39,24 @@ const SearchComponent: React.FC<SearchProps> = ({
       style={{
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        width: width,
+        justifyContent: 'center',
         gap: 15,
+        alignSelf: onFocus ? 'flex-start' : 'flex-end',
       }}>
-      <KeyboardAwareScrollView>
+      {!onFocus ? (
+        <TouchableOpacity onPress={buttonPressHandler}>
+          <CustomIcon
+            name="chevron-left"
+            pack="Feather"
+            size={18}
+            color="#000000"
+          />
+        </TouchableOpacity>
+      ) : null}
+      <KeyboardAwareScrollView
+        contentContainerStyle={{
+          alignSelf: 'flex-end',
+        }}>
         <View style={[styles.InputContainerComponent]}>
           <TextInput
             placeholder="Calabresa / Mussarela"
@@ -89,8 +104,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     paddingHorizontal: 20,
-    marginVertical: 10,
     borderWidth: 1,
+    alignSelf: 'flex-end',
   },
 
   TextInputContainer: {

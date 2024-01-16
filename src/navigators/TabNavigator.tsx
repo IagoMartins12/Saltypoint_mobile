@@ -62,23 +62,6 @@ const TabNavigator = () => {
       />
 
       <Tab.Screen
-        name="Search"
-        component={SearchScreen}
-        options={{
-          tabBarIcon: ({focused, color, size}) => (
-            <CustomIcon
-              name="search"
-              size={25}
-              color={
-                focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
-              }
-              pack="Feather"
-            />
-          ),
-        }}
-      />
-
-      <Tab.Screen
         name="Cart"
         component={CartScreen}
         options={{

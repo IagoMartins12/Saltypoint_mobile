@@ -7,6 +7,7 @@ import TabNavigator from './src/navigators/TabNavigator';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import MainScreen from './src/screens/MainScreen';
+import SearchScreen from './src/screens/SearchScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,11 @@ const App = () => {
         <Stack.Screen
           name="Register"
           component={RegisterScreen}
+          options={{animation: 'slide_from_right'}}
+        />
+        <Stack.Screen
+          name="Searchscreen"
+          component={SearchScreen}
           options={{animation: 'slide_from_right'}}
         />
         <Stack.Screen

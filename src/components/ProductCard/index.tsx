@@ -19,7 +19,7 @@ const ProductCard = () => {
 
       <ImageBackground
         source={require('../../assets/pizzaCard.jpg')}
-        style={[styles.CartItemImage, styles.imageWithBorder]}>
+        style={styles.CartItemImage}>
         <View style={styles.CardRatingContainer}>
           <CustomIcon name={'heart'} color={'#ffffff'} size={20} />
         </View>
@@ -61,12 +61,8 @@ const styles = StyleSheet.create({
   },
   CartItemImage: {
     height: 140,
-    width: 'auto',
-  },
-  imageWithBorder: {
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
-
     overflow: 'hidden',
   },
   productTitle: {

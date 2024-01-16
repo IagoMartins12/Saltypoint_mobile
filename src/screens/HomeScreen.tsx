@@ -42,6 +42,12 @@ const HomeScreen = ({
 
   const ListRef: any = useRef<FlatList>();
 
+  const buttonPressHandler = () => {
+    navigation.push('Searchscreen');
+  };
+
+  // Searchscreen;
+
   const ViewList = [
     <CustomIcon
       name="grip-vertical"
@@ -66,21 +72,20 @@ const HomeScreen = ({
             Olá, <Text style={{color: COLORS.primaryRedHex}}>Iago! </Text>
           </Text>
 
-          <View
+          <TouchableOpacity
+            onPress={buttonPressHandler}
             style={{
               flexDirection: 'row',
               gap: 10,
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text style={styles.addressText}> Estrada de ligação, 22</Text>
             <CustomIcon
-              name="location-dot"
-              size={15}
-              pack="FontAwesome6"
+              name="search"
+              size={25}
               color={COLORS.primaryOrangeHex}
             />
-          </View>
+          </TouchableOpacity>
         </View>
 
         <View>

@@ -28,9 +28,13 @@ const SearchScreen = ({
   const [currentWidth, setCurrentWidth] = useState('100%');
   const [searchText, setSearchText] = useState('');
 
+  const buttonPressHandler = () => {
+    navigation.pop();
+  };
+
   useEffect(() => {
     if (onFocus) setCurrentWidth('95%');
-    if (!onFocus) setCurrentWidth('100%');
+    if (!onFocus) setCurrentWidth('90%');
   }, [onFocus]);
 
   return (
@@ -41,6 +45,7 @@ const SearchScreen = ({
         onFocus={onFocus}
         searchText={searchText}
         setSearchText={setSearchText}
+        buttonPressHandler={buttonPressHandler}
       />
 
       {onFocus ? (
