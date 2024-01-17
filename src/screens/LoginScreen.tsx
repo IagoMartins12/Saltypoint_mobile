@@ -1,15 +1,17 @@
 import {
   Dimensions,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE} from '../theme/theme';
 import {useForm} from 'react-hook-form';
 import LoginAnimation from '../components/Lottie/LoginAnimation';
-import CustomIcon from '../components/CustomIcon';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
@@ -23,17 +25,42 @@ const LoginScreen = ({
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const [isKeyboadVisible, setIsKeyboadVisible] = useState(false);
   const {control, handleSubmit} = useForm();
   const onSubmit = (data: any) => console.log(data);
 
-  const buttonPressHandler = () => {
+  const buttonPressHandler = useCallback(() => {
     navigation.push('Register');
-  };
+  }, [navigation]);
 
-  const onSwipeRight = () => {
-    // Navegar para a página desejada
+  const onSwipeRight = useCallback(() => {
     navigation.navigate('MainScreen');
-  };
+  }, [navigation]);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setIsKeyboadVisible(true);
+        console.log('Keyboard is visible');
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setIsKeyboadVisible(false);
+        console.log('Keyboard is hidden');
+      },
+    );
+
+    // Clean up listeners on component unmount
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
+  console.log('keyboard', isKeyboadVisible);
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
@@ -46,7 +73,7 @@ const LoginScreen = ({
             onSwipeRight();
           }
         }}>
-        <View style={styles.loginMainView} collapsable>
+        <View style={styles.loginMainView}>
           <View style={styles.imageContainer}>
             <LoginAnimation />
             <View style={styles.brandwView}>
@@ -59,6 +86,7 @@ const LoginScreen = ({
           <View style={styles.subContainer}>
             <View style={styles.bottomView}>
               {/* Form  */}
+
               <View style={styles.mainContainer}>
                 <StyledInputComponent
                   control={control}
@@ -79,32 +107,39 @@ const LoginScreen = ({
                   </Text>
                 </View>
 
-                <View style={styles.buttonDiv}>
-                  <TouchableOpacity
-                    onPress={handleSubmit(onSubmit)}
-                    style={styles.buttonStyle}>
-                    <Text style={{color: '#FFFFFF'}}>Continuar</Text>
-                  </TouchableOpacity>
+                <View>
+                  <View style={styles.buttonDiv}>
+                    <TouchableOpacity
+                      onPress={handleSubmit(onSubmit)}
+                      style={styles.buttonStyle}>
+                      <Text style={{color: '#FFFFFF'}}>Continuar</Text>
+                    </TouchableOpacity>
 
-                  <TouchableOpacity
-                    onPress={handleSubmit(onSubmit)}
-                    style={styles.googleButton}>
-                    <Text style={{color: '#000000'}}>Continuar com Google</Text>
-                  </TouchableOpacity>
-                </View>
-
-                <View style={styles.registerText}>
-                  <Text>
-                    Não possui conta?{' '}
-                    <Text
-                      style={{
-                        color: '#031475',
-                        textDecorationLine: 'underline',
-                      }}
-                      onPress={buttonPressHandler}>
-                      Se cadastre
-                    </Text>
-                  </Text>
+                    {!isKeyboadVisible ? (
+                      <>
+                        <TouchableOpacity
+                          onPress={handleSubmit(onSubmit)}
+                          style={styles.googleButton}>
+                          <Text style={{color: '#000000'}}>
+                            Continuar com Google
+                          </Text>
+                        </TouchableOpacity>
+                        <View style={styles.registerText}>
+                          <Text>
+                            Não possui conta?{' '}
+                            <Text
+                              style={{
+                                color: '#031475',
+                                textDecorationLine: 'underline',
+                              }}
+                              onPress={buttonPressHandler}>
+                              Se cadastre
+                            </Text>
+                          </Text>
+                        </View>
+                      </>
+                    ) : null}
+                  </View>
                 </View>
               </View>
             </View>
@@ -129,7 +164,6 @@ const styles = StyleSheet.create({
   brandwView: {
     justifyContent: 'center',
     alignItems: 'center',
-    bottom: 25,
   },
 
   brandwViewText: {
@@ -162,12 +196,6 @@ const styles = StyleSheet.create({
   subContainer: {
     backgroundColor: '#FFFFFF',
     flex: 1.5,
-  },
-
-  InputContainerComponent: {
-    flexDirection: 'row',
-    borderRadius: BORDERRADIUS.radius_10,
-    borderBottomColor: COLORS.primaryOrangeHex,
   },
 
   optinsText: {

@@ -11,7 +11,7 @@ const TitleSection = ({title}: {title: string}) => {
 
 const styles = StyleSheet.create({
   textStyle: {
-    fontSize: FONTSIZE.size_28,
+    fontSize: FONTSIZE.size_20,
     fontWeight: '700',
     textAlign: 'center',
     color: '#000000',

@@ -3,7 +3,6 @@ import React from 'react';
 import LottieView from 'lottie-react-native';
 import {COLORS, FONTFAMILY, FONTSIZE} from '../../../theme/theme';
 
-
 const LoginAnimation = () => {
   return (
     <View style={styles.EmptyCartContainer}>

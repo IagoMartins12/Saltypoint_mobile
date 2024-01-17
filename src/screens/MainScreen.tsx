@@ -8,10 +8,23 @@ import {
 } from 'react-native';
 import React from 'react';
 import {BORDERRADIUS, COLORS, FONTSIZE} from '../theme/theme';
+import {
+  GestureHandlerRootView,
+  PanGestureHandler,
+  State,
+} from 'react-native-gesture-handler';
 
 const MainScreen = ({navigation}: any) => {
   const buttonRegister = () => {
     navigation.push('Register');
+  };
+
+  const onSwipeRight = () => {
+    navigation.navigate('Register');
+  };
+
+  const onSwipeLeft = () => {
+    navigation.navigate('Login');
   };
 
   const buttonLogin = () => {
@@ -23,46 +36,67 @@ const MainScreen = ({navigation}: any) => {
   };
 
   return (
-    <View style={styles.loginMainView}>
-      <ImageBackground
-        style={styles.bgStyle}
-        source={require('../assets/pizzaWallpapper.jpg')}></ImageBackground>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <PanGestureHandler
+        onHandlerStateChange={({nativeEvent}) => {
+          if (
+            nativeEvent.state === State.END &&
+            nativeEvent.translationX < 50
+          ) {
+            onSwipeRight();
+          }
 
-      <View style={styles.subContainer}>
-        <View style={styles.bottomView}>
-          <View style={{padding: 40, gap: 20}}>
-            <View>
-              <Text style={styles.WelcomeText}>Seja bem vindo a </Text>
-              <Text style={styles.WelcomeSubText}>Salty Point</Text>
+          if (
+            nativeEvent.state === State.END &&
+            nativeEvent.translationX > 50
+          ) {
+            onSwipeLeft();
+          }
+        }}>
+        <View style={styles.loginMainView}>
+          <ImageBackground
+            style={styles.bgStyle}
+            source={require('../assets/pizzaWallpapper.jpg')}></ImageBackground>
+
+          <View style={styles.subContainer}>
+            <View style={styles.bottomView}>
+              <View style={{padding: 40, gap: 20}}>
+                <View>
+                  <Text style={styles.WelcomeText}>Seja bem vindo a </Text>
+                  <Text style={styles.WelcomeSubText}>Salty Point</Text>
+                </View>
+
+                <View>
+                  <Text>Bateu aquela fome? Nós resolvemos o seu problema!</Text>
+                  <Text>
+                    Peça a melhor pizza da região pelo nosso aplicativo
+                  </Text>
+                </View>
+              </View>
+
+              <View>
+                <View style={styles.buttonsDiv}>
+                  <TouchableOpacity
+                    style={styles.firstButton}
+                    onPress={buttonLogin}>
+                    <Text style={{color: '#FFFFFF'}}>Login</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.secondButton}
+                    onPress={buttonRegister}>
+                    <Text style={{color: '#000000'}}>Cadastro</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <Text style={styles.noAuthText} onPress={buttonHome}>
+                  Continuar sem se autenticar
+                </Text>
+              </View>
             </View>
-
-            <View>
-              <Text>Bateu aquela fome? Nós resolvemos o seu problema!</Text>
-              <Text>Peça a melhor pizza da região pelo nosso aplicativo</Text>
-            </View>
-          </View>
-
-          <View>
-            <View style={styles.buttonsDiv}>
-              <TouchableOpacity
-                style={styles.firstButton}
-                onPress={buttonLogin}>
-                <Text style={{color: '#FFFFFF'}}>Login</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.secondButton}
-                onPress={buttonRegister}>
-                <Text style={{color: '#000000'}}>Cadastro</Text>
-              </TouchableOpacity>
-            </View>
-
-            <Text style={styles.noAuthText} onPress={buttonHome}>
-              Continuar sem se autenticar
-            </Text>
           </View>
         </View>
-      </View>
-    </View>
+      </PanGestureHandler>
+    </GestureHandlerRootView>
   );
 };
 

@@ -9,6 +9,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import {BORDERRADIUS, COLORS, FONTSIZE} from '../../theme/theme';
+import CustomIcon from '../CustomIcon';
 
 interface InputProps {
   name: string;
@@ -39,6 +40,15 @@ const StyledInputComponent: React.FC<InputProps> = ({
                 borderColor: isFocused ? 'blue' : 'black',
               },
             ]}>
+            {/* <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingHorizontal: 10,
+                borderRightWidth: 0.25,
+              }}>
+              <CustomIcon name="settings" size={25} pack="Feather" />
+            </View> */}
             <TextInput
               placeholder={isFocused ? '' : placeholder}
               onBlur={() => {

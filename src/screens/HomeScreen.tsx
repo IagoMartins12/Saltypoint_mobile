@@ -19,7 +19,6 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import ProductCard from '../components/ProductCard';
 import ProductCardHorizontal from '../components/ProductCardHorizontal';
 import CustomIcon from '../components/CustomIcon';
-import {global} from '../style';
 const categories = [
   'Todos',
   'Pizza',
@@ -65,87 +64,102 @@ const HomeScreen = ({
   ];
 
   return (
-    <View style={global.mainContainer}>
-      <View>
-        <View style={styles.textDiv}>
-          <Text style={styles.mainText}>
-            Olá, <Text style={{color: COLORS.primaryRedHex}}>Iago! </Text>
-          </Text>
-
-          <TouchableOpacity
-            onPress={buttonPressHandler}
-            style={{
-              flexDirection: 'row',
-              gap: 10,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <CustomIcon
-              name="search"
-              size={25}
-              color={COLORS.primaryOrangeHex}
-            />
-          </TouchableOpacity>
-        </View>
-
+    <View style={styles.mainContainer}>
+      <View
+        style={{
+          paddingHorizontal: 20,
+          paddingTop: 25,
+          borderBottomWidth: 0.25,
+        }}>
         <View>
-          <Text>
-            105 <Text>Pontos </Text>
-          </Text>
+          <View style={styles.textDiv}>
+            <Text style={styles.mainText}>
+              Olá, <Text style={{color: COLORS.primaryRedHex}}>Iago! </Text>
+            </Text>
+
+            <TouchableOpacity
+              onPress={buttonPressHandler}
+              style={{
+                flexDirection: 'row',
+                gap: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <CustomIcon
+                name="search"
+                size={25}
+                color={COLORS.primaryOrangeHex}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View>
+            <Text
+              style={{
+                fontSize: FONTSIZE.size_14,
+                color: COLORS.primaryBlackHex,
+                textDecorationLine: 'underline',
+              }}>
+              105 Pontos
+            </Text>
+          </View>
+
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.CategoryScrollViewStyle}>
+            {categories.map((data, index) => (
+              <View
+                key={index.toString()}
+                style={styles.CategoryScrollViewContainer}>
+                <TouchableOpacity
+                  style={styles.CategoryScrollViewItem}
+                  onPress={() => {
+                    ListRef?.current?.scrollToOffset({
+                      animated: true,
+                      offset: 0,
+                    });
+                    setCategoryIndex({
+                      index: index,
+                      category: categories[index],
+                    });
+                  }}>
+                  <Text
+                    style={[
+                      styles.CategoryText,
+                      categoryIndex.index == index
+                        ? {
+                            color: COLORS.primaryRedHex,
+                            borderBottomWidth: 2,
+                            borderColor: COLORS.primaryRedHex,
+                          }
+                        : {},
+                    ]}>
+                    {data}
+                  </Text>
+                  {categoryIndex.index == index ? (
+                    <View style={styles.ActiveCategory} />
+                  ) : (
+                    <></>
+                  )}
+                </TouchableOpacity>
+              </View>
+            ))}
+          </ScrollView>
         </View>
 
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.CategoryScrollViewStyle}>
-          {categories.map((data, index) => (
-            <View
-              key={index.toString()}
-              style={styles.CategoryScrollViewContainer}>
-              <TouchableOpacity
-                style={styles.CategoryScrollViewItem}
-                onPress={() => {
-                  ListRef?.current?.scrollToOffset({
-                    animated: true,
-                    offset: 0,
-                  });
-                  setCategoryIndex({index: index, category: categories[index]});
-                }}>
-                <Text
-                  style={[
-                    styles.CategoryText,
-                    categoryIndex.index == index
-                      ? {
-                          color: COLORS.primaryOrangeHex,
-                          borderBottomWidth: 2,
-                          borderColor: COLORS.primaryRedHex,
-                        }
-                      : {},
-                  ]}>
-                  {data}
-                </Text>
-                {categoryIndex.index == index ? (
-                  <View style={styles.ActiveCategory} />
-                ) : (
-                  <></>
-                )}
-              </TouchableOpacity>
-            </View>
+        <View style={styles.ViewDiv}>
+          {ViewList.map((icon, key) => (
+            <TouchableOpacity
+              key={key}
+              style={styles.IconDiv}
+              onPress={() => {
+                setCurrentCard(key);
+              }}>
+              {icon}
+            </TouchableOpacity>
           ))}
-        </ScrollView>
-      </View>
-
-      <View style={styles.ViewDiv}>
-        {ViewList.map((icon, key) => (
-          <TouchableOpacity
-            key={key}
-            style={styles.IconDiv}
-            onPress={() => {
-              setCurrentCard(key);
-            }}>
-            {icon}
-          </TouchableOpacity>
-        ))}
+        </View>
       </View>
 
       <ScrollView
@@ -184,19 +198,14 @@ const HomeScreen = ({
 
 const styles = StyleSheet.create({
   mainContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 30,
+    flex: 1,
+    backgroundColor: '#FFFFFF',
   },
 
   mainText: {
     fontSize: FONTSIZE.size_24,
     fontWeight: '700',
-  },
-
-  addressText: {
-    fontSize: FONTSIZE.size_14,
-    fontWeight: '400',
-    color: COLORS.primaryOrangeHex,
+    color: COLORS.primaryBlackHex,
   },
 
   textDiv: {
@@ -210,6 +219,8 @@ const styles = StyleSheet.create({
   productsDiv: {
     rowGap: 25,
     justifyContent: 'space-around',
+    paddingHorizontal: 20,
+    paddingVertical: 20,
     marginBottom: 100,
   },
 
@@ -225,7 +236,7 @@ const styles = StyleSheet.create({
   CategoryText: {
     fontFamily: FONTFAMILY.poppins_semibold,
     fontSize: FONTSIZE.size_16,
-    color: COLORS.primaryLightGreyHex,
+    color: COLORS.primaryBlackHex,
     marginBottom: SPACING.space_4,
   },
   ActiveCategory: {
