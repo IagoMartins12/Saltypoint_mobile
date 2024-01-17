@@ -1,5 +1,6 @@
 import {
   Dimensions,
+  Image,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -19,13 +20,13 @@ import {
   State,
 } from 'react-native-gesture-handler';
 import StyledInputComponent from '../components/Input';
+import useKeyboardOpen from '../hooks/useKeyboardOpen';
 
 const LoginScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
-  const [isKeyboadVisible, setIsKeyboadVisible] = useState(false);
   const {control, handleSubmit} = useForm();
   const onSubmit = (data: any) => console.log(data);
 
@@ -33,34 +34,11 @@ const LoginScreen = ({
     navigation.push('Register');
   }, [navigation]);
 
+  const isKeyboardVisible = useKeyboardOpen();
+
   const onSwipeRight = useCallback(() => {
     navigation.navigate('MainScreen');
   }, [navigation]);
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => {
-        setIsKeyboadVisible(true);
-        console.log('Keyboard is visible');
-      },
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {
-        setIsKeyboadVisible(false);
-        console.log('Keyboard is hidden');
-      },
-    );
-
-    // Clean up listeners on component unmount
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-
-  console.log('keyboard', isKeyboadVisible);
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
@@ -74,16 +52,20 @@ const LoginScreen = ({
           }
         }}>
         <View style={styles.loginMainView}>
-          <View style={styles.imageContainer}>
+          <View
+            style={[
+              styles.imageContainer,
+              {flex: isKeyboardVisible ? 0.75 : 0.5},
+            ]}>
             <LoginAnimation />
+          </View>
+          <View style={styles.subContainer}>
             <View style={styles.brandwView}>
               <Text style={styles.brandwViewText}>Bem-vindo de volta! </Text>
               <Text style={styles.brandwViewSubText}>
                 Faça o login para se autenticar e realizar o seu pedido
               </Text>
             </View>
-          </View>
-          <View style={styles.subContainer}>
             <View style={styles.bottomView}>
               {/* Form  */}
 
@@ -112,14 +94,31 @@ const LoginScreen = ({
                     <TouchableOpacity
                       onPress={handleSubmit(onSubmit)}
                       style={styles.buttonStyle}>
-                      <Text style={{color: '#FFFFFF'}}>Continuar</Text>
+                      <Text style={{color: '#FFFFFF', paddingRight: 10}}>
+                        Continuar
+                      </Text>
                     </TouchableOpacity>
 
-                    {!isKeyboadVisible ? (
+                    {!isKeyboardVisible ? (
                       <>
                         <TouchableOpacity
                           onPress={handleSubmit(onSubmit)}
                           style={styles.googleButton}>
+                          <View
+                            style={{
+                              height: 25,
+                              width: 25,
+                              marginRight: 10,
+                            }}>
+                            <Image
+                              source={require('../assets/googleIcon.png')}
+                              style={{
+                                height: '100%',
+                                width: '100%',
+                              }}
+                            />
+                          </View>
+
                           <Text style={{color: '#000000'}}>
                             Continuar com Google
                           </Text>
@@ -158,8 +157,7 @@ const styles = StyleSheet.create({
   },
 
   imageContainer: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#ffffff',
   },
   brandwView: {
     justifyContent: 'center',
@@ -230,6 +228,7 @@ const styles = StyleSheet.create({
   },
 
   googleButton: {
+    flexDirection: 'row',
     width: Dimensions.get('screen').width / 1.25,
     borderRadius: BORDERRADIUS.radius_20,
     height: 45,

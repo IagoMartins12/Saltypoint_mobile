@@ -17,6 +17,7 @@ import {
 } from 'react-native-gesture-handler';
 import PizzaAnimation from '../components/Lottie/PizzaAnimation';
 import StyledInputComponent from '../components/Input';
+import useKeyboardOpen from '../hooks/useKeyboardOpen';
 
 const RegisterScreen = ({
   navigation,
@@ -25,6 +26,7 @@ const RegisterScreen = ({
 }) => {
   const {control, handleSubmit} = useForm();
   const onSubmit = (data: any) => console.log(data);
+  const isKeyboardVisible = useKeyboardOpen();
 
   const buttonPressHandler = () => {
     navigation.push('Login');
