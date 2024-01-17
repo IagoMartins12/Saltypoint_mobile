@@ -37,18 +37,21 @@ const StyledInputComponent: React.FC<InputProps> = ({
             style={[
               styles.InputContainerComponent,
               {
-                borderColor: isFocused ? 'blue' : 'black',
+                borderColor: isFocused ? COLORS.primaryRedHex : 'black',
               },
             ]}>
-            {/* <View
+            <View
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
                 paddingHorizontal: 10,
-                borderRightWidth: 0.25,
+                borderRightWidth: 0.5,
+                borderRightColor: isFocused
+                  ? COLORS.primaryRedHex
+                  : COLORS.primaryBlackHex,
               }}>
               <CustomIcon name="settings" size={25} pack="Feather" />
-            </View> */}
+            </View>
             <TextInput
               placeholder={isFocused ? '' : placeholder}
               onBlur={() => {
@@ -66,7 +69,7 @@ const StyledInputComponent: React.FC<InputProps> = ({
                 style={[
                   styles.placeholder,
                   {
-                    color: isFocused ? 'blue' : '#000000',
+                    color: isFocused ? COLORS.primaryRedHex : '#000000',
                   },
                 ]}>
                 {placeholder}
@@ -88,6 +91,7 @@ const styles = StyleSheet.create({
     borderRadius: BORDERRADIUS.radius_10,
     borderWidth: 0.5,
     position: 'relative',
+    height: 50,
   },
   input: {
     flex: 1,
@@ -96,7 +100,7 @@ const styles = StyleSheet.create({
   },
   placeholder: {
     position: 'absolute',
-    left: 10,
+    left: 50,
     top: -10,
     backgroundColor: 'white',
     paddingHorizontal: 4,

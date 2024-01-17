@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   LottieStyle: {
-    height: 350,
+    height: 300,
   },
   LottieText: {
     fontFamily: FONTFAMILY.poppins_medium,

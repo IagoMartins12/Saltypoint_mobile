@@ -7,9 +7,12 @@ import {
   State,
 } from 'react-native-gesture-handler';
 import {global} from '../../style';
-import {FONTSIZE} from '../../theme/theme';
+import {COLORS, FONTSIZE} from '../../theme/theme';
 import {useForm} from 'react-hook-form';
 import StyledInputComponent from '../../components/Input';
+import Dropdown from '../../components/Select';
+import CustomIcon from '../../components/CustomIcon';
+import ComeBack from '../../components/ComeBack';
 
 const ProfileScreen = ({
   navigation,
@@ -35,13 +38,32 @@ const ProfileScreen = ({
             onSwipeLeft();
           }
         }}>
-        <View style={global.mainContainer}>
-          <View style={styles.profileContainer}>
-            <View style={styles.profilePhotoDiv}>
-              <Image
-                style={styles.CartItemImage}
-                source={require('../../assets/avatar.png')}
-              />
+        <View style={styles.mainContainer}>
+          <View style={[styles.profileContainer, global.shadow]}>
+            <ComeBack navigation={navigation} />
+            <View
+              style={{
+                alignSelf: 'center',
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'absolute',
+              }}>
+              <View style={styles.profilePhotoDiv}>
+                <Image
+                  style={styles.CartItemImage}
+                  source={require('../../assets/avatar.png')}
+                />
+              </View>
+              <Text
+                style={{
+                  fontSize: FONTSIZE.size_18,
+                  fontWeight: '500',
+                  color: '#000000',
+                  marginTop: 10,
+                }}>
+                Iago martins
+              </Text>
             </View>
           </View>
 
@@ -61,11 +83,8 @@ const ProfileScreen = ({
               name="cellphone"
               placeholder="Telefone: "
             />
-            <StyledInputComponent
-              control={control}
-              name="Email"
-              placeholder="Email: "
-            />
+
+            <Dropdown />
           </View>
         </View>
       </PanGestureHandler>
@@ -76,14 +95,17 @@ const ProfileScreen = ({
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    marginHorizontal: 20,
-    marginVertical: 30,
+    backgroundColor: '#ffffff',
   },
 
   profileContainer: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    flexDirection: 'row',
+    position: 'relative',
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1.25,
   },
 
   profilePhotoDiv: {
@@ -97,8 +119,11 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 100000,
     overflow: 'hidden',
+    alignSelf: 'center', // Adicionado para centralizar a imagem
   },
   listContainar: {
+    paddingHorizontal: 20,
+    paddingVertical: 30,
     flex: 3,
     gap: 12,
   },

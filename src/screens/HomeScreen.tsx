@@ -19,6 +19,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import ProductCard from '../components/ProductCard';
 import ProductCardHorizontal from '../components/ProductCardHorizontal';
 import CustomIcon from '../components/CustomIcon';
+import {global} from '../style';
 const categories = [
   'Todos',
   'Pizza',
@@ -66,11 +67,13 @@ const HomeScreen = ({
   return (
     <View style={styles.mainContainer}>
       <View
-        style={{
-          paddingHorizontal: 20,
-          paddingTop: 25,
-          borderBottomWidth: 0.25,
-        }}>
+        style={[
+          global.shadow,
+          {
+            paddingHorizontal: 20,
+            paddingTop: 25,
+          },
+        ]}>
         <View>
           <View style={styles.textDiv}>
             <Text style={styles.mainText}>

@@ -48,17 +48,22 @@ const RegisterScreen = ({
             onSwipeRight();
           }
         }}>
-        <View style={styles.loginMainView} collapsable>
-          <View style={styles.imageContainer}>
+        <View style={styles.loginMainView}>
+          <View
+            style={[
+              styles.imageContainer,
+              {flex: isKeyboardVisible ? 0.75 : 0.5},
+            ]}>
             <PizzaAnimation />
+          </View>
+
+          <View style={styles.subContainer}>
             <View style={styles.brandwView}>
               <Text style={styles.brandwViewText}>Bem-vindo!</Text>
               <Text style={styles.brandwViewSubText}>
                 Se cadastre para realizar os seus pedidos
               </Text>
             </View>
-          </View>
-          <View style={styles.subContainer}>
             <View style={styles.bottomView}>
               {/* Form  */}
               <View style={styles.mainContainer}>
