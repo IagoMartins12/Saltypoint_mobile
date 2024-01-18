@@ -108,7 +108,7 @@ const ProfileScreen = ({
                 control={control}
                 name="cellphone"
                 placeholder="Telefone: "
-                icon="cellphone"
+                icon="email-outline"
               />
               <Dropdown />
             </View>
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   },
   listContainar: {
     paddingHorizontal: 20,
-    paddingVertical: 30,
+    paddingVertical: 20,
     flex: 3,
     justifyContent: 'flex-start',
     gap: 45,

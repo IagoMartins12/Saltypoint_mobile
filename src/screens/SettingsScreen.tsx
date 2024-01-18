@@ -63,7 +63,7 @@ const SettingsScreen = ({
       icon: 'shield',
       pack: 'SimpleLineIcons' as PackNames,
       onClick: () => {
-        handleNavigate('Profile');
+        handleNavigate('Term');
       },
     },
     {
