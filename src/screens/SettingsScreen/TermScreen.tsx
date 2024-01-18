@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
@@ -7,10 +7,9 @@ import {
   ScrollView,
   State,
 } from 'react-native-gesture-handler';
-import {global} from '../../style';
-import CustomIcon from '../../components/CustomIcon';
-import {FONTSIZE} from '../../theme/theme';
+
 import SectionTitle from '../../components/SectionTitle';
+import {COLORS, FONTSIZE} from '../../theme/theme';
 
 const TermScreen = ({
   navigation,
@@ -34,10 +33,12 @@ const TermScreen = ({
             onSwipeLeft();
           }
         }}>
-        <ScrollView>
-          <View style={global.mainContainer}>
+        <View style={{flex: 1}}>
+          <View style={{flex: 0.09, backgroundColor: COLORS.primaryWhiteHex}}>
             <SectionTitle comeBack={comeBack} title="Termos de uso" />
-            <View style={{marginVertical: 25, gap: 15}}>
+          </View>
+          <ScrollView style={styles.mainContainer}>
+            <View style={{gap: 15}}>
               <View style={styles.section}>
                 <View style={styles.textContainer}>
                   <Text style={styles.text}>
@@ -135,14 +136,20 @@ const TermScreen = ({
                 </Text>
               </View>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </View>
       </PanGestureHandler>
     </GestureHandlerRootView>
   );
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#FFFFFF',
+  },
   section: {
     flex: 1,
   },
@@ -157,13 +164,13 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   text: {
-    fontSize: 16,
-    fontWeight: '300',
+    fontSize: FONTSIZE.size_18,
+    fontWeight: '500',
     color: '#000000',
   },
   listItem: {
-    fontSize: 16,
-    fontWeight: '300',
+    fontSize: FONTSIZE.size_16,
+    fontWeight: '400',
     marginLeft: 10,
     color: '#000000',
   },

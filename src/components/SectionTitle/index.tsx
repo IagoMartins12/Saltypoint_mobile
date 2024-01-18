@@ -13,9 +13,10 @@ const SectionTitle: React.FC<SectionTitleProps> = ({comeBack, title}) => {
       style={[
         global.shadow,
         {
-          height: '0.5%',
+          flex: 1,
           flexDirection: 'row',
           alignItems: 'center',
+          paddingLeft: 15,
         },
       ]}>
       <View style={{width: '15%'}}>

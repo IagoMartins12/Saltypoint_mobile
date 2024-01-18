@@ -56,8 +56,8 @@ const ForgetPasswordModal: React.FC<teste> = ({
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',
-                  height: 45,
-                  width: 45,
+                  height: 35,
+                  width: 35,
                   backgroundColor: '#f0efef',
                   borderRadius: 100,
                   top: 15,

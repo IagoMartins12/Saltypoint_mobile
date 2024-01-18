@@ -1,11 +1,17 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
   PanGestureHandler,
+  ScrollView,
   State,
 } from 'react-native-gesture-handler';
+import {global} from '../../style';
+
+import SectionTitle from '../../components/SectionTitle';
+import {COLORS, FONTSIZE} from '../../theme/theme';
+import CouponCard from '../../components/CouponCard';
 
 const CouponsScreen = ({
   navigation,
@@ -13,10 +19,11 @@ const CouponsScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const onSwipeLeft = () => {
-    // Navegar para a página desejada
     navigation.navigate('Settings');
   };
-
+  const comeBack = () => {
+    navigation.pop();
+  };
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <PanGestureHandler
@@ -28,20 +35,22 @@ const CouponsScreen = ({
             onSwipeLeft();
           }
         }}>
-        <View style={styles.mainContainer}>
-          <Text>CouponsScreen</Text>
+        <View style={{flex: 1}}>
+          <View style={{flex: 0.09, backgroundColor: COLORS.primaryWhiteHex}}>
+            <SectionTitle comeBack={comeBack} title="Meus cupons" />
+          </View>
+          <ScrollView style={global.mainContainer}>
+            <View style={{gap: 15, flex: 1}}>
+              <CouponCard />
+              <CouponCard />
+            </View>
+          </ScrollView>
         </View>
       </PanGestureHandler>
     </GestureHandlerRootView>
   );
 };
 
-const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    marginHorizontal: 20,
-    marginVertical: 30,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default CouponsScreen;

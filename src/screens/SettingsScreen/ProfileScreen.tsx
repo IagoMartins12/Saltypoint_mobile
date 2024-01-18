@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   },
   listContainar: {
     paddingHorizontal: 20,
-    paddingVertical: 20,
+    paddingVertical: 10,
     flex: 3,
     justifyContent: 'flex-start',
     gap: 45,
