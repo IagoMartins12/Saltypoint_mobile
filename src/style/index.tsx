@@ -1,4 +1,5 @@
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
+import {BORDERRADIUS, COLORS} from '../theme/theme';
 
 export const global = StyleSheet.create({
   mainContainer: {
@@ -17,5 +18,24 @@ export const global = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
     elevation: 2,
+  },
+  buttonStyle: {
+    width: Dimensions.get('screen').width / 1.25,
+    borderRadius: BORDERRADIUS.radius_20,
+    backgroundColor: COLORS.primaryRedHex,
+    height: 45,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  buttonStyleWhite: {
+    flexDirection: 'row',
+    width: Dimensions.get('screen').width / 1.25,
+    borderRadius: BORDERRADIUS.radius_20,
+    height: 45,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: '#130241',
+    borderWidth: 1.25,
   },
 });

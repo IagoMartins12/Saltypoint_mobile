@@ -21,6 +21,8 @@ import {
 } from 'react-native-gesture-handler';
 import StyledInputComponent from '../components/Input';
 import useKeyboardOpen from '../hooks/useKeyboardOpen';
+import {global} from '../style';
+import LargeButton from '../components/Button';
 
 const LoginScreen = ({
   navigation,
@@ -74,12 +76,14 @@ const LoginScreen = ({
                   control={control}
                   name="Email"
                   placeholder="Email: "
+                  icon="email-outline"
                 />
 
                 <StyledInputComponent
                   control={control}
                   name="Senha"
                   placeholder="Senha: "
+                  icon="asterisk"
                   isPassword
                 />
 
@@ -91,19 +95,17 @@ const LoginScreen = ({
 
                 <View>
                   <View style={styles.buttonDiv}>
-                    <TouchableOpacity
-                      onPress={handleSubmit(onSubmit)}
-                      style={styles.buttonStyle}>
-                      <Text style={{color: '#FFFFFF', paddingRight: 10}}>
-                        Continuar
-                      </Text>
-                    </TouchableOpacity>
+                    <LargeButton
+                      handleSubmit={handleSubmit}
+                      onSubmit={onSubmit}
+                      text="Continuar"
+                    />
 
                     {!isKeyboardVisible ? (
                       <>
                         <TouchableOpacity
                           onPress={handleSubmit(onSubmit)}
-                          style={styles.googleButton}>
+                          style={global.buttonStyleWhite}>
                           <View
                             style={{
                               height: 25,
@@ -216,25 +218,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 20,
-  },
-
-  buttonStyle: {
-    width: Dimensions.get('screen').width / 1.25,
-    borderRadius: BORDERRADIUS.radius_20,
-    backgroundColor: COLORS.primaryRedHex,
-    height: 45,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  googleButton: {
-    flexDirection: 'row',
-    width: Dimensions.get('screen').width / 1.25,
-    borderRadius: BORDERRADIUS.radius_20,
-    height: 45,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: '#130241',
-    borderWidth: 1.25,
   },
 });

@@ -18,6 +18,7 @@ import {
 import PizzaAnimation from '../components/Lottie/PizzaAnimation';
 import StyledInputComponent from '../components/Input';
 import useKeyboardOpen from '../hooks/useKeyboardOpen';
+import {global} from '../style';
 
 const RegisterScreen = ({
   navigation,
@@ -71,12 +72,14 @@ const RegisterScreen = ({
                   control={control}
                   name="Email"
                   placeholder="Email: "
+                  icon="email-outline"
                 />
 
                 <StyledInputComponent
                   control={control}
                   name="Senha"
                   placeholder="Senha: "
+                  icon="asterisk"
                   isPassword
                 />
 
@@ -84,13 +87,14 @@ const RegisterScreen = ({
                   control={control}
                   name="confirmPassword"
                   placeholder="Confirme a senha: "
+                  icon="asterisk"
                   isPassword
                 />
 
                 <View style={styles.buttonDiv}>
                   <TouchableOpacity
                     onPress={handleSubmit(onSubmit)}
-                    style={styles.buttonStyle}>
+                    style={global.buttonStyle}>
                     <Text style={{color: '#FFFFFF'}}>Registrar</Text>
                   </TouchableOpacity>
                 </View>
@@ -197,15 +201,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 20,
-  },
-
-  buttonStyle: {
-    width: Dimensions.get('screen').width / 1.25,
-    borderRadius: BORDERRADIUS.radius_20,
-    backgroundColor: COLORS.primaryRedHex,
-    height: 45,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 
   googleButton: {

@@ -9,7 +9,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import {BORDERRADIUS, COLORS, FONTSIZE} from '../../theme/theme';
-import CustomIcon from '../CustomIcon';
+import CustomIcon, {PackNames} from '../CustomIcon';
 
 interface InputProps {
   name: string;
@@ -17,6 +17,8 @@ interface InputProps {
   text?: string;
   control: Control<FieldValues, any>;
   isPassword?: boolean;
+  icon: string;
+  pack?: PackNames;
 }
 
 const StyledInputComponent: React.FC<InputProps> = ({
@@ -24,6 +26,8 @@ const StyledInputComponent: React.FC<InputProps> = ({
   name,
   placeholder,
   isPassword,
+  icon,
+  pack = 'MaterialCommunityIcons',
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -50,7 +54,7 @@ const StyledInputComponent: React.FC<InputProps> = ({
                   ? COLORS.primaryRedHex
                   : COLORS.primaryBlackHex,
               }}>
-              <CustomIcon name="settings" size={25} pack="Feather" />
+              <CustomIcon name={icon} size={25} pack={pack} />
             </View>
             <TextInput
               placeholder={isFocused ? '' : placeholder}

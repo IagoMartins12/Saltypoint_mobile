@@ -1,5 +1,12 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
@@ -13,18 +20,34 @@ import StyledInputComponent from '../../components/Input';
 import Dropdown from '../../components/Select';
 import CustomIcon from '../../components/CustomIcon';
 import ComeBack from '../../components/ComeBack';
+import useKeyboardOpen from '../../hooks/useKeyboardOpen';
+import ForgetPasswordModal from '../../components/Modals/ForgetPasswordModal';
+import {useSharedValue, withTiming} from 'react-native-reanimated';
 
 const ProfileScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const [modalOpen, setModalOpen] = useState(false);
   const {control, handleSubmit} = useForm();
   const onSubmit = (data: any) => console.log(data);
+  const translateY = useSharedValue(Dimensions.get('window').height);
 
+  const isKeyboardVisible = useKeyboardOpen();
   const onSwipeLeft = () => {
     // Navegar para a página desejada
     navigation.navigate('Settings');
+  };
+
+  const showModal = () => {
+    translateY.value = withTiming(0, {duration: 500});
+  };
+
+  const hideModal = () => {
+    translateY.value = withTiming(Dimensions.get('window').height, {
+      duration: 500,
+    });
   };
 
   return (
@@ -39,7 +62,7 @@ const ProfileScreen = ({
           }
         }}>
         <View style={styles.mainContainer}>
-          <View style={[styles.profileContainer, global.shadow]}>
+          <View style={[global.shadow, styles.profileContainer]}>
             <ComeBack navigation={navigation} />
             <View
               style={{
@@ -68,24 +91,60 @@ const ProfileScreen = ({
           </View>
 
           <View style={styles.listContainar}>
-            <StyledInputComponent
-              control={control}
-              name="name"
-              placeholder="Nome: "
-            />
-            <StyledInputComponent
-              control={control}
-              name="Email"
-              placeholder="Email: "
-            />
-            <StyledInputComponent
-              control={control}
-              name="cellphone"
-              placeholder="Telefone: "
-            />
+            <View style={{gap: 12}}>
+              <StyledInputComponent
+                control={control}
+                name="name"
+                icon="account-circle-outline"
+                placeholder="Nome: "
+              />
+              <StyledInputComponent
+                control={control}
+                name="Email"
+                placeholder="Email: "
+                icon="email-outline"
+              />
+              <StyledInputComponent
+                control={control}
+                name="cellphone"
+                placeholder="Telefone: "
+                icon="cellphone"
+              />
+              <Dropdown />
+            </View>
 
-            <Dropdown />
+            {!isKeyboardVisible ? (
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={handleSubmit(onSubmit)}
+                  style={global.buttonStyle}>
+                  <Text style={{color: '#FFFFFF'}}>Editar</Text>
+                </TouchableOpacity>
+                <Text
+                  onPress={() => {
+                    showModal();
+                    setModalOpen(true);
+                  }}
+                  style={{
+                    color: COLORS.primaryRedHex,
+                    textDecorationLine: 'underline',
+                  }}>
+                  Alterar senha
+                </Text>
+              </View>
+            ) : null}
           </View>
+          <ForgetPasswordModal
+            modalOpen={modalOpen}
+            setModalOpen={setModalOpen}
+            hideModal={hideModal}
+            translateY={translateY}
+          />
         </View>
       </PanGestureHandler>
     </GestureHandlerRootView>
@@ -99,33 +158,31 @@ const styles = StyleSheet.create({
   },
 
   profileContainer: {
-    flex: 1,
-    paddingHorizontal: 20,
+    flex: 1.75,
     paddingVertical: 30,
-    flexDirection: 'row',
     position: 'relative',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'transparent',
   },
 
   profilePhotoDiv: {
-    height: 100,
-    width: 100,
-    borderRadius: 100000,
+    height: 150,
+    width: 150,
   },
 
   CartItemImage: {
     height: '100%',
     width: '100%',
-    borderRadius: 100000,
+    borderRadius: 100,
     overflow: 'hidden',
-    alignSelf: 'center', // Adicionado para centralizar a imagem
   },
   listContainar: {
     paddingHorizontal: 20,
     paddingVertical: 30,
     flex: 3,
-    gap: 12,
+    justifyContent: 'flex-start',
+    gap: 45,
   },
 });
 

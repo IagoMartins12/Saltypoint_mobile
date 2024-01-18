@@ -19,6 +19,8 @@ const SelectComponent = () => {
     );
   };
 
+  const Placeholder = {label: 'Selecione um endereço', value: null};
+
   return (
     <View>
       <RNPickerSelect
@@ -46,6 +48,7 @@ const SelectComponent = () => {
         //@ts-ignore
         Icon={CustomSelectIcon}
         onValueChange={value => console.log(value)}
+        placeholder={Placeholder}
         items={[
           {label: 'Football', value: 'football'},
           {label: 'Baseball', value: 'baseball'},

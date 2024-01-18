@@ -4,6 +4,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'; // Substitua 
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6'; // Substitua 'FontAwesome' pelo conjunto de ícones desejado
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Substitua 'FontAwesome' pelo conjunto de ícones desejado
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'; // Substitua 'FontAwesome' pelo conjunto de ícones desejado
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'; // Substitua 'FontAwesome' pelo conjunto de ícones desejado
 
 export type PackNames =
   | 'FontAwesome'
@@ -11,7 +12,8 @@ export type PackNames =
   | 'FontAwesome5'
   | 'FontAwesome6'
   | 'Ionicons'
-  | 'SimpleLineIcons';
+  | 'SimpleLineIcons'
+  | 'MaterialCommunityIcons';
 
 interface CustomIconProps {
   name: string;
@@ -48,6 +50,10 @@ const CustomIcon: React.FC<CustomIconProps> = ({
 
   if (pack === 'SimpleLineIcons') {
     return <SimpleLineIcons name={name} size={size} color={color} />;
+  }
+
+  if (pack === 'MaterialCommunityIcons') {
+    return <MaterialCommunityIcons name={name} size={size} color={color} />;
   }
 };
 

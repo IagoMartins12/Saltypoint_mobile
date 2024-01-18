@@ -42,6 +42,7 @@ const SearchComponent: React.FC<SearchProps> = ({
         justifyContent: 'center',
         gap: 15,
         alignSelf: onFocus ? 'flex-start' : 'flex-end',
+        position: 'relative',
       }}>
       {!onFocus ? (
         <TouchableOpacity onPress={buttonPressHandler}>
