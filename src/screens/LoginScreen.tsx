@@ -39,7 +39,7 @@ const LoginScreen = ({
   const isKeyboardVisible = useKeyboardOpen();
 
   const onSwipeRight = useCallback(() => {
-    navigation.navigate('MainScreen');
+    navigation.navigate('Main');
   }, [navigation]);
 
   return (

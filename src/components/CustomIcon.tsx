@@ -1,10 +1,11 @@
-import FontAwesome from 'react-native-vector-icons/FontAwesome'; // Substitua 'FontAwesome' pelo conjunto de ícones desejado
-import Feather from 'react-native-vector-icons/Feather'; // Substitua 'FontAwesome' pelo conjunto de ícones desejado
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'; // Substitua 'FontAwesome' pelo conjunto de ícones desejado
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6'; // Substitua 'FontAwesome' pelo conjunto de ícones desejado
-import Ionicons from 'react-native-vector-icons/Ionicons'; // Substitua 'FontAwesome' pelo conjunto de ícones desejado
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'; // Substitua 'FontAwesome' pelo conjunto de ícones desejado
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'; // Substitua 'FontAwesome' pelo conjunto de ícones desejado
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 export type PackNames =
   | 'FontAwesome'
@@ -13,6 +14,7 @@ export type PackNames =
   | 'FontAwesome6'
   | 'Ionicons'
   | 'SimpleLineIcons'
+  | 'Entypo'
   | 'MaterialCommunityIcons';
 
 interface CustomIconProps {
@@ -54,6 +56,10 @@ const CustomIcon: React.FC<CustomIconProps> = ({
 
   if (pack === 'MaterialCommunityIcons') {
     return <MaterialCommunityIcons name={name} size={size} color={color} />;
+  }
+
+  if (pack === 'Entypo') {
+    return <Entypo name={name} size={size} color={color} />;
   }
 };
 

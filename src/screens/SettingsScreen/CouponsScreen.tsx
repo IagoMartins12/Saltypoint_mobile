@@ -36,8 +36,8 @@ const CouponsScreen = ({
           }
         }}>
         <View style={{flex: 1}}>
-          <View style={{flex: 0.09, backgroundColor: COLORS.primaryWhiteHex}}>
-            <SectionTitle comeBack={comeBack} title="Meus cupons" />
+          <View style={{flex: 0.09, backgroundColor: COLORS.primaryBlackHex}}>
+            <SectionTitle comeBack={comeBack} />
           </View>
           <ScrollView style={global.mainContainer}>
             <View style={{gap: 15, flex: 1}}>

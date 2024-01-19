@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
-import {global} from '../../style';
 import {COLORS} from '../../theme/theme';
 
 const CouponCard = () => {

@@ -35,7 +35,7 @@ const RegisterScreen = ({
 
   const onSwipeRight = () => {
     // Navegar para a página desejada
-    navigation.navigate('MainScreen');
+    navigation.navigate('Main');
   };
 
   return (

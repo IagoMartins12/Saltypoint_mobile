@@ -21,10 +21,10 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="MainScreen"
+        initialRouteName="Main"
         screenOptions={{headerShown: false}}>
         <Stack.Screen
-          name="MainScreen"
+          name="Main"
           component={MainScreen}
           options={{animation: 'slide_from_left'}}
         />
@@ -39,7 +39,7 @@ const App = () => {
           options={{animation: 'slide_from_right'}}
         />
         <Stack.Screen
-          name="Searchscreen"
+          name="Search"
           component={SearchScreen}
           options={{animation: 'slide_from_right'}}
         />

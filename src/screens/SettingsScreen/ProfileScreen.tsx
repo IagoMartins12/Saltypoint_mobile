@@ -75,7 +75,7 @@ const ProfileScreen = ({
               <View style={styles.profilePhotoDiv}>
                 <Image
                   style={styles.CartItemImage}
-                  source={require('../../assets/avatar.png')}
+                  source={require('../../assets/profile.png')}
                 />
               </View>
               <Text

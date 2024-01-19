@@ -71,7 +71,7 @@ const SettingsScreen = ({
       icon: 'logout',
       pack: 'SimpleLineIcons' as PackNames,
       onClick: () => {
-        handleNavigate('Profile');
+        handleNavigate('Main');
       },
     },
   ];
@@ -82,7 +82,7 @@ const SettingsScreen = ({
         <View style={styles.profilePhotoDiv}>
           <Image
             style={styles.CartItemImage}
-            source={require('../assets/avatar.png')}
+            source={require('../assets/profile.png')}
           />
         </View>
         <Text

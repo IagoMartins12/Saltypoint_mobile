@@ -43,7 +43,7 @@ const HomeScreen = ({
   const ListRef: any = useRef<FlatList>();
 
   const buttonPressHandler = () => {
-    navigation.push('Searchscreen');
+    navigation.push('Search');
   };
 
   // Searchscreen;
@@ -151,7 +151,7 @@ const HomeScreen = ({
           </ScrollView>
         </View>
 
-        <View style={styles.ViewDiv}>
+        {/* <View style={styles.ViewDiv}>
           {ViewList.map((icon, key) => (
             <TouchableOpacity
               key={key}
@@ -162,7 +162,7 @@ const HomeScreen = ({
               {icon}
             </TouchableOpacity>
           ))}
-        </View>
+        </View> */}
       </View>
 
       <ScrollView

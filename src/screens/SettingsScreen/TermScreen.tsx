@@ -34,8 +34,8 @@ const TermScreen = ({
           }
         }}>
         <View style={{flex: 1}}>
-          <View style={{flex: 0.09, backgroundColor: COLORS.primaryWhiteHex}}>
-            <SectionTitle comeBack={comeBack} title="Termos de uso" />
+          <View style={{flex: 0.09, backgroundColor: COLORS.primaryBlackHex}}>
+            <SectionTitle comeBack={comeBack} />
           </View>
           <ScrollView style={styles.mainContainer}>
             <View style={{gap: 15}}>

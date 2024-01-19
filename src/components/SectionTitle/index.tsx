@@ -5,7 +5,7 @@ import {global} from '../../style';
 
 interface SectionTitleProps {
   comeBack: () => void;
-  title: string;
+  title?: string;
 }
 const SectionTitle: React.FC<SectionTitleProps> = ({comeBack, title}) => {
   return (
@@ -34,16 +34,18 @@ const SectionTitle: React.FC<SectionTitleProps> = ({comeBack, title}) => {
         </TouchableOpacity>
       </View>
 
-      <Text
-        style={{
-          textAlign: 'center',
-          width: '70%',
-          fontWeight: '600',
-          fontSize: 22,
-          color: '#000000',
-        }}>
-        {title}
-      </Text>
+      {title ? (
+        <Text
+          style={{
+            textAlign: 'center',
+            width: '70%',
+            fontWeight: '600',
+            fontSize: 22,
+            color: '#000000',
+          }}>
+          {title}
+        </Text>
+      ) : null}
     </View>
   );
 };

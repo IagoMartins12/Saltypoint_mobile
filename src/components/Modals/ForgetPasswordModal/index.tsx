@@ -14,14 +14,14 @@ import {useForm} from 'react-hook-form';
 import StyledInputComponent from '../../Input';
 import LargeButton from '../../Button';
 
-interface teste {
+export interface ModalProps {
   modalOpen: boolean;
   setModalOpen: (modalOpen: boolean) => void;
   hideModal: () => void;
   translateY: Animated.SharedValue<number>;
 }
 
-const ForgetPasswordModal: React.FC<teste> = ({
+const ForgetPasswordModal: React.FC<ModalProps> = ({
   modalOpen,
   setModalOpen,
   hideModal,
