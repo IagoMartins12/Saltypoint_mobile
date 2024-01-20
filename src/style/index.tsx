@@ -4,8 +4,8 @@ import {BORDERRADIUS, COLORS} from '../theme/theme';
 export const global = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 30,
+    paddingHorizontal: 15,
+    paddingVertical: 15,
     backgroundColor: '#FFFFFF',
   },
 

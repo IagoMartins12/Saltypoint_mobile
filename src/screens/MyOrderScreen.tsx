@@ -1,5 +1,5 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
@@ -10,12 +10,19 @@ import {
 import SectionTitle from '../components/SectionTitle';
 import {global} from '../style';
 import {COLORS} from '../theme/theme';
+import CustomIcon from '../components/CustomIcon';
+import CardProductOrder from '../components/CardProductOrder';
+import CurrentOrderInfo from '../components/OrderInfo';
+import CartAnimation from '../components/Lottie/CartAnimation';
+import LoginAnimation from '../components/Lottie/LoginAnimation';
 
 const MyOrderScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const [hasPlayed, setHasPlayed] = useState(false);
+
   const onSwipeLeft = () => {
     navigation.navigate('Order');
   };
@@ -37,9 +44,44 @@ const MyOrderScreen = ({
           <View style={{flex: 0.09, backgroundColor: COLORS.primaryBlackHex}}>
             <SectionTitle comeBack={comeBack} />
           </View>
-          <ScrollView style={global.mainContainer}>
-            <View style={{gap: 15, flex: 1}}>
-              <Text>MyOrderScreen</Text>
+          <ScrollView style={styles.mainContainer}>
+            <View style={{flex: 1, paddingBottom: 15}}>
+              <View>
+                <View>
+                  {/* {currentOrder.map(order =>
+                    order.orderItems.map(item => (
+                      <CartProductCardOrder cart_product={item} key={item.id} />
+                    )),
+                  )} */}
+                  <CardProductOrder />
+                  <CardProductOrder />
+                </View>
+
+                <View>
+                  {/* {currentOrder.map((order, i) => (
+                    <CurrentOrderInfo order={order} key={i} />
+                  ))} */}
+
+                  <CurrentOrderInfo />
+                </View>
+              </View>
+              {hasPlayed ? (
+                <View style={styles.buttonContainer}>
+                  <CartAnimation setHasPlayed={setHasPlayed} />
+                </View>
+              ) : (
+                <TouchableOpacity
+                  style={[styles.buttonContainer, {backgroundColor: 'red'}]}
+                  onPress={() => setHasPlayed(true)}>
+                  <CustomIcon
+                    name="shopping-cart"
+                    pack="Feather"
+                    size={22}
+                    color={COLORS.primaryBlackHex}
+                  />
+                  <Text style={styles.buttonText}>Repetir pedido</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </ScrollView>
         </View>
@@ -48,6 +90,29 @@ const MyOrderScreen = ({
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  mainContainer: {
+    flex: 1,
+    paddingHorizontal: 15,
+    backgroundColor: '#FFFFFF',
+  },
+  buttonContainer: {
+    width: '100%',
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  buttonText: {
+    color: 'white',
+    marginLeft: 5,
+  },
+});
 
 export default MyOrderScreen;
