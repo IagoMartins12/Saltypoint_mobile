@@ -14,6 +14,7 @@ import OrderScreen from './src/screens/SettingsScreen/OrderScreen';
 import CouponsScreen from './src/screens/SettingsScreen/CouponsScreen';
 import FidelityScreen from './src/screens/SettingsScreen/FidelityScreen';
 import TermScreen from './src/screens/SettingsScreen/TermScreen';
+import MyOrderScreen from './src/screens/MyOrderScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -59,10 +60,16 @@ const App = () => {
           options={{animation: 'slide_from_right'}}
         />
         <Stack.Screen
+          name="MyOrder"
+          component={MyOrderScreen}
+          options={{animation: 'slide_from_right'}}
+        />
+        <Stack.Screen
           name="Coupons"
           component={CouponsScreen}
           options={{animation: 'slide_from_right'}}
         />
+
         <Stack.Screen
           name="Fidelity"
           component={FidelityScreen}

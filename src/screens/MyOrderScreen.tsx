@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
@@ -7,19 +7,17 @@ import {
   ScrollView,
   State,
 } from 'react-native-gesture-handler';
-import {global} from '../../style';
+import SectionTitle from '../components/SectionTitle';
+import {global} from '../style';
+import {COLORS} from '../theme/theme';
 
-import SectionTitle from '../../components/SectionTitle';
-import {COLORS} from '../../theme/theme';
-import CouponCard from '../../components/CouponCard';
-
-const CouponsScreen = ({
+const MyOrderScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const onSwipeLeft = () => {
-    navigation.navigate('Settings');
+    navigation.navigate('Order');
   };
   const comeBack = () => {
     navigation.pop();
@@ -41,8 +39,7 @@ const CouponsScreen = ({
           </View>
           <ScrollView style={global.mainContainer}>
             <View style={{gap: 15, flex: 1}}>
-              <CouponCard />
-              <CouponCard />
+              <Text>MyOrderScreen</Text>
             </View>
           </ScrollView>
         </View>
@@ -53,4 +50,4 @@ const CouponsScreen = ({
 
 const styles = StyleSheet.create({});
 
-export default CouponsScreen;
+export default MyOrderScreen;
