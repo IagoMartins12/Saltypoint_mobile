@@ -1,5 +1,15 @@
-import {Image, ImageBackground, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {
+  Dimensions,
+  Image,
+  ImageBackground,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {global} from '../style';
 import {FONTSIZE} from '../theme/theme';
@@ -11,8 +21,9 @@ const SettingsScreen = ({
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const [isImageModalVisible, setImageModalVisible] = useState(false);
+
   const handleNavigate = (name: string) => {
-    console.log('name', name);
     navigation.push(name);
   };
 
@@ -22,7 +33,6 @@ const SettingsScreen = ({
       icon: 'user',
       pack: 'SimpleLineIcons' as PackNames,
       onClick: () => {
-        console.log('clicouu');
         handleNavigate('Profile');
       },
     },
@@ -80,10 +90,14 @@ const SettingsScreen = ({
     <View style={global.mainContainer}>
       <View style={styles.profileContainer}>
         <View style={styles.profilePhotoDiv}>
-          <Image
-            style={styles.CartItemImage}
-            source={require('../assets/profile.png')}
-          />
+          <TouchableOpacity
+            onPress={() => setImageModalVisible(true)}
+            style={styles.profilePhotoDiv}>
+            <Image
+              style={styles.CartItemImage}
+              source={require('../assets/profile.png')}
+            />
+          </TouchableOpacity>
         </View>
         <Text
           style={{
@@ -107,6 +121,20 @@ const SettingsScreen = ({
           />
         ))}
       </View>
+
+      <Modal
+        animationType={isImageModalVisible ? 'fade' : 'none'}
+        transparent={true}
+        visible={isImageModalVisible}>
+        <Pressable
+          style={styles.modalContainer}
+          onPress={() => setImageModalVisible(false)}>
+          <Image
+            style={styles.modalImage}
+            source={require('../assets/profile.png')}
+          />
+        </Pressable>
+      </Modal>
     </View>
   );
 };
@@ -125,8 +153,8 @@ const styles = StyleSheet.create({
   },
 
   profilePhotoDiv: {
-    height: 100,
-    width: 100,
+    height: 130,
+    width: 130,
     borderRadius: 100000,
   },
 
@@ -139,6 +167,18 @@ const styles = StyleSheet.create({
   listContainar: {
     flex: 3,
     gap: 8,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
+
+  modalImage: {
+    height: 350,
+    width: 350,
+    borderRadius: 1000,
   },
 });
 

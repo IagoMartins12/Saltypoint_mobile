@@ -165,12 +165,12 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: FONTSIZE.size_18,
-    fontWeight: '500',
+    fontWeight: '300',
     color: '#000000',
   },
   listItem: {
     fontSize: FONTSIZE.size_16,
-    fontWeight: '400',
+    fontWeight: '300',
     marginLeft: 10,
     color: '#000000',
   },

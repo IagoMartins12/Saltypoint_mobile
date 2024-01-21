@@ -4,8 +4,8 @@ import {FieldValues, UseFormHandleSubmit} from 'react-hook-form';
 
 interface LargeButtonProps {
   text: string;
-  handleSubmit: UseFormHandleSubmit<FieldValues, undefined>;
-  onSubmit: (data: any) => void;
+  handleSubmit?: UseFormHandleSubmit<FieldValues, undefined>;
+  onSubmit?: (data: any) => void;
 }
 const LargeButton: React.FC<LargeButtonProps> = ({
   handleSubmit,
@@ -14,7 +14,11 @@ const LargeButton: React.FC<LargeButtonProps> = ({
 }) => {
   return (
     <TouchableOpacity
-      onPress={handleSubmit(onSubmit)}
+      onPress={() => {
+        if (handleSubmit && onSubmit) {
+          handleSubmit(onSubmit);
+        }
+      }}
       style={global.buttonStyle}>
       <Text style={{color: '#FFFFFF', paddingRight: 10}}>{text}</Text>
     </TouchableOpacity>
