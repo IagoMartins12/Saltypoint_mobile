@@ -1,4 +1,5 @@
 import {
+  Animated,
   Dimensions,
   Image,
   ImageBackground,
@@ -15,12 +16,15 @@ import {global} from '../style';
 import {FONTSIZE} from '../theme/theme';
 import SettingsOption from '../components/SettingsOption';
 import {PackNames} from '../components/CustomIcon';
+import ThemeSwitch from '../components/ThemeSwitch';
 
 const SettingsScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const [animation] = useState(new Animated.Value(5));
+  const [isMoving, setIsMoving] = useState(false);
   const [isImageModalVisible, setImageModalVisible] = useState(false);
 
   const handleNavigate = (name: string) => {
@@ -86,8 +90,39 @@ const SettingsScreen = ({
     },
   ];
 
+  const moveView = () => {
+    setIsMoving(!isMoving);
+    const toValue = isMoving ? 5 : 1;
+    Animated.timing(animation, {
+      toValue,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
+  };
+
   return (
     <View style={global.mainContainer}>
+      <Animated.View
+        style={[
+          styles.box,
+          {
+            transform: [
+              {
+                scaleX: animation.interpolate({
+                  inputRange: [1, 5],
+                  outputRange: [1, 2000],
+                }),
+              }, // Vary scaleX between 1 and 2
+              {
+                scaleY: animation.interpolate({
+                  inputRange: [1, 5],
+                  outputRange: [1, 2000],
+                }),
+              }, // Vary scaleY between 1 and 3
+            ],
+          },
+        ]}
+      />
       <View style={styles.profileContainer}>
         <View style={styles.profilePhotoDiv}>
           <TouchableOpacity
@@ -111,15 +146,18 @@ const SettingsScreen = ({
       </View>
 
       <View style={styles.listContainar}>
-        {settingsOptions.map((option, key) => (
-          <SettingsOption
-            icon={option.icon}
-            label={option.label}
-            pack={option.pack}
-            key={key}
-            onClick={option.onClick}
-          />
-        ))}
+        <View style={{gap: 8}}>
+          {settingsOptions.map((option, key) => (
+            <SettingsOption
+              icon={option.icon}
+              label={option.label}
+              pack={option.pack}
+              key={key}
+              onClick={option.onClick}
+            />
+          ))}
+        </View>
+        {/* <ThemeSwitch moveView={moveView} /> */}
       </View>
 
       <Modal
@@ -166,7 +204,7 @@ const styles = StyleSheet.create({
   },
   listContainar: {
     flex: 3,
-    gap: 8,
+    gap: 30,
   },
   modalContainer: {
     flex: 1,
@@ -179,6 +217,12 @@ const styles = StyleSheet.create({
     height: 350,
     width: 350,
     borderRadius: 1000,
+  },
+  box: {
+    width: 1,
+    height: 1,
+    borderRadius: 50,
+    backgroundColor: 'black',
   },
 });
 

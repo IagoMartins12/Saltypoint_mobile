@@ -30,7 +30,7 @@ const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
   };
 
   return (
-    <View style={[styles.mainDiv]}>
+    <View style={[styles.mainDiv, global.shadow]}>
       {renderPointsText()}
 
       <View style={styles.cardContainer}>
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#2505b3',
+    backgroundColor: COLORS.primaryRedHex,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     paddingBottom: 2,
@@ -84,14 +84,15 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   imageWithBorder: {
-    borderRadius: 15, // Ajuste o valor conforme necessário
-    overflow: 'hidden', // Garante que a borda seja aplicada corretamente
-    height: '98%', // Define a altura da imagem em 95% da altura do componente pai
+    borderRadius: 15,
+    overflow: 'hidden',
+    height: '98%',
     alignSelf: 'center',
-    marginLeft: 7,
+    margin: 7,
   },
   cardItemImage: {
     width: Dimensions.get('window').width / 2.25,
+    borderRadius: 50,
   },
   cardInfoContainer: {
     paddingLeft: 7,

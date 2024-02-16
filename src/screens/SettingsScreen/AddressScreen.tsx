@@ -96,10 +96,7 @@ const AddressScreen = ({
             <View style={styles.contentContainer}>
               {address.length > 0 &&
                 address.map((address, i) => (
-                  <TouchableOpacity
-                    key={i}
-                    style={styles.addressItem}
-                    onPress={() => handleOpenDeleteModal(address.id)}>
+                  <View key={i} style={styles.addressItem}>
                     <View style={styles.iconContainer}>
                       {address.type_adress === 0 ? (
                         <CustomIcon
@@ -137,15 +134,17 @@ const AddressScreen = ({
                       )}
                     </View>
 
-                    <View style={styles.deleteIconContainer}>
+                    <TouchableOpacity
+                      style={styles.deleteIconContainer}
+                      onPress={() => handleOpenDeleteModal(address.id)}>
                       <CustomIcon
                         name="trash-2"
                         size={25}
                         color="red"
                         pack="Feather"
                       />
-                    </View>
-                  </TouchableOpacity>
+                    </TouchableOpacity>
+                  </View>
                 ))}
               {address.length === 0 && (
                 <Text style={styles.emptyResultText}>

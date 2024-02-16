@@ -79,7 +79,7 @@ const MainScreen = ({navigation}: any) => {
                   <TouchableOpacity
                     style={styles.firstButton}
                     onPress={buttonLogin}>
-                    <Text style={{color: '#FFFFFF'}}>Login</Text>
+                    <Text style={{color: COLORS.themeColor}}>Login</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.secondButton}
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
 
   bottomView: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.themeColor,
     bottom: 50,
     borderTopStartRadius: 60,
     borderTopEndRadius: 60,
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   },
 
   subContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.themeColor,
     flex: 1,
   },
 

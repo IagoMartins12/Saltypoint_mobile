@@ -16,7 +16,6 @@ import {
 import SectionTitle from '../../components/SectionTitle';
 import {global} from '../../style';
 import {COLORS, FONTSIZE} from '../../theme/theme';
-import CustomIcon from '../../components/CustomIcon';
 import RewardInfo from '../../components/RewardInfo';
 import FidelityAccordeonSection from '../../components/FidelityAccordeonSection';
 

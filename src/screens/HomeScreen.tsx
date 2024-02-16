@@ -151,7 +151,7 @@ const HomeScreen = ({
           </ScrollView>
         </View>
 
-        {/* <View style={styles.ViewDiv}>
+        <View style={styles.ViewDiv}>
           {ViewList.map((icon, key) => (
             <TouchableOpacity
               key={key}
@@ -162,7 +162,7 @@ const HomeScreen = ({
               {icon}
             </TouchableOpacity>
           ))}
-        </View> */}
+        </View>
       </View>
 
       <ScrollView

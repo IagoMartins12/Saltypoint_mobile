@@ -1,3 +1,21 @@
+import {Appearance} from 'react-native';
+
+const color = Appearance.getColorScheme();
+
+export const darkTheme = {
+  containerBackgroundColor: 'black',
+  containerViewColor: 'white',
+  textColor: 'white',
+  switchButtonBackgroundColor: '#ccc',
+};
+
+export const lightTheme = {
+  containerBackgroundColor: 'white',
+  containerViewColor: 'black',
+  textColor: 'black',
+  switchButtonBackgroundColor: '#ccc',
+};
+
 interface Spacing {
   space_2: number;
   space_4: number;
@@ -33,6 +51,8 @@ export const SPACING: Spacing = {
 };
 
 export const COLORS = {
+  themeColor: color === 'dark' ? '#000000' : '#ffffff',
+  themeFontColor: color === 'dark' ? '#ffffff' : '#000000',
   primaryRedHex: '#FF6347',
   primaryYellowHex: '#FFD700',
   primaryGreenHex: '#228B22',

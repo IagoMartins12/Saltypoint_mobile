@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
   PointsText: {
     gap: 5,
-    backgroundColor: '#2505b3',
+    backgroundColor: COLORS.primaryRedHex,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
