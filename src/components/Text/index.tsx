@@ -1,0 +1,66 @@
+import React, {ReactNode} from 'react';
+import {StyleSheet, Text, TextStyle} from 'react-native';
+import useThemeContext from '../../hooks/useThemeContext';
+import {FONTSIZE} from '../../theme/theme';
+
+interface TextProps {
+  textSize?: 'largeText' | 'mediumText' | 'mediumText2' | 'smallText';
+  style?: TextStyle; // Alterado para aceitar qualquer tipo de estilo
+  onPress?: () => void;
+  children?: ReactNode; // Adicionando a propriedade children
+}
+
+const MyText: React.FC<TextProps> = ({
+  textSize = 'mediumText',
+  style,
+  onPress,
+  children, // Adicionando children à desestruturação
+  ...props
+}) => {
+  const {colors} = useThemeContext();
+
+  const getTextStyles = () => {
+    switch (textSize) {
+      case 'largeText':
+        return styles.largeText;
+      case 'mediumText':
+        return styles.mediumText;
+      case 'smallText':
+        return styles.smallText;
+      case 'mediumText2':
+        return styles.mediumText2;
+      default:
+        return styles.mediumText;
+    }
+  };
+
+  const textStyles = [getTextStyles(), {color: colors.text}, style]; // Combinando estilos dinâmicos com os estilos adicionais
+
+  return (
+    <Text style={textStyles} {...props} onPress={onPress}>
+      {children}
+    </Text>
+  ); // Passando children para o componente Text
+};
+
+const styles = StyleSheet.create({
+  largeText: {
+    fontSize: FONTSIZE.size_24,
+    fontWeight: '700',
+  },
+  mediumText: {
+    fontSize: FONTSIZE.size_18,
+    fontWeight: '500',
+  },
+
+  mediumText2: {
+    fontSize: FONTSIZE.size_14,
+    fontWeight: '500',
+  },
+  smallText: {
+    fontSize: FONTSIZE.size_12,
+    fontWeight: '400',
+  },
+});
+
+export default MyText;
