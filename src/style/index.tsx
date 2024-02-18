@@ -38,4 +38,22 @@ export const global = StyleSheet.create({
     borderColor: '#130241',
     borderWidth: 1.25,
   },
+
+  notRoundedButton: {
+    gap: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    paddingVertical: 10,
+    borderRadius: 8,
+    backgroundColor: '#FF6347',
+  },
+
+  notRoundedButtonText: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginLeft: 5,
+    color: '#fff',
+  },
 });

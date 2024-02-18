@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
 
 import CepInput from '../../components/CepInput';
 import {FieldValues, SubmitHandler, useForm} from 'react-hook-form';
@@ -8,9 +15,7 @@ import SectionTitle from '../../components/SectionTitle';
 import {COLORS} from '../../theme/theme';
 import {global} from '../../style';
 import {getAddressPerCep} from '../../services';
-import Toast from 'react-native-toast-message';
 import CallToast from '../../components/Toast';
-import useKeyboardOpen from '../../hooks/useKeyboardOpen';
 import CustomIcon from '../../components/CustomIcon';
 
 const CepStepScreen = ({
@@ -20,20 +25,17 @@ const CepStepScreen = ({
 }) => {
   const [isValid, setIsValid] = useState(false);
   const {showToast} = CallToast();
-  const isOpen = useKeyboardOpen();
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     const validateCpf = data.cep.replace('-', '');
 
-    console.log('data', data);
     const response = await getAddressPerCep(validateCpf);
 
-    console.log('response', response);
     if (response?.erro) {
       return showToast('CEP não encontrado', 'error');
       // return toast.error('CEP não encontrado');
     }
 
-    return showToast('CEP encontrado', 'success');
+    navigation.navigate('SaveAddress', {response});
 
     //   if (response) {
     //     setStep(STEPS.ADDRESS_INFO);
@@ -67,9 +69,8 @@ const CepStepScreen = ({
   });
 
   const handleOnChange = (value: string) => {
-    console.log('value', value);
-    setValue('cep', value);
     setIsValid(value.length === 9);
+    setValue('cep', value);
   };
 
   const comeBack = () => {
@@ -77,28 +78,26 @@ const CepStepScreen = ({
   };
   return (
     <View style={{flex: 1}}>
-      <View style={{flex: 0.09, backgroundColor: COLORS.primaryBlackHex}}>
+      <View
+        style={{
+          height: Dimensions.get('screen').height / 13,
+          backgroundColor: COLORS.primaryBlackHex,
+        }}>
         <SectionTitle comeBack={comeBack} />
       </View>
-      <View
-        style={[
-          global.mainContainer,
-          {
-            gap: 15,
-          },
-        ]}>
-        <View style={{width: '100%', height: isOpen ? '20%' : '12%'}}>
+      <ScrollView style={[global.mainContainer]}>
+        <View style={{width: '100%'}}>
           <CepInput
             handleOnChange={handleOnChange}
             register={register}
             control={control}
           />
         </View>
-        <View style={{gap: 10}}>
+        <View style={{gap: 10, marginTop: 10}}>
           <TouchableOpacity
             onPress={handleSubmit(onSubmit)}
             style={[
-              styles.button,
+              global.notRoundedButton,
               {opacity: isValid ? 1 : 0.6},
               !isValid && styles.buttonDisabled,
             ]}
@@ -109,9 +108,9 @@ const CepStepScreen = ({
               pack="SimpleLineIcons"
               color="black"
             />
-            <Text style={styles.buttonText}>Buscar CEP</Text>
+            <Text style={global.notRoundedButtonText}>Buscar CEP</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={global.notRoundedButton}>
             <CustomIcon
               name="question"
               size={20}
@@ -119,12 +118,12 @@ const CepStepScreen = ({
               color="black"
             />
 
-            <Text style={[styles.buttonText, {fontSize: 14}]}>
+            <Text style={[global.notRoundedButtonText, {fontSize: 14}]}>
               Não sei meu cep
             </Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -135,24 +134,9 @@ const styles = StyleSheet.create({
 
     paddingHorizontal: 20,
   },
-  button: {
-    gap: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    paddingVertical: 10,
-    borderRadius: 8,
-    backgroundColor: '#FF6347',
-  },
+
   buttonDisabled: {
     opacity: 0.6,
-  },
-  buttonText: {
-    fontWeight: 'bold',
-    fontSize: 18,
-    marginLeft: 5,
-    color: '#fff',
   },
 });
 

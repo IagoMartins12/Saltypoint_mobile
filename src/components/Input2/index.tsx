@@ -1,25 +1,23 @@
 import React, {useState} from 'react';
-import {
-  Control,
-  Controller,
-  FieldValues,
-  UseFormRegister,
-} from 'react-hook-form';
+import {Control, Controller, FieldValues} from 'react-hook-form';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
-import {formatCep} from '../../utils';
 
 export interface CepInputProps {
-  register: UseFormRegister<FieldValues>;
-  handleOnChange: (value: string) => void;
-  required?: boolean;
+  name: string;
+  id: string;
   control: Control<FieldValues, any>;
+  required?: boolean;
+  disabled?: boolean;
+  onChangeFunction: (value: string, id: string) => void;
 }
 
-const CepInput: React.FC<CepInputProps> = ({
-  register,
+const StyledInputComponent2: React.FC<CepInputProps> = ({
+  name,
+  id,
   control,
-  handleOnChange,
+  onChangeFunction,
   required = true,
+  disabled = false,
 }) => {
   const [focus, setFocus] = useState(false);
 
@@ -33,24 +31,22 @@ const CepInput: React.FC<CepInputProps> = ({
 
   return (
     <Controller
-      name="cep"
+      name={id}
       control={control}
       rules={{required: required}}
       render={({field: {onChange, onBlur, value}}) => (
         <View style={styles.container}>
-          <Text style={[styles.label, focus && styles.labelFocus]}>CEP</Text>
+          <Text style={[styles.label, focus && styles.labelFocus]}>{name}</Text>
           <TextInput
             style={[styles.input, focus && styles.inputError]}
-            placeholder="Exemplo: 05280-000"
+            placeholder={name}
             onChangeText={text => {
-              const formattedCep = formatCep(text);
-              handleOnChange(formattedCep);
-              onChange(formattedCep);
-              1;
+              onChangeFunction(text, id);
             }}
             onFocus={handleFocus}
             onBlur={handleBlur}
             value={value}
+            editable={!disabled} // Definindo a propriedade editable com base em disabled
           />
         </View>
       )}
@@ -62,8 +58,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    marginBottom: 10,
-    flex: 1,
   },
   label: {
     fontFamily: 'Arial',
@@ -79,6 +73,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderBottomWidth: 2,
     borderBottomColor: '#000',
+    fontSize: 18,
+    color: '#000000',
   },
   inputError: {
     borderBottomColor: '#FF0000',
@@ -88,4 +84,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CepInput;
+export default StyledInputComponent2;
