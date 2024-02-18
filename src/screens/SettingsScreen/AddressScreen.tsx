@@ -19,8 +19,8 @@ import {COLORS} from '../../theme/theme';
 import CustomIcon from '../../components/CustomIcon';
 import {useSharedValue, withTiming} from 'react-native-reanimated';
 import DeleteAddressModal from '../../components/Modals/DeleteAddressModal';
-import ForgetPasswordModal from '../../components/Modals/ForgetPasswordModal';
-import ContactModal from '../../components/Modals/ContactModal';
+
+import AddressCard from '../../components/AddressCard';
 
 const AddressScreen = ({
   navigation,
@@ -47,6 +47,10 @@ const AddressScreen = ({
 
   const comeBack = () => {
     navigation.pop();
+  };
+
+  const addAddress = () => {
+    navigation.navigate('Cep');
   };
 
   const address = [
@@ -96,55 +100,11 @@ const AddressScreen = ({
             <View style={styles.contentContainer}>
               {address.length > 0 &&
                 address.map((address, i) => (
-                  <View key={i} style={styles.addressItem}>
-                    <View style={styles.iconContainer}>
-                      {address.type_adress === 0 ? (
-                        <CustomIcon
-                          name="home"
-                          size={30}
-                          color="#000000"
-                          pack="Feather"
-                        />
-                      ) : (
-                        <CustomIcon
-                          name="briefcase"
-                          size={30}
-                          color="#000000"
-                          pack="Feather"
-                        />
-                      )}
-                    </View>
-
-                    <View style={styles.textContainer}>
-                      <Text style={styles.addressType}>
-                        {address.type_adress === 0 ? 'Casa' : 'Trabalho'}
-                      </Text>
-                      <Text style={styles.addressText}>
-                        {address.address}, {address.number}
-                      </Text>
-                      <Text style={styles.addressText}>{address.district}</Text>
-                      <Text style={styles.addressText}>
-                        {address.city} / {address.uf}
-                      </Text>
-
-                      {address.reference && (
-                        <Text style={styles.addressText}>
-                          {address.reference}
-                        </Text>
-                      )}
-                    </View>
-
-                    <TouchableOpacity
-                      style={styles.deleteIconContainer}
-                      onPress={() => handleOpenDeleteModal(address.id)}>
-                      <CustomIcon
-                        name="trash-2"
-                        size={25}
-                        color="red"
-                        pack="Feather"
-                      />
-                    </TouchableOpacity>
-                  </View>
+                  <AddressCard
+                    address={address}
+                    handleOpenDeleteModal={handleOpenDeleteModal}
+                    key={i}
+                  />
                 ))}
               {address.length === 0 && (
                 <Text style={styles.emptyResultText}>
@@ -152,7 +112,7 @@ const AddressScreen = ({
                 </Text>
               )}
 
-              <TouchableOpacity style={styles.addButton} onPress={showModal}>
+              <TouchableOpacity style={styles.addButton} onPress={addAddress}>
                 <CustomIcon name="plus" size={25} color="red" pack="Feather" />
                 <Text style={styles.addButtonText}>Adicionar endereço</Text>
               </TouchableOpacity>

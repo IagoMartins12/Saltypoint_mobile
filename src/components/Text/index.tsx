@@ -1,7 +1,6 @@
 import React, {ReactNode} from 'react';
 import {StyleSheet, Text, TextStyle} from 'react-native';
-import useThemeContext from '../../hooks/useThemeContext';
-import {FONTSIZE} from '../../theme/theme';
+import {COLORS, FONTSIZE} from '../../theme/theme';
 
 interface TextProps {
   textSize?: 'largeText' | 'mediumText' | 'mediumText2' | 'smallText';
@@ -17,8 +16,6 @@ const MyText: React.FC<TextProps> = ({
   children, // Adicionando children à desestruturação
   ...props
 }) => {
-  const {colors} = useThemeContext();
-
   const getTextStyles = () => {
     switch (textSize) {
       case 'largeText':
@@ -34,7 +31,7 @@ const MyText: React.FC<TextProps> = ({
     }
   };
 
-  const textStyles = [getTextStyles(), {color: colors.text}, style]; // Combinando estilos dinâmicos com os estilos adicionais
+  const textStyles = [getTextStyles(), {color: COLORS.primaryBlackHex}, style]; // Combinando estilos dinâmicos com os estilos adicionais
 
   return (
     <Text style={textStyles} {...props} onPress={onPress}>

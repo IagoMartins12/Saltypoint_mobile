@@ -1,8 +1,6 @@
 import {
   Animated,
-  Dimensions,
   Image,
-  ImageBackground,
   Modal,
   Pressable,
   StyleSheet,
@@ -16,7 +14,6 @@ import {global} from '../style';
 import {FONTSIZE} from '../theme/theme';
 import SettingsOption from '../components/SettingsOption';
 import {PackNames} from '../components/CustomIcon';
-import ThemeSwitch from '../components/ThemeSwitch';
 
 const SettingsScreen = ({
   navigation,
@@ -222,7 +219,7 @@ const styles = StyleSheet.create({
     width: 1,
     height: 1,
     borderRadius: 50,
-    backgroundColor: 'black',
+    // backgroundColor: 'black',
   },
 });
 
