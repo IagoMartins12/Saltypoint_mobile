@@ -10,12 +10,15 @@ import {
 import {BORDERRADIUS, COLORS, FONTSIZE, SPACING} from '../../theme/theme';
 import CustomIcon from '../CustomIcon';
 import {global} from '../../style';
+import {Product} from '../../types/ModelsType';
 
 interface ProductCardHorizontalProps {
   showPoints?: boolean;
+  product: Product;
 }
 
 const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
+  product,
   showPoints = true,
 }) => {
   const renderPointsText = () => {
@@ -24,7 +27,7 @@ const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
     return (
       <View style={styles.pointsText}>
         <CustomIcon name="reply" size={11} color="#ffffff" />
-        <Text style={{color: '#ffffff'}}> Ganhe 5 pontos </Text>
+        <Text style={{color: '#ffffff'}}> Ganhe {product.value} pontos </Text>
       </View>
     );
   };
@@ -32,25 +35,23 @@ const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
   return (
     <View style={[styles.mainDiv, global.shadow]}>
       {renderPointsText()}
-
       <View style={styles.cardContainer}>
         <ImageBackground
-          source={require('../../assets/pizzaCard.jpg')}
+          source={{
+            uri: product.product_image,
+          }}
           style={[styles.cardItemImage, styles.imageWithBorder]}>
           <View style={styles.cardRatingContainer}>
             <CustomIcon name={'heart'} color={'#ffffff'} size={20} />
           </View>
         </ImageBackground>
         <View style={styles.cardInfoContainer}>
-          <Text style={styles.productTitle}>Pizza de portuguesa</Text>
+          <Text style={styles.productTitle}>{product.name}</Text>
 
-          <Text style={styles.subTextProduct}>
-            Uma deliciosa pizza de portuguesa, que contém mussarela, cebola,
-            milho, ovos e palmito
-          </Text>
+          <Text style={styles.subTextProduct}>{product.description}</Text>
 
           <View style={styles.infoDiv}>
-            <Text style={styles.priceText}> R$ 30,00</Text>
+            <Text style={styles.priceText}> R$ {product.value.toFixed(2)}</Text>
             {/* <CustomIcon name="cart-plus" size={25} /> */}
           </View>
         </View>
@@ -113,6 +114,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#000000',
     overflow: 'hidden',
+    height: '30%',
   },
   infoDiv: {
     flexDirection: 'row',

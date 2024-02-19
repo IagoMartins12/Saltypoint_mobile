@@ -8,17 +8,24 @@ import {
 import {BORDERRADIUS, COLORS, FONTSIZE, SPACING} from '../../theme/theme';
 import CustomIcon from '../CustomIcon';
 import {global} from '../../style';
+import {Product} from '../../types/ModelsType';
 
-const ProductCard = () => {
+export interface ProductCardProps {
+  product: Product;
+}
+const ProductCard: React.FC<ProductCardProps> = ({product}) => {
+  const getPoints = product.value;
   return (
     <View style={[styles.mainDiv, global.shadow]}>
       <View style={styles.PointsText}>
         <CustomIcon name="reply" size={11} color="#ffffff" />
-        <Text style={{color: '#ffffff'}}> Ganhe 5 pontos </Text>
+        <Text style={{color: '#ffffff'}}> Ganhe {getPoints} pontos </Text>
       </View>
 
       <ImageBackground
-        source={require('../../assets/pizzaCard.jpg')}
+        source={{
+          uri: product.product_image,
+        }}
         style={styles.CartItemImage}>
         <View style={styles.CardRatingContainer}>
           <CustomIcon name={'heart'} color={'#ffffff'} size={20} />
@@ -31,10 +38,10 @@ const ProductCard = () => {
           justifyContent: 'space-around',
           flex: 1,
         }}>
-        <Text style={styles.productTitle}>Pizza de portuguesa</Text>
+        <Text style={styles.productTitle}>{product.name}</Text>
 
         <View style={styles.infoDiv}>
-          <Text style={styles.priceText}> R$ 30,00</Text>
+          <Text style={styles.priceText}> R$ {product.value.toFixed(2)}</Text>
           {/* <CustomIcon name="cart-plus" size={25} /> */}
         </View>
       </View>
@@ -45,7 +52,7 @@ const ProductCard = () => {
 const styles = StyleSheet.create({
   mainDiv: {
     backgroundColor: '#ffffff',
-    height: Dimensions.get('window').height / 3.25,
+    height: Dimensions.get('window').height / 3.15,
     width: Dimensions.get('window').width / 2.4,
     borderRadius: BORDERRADIUS.radius_15,
   },
@@ -60,10 +67,11 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
   },
   CartItemImage: {
-    height: 140,
+    height: 150,
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
-    overflow: 'hidden',
+    padding: 10,
+    objectFit: 'fill',
   },
   productTitle: {
     fontSize: FONTSIZE.size_16,

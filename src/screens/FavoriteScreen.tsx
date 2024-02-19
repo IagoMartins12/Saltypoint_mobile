@@ -9,23 +9,24 @@ import {
 import ProductCardHorizontal from '../components/ProductCardHorizontal';
 import TitleSection from '../components/TitleSection';
 import {global} from '../style';
+import {Product} from '../types/ModelsType';
+import useGlobalStore from '../hooks/store/useGlobalStore';
 
 const FavoriteScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const {products} = useGlobalStore();
   return (
     <ScrollView
       style={global.mainContainer}
       showsVerticalScrollIndicator={false}>
       <TitleSection title="Favoritos" />
       <View style={styles.productsDiv}>
-        <ProductCardHorizontal showPoints={false} />
-        <ProductCardHorizontal showPoints={false} />
-        <ProductCardHorizontal showPoints={false} />
-        <ProductCardHorizontal showPoints={false} />
-        <ProductCardHorizontal showPoints={false} />
+        {products.map((p: Product) => (
+          <ProductCardHorizontal product={p} key={p.id} showPoints={false} />
+        ))}
       </View>
     </ScrollView>
   );

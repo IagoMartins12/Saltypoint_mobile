@@ -1,4 +1,5 @@
 import {ChangeEvent} from 'react';
+import {Category} from '../types/ModelsType';
 
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
@@ -95,4 +96,15 @@ export const formatOrderDate = (orderDate: Date) => {
     .padStart(2, '0')}`;
 
   return formattedDate;
+};
+
+export const categoriesToExclude = ['Bordas', 'Brindes', 'Promoções'];
+
+export const visibleCategories = (category: Category[]) => {
+  return [
+    {category_name: 'Todos'},
+    ...category.filter(
+      category => !categoriesToExclude.includes(category.category_name),
+    ),
+  ];
 };

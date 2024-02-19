@@ -18,7 +18,6 @@ import {COLORS, FONTSIZE} from '../../theme/theme';
 import {useForm} from 'react-hook-form';
 import StyledInputComponent from '../../components/Input';
 import Dropdown from '../../components/Select';
-import CustomIcon from '../../components/CustomIcon';
 import ComeBack from '../../components/ComeBack';
 import useKeyboardOpen from '../../hooks/useKeyboardOpen';
 import ForgetPasswordModal from '../../components/Modals/ForgetPasswordModal';

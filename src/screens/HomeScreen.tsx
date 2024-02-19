@@ -20,6 +20,9 @@ import ProductCard from '../components/ProductCard';
 import ProductCardHorizontal from '../components/ProductCardHorizontal';
 import CustomIcon from '../components/CustomIcon';
 import {global} from '../style';
+import useGlobalStore from '../hooks/store/useGlobalStore';
+import {Product} from '../types/ModelsType';
+import {visibleCategories} from '../utils';
 const categories = [
   'Todos',
   'Pizza',
@@ -42,11 +45,11 @@ const HomeScreen = ({
 
   const ListRef: any = useRef<FlatList>();
 
+  const {products, categorys} = useGlobalStore();
+
   const buttonPressHandler = () => {
     navigation.push('Search');
   };
-
-  // Searchscreen;
 
   const ViewList = [
     <CustomIcon
@@ -111,7 +114,7 @@ const HomeScreen = ({
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.CategoryScrollViewStyle}>
-            {categories.map((data, index) => (
+            {visibleCategories(categorys).map((data, index) => (
               <View
                 key={index.toString()}
                 style={styles.CategoryScrollViewContainer}>
@@ -138,13 +141,11 @@ const HomeScreen = ({
                           }
                         : {},
                     ]}>
-                    {data}
+                    {data.category_name}
                   </Text>
                   {categoryIndex.index == index ? (
                     <View style={styles.ActiveCategory} />
-                  ) : (
-                    <></>
-                  )}
+                  ) : null}
                 </TouchableOpacity>
               </View>
             ))}
@@ -176,22 +177,15 @@ const HomeScreen = ({
         showsVerticalScrollIndicator={false}>
         {currentCard === 0 ? (
           <>
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
+            {products.map((p: Product) => (
+              <ProductCard product={p} key={p.id} />
+            ))}
           </>
         ) : (
           <View style={{rowGap: 15, flex: 1}}>
-            <ProductCardHorizontal />
-            <ProductCardHorizontal />
-            <ProductCardHorizontal />
-            <ProductCardHorizontal />
-            <ProductCardHorizontal />
-            <ProductCardHorizontal />
+            {products.map((p: Product) => (
+              <ProductCardHorizontal product={p} key={p.id} />
+            ))}
           </View>
         )}
       </ScrollView>

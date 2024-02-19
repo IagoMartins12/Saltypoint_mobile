@@ -19,7 +19,7 @@ import MyOrderScreen from './src/screens/MyOrderScreen';
 import CepStepScreen from './src/screens/AddressScreens/CepStepScreen';
 import SaveAddressScreen from './src/screens/AddressScreens/SaveAddressScreen';
 import GeoAddressScreen from './src/screens/AddressScreens/GeoAddressScreen';
-
+import FetchData from './src/components/FetchData/index';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -113,6 +113,7 @@ const App = () => {
         </Stack.Navigator>
       </NavigationContainer>
       <Toast />
+      <FetchData />
     </>
   );
 };
