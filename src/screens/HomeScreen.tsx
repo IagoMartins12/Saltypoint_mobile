@@ -218,11 +218,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     paddingHorizontal: 20,
     paddingVertical: 20,
-    marginBottom: 100,
+    paddingBottom: 80,
   },
 
   CategoryScrollViewStyle: {
-    marginTop: 20,
+    marginVertical: 15,
   },
   CategoryScrollViewContainer: {
     paddingHorizontal: SPACING.space_10,

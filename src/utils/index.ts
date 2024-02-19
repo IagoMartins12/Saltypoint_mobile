@@ -102,7 +102,7 @@ export const categoriesToExclude = ['Bordas', 'Brindes', 'Promoções'];
 
 export const visibleCategories = (category: Category[]) => {
   return [
-    {category_name: 'Todos'},
+    {category_name: 'Todos', id: '0'},
     ...category.filter(
       category => !categoriesToExclude.includes(category.category_name),
     ),

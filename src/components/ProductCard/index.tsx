@@ -28,7 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = ({product}) => {
         }}
         style={styles.CartItemImage}>
         <View style={styles.CardRatingContainer}>
-          <CustomIcon name={'heart'} color={'#ffffff'} size={20} />
+          <CustomIcon name={'heart'} color={'gray'} size={20} />
         </View>
       </ImageBackground>
 

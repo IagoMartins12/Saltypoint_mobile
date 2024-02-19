@@ -1,3 +1,4 @@
+import React, {useState, useEffect} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -5,37 +6,72 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-import TitleSection from '../components/TitleSection';
 import SearchComponent from '../components/SearchComponent';
 import {BORDERRADIUS, FONTSIZE} from '../theme/theme';
 import CustomIcon from '../components/CustomIcon';
 import SearchText from '../components/SearchText';
-import {global} from '../style';
 import ProductCard from '../components/ProductCard';
-
-const categories = ['Pizza', 'Esfiha', 'Combos', 'Refrigerantes', 'Promoção'];
+import useGlobalStore from '../hooks/store/useGlobalStore';
+import {Product} from '../types/ModelsType';
+import {visibleCategories} from '../utils';
+import {global} from '../style';
 
 const SearchScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
-  const [currentCategory, setCurrentCategory] = useState<null | number>(null);
+  const [productState, setProductState] = useState<Product[]>([]);
+  const [currentCategory, setCurrentCategory] = useState<string | null>(null);
   const [onFocus, setOnFocus] = useState(false);
   const [currentWidth, setCurrentWidth] = useState('100%');
   const [searchText, setSearchText] = useState('');
+
+  const {products, categorys} = useGlobalStore();
 
   const buttonPressHandler = () => {
     navigation.pop();
   };
 
+  const handleSearchInput = (query: string) => {
+    const newProducts = products.filter(
+      (p: Product) =>
+        p.name.toLowerCase().includes(query.toLowerCase()) ||
+        p.description.toLowerCase().includes(query.toLowerCase()),
+    );
+
+    const filteredProduct = newProducts.filter(p =>
+      visibleCategories(categorys).some(
+        category => category.id === p.category_id,
+      ),
+    );
+
+    setProductState(filteredProduct);
+  };
+
   useEffect(() => {
-    if (onFocus) setCurrentWidth('95%');
-    if (!onFocus) setCurrentWidth('90%');
+    setCurrentWidth(onFocus ? '95%' : '90%');
   }, [onFocus]);
+
+  useEffect(() => {
+    setProductState(products);
+  }, [products]);
+
+  useEffect(() => {
+    handleSearchInput(searchText);
+  }, [searchText]);
+
+  const renderProductList = () => (
+    <ScrollView
+      contentContainerStyle={[styles.productDiv, {paddingBottom: 15}]}
+      showsVerticalScrollIndicator={false}>
+      {productState.map((p: Product) => (
+        <ProductCard product={p} key={p.id} />
+      ))}
+    </ScrollView>
+  );
 
   return (
     <View style={global.mainContainer}>
@@ -48,62 +84,50 @@ const SearchScreen = ({
         buttonPressHandler={buttonPressHandler}
       />
 
-      {onFocus ? (
-        <>
-          {searchText !== '' ? (
-            <ScrollView
-              contentContainerStyle={[styles.productDiv, {paddingBottom: 15}]}
-              showsVerticalScrollIndicator={false}>
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-            </ScrollView>
-          ) : null}
-        </>
-      ) : (
-        <>
-          <View style={{marginVertical: 20, gap: 10}}>
-            <Text style={styles.categoryText}>Categorias</Text>
+      {onFocus && searchText !== '' && renderProductList()}
 
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.CategoryScrollViewStyle}>
-              {categories.map((category, key) => (
-                <TouchableOpacity
-                  key={key}
-                  style={[
-                    styles.categoryBox,
-                    {
-                      backgroundColor:
-                        currentCategory === key ? '#2FDBBC' : '#fff0f0da',
-                      opacity:
-                        currentCategory !== null && currentCategory !== key
-                          ? 0.5
-                          : 1,
-                    },
-                  ]}
-                  onPress={() => {
-                    setCurrentCategory(prev => (prev === key ? null : key));
-                  }}>
-                  <Text style={styles.categoryBoxName}>{category}</Text>
-                  {key === currentCategory ? (
-                    <CustomIcon
-                      name="close"
-                      size={25}
-                      color="#000000"
-                      pack="Ionicons"
-                    />
-                  ) : null}
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
+      {!onFocus && (
+        <View style={{marginVertical: 20, gap: 10}}>
+          <Text style={styles.categoryText}>Categorias</Text>
+
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.CategoryScrollViewStyle}>
+            {visibleCategories(categorys).map((category, key) => (
+              <TouchableOpacity
+                key={key}
+                style={[
+                  styles.categoryBox,
+                  {
+                    backgroundColor:
+                      currentCategory === category.id ? '#2FDBBC' : '#fff0f0da',
+                    opacity:
+                      currentCategory !== null &&
+                      currentCategory !== category.id
+                        ? 0.5
+                        : 1,
+                  },
+                ]}
+                onPress={() => {
+                  setCurrentCategory(prev =>
+                    prev === category.id ? null : category.id,
+                  );
+                }}>
+                <Text style={styles.categoryBoxName}>
+                  {category.category_name}
+                </Text>
+                {category.id === currentCategory && (
+                  <CustomIcon
+                    name="close"
+                    size={25}
+                    color="#000000"
+                    pack="Ionicons"
+                  />
+                )}
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
 
           {currentCategory === null ? (
             <View style={{marginVertical: 20, gap: 20}}>
@@ -127,29 +151,23 @@ const SearchScreen = ({
             <ScrollView
               contentContainerStyle={styles.productDiv}
               showsVerticalScrollIndicator={false}>
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
-              <ProductCard />
+              {productState
+                .filter((p: Product) => {
+                  if (currentCategory === '0') return productState;
+                  return p.category_id === currentCategory;
+                })
+                .map((p: Product) => (
+                  <ProductCard product={p} key={p.id} />
+                ))}
             </ScrollView>
           )}
-        </>
+        </View>
       )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-  },
-
   categoryText: {
     fontSize: FONTSIZE.size_14,
     fontWeight: '700',
@@ -157,8 +175,8 @@ const styles = StyleSheet.create({
   },
 
   categoryBox: {
-    paddingHorizontal: 30,
-    paddingVertical: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 8,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: BORDERRADIUS.radius_15,
@@ -167,10 +185,11 @@ const styles = StyleSheet.create({
   },
 
   categoryBoxName: {
-    fontSize: FONTSIZE.size_16,
-    fontWeight: '600',
+    fontSize: FONTSIZE.size_14,
+    fontWeight: '500',
     color: 'black',
   },
+
   CategoryScrollViewStyle: {
     columnGap: 15,
   },

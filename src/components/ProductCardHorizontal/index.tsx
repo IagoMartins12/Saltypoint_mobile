@@ -42,7 +42,7 @@ const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
           }}
           style={[styles.cardItemImage, styles.imageWithBorder]}>
           <View style={styles.cardRatingContainer}>
-            <CustomIcon name={'heart'} color={'#ffffff'} size={20} />
+            <CustomIcon name={'heart'} color={'gray'} size={20} />
           </View>
         </ImageBackground>
         <View style={styles.cardInfoContainer}>
