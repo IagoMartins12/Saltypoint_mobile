@@ -35,7 +35,7 @@ const ProductRecomendCard: React.FC<ProductCardProps> = ({product}) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FFFFFF',
-    height: Dimensions.get('screen').height / 3.25,
+    height: Dimensions.get('screen').height / 3.4,
     width: Dimensions.get('screen').width / 2.6,
     padding: 2,
     borderRadius: BORDERRADIUS.radius_20,
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     height: '50%',
     paddingHorizontal: 10,
     paddingVertical: 15,
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
   },
 
   addItemsDiv: {
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     overflow: 'hidden',
-    maxHeight: '40%',
+    maxHeight: '50%',
   },
   textPrice: {
     fontSize: 14,

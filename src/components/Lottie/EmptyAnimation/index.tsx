@@ -2,8 +2,13 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import LottieView from 'lottie-react-native';
 import {COLORS, FONTFAMILY, FONTSIZE} from '../../../theme/theme';
+import MyText from '../../Text';
 
-const EmptyAnimation = () => {
+interface EmptyAnimationProps {
+  text?: string;
+}
+
+const EmptyAnimation: React.FC<EmptyAnimationProps> = ({text}) => {
   return (
     <View style={styles.EmptyCartContainer}>
       <LottieView
@@ -12,6 +17,8 @@ const EmptyAnimation = () => {
         autoPlay
         loop
       />
+
+      <MyText style={{textAlign: 'center', fontSize: 22}}> {text}</MyText>
     </View>
   );
 };
