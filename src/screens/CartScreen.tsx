@@ -1,58 +1,102 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {
-  GestureHandlerRootView,
-  PanGestureHandler,
-  State,
-} from 'react-native-gesture-handler';
+import useGlobalStore from '../hooks/store/useGlobalStore';
+import MyText from '../components/Text';
+import EmptyAnimation from '../components/Lottie/EmptyAnimation';
+import ProductCartCard from '../components/ProductCartCard';
+import {global} from '../style';
+import {useRef, useState} from 'react';
+import ProductRecomendCard from '../components/ProductRecomendCard';
 
 const CartScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
-  const onSwipeRight = () => {
-    // Navegar para a página desejada
-    navigation.navigate('Favorite');
-  };
+  const cartNotEmpty = true;
 
-  const onSwipeLeft = () => {
-    // Navegar para a página desejada
-    navigation.navigate('Search');
-  };
+  const {products} = useGlobalStore();
+  const ListRef: any = useRef<FlatList>();
 
+  const totalProducts = products.slice(0, 4);
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <PanGestureHandler
-        onHandlerStateChange={({nativeEvent}) => {
-          if (
-            nativeEvent.state === State.END &&
-            nativeEvent.translationX < 50
-          ) {
-            onSwipeRight();
-          }
+    <ScrollView style={{flex: 1}}>
+      <View style={styles.mainContainer}>
+        {cartNotEmpty ? (
+          <View style={styles.containerView}>
+            <View style={[styles.productView, styles.paddingView]}>
+              {totalProducts.map((p, i) => (
+                <>
+                  <ProductCartCard product={p} key={p.id} />
+                  {i !== totalProducts.length ? (
+                    <View style={global.hrStyle} key={i} />
+                  ) : null}
+                </>
+              ))}
+            </View>
 
-          if (
-            nativeEvent.state === State.END &&
-            nativeEvent.translationX > 50
-          ) {
-            onSwipeLeft();
-          }
-        }}>
-        <View style={styles.mainContainer}>
-          <Text>CartScreen</Text>
-        </View>
-      </PanGestureHandler>
-    </GestureHandlerRootView>
+            <MyText style={styles.textFlatList}> Peça também</MyText>
+
+            <FlatList
+              data={totalProducts}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={[styles.paddingView, styles.flatListView]}
+              keyExtractor={item => item.id}
+              renderItem={({item}) => {
+                return <ProductRecomendCard product={item} />;
+              }}
+            />
+          </View>
+        ) : (
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+            }}>
+            <EmptyAnimation />
+            <MyText
+              style={{
+                fontSize: 22,
+                flex: 0.5,
+                textAlign: 'center',
+              }}>
+              Sem produtos no carrinho
+            </MyText>
+          </View>
+        )}
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    marginHorizontal: 20,
-    marginVertical: 30,
+    paddingBottom: 50,
+  },
+
+  containerView: {},
+  productView: {
+    backgroundColor: 'white',
+
+    gap: 10,
+  },
+
+  textFlatList: {
+    paddingHorizontal: 20,
+    fontSize: 18,
+    fontWeight: '600',
+    paddingTop: 20,
+  },
+
+  paddingView: {
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+  },
+
+  flatListView: {
+    gap: 10,
   },
 });
 

@@ -56,4 +56,11 @@ export const global = StyleSheet.create({
     marginLeft: 5,
     color: '#fff',
   },
+
+  hrStyle: {
+    borderBottomColor: 'black',
+    borderBottomWidth: 0.5,
+    paddingTop: 10,
+    marginHorizontal: 10,
+  },
 });
