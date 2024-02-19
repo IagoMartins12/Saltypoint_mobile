@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Location } from '../types/GeolocationType';
+import {useState, useEffect} from 'react';
+import {Location} from '../types/GeolocationType';
+import Geolocation from '@react-native-community/geolocation';
 
 const useGeoLocation = (): Location => {
   const [location, setLocation] = useState<Location>({
@@ -24,17 +25,11 @@ const useGeoLocation = (): Location => {
   };
 
   useEffect(() => {
-    if (!('geolocation' in navigator)) {
-      onError({
-        code: 0,
-        message: 'Geolocation not supported',
-        PERMISSION_DENIED: 1,
-        POSITION_UNAVAILABLE: 2,
-        TIMEOUT: 3,
-      });
-    } else {
-      navigator.geolocation.getCurrentPosition(onSuccess, onError);
-    }
+    Geolocation.getCurrentPosition(onSuccess, onError, {
+      enableHighAccuracy: true,
+      timeout: 20000,
+      maximumAge: 1000,
+    });
   }, []);
 
   return location;

@@ -18,6 +18,7 @@ import TermScreen from './src/screens/SettingsScreen/TermScreen';
 import MyOrderScreen from './src/screens/MyOrderScreen';
 import CepStepScreen from './src/screens/AddressScreens/CepStepScreen';
 import SaveAddressScreen from './src/screens/AddressScreens/SaveAddressScreen';
+import GeoAddressScreen from './src/screens/AddressScreens/GeoAddressScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -100,6 +101,12 @@ const App = () => {
             <Stack.Screen
               name="SaveAddress"
               component={SaveAddressScreen}
+              options={{animation: 'slide_from_bottom'}}
+            />
+
+            <Stack.Screen
+              name="GeoAddress"
+              component={GeoAddressScreen}
               options={{animation: 'slide_from_bottom'}}
             />
           </Stack.Group>

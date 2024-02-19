@@ -2,12 +2,21 @@ import {useRoute} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import SectionTitle from '../../components/SectionTitle';
-import {COLORS} from '../../theme/theme';
 import {global} from '../../style';
 import StyledInputComponent2 from '../../components/Input2';
 import {FieldValues, SubmitHandler, useForm} from 'react-hook-form';
 import {useEffect} from 'react';
-import CustomIcon from '../../components/CustomIcon';
+import {Result} from '../../types/GeolocationType';
+
+export const onlyDistrict = ['sublocality', 'postal_code'];
+
+export const addressTypes = [
+  'street_address',
+  'route',
+  'postal_code',
+  'establishment',
+  'point_of_interest',
+];
 
 const SaveAddressScreen = ({
   navigation,
@@ -17,8 +26,9 @@ const SaveAddressScreen = ({
   const teste = useRoute();
 
   //@ts-ignore
-  const teste2 = teste.params?.response;
-
+  const response = teste.params?.response;
+  //@ts-ignore
+  const geometryResponse = teste.params?.result;
   const comeBack = () => {
     navigation.pop();
   };
@@ -28,12 +38,51 @@ const SaveAddressScreen = ({
     console.log('data', data);
   };
 
-  useEffect(() => {
-    setValue('cep', teste2.cep);
-    setValue('address', teste2.logradouro);
-    setValue('district', teste2.bairro);
+  const setValuesGeometry = (result: Result) => {
+    console.log('result', result.types);
+    if (result.types.some(type => type === 'route')) {
+      setValue('address', result.address_components[1]?.long_name);
+      setValue('cep', result.address_components[6]?.long_name);
+      setValue('district', result.address_components[2]?.long_name);
+      return;
+    }
+
+    if (result.types.some(type => type === 'premise')) {
+      setValue('address', result.address_components[1]?.long_name);
+      setValue('cep', result.address_components[6]?.long_name);
+      // setValue('district', result.address_components[2].long_name);
+      setValue('district', result.address_components[2]?.long_name);
+
+      return;
+    }
+
+    if (result.types.some(type => addressTypes.includes(type))) {
+      setValue('address', result.address_components[1]?.long_name);
+      setValue('cep', result.address_components[0]?.long_name);
+      // setValue('district', result.address_components[2]?.long_name);
+    }
+
+    if (result.types.some(type => onlyDistrict.includes(type))) {
+      setValue('district', result.address_components[1]?.long_name);
+    }
+
     setValue('city', 'São Paulo');
     setValue('state', 'SP');
+  };
+
+  useEffect(() => {
+    if (response) {
+      setValue('cep', response.cep);
+      setValue('address', response.logradouro);
+      setValue('district', response.bairro);
+      setValue('city', 'São Paulo');
+      setValue('state', 'SP');
+    }
+
+    if (geometryResponse) {
+      console.log('geometryResponse', geometryResponse);
+      setValuesGeometry(geometryResponse);
+    }
   }, []);
 
   const handleOnChange = (value: string, id: string) => {
@@ -42,9 +91,7 @@ const SaveAddressScreen = ({
 
   return (
     <View style={{flex: 1}}>
-      <View style={{flex: 0.09, backgroundColor: COLORS.primaryBlackHex}}>
-        <SectionTitle comeBack={comeBack} />
-      </View>
+      <SectionTitle comeBack={comeBack} />
 
       <ScrollView
         style={[

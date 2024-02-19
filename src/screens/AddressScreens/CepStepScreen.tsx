@@ -12,7 +12,6 @@ import CepInput from '../../components/CepInput';
 import {FieldValues, SubmitHandler, useForm} from 'react-hook-form';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import SectionTitle from '../../components/SectionTitle';
-import {COLORS} from '../../theme/theme';
 import {global} from '../../style';
 import {getAddressPerCep} from '../../services';
 import CallToast from '../../components/Toast';
@@ -56,6 +55,10 @@ const CepStepScreen = ({
     //   }
   };
 
+  const goToGeoAddress = () => {
+    navigation.navigate('GeoAddress');
+  };
+
   const {register, handleSubmit, setValue, control} = useForm<FieldValues>({
     defaultValues: {
       cep: '',
@@ -78,13 +81,7 @@ const CepStepScreen = ({
   };
   return (
     <View style={{flex: 1}}>
-      <View
-        style={{
-          height: Dimensions.get('screen').height / 13,
-          backgroundColor: COLORS.primaryBlackHex,
-        }}>
-        <SectionTitle comeBack={comeBack} />
-      </View>
+      <SectionTitle comeBack={comeBack} />
       <ScrollView style={[global.mainContainer]}>
         <View style={{width: '100%'}}>
           <CepInput
@@ -110,7 +107,9 @@ const CepStepScreen = ({
             />
             <Text style={global.notRoundedButtonText}>Buscar CEP</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={global.notRoundedButton}>
+          <TouchableOpacity
+            style={global.notRoundedButton}
+            onPress={goToGeoAddress}>
             <CustomIcon
               name="question"
               size={20}

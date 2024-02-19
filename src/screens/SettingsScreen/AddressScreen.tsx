@@ -93,9 +93,7 @@ const AddressScreen = ({
           }
         }}>
         <View style={{flex: 1}}>
-          <View style={{flex: 0.09, backgroundColor: COLORS.primaryBlackHex}}>
-            <SectionTitle comeBack={comeBack} />
-          </View>
+          <SectionTitle comeBack={comeBack} />
           <ScrollView style={global.mainContainer}>
             <View style={styles.contentContainer}>
               {address.length > 0 &&

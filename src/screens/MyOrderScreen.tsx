@@ -41,9 +41,7 @@ const MyOrderScreen = ({
           }
         }}>
         <View style={{flex: 1}}>
-          <View style={{flex: 0.09, backgroundColor: COLORS.primaryBlackHex}}>
-            <SectionTitle comeBack={comeBack} />
-          </View>
+          <SectionTitle comeBack={comeBack} />
           <ScrollView style={styles.mainContainer}>
             <View style={{flex: 1, paddingBottom: 15}}>
               <View>
