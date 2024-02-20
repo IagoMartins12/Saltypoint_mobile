@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export type PackNames =
   | 'FontAwesome'
@@ -15,7 +16,8 @@ export type PackNames =
   | 'Ionicons'
   | 'SimpleLineIcons'
   | 'Entypo'
-  | 'MaterialCommunityIcons';
+  | 'MaterialCommunityIcons'
+  | 'MaterialIcons';
 
 interface CustomIconProps {
   name: string;
@@ -60,6 +62,10 @@ const CustomIcon: React.FC<CustomIconProps> = ({
 
   if (pack === 'Entypo') {
     return <Entypo name={name} size={size} color={color} />;
+  }
+
+  if (pack === 'MaterialIcons') {
+    return <MaterialIcons name={name} size={size} color={color} />;
   }
 };
 

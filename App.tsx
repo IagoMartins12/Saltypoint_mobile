@@ -19,6 +19,8 @@ import MyOrderScreen from './src/screens/MyOrderScreen';
 import CepStepScreen from './src/screens/AddressScreens/CepStepScreen';
 import SaveAddressScreen from './src/screens/AddressScreens/SaveAddressScreen';
 import GeoAddressScreen from './src/screens/AddressScreens/GeoAddressScreen';
+import AddressCartScreen from './src/screens/CartSceens/AddressCartScreen';
+
 import FetchData from './src/components/FetchData/index';
 const Stack = createNativeStackNavigator();
 
@@ -91,6 +93,7 @@ const App = () => {
             options={{animation: 'slide_from_bottom'}}
           />
 
+          {/* Endereço stack */}
           <Stack.Group>
             <Stack.Screen
               name="Cep"
@@ -108,6 +111,15 @@ const App = () => {
               name="GeoAddress"
               component={GeoAddressScreen}
               options={{animation: 'slide_from_bottom'}}
+            />
+          </Stack.Group>
+
+          {/* Cart Stack */}
+          <Stack.Group>
+            <Stack.Screen
+              name="AddressCart"
+              component={AddressCartScreen}
+              options={{animation: 'slide_from_right'}}
             />
           </Stack.Group>
         </Stack.Navigator>
