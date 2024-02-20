@@ -18,7 +18,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import CustomIcon from '../../CustomIcon';
 import {ModalProps} from '../ForgetPasswordModal';
-import {COLORS, FONTSIZE} from '../../../theme/theme';
+import {COLORS} from '../../../theme/theme';
 import MyText from '../../Text';
 import CouponCard from '../../CouponCard';
 import useKeyboardOpen from '../../../hooks/useKeyboardOpen';
@@ -145,7 +145,8 @@ const CouponsModal: React.FC<ModalProps> = ({
                     </MyText>
                   </View>
                   <View style={{gap: 15, marginHorizontal: 20, marginTop: 10}}>
-                    <EmptyAnimation text="Sem cupons disponiveis" />
+                    {/* <EmptyAnimation text="Sem cupons disponiveis" /> */}
+                    <CouponCard />
                   </View>
                 </ScrollView>
               ) : (

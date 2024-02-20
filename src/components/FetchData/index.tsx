@@ -19,6 +19,8 @@ const FetchData = () => {
       try {
         // const productData = await getProducts();
         // setProducts(productData);
+
+        console.log('get data');
         const [categoryData, productData, typePagamentData, statesDate] =
           await Promise.all([
             getCategories(),

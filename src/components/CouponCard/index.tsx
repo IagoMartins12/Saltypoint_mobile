@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed',
   },
   imageContainer: {
-    width: '40%',
+    width: '30%',
     alignItems: 'center',
     justifyContent: 'center',
   },
