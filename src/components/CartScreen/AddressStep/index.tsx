@@ -10,6 +10,8 @@ import SectionTitle from '../../SectionTitle';
 import useGlobalStore from '../../../hooks/store/useGlobalStore';
 import PaymentCard from '../../PaymentCard';
 import {useState} from 'react';
+import CartAddressCard from '../../CartAddressCard';
+import CartCellphoneCard from '../../CartCellphoneCard';
 
 interface AddressStepProps {
   totalProducts: Product[];
@@ -24,10 +26,57 @@ const AddressStep: React.FC<AddressStepProps> = ({
   comeBack,
 }) => {
   const [active, setActive] = useState<null | string>(null);
+  const [selectedDelivery, setSelectedDelivery] = useState<null | string>(null);
   const {typePagament} = useGlobalStore();
 
   const iconSize = 30;
   const iconColor = '#000000';
+
+  const cellPhoneIcon = (
+    <CustomIcon
+      size={iconSize}
+      color={iconColor}
+      name="phone"
+      pack="MaterialCommunityIcons"
+    />
+  );
+  const userOptions = [
+    {
+      id: '1',
+      name: 'Delivery',
+      address: 'Luiza maria rosa',
+      number: '222',
+      district: 'Décima area',
+      city: 'São paulo',
+      uf: 'SP',
+      reference: 'Esquina',
+      icon: (
+        <CustomIcon
+          name="delivery-dining"
+          size={iconSize}
+          color={iconColor}
+          pack="MaterialIcons"
+        />
+      ),
+    },
+    {
+      id: '2',
+      name: 'Retirar na loja',
+      address: 'Estrada de ligação',
+      number: '22',
+      district: 'Sol nascente',
+      city: 'São paulo',
+      uf: 'SP',
+      icon: (
+        <CustomIcon
+          name="home"
+          size={iconSize}
+          color={iconColor}
+          pack="MaterialIcons"
+        />
+      ),
+    },
+  ];
   const getIcon = (options: Type_Pagament) => {
     if (options.type_pagament_name.toUpperCase().includes('CREDITO')) {
       return (
@@ -80,7 +129,28 @@ const AddressStep: React.FC<AddressStepProps> = ({
             <MyText style={styles.redTextTittle}>Trocar</MyText>
           </View>
 
-          <View></View>
+          <View>
+            {userOptions.map(op => (
+              <CartAddressCard
+                address={op}
+                selectedDelivery={selectedDelivery}
+                setSelectedDelivery={setSelectedDelivery}
+              />
+            ))}
+          </View>
+        </View>
+
+        <View style={styles.wFull}>
+          <View style={styles.titleView}>
+            <MyText style={styles.textTittle}>Contato</MyText>
+          </View>
+
+          <View>
+            <CartCellphoneCard
+              cellphone="(11) 98859-8530"
+              icon={cellPhoneIcon}
+            />
+          </View>
         </View>
 
         <View style={styles.wFull}>

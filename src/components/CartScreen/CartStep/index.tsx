@@ -6,6 +6,7 @@ import CartInfo from '../../CartInfo';
 import {Product} from '../../../types/ModelsType';
 import ProductCartCard from '../../ProductCartCard';
 import {COLORS} from '../../../theme/theme';
+import {global} from '../../../style';
 
 interface teste {
   totalProducts: Product[];

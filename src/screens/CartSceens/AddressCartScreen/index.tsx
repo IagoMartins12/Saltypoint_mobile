@@ -61,7 +61,7 @@ const AddressCartScreen = ({
       <View style={{flex: 1, backgroundColor: '#FFFFFF'}}>
         <SectionTitle comeBack={comeBack} />
 
-        <View style={styles.mainContainer}>
+        <ScrollView style={styles.mainContainer}>
           <View
             style={{
               flex: 2,
@@ -81,8 +81,8 @@ const AddressCartScreen = ({
               translateY={translateY}
             />
           </View>
-          <CartTotalFixed onPress={accressStep} />
-        </View>
+        </ScrollView>
+        <CartTotalFixed onPress={accressStep} />
       </View>
     </>
   );

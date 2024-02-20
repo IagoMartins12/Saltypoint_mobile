@@ -24,17 +24,11 @@ import CartStep from '../components/CartScreen/CartStep';
 import CartTotalFixed from '../components/CartScreen/CartTotalFixed';
 import AddressStep from '../components/CartScreen/AddressStep';
 
-export enum STEPS {
-  CART = 0,
-  ADDRESS = 1,
-}
-
 const CartScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
-  const [step, setStep] = useState(STEPS.CART);
   const [modalOpen, setModalOpen] = useState(false);
   const translateY = useSharedValue(Dimensions.get('window').height);
 
@@ -61,31 +55,17 @@ const CartScreen = ({
     navigation.push('AddressCart');
   };
 
-  const comeBack = () => {
-    navigation.pop();
-  };
   return (
     <>
       <View style={{flex: 1}}>
         <View style={styles.mainContainer}>
           {cartNotEmpty ? (
             <View style={{flex: 1}}>
-              {step === STEPS.CART ? (
-                <CartStep
-                  ListRef={ListRef}
-                  showModal={showModal}
-                  totalProducts={totalProducts}
-                />
-              ) : null}
-
-              {step === STEPS.ADDRESS ? (
-                <AddressStep
-                  comeBack={comeBack}
-                  ListRef={ListRef}
-                  showModal={showModal}
-                  totalProducts={totalProducts}
-                />
-              ) : null}
+              <CartStep
+                ListRef={ListRef}
+                showModal={showModal}
+                totalProducts={totalProducts}
+              />
 
               <CartTotalFixed onPress={accressStep} />
               <CouponsModal

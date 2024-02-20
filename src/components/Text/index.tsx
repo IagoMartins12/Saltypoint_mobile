@@ -4,7 +4,7 @@ import {COLORS, FONTSIZE} from '../../theme/theme';
 
 interface TextProps {
   textSize?: 'largeText' | 'mediumText' | 'mediumText2' | 'smallText';
-  style?: TextStyle; // Alterado para aceitar qualquer tipo de estilo
+  style?: TextStyle | TextStyle[]; // Alterado para aceitar qualquer tipo de estilo
   onPress?: () => void;
   children?: ReactNode; // Adicionando a propriedade children
 }
