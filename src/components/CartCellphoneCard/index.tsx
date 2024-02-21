@@ -7,7 +7,7 @@ import MyText from '../Text';
 interface AddressProps {
   icon: JSX.Element;
   cellphone?: string;
-  showModal: () => void;
+  showModal: (currentTarget: 'Address' | 'Cellphone') => void;
 }
 const CartCellphoneCard: React.FC<AddressProps> = ({
   icon,
@@ -35,7 +35,10 @@ const CartCellphoneCard: React.FC<AddressProps> = ({
         )}
       </View>
 
-      <Pressable onPress={showModal}>
+      <Pressable
+        onPress={() => {
+          showModal('Cellphone');
+        }}>
         <CustomIcon
           name="pencil-outline"
           color="#000000"

@@ -28,25 +28,6 @@ const AddressCartScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const [step, setStep] = useState(STEPS.CART);
-  const [modalOpen, setModalOpen] = useState(false);
-  const translateY = useSharedValue(Dimensions.get('window').height);
-
-  const showModal = () => {
-    console.log('chamou');
-    translateY.value = withTiming(0, {duration: 500});
-    setModalOpen(true);
-  };
-
-  const hideModal = () => {
-    translateY.value = withTiming(Dimensions.get('window').height, {
-      duration: 500,
-    });
-  };
-
-  const {products} = useGlobalStore();
-  const ListRef = useRef<FlatList>();
-
-  const totalProducts = products.slice(0, 4);
 
   const accressStep = () => {
     setStep(STEPS.ADDRESS);
@@ -55,23 +36,18 @@ const AddressCartScreen = ({
   const comeBack = () => {
     navigation.pop();
   };
+
+  const addAddress = () => {
+    navigation.navigate('Cep');
+  };
   return (
     <>
       <View style={{flex: 1, backgroundColor: '#FFFFFF'}}>
         <SectionTitle comeBack={comeBack} />
 
         <ScrollView style={styles.mainContainer}>
-          <View
-            style={{
-              flex: 2,
-              justifyContent: 'space-between',
-            }}>
-            <AddressStep
-              comeBack={comeBack}
-              ListRef={ListRef}
-              showModal={showModal}
-              totalProducts={totalProducts}
-            />
+          <View style={styles.stepView}>
+            <AddressStep addAddress={addAddress} />
           </View>
         </ScrollView>
         <CartTotalFixed onPress={accressStep} />
@@ -83,6 +59,10 @@ const AddressCartScreen = ({
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
+  },
+
+  stepView: {
+    justifyContent: 'space-between',
   },
 });
 

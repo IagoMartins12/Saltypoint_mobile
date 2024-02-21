@@ -8,12 +8,16 @@ import ProductCartCard from '../../ProductCartCard';
 import {COLORS} from '../../../theme/theme';
 import {global} from '../../../style';
 
-interface teste {
+interface CartStepProps {
   totalProducts: Product[];
   showModal: () => void;
   ListRef: React.MutableRefObject<FlatList<any>>;
 }
-const CartStep: React.FC<teste> = ({totalProducts, showModal, ListRef}) => {
+const CartStep: React.FC<CartStepProps> = ({
+  totalProducts,
+  showModal,
+  ListRef,
+}) => {
   return (
     <ScrollView style={styles.containerView}>
       <View style={[styles.productView, styles.paddingView]}>

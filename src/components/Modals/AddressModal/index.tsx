@@ -6,7 +6,6 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -17,20 +16,24 @@ import Animated, {
 } from 'react-native-reanimated';
 import CustomIcon from '../../CustomIcon';
 import {ModalProps} from '../ForgetPasswordModal';
-import {COLORS} from '../../../theme/theme';
 import MyText from '../../Text';
-import CouponCard from '../../CouponCard';
 import useKeyboardOpen from '../../../hooks/useKeyboardOpen';
 import EmptyAnimation from '../../Lottie/EmptyAnimation';
+import {userOptions} from '../../CartScreen/AddressStep';
+import AddressCardSelected from '../../AddressCardSelected';
 
-const CouponsModal: React.FC<ModalProps> = ({
+interface AddressModalProps extends ModalProps {
+  addAddress: () => void;
+}
+const AddressModal: React.FC<AddressModalProps> = ({
   modalOpen,
   setModalOpen,
   hideModal,
   translateY,
+  addAddress,
 }) => {
-  const [searchText, setSearchText] = useState('');
-  const [selectedOption, setSelectedOption] = useState(0);
+  const [selectedAddress, setSelectedAddress] = useState<null | string>(null);
+
   const isOpen = useKeyboardOpen();
 
   // Altura compartilhada animada
@@ -60,17 +63,9 @@ const CouponsModal: React.FC<ModalProps> = ({
   const handleOverlayPress = (e: GestureResponderEvent) => {
     hideModal();
     setTimeout(() => setModalOpen(!modalOpen), 300);
-    setSearchText('');
   };
 
-  const options = [
-    {
-      name: 'Cupons',
-    },
-    {
-      name: 'Recompensas',
-    },
-  ];
+  const notEmpty = true;
 
   return (
     <View style={styles.centeredView}>
@@ -96,61 +91,37 @@ const CouponsModal: React.FC<ModalProps> = ({
               </Pressable>
             </View>
             <View style={{width: '100%', marginTop: 30}}>
-              <View style={{width: '100%', flexDirection: 'row'}}>
-                {options.map((op, i) => (
-                  <Pressable
-                    onPress={() => setSelectedOption(i)}
-                    key={i}
-                    style={{
-                      width: '50%',
-                      paddingBottom: 10,
-                      borderBottomWidth: selectedOption === i ? 1 : 0,
-                      borderColor:
-                        selectedOption === i ? COLORS.secondaryRed : null,
-                    }}>
-                    <MyText
-                      style={{
-                        textAlign: 'center',
-                        color:
-                          selectedOption === i
-                            ? COLORS.secondaryRed
-                            : '#000000',
-                      }}>
-                      {op.name}
-                    </MyText>
-                  </Pressable>
-                ))}
-              </View>
-              {selectedOption === 0 ? (
+              {notEmpty ? (
                 <ScrollView>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <TextInput
-                      placeholder="Código de cupom"
-                      style={{
-                        padding: 10,
-                        borderWidth: 0.5,
-                        width: '65%',
-                        marginHorizontal: 20,
-                        marginVertical: 10,
-                      }}
-                      value={searchText}
-                      onChangeText={ev => setSearchText(ev)}
-                    />
-                    <MyText
-                      style={{
-                        color: searchText ? COLORS.secondaryRed : '#000000',
-                      }}>
-                      Adicionar
-                    </MyText>
-                  </View>
+                  <View
+                    style={{flexDirection: 'row', alignItems: 'center'}}></View>
                   <View style={{gap: 15, marginHorizontal: 20, marginTop: 10}}>
                     {/* <EmptyAnimation text="Sem cupons disponiveis" /> */}
-                    <CouponCard />
+                    {userOptions.map(op => (
+                      <AddressCardSelected
+                        address={op}
+                        selectedAddress={selectedAddress}
+                        setSelectedAddress={setSelectedAddress}
+                      />
+                    ))}
+                    <TouchableOpacity
+                      style={styles.addButton}
+                      onPress={addAddress}>
+                      <CustomIcon
+                        name="plus"
+                        size={25}
+                        color="red"
+                        pack="Feather"
+                      />
+                      <MyText style={styles.addButtonText}>
+                        Adicionar endereço
+                      </MyText>
+                    </TouchableOpacity>
                   </View>
                 </ScrollView>
               ) : (
                 <ScrollView>
-                  <EmptyAnimation text="Sem cupons disponiveis" />
+                  <EmptyAnimation text="Sem endereço cadastrado" />
                 </ScrollView>
               )}
             </View>
@@ -189,6 +160,19 @@ const styles = StyleSheet.create({
     left: 20,
     position: 'absolute',
   },
+  addButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 25,
+    cursor: 'pointer',
+  },
+  addButtonText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: 'red',
+    marginLeft: 5,
+  },
 });
 
-export default CouponsModal;
+export default AddressModal;
