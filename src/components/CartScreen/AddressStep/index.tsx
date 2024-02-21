@@ -1,4 +1,11 @@
-import {FlatList, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import CustomIcon from '../../CustomIcon';
 import MyText from '../../Text';
 import ProductRecomendCard from '../../ProductRecomendCard';
@@ -12,6 +19,8 @@ import PaymentCard from '../../PaymentCard';
 import {useState} from 'react';
 import CartAddressCard from '../../CartAddressCard';
 import CartCellphoneCard from '../../CartCellphoneCard';
+import {useSharedValue, withTiming} from 'react-native-reanimated';
+import ChangeCellphoneModal from '../../Modals/ChangeCellphoneModal';
 
 interface AddressStepProps {
   totalProducts: Product[];
@@ -21,12 +30,25 @@ interface AddressStepProps {
 }
 const AddressStep: React.FC<AddressStepProps> = ({
   totalProducts,
-  showModal,
   ListRef,
   comeBack,
 }) => {
   const [active, setActive] = useState<null | string>(null);
   const [selectedDelivery, setSelectedDelivery] = useState<null | string>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const translateY = useSharedValue(Dimensions.get('window').height);
+
+  const showModal = () => {
+    console.log('chamou');
+    translateY.value = withTiming(0, {duration: 500});
+    setModalOpen(true);
+  };
+
+  const hideModal = () => {
+    translateY.value = withTiming(Dimensions.get('window').height, {
+      duration: 500,
+    });
+  };
   const {typePagament} = useGlobalStore();
 
   const iconSize = 30;
@@ -149,6 +171,7 @@ const AddressStep: React.FC<AddressStepProps> = ({
             <CartCellphoneCard
               cellphone="(11) 98859-8530"
               icon={cellPhoneIcon}
+              showModal={showModal}
             />
           </View>
         </View>
@@ -172,6 +195,12 @@ const AddressStep: React.FC<AddressStepProps> = ({
               );
             })}
           </View>
+          <ChangeCellphoneModal
+            modalOpen={modalOpen}
+            setModalOpen={setModalOpen}
+            hideModal={hideModal}
+            translateY={translateY}
+          />
         </View>
       </View>
     </View>

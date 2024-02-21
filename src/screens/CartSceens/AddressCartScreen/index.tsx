@@ -15,6 +15,7 @@ import AddressStep from '../../../components/CartScreen/AddressStep';
 import CartTotalFixed from '../../../components/CartScreen/CartTotalFixed';
 import CouponsModal from '../../../components/Modals/CouponsModal';
 import SectionTitle from '../../../components/SectionTitle';
+import ChangeCellphoneModal from '../../../components/Modals/ChangeCellphoneModal';
 
 export enum STEPS {
   CART = 0,
@@ -30,11 +31,6 @@ const AddressCartScreen = ({
   const [modalOpen, setModalOpen] = useState(false);
   const translateY = useSharedValue(Dimensions.get('window').height);
 
-  const cartNotEmpty = true;
-
-  const {products} = useGlobalStore();
-  const ListRef = useRef<FlatList>();
-
   const showModal = () => {
     console.log('chamou');
     translateY.value = withTiming(0, {duration: 500});
@@ -46,6 +42,9 @@ const AddressCartScreen = ({
       duration: 500,
     });
   };
+
+  const {products} = useGlobalStore();
+  const ListRef = useRef<FlatList>();
 
   const totalProducts = products.slice(0, 4);
 
@@ -72,13 +71,6 @@ const AddressCartScreen = ({
               ListRef={ListRef}
               showModal={showModal}
               totalProducts={totalProducts}
-            />
-
-            <CouponsModal
-              modalOpen={modalOpen}
-              setModalOpen={setModalOpen}
-              hideModal={hideModal}
-              translateY={translateY}
             />
           </View>
         </ScrollView>

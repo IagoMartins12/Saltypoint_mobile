@@ -1,4 +1,4 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Pressable, StyleSheet, TouchableOpacity, View} from 'react-native';
 import CustomIcon from '../CustomIcon';
 import {COLORS} from '../../theme/theme';
 import React from 'react';
@@ -7,8 +7,13 @@ import MyText from '../Text';
 interface AddressProps {
   icon: JSX.Element;
   cellphone?: string;
+  showModal: () => void;
 }
-const CartCellphoneCard: React.FC<AddressProps> = ({icon, cellphone}) => {
+const CartCellphoneCard: React.FC<AddressProps> = ({
+  icon,
+  cellphone,
+  showModal,
+}) => {
   return (
     <View style={styles.addressItem}>
       <View style={styles.iconContainer}>{icon}</View>
@@ -30,12 +35,14 @@ const CartCellphoneCard: React.FC<AddressProps> = ({icon, cellphone}) => {
         )}
       </View>
 
-      <CustomIcon
-        name="pencil-outline"
-        color="#000000"
-        pack="MaterialCommunityIcons"
-        size={20}
-      />
+      <Pressable onPress={showModal}>
+        <CustomIcon
+          name="pencil-outline"
+          color="#000000"
+          pack="MaterialCommunityIcons"
+          size={20}
+        />
+      </Pressable>
     </View>
   );
 };
