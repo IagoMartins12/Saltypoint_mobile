@@ -51,10 +51,11 @@ const ProductCard: React.FC<ProductCardProps> = ({product}) => {
 
 const styles = StyleSheet.create({
   mainDiv: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
     height: Dimensions.get('window').height / 3.15,
     width: Dimensions.get('window').width / 2.4,
     borderRadius: BORDERRADIUS.radius_15,
+    marginBottom: 2,
   },
   PointsText: {
     gap: 5,
@@ -64,7 +65,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderTopLeftRadius: BORDERRADIUS.radius_15,
     borderTopRightRadius: BORDERRADIUS.radius_15,
-    paddingBottom: 2,
   },
   CartItemImage: {
     height: 150,

@@ -52,47 +52,53 @@ const App = () => {
             component={SearchScreen}
             options={{animation: 'slide_from_right'}}
           />
-          <Stack.Screen
-            name="Profile"
-            component={ProfileScreen}
-            options={{animation: 'slide_from_right'}}
-          />
-          <Stack.Screen
-            name="Address"
-            component={AddressScreen}
-            options={{animation: 'slide_from_right'}}
-          />
-          <Stack.Screen
-            name="Order"
-            component={OrderScreen}
-            options={{animation: 'slide_from_right'}}
-          />
-          <Stack.Screen
-            name="MyOrder"
-            component={MyOrderScreen}
-            options={{animation: 'slide_from_right'}}
-          />
-          <Stack.Screen
-            name="Coupons"
-            component={CouponsScreen}
-            options={{animation: 'slide_from_right'}}
-          />
 
-          <Stack.Screen
-            name="Fidelity"
-            component={FidelityScreen}
-            options={{animation: 'slide_from_right'}}
-          />
-          <Stack.Screen
-            name="Term"
-            component={TermScreen}
-            options={{animation: 'slide_from_right'}}
-          />
           <Stack.Screen
             name="Tab"
             component={TabNavigator}
             options={{animation: 'slide_from_bottom'}}
           />
+          <Stack.Group>
+            <Stack.Screen
+              name="Profile"
+              component={ProfileScreen}
+              options={{animation: 'slide_from_right'}}
+            />
+            <Stack.Screen
+              name="Address"
+              component={AddressScreen}
+              options={{animation: 'slide_from_right'}}
+            />
+            <Stack.Screen
+              name="Order"
+              component={OrderScreen}
+              options={{
+                animation: 'slide_from_right',
+                fullScreenGestureEnabled: false,
+              }}
+            />
+            <Stack.Screen
+              name="MyOrder"
+              component={MyOrderScreen}
+              options={{animation: 'slide_from_right'}}
+            />
+            <Stack.Screen
+              name="Coupons"
+              component={CouponsScreen}
+              options={{animation: 'slide_from_right'}}
+            />
+
+            <Stack.Screen
+              name="Fidelity"
+              component={FidelityScreen}
+              options={{animation: 'slide_from_right'}}
+            />
+            <Stack.Screen
+              name="Term"
+              component={TermScreen}
+              options={{animation: 'slide_from_right'}}
+            />
+          </Stack.Group>
 
           {/* Endereço stack */}
           <Stack.Group>

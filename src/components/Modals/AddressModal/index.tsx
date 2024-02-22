@@ -97,12 +97,12 @@ const AddressModal: React.FC<AddressModalProps> = ({
                   <View
                     style={{flexDirection: 'row', alignItems: 'center'}}></View>
                   <View style={{gap: 15, marginHorizontal: 20, marginTop: 10}}>
-                    {/* <EmptyAnimation text="Sem cupons disponiveis" /> */}
-                    {userOptions.map(op => (
+                    {userOptions.map((op, i) => (
                       <AddressCardSelected
                         address={op}
                         selectedAddress={selectedAddress}
                         setSelectedAddress={setSelectedAddress}
+                        key={i}
                       />
                     ))}
                     <TouchableOpacity

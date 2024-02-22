@@ -162,6 +162,7 @@ const AddressCartScreen = ({
                       selectedDelivery={selectedDelivery}
                       setSelectedDelivery={setTitle}
                       withBorder={i === userOptions.length - 1 ? false : true}
+                      key={i}
                     />
                   ))}
                 </View>

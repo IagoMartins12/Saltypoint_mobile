@@ -1,11 +1,11 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
   PanGestureHandler,
-  ScrollView,
   State,
+  ScrollView,
 } from 'react-native-gesture-handler';
 import SectionTitle from '../../components/SectionTitle';
 import {global} from '../../style';
@@ -29,6 +29,13 @@ const OrderScreen = ({
   const goToOrder = () => {
     navigation.navigate('MyOrder');
   };
+
+  useEffect(() => {
+    navigation.addListener('beforeRemove', e => {
+      e.preventDefault();
+      //clear setInterval here and go back
+    });
+  }, []);
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <PanGestureHandler

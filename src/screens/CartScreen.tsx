@@ -54,13 +54,13 @@ const CartScreen = ({
                 {/* Cart Products  */}
                 <View style={[styles.productView, styles.paddingView]}>
                   {totalProducts.map((p, i) => (
-                    <>
-                      <ProductCartCard product={p} key={p.id} />
+                    <View key={i}>
+                      <ProductCartCard product={p} />
 
                       {i !== totalProducts.length - 1 ? (
-                        <View style={global.hrStyle} key={i} />
+                        <View style={global.hrStyle} />
                       ) : null}
-                    </>
+                    </View>
                   ))}
                 </View>
 
