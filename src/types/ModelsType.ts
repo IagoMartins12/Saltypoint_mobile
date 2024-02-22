@@ -122,7 +122,6 @@ export type Product = {
   value: number;
   category_id: string;
   product_image: string;
-  stock_id?: string | null;
 
   category: Category;
 
@@ -130,7 +129,6 @@ export type Product = {
   order_product_2: Order_Product[];
   cart_product: Cart_product[];
   cart_product_2: Cart_product[];
-  stock: Stock[];
   favorites: Favorite[];
 };
 
@@ -145,7 +143,6 @@ export type Stock = {
 export type Category = {
   id: string;
   category_name: string;
-
   products: Product[];
 };
 

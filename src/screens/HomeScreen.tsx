@@ -1,3 +1,4 @@
+import React, {useRef, useState} from 'react';
 import {
   FlatList,
   ScrollView,
@@ -6,188 +7,69 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
-import {
-  BORDERRADIUS,
-  COLORS,
-  FONTFAMILY,
-  FONTSIZE,
-  SPACING,
-} from '../theme/theme';
-
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import ProductCard from '../components/ProductCard';
-import ProductCardHorizontal from '../components/ProductCardHorizontal';
+import {COLORS, FONTSIZE} from '../theme/theme';
 import CustomIcon from '../components/CustomIcon';
+import ProductCard from '../components/ProductCard';
 import {global} from '../style';
 import useGlobalStore from '../hooks/store/useGlobalStore';
-import {Product} from '../types/ModelsType';
+import {Category, Product} from '../types/ModelsType';
 import {visibleCategories} from '../utils';
-const categories = [
-  'Todos',
-  'Pizza',
-  'Esfiha',
-  'Refrigerantes',
-  'Combos',
-  'Promoção',
-];
 
 const HomeScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
-  const [currentCard, setCurrentCard] = useState(0);
-  const [categoryIndex, setCategoryIndex] = useState({
-    index: 0,
-    category: categories[0],
-  });
-
-  const ListRef: any = useRef<FlatList>();
-
   const {products, categorys} = useGlobalStore();
 
   const buttonPressHandler = () => {
     navigation.push('Search');
   };
 
-  const ViewList = [
-    <CustomIcon
-      name="grip-vertical"
-      size={20}
-      pack="FontAwesome6"
-      color={currentCard === 0 ? 'blue' : 'black'}
-    />,
-
-    <CustomIcon
-      name="grip-lines"
-      size={20}
-      pack="FontAwesome6"
-      color={currentCard === 1 ? 'blue' : 'black'}
-    />,
-  ];
+  const renderProductItem = ({item}: {item: Product}) => {
+    return <ProductCard product={item} />;
+  };
 
   return (
     <View style={styles.mainContainer}>
-      <View
-        style={[
-          global.shadow,
-          {
-            paddingHorizontal: 20,
-            paddingTop: 25,
-          },
-        ]}>
-        <View>
-          <View style={styles.textDiv}>
-            <Text style={styles.mainText}>
-              Olá, <Text style={{color: COLORS.primaryRedHex}}>Iago! </Text>
-            </Text>
-
-            <TouchableOpacity
-              onPress={buttonPressHandler}
-              style={{
-                flexDirection: 'row',
-                gap: 10,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <CustomIcon
-                name="search"
-                size={25}
-                color={COLORS.primaryOrangeHex}
-              />
-            </TouchableOpacity>
-          </View>
-
-          <View>
-            <Text
-              style={{
-                fontSize: FONTSIZE.size_14,
-                color: COLORS.primaryBlackHex,
-                textDecorationLine: 'underline',
-              }}>
-              105 Pontos
-            </Text>
-          </View>
-
-          {/* <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.CategoryScrollViewStyle}>
-            {visibleCategories(categorys).map((data, index) => (
-              <View
-                key={index.toString()}
-                style={styles.CategoryScrollViewContainer}>
-                <TouchableOpacity
-                  style={styles.CategoryScrollViewItem}
-                  onPress={() => {
-                    ListRef?.current?.scrollToOffset({
-                      animated: true,
-                      offset: 0,
-                    });
-                    setCategoryIndex({
-                      index: index,
-                      category: categories[index],
-                    });
-                  }}>
-                  <Text
-                    style={[
-                      styles.CategoryText,
-                      categoryIndex.index == index
-                        ? {
-                            color: COLORS.primaryRedHex,
-                            borderBottomWidth: 2,
-                            borderColor: COLORS.primaryRedHex,
-                          }
-                        : {},
-                    ]}>
-                    {data.category_name}
-                  </Text>
-                  {categoryIndex.index == index ? (
-                    <View style={styles.ActiveCategory} />
-                  ) : null}
-                </TouchableOpacity>
-              </View>
-            ))}
-          </ScrollView> */}
+      <View style={[global.shadow, styles.headerContainer]}>
+        <View style={styles.textDiv}>
+          <Text style={styles.mainText}>
+            Olá, <Text style={{color: COLORS.primaryRedHex}}>Iago! </Text>
+          </Text>
+          <TouchableOpacity
+            onPress={buttonPressHandler}
+            style={styles.searchIcon}>
+            <CustomIcon
+              name="search"
+              size={25}
+              color={COLORS.primaryOrangeHex}
+            />
+          </TouchableOpacity>
         </View>
 
-        <View style={styles.ViewDiv}>
-          {ViewList.map((icon, key) => (
-            <TouchableOpacity
-              key={key}
-              style={styles.IconDiv}
-              onPress={() => {
-                setCurrentCard(key);
-              }}>
-              {icon}
-            </TouchableOpacity>
-          ))}
-        </View>
+        <Text style={styles.pointsText}>105 Pontos</Text>
       </View>
 
       <ScrollView
-        contentContainerStyle={[
-          styles.productsDiv,
-          {
-            flexDirection: currentCard === 0 ? 'row' : 'column',
-            flexWrap: currentCard === 0 ? 'wrap' : 'nowrap',
-          },
-        ]}
+        contentContainerStyle={[styles.productsDiv]}
         showsVerticalScrollIndicator={false}>
-        {currentCard === 0 ? (
-          <>
-            {products.map((p: Product) => (
-              <ProductCard product={p} key={p.id} />
-            ))}
-          </>
-        ) : (
-          <View style={{rowGap: 15, flex: 1}}>
-            {products.map((p: Product) => (
-              <ProductCardHorizontal product={p} key={p.id} />
-            ))}
+        {visibleCategories(categorys).map((category, index) => (
+          <View key={index} style={styles.categoryContainer}>
+            <Text style={styles.categoryTitle}>{category.category_name}</Text>
+            <FlatList
+              data={products.filter(
+                (product: Product) => product.category_id === category.id,
+              )}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.flatListView}
+              keyExtractor={item => item.id}
+              renderItem={renderProductItem}
+            />
           </View>
-        )}
+        ))}
       </ScrollView>
     </View>
   );
@@ -198,57 +80,47 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-
+  headerContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 25,
+    paddingBottom: 10,
+  },
   mainText: {
     fontSize: FONTSIZE.size_24,
     fontWeight: '700',
     color: COLORS.primaryBlackHex,
   },
-
   textDiv: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-  },
-
-  pointsDiv: {},
-
-  productsDiv: {
-    rowGap: 25,
-    justifyContent: 'space-around',
-    paddingHorizontal: 20,
-    paddingVertical: 20,
-    paddingBottom: 80,
-  },
-
-  CategoryScrollViewStyle: {
-    marginVertical: 15,
-  },
-  CategoryScrollViewContainer: {
-    paddingHorizontal: SPACING.space_10,
-  },
-  CategoryScrollViewItem: {
     alignItems: 'center',
   },
-  CategoryText: {
-    fontFamily: FONTFAMILY.poppins_semibold,
-    fontSize: FONTSIZE.size_16,
-    color: COLORS.primaryBlackHex,
-    marginBottom: SPACING.space_4,
-  },
-  ActiveCategory: {
-    flex: 1,
-    borderRadius: BORDERRADIUS.radius_10,
-    backgroundColor: COLORS.primaryOrangeHex,
-  },
-  ViewDiv: {
+  searchIcon: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    gap: 15,
+    gap: 10,
   },
-  IconDiv: {
-    padding: 10,
+  pointsText: {
+    fontSize: FONTSIZE.size_14,
+    color: COLORS.primaryBlackHex,
+    textDecorationLine: 'underline',
+  },
+  productsDiv: {
+    paddingHorizontal: 25,
+    marginVertical: 15,
+    gap: 20,
+    paddingBottom: 70,
+  },
+  categoryContainer: {
+    gap: 15,
+    paddingVertical: 10,
+  },
+  categoryTitle: {
+    fontSize: 22,
+    fontWeight: '600',
+    color: COLORS.primaryBlackHex,
+  },
+  flatListView: {
+    gap: 15,
   },
 });
 

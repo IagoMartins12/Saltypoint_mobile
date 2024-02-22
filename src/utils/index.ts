@@ -100,9 +100,20 @@ export const formatOrderDate = (orderDate: Date) => {
 
 export const categoriesToExclude = ['Bordas', 'Brindes', 'Promoções'];
 
-export const visibleCategories = (category: Category[]) => {
+export const visibleCategories = (
+  category: Category[],
+  includeAll?: boolean,
+) => {
+  if (includeAll) {
+    return [
+      {category_name: 'Todos', id: '0'},
+      ...category.filter(
+        category => !categoriesToExclude.includes(category.category_name),
+      ),
+    ];
+  }
+
   return [
-    {category_name: 'Todos', id: '0'},
     ...category.filter(
       category => !categoriesToExclude.includes(category.category_name),
     ),
