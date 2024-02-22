@@ -23,7 +23,7 @@ const OrderScreen = ({
   };
 
   const comeBack = () => {
-    navigation.pop();
+    navigation.navigate('Settings');
   };
 
   const goToOrder = () => {

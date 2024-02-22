@@ -1,13 +1,10 @@
-import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import CartTotalFixed from '../../../components/CartScreen/CartTotalFixed';
 import SectionTitle from '../../../components/SectionTitle';
-import MyText from '../../../components/Text';
 import CustomIcon from '../../../components/CustomIcon';
 import useGlobalStore from '../../../hooks/store/useGlobalStore';
-import {useSharedValue, withTiming} from 'react-native-reanimated';
 import {useState} from 'react';
-import {COLORS, FONTSIZE} from '../../../theme/theme';
 import {useRoute} from '@react-navigation/native';
 import CartTittleSection from '../../../components/CartTittleSection';
 import CartInfo from '../../../components/CartInfo';
@@ -19,6 +16,8 @@ import {getIcon} from '../AddressCartScreen';
 import PaymentCard from '../../../components/PaymentCard';
 import CartCellphoneCard from '../../../components/CartCellphoneCard';
 import {iconColor, iconSize} from '../../../utils';
+import OrderAnimation from '../../../components/Lottie/OrderAnimation';
+import CallToast from '../../../components/Toast';
 
 export enum STEPS {
   CART = 0,
@@ -44,11 +43,22 @@ const ResumeCartScreen = ({
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
-  const teste = useRoute();
+  const [hasPlayed, setHasPlayed] = useState(false);
+  const {showToast} = CallToast();
+  const route = useRoute();
 
   //@ts-ignore
-  const response: responseType = teste.params;
+  const response: responseType = route.params;
 
+  const finishOrder = () => {
+    setHasPlayed(true);
+  };
+
+  const getBack = () => {
+    showToast('Pedido feito', 'success');
+    navigation.navigate('Order');
+    setHasPlayed(false);
+  };
   const {typePagament} = useGlobalStore();
 
   const comeBack = () => {
@@ -64,91 +74,104 @@ const ResumeCartScreen = ({
 
     return <PaymentCard icon={icon} typePagament={typePagamentOptions} />;
   };
-  return (
-    <>
-      <View style={{flex: 1}}>
-        <SectionTitle comeBack={comeBack} />
 
-        <ScrollView style={styles.mainContainer}>
-          {/* Resume  */}
-          <View style={[styles.paddingView, styles.couponView, global.shadow]}>
-            <View style={styles.wFull}>
-              <CartTittleSection title="Resumo de valores" />
-              <View style={{gap: 10}}>
-                <CartInfo label="Subtotal" text="R$ 57,80" />
-                {response?.selectedDelivery === '0' ? (
-                  <CartInfo label="Taxa de entrega" text="R$ 9,00" />
-                ) : null}
-
-                <CartInfo label="Cupom" text="- R$ 12,80" color="green" />
-
-                <View style={global.hrStyle} />
-              </View>
-
-              <CartInfo label="Total" text="R$ 52,80" boldText />
-            </View>
-          </View>
-
-          {/* Address  */}
-          <View
-            style={[
-              styles.paddingView,
-              styles.couponView,
-              global.shadow,
-              {
-                marginTop: 20,
-              },
-            ]}>
-            <View style={styles.wFull}>
-              <CartTittleSection title="Entrega em" />
-              {response.selectedDelivery === '0' ? (
-                <CartAddressCard address={userOptions[0]} />
-              ) : (
-                <CartAddressCard address={userOptions[1]} />
-              )}
-            </View>
-          </View>
-
-          {/* Cellphone  */}
-          <View
-            style={[
-              styles.paddingView,
-              styles.couponView,
-              global.shadow,
-              {
-                marginTop: 20,
-              },
-            ]}>
-            <View style={styles.wFull}>
-              <CartTittleSection title="Contato" />
-              <CartCellphoneCard
-                icon={cellPhoneIcon}
-                cellphone="(11) 98859-8530"
-              />
-            </View>
-          </View>
-
-          {/* Type pagament */}
-          <View
-            style={[
-              styles.paddingView,
-              styles.couponView,
-              global.shadow,
-
-              {
-                marginTop: 20,
-              },
-            ]}>
-            <View style={styles.wFull}>
-              <CartTittleSection title="Forma de pagamento" />
-              {getTypePagament(response.selectedPayment)}
-            </View>
-          </View>
-        </ScrollView>
-
-        <CartTotalFixed quantity={2} value={57} title="Total" lastStep />
+  if (hasPlayed) {
+    return (
+      <View style={{flex: 1, backgroundColor: '#FFFFFF'}}>
+        <OrderAnimation onFinished={getBack} />
       </View>
-    </>
+    );
+  }
+
+  return (
+    <View style={{flex: 1}}>
+      <SectionTitle comeBack={comeBack} />
+
+      <ScrollView style={styles.mainContainer}>
+        {/* Resume  */}
+        <View style={[styles.paddingView, styles.couponView, global.shadow]}>
+          <View style={styles.wFull}>
+            <CartTittleSection title="Resumo de valores" />
+            <View style={{gap: 10}}>
+              <CartInfo label="Subtotal" text="R$ 57,80" />
+              {response?.selectedDelivery === '0' ? (
+                <CartInfo label="Taxa de entrega" text="R$ 9,00" />
+              ) : null}
+
+              <CartInfo label="Cupom" text="- R$ 12,80" color="green" />
+
+              <View style={global.hrStyle} />
+            </View>
+
+            <CartInfo label="Total" text="R$ 52,80" boldText />
+          </View>
+        </View>
+
+        {/* Address  */}
+        <View
+          style={[
+            styles.paddingView,
+            styles.couponView,
+            global.shadow,
+            {
+              marginTop: 20,
+            },
+          ]}>
+          <View style={styles.wFull}>
+            <CartTittleSection title="Entrega em" />
+            {response.selectedDelivery === '0' ? (
+              <CartAddressCard address={userOptions[0]} />
+            ) : (
+              <CartAddressCard address={userOptions[1]} />
+            )}
+          </View>
+        </View>
+
+        {/* Cellphone  */}
+        <View
+          style={[
+            styles.paddingView,
+            styles.couponView,
+            global.shadow,
+            {
+              marginTop: 20,
+            },
+          ]}>
+          <View style={styles.wFull}>
+            <CartTittleSection title="Contato" />
+            <CartCellphoneCard
+              icon={cellPhoneIcon}
+              cellphone="(11) 98859-8530"
+            />
+          </View>
+        </View>
+
+        {/* Type pagament */}
+        <View
+          style={[
+            styles.paddingView,
+            styles.couponView,
+            global.shadow,
+
+            {
+              marginTop: 20,
+            },
+          ]}>
+          <View style={styles.wFull}>
+            <CartTittleSection title="Forma de pagamento" />
+            {getTypePagament(response.selectedPayment)}
+          </View>
+        </View>
+      </ScrollView>
+
+      <CartTotalFixed
+        quantity={2}
+        value={57}
+        title="Total"
+        lastStep
+        onPress={finishOrder}
+      />
+    </View>
   );
 };
 
