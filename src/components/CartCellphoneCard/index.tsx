@@ -7,7 +7,7 @@ import MyText from '../Text';
 interface AddressProps {
   icon: JSX.Element;
   cellphone?: string;
-  showModal: (currentTarget: 'Address' | 'Cellphone') => void;
+  showModal?: (currentTarget: 'Address' | 'Cellphone') => void;
 }
 const CartCellphoneCard: React.FC<AddressProps> = ({
   icon,
@@ -35,17 +35,19 @@ const CartCellphoneCard: React.FC<AddressProps> = ({
         )}
       </View>
 
-      <Pressable
-        onPress={() => {
-          showModal('Cellphone');
-        }}>
-        <CustomIcon
-          name="pencil-outline"
-          color="#000000"
-          pack="MaterialCommunityIcons"
-          size={20}
-        />
-      </Pressable>
+      {showModal ? (
+        <Pressable
+          onPress={() => {
+            showModal('Cellphone');
+          }}>
+          <CustomIcon
+            name="pencil-outline"
+            color="#000000"
+            pack="MaterialCommunityIcons"
+            size={20}
+          />
+        </Pressable>
+      ) : null}
     </View>
   );
 };
@@ -55,8 +57,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
     paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderColor: 'gray',
   },
   iconContainer: {
     width: '20%',

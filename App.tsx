@@ -20,6 +20,7 @@ import CepStepScreen from './src/screens/AddressScreens/CepStepScreen';
 import SaveAddressScreen from './src/screens/AddressScreens/SaveAddressScreen';
 import GeoAddressScreen from './src/screens/AddressScreens/GeoAddressScreen';
 import AddressCartScreen from './src/screens/CartSceens/AddressCartScreen';
+import ResumeCartScreen from './src/screens/CartSceens/ResumeScreen';
 
 import FetchData from './src/components/FetchData/index';
 const Stack = createNativeStackNavigator();
@@ -119,6 +120,12 @@ const App = () => {
             <Stack.Screen
               name="AddressCart"
               component={AddressCartScreen}
+              options={{animation: 'slide_from_right'}}
+            />
+
+            <Stack.Screen
+              name="ResumeCart"
+              component={ResumeCartScreen}
               options={{animation: 'slide_from_right'}}
             />
           </Stack.Group>

@@ -2,27 +2,34 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import LottieView from 'lottie-react-native';
 import {COLORS, FONTFAMILY, FONTSIZE} from '../../../theme/theme';
+import MyText from '../../Text';
 
-const ProcessAnimation = () => {
+interface OrderAnimationProps {
+  text?: string;
+}
+
+const OrderAnimation: React.FC<OrderAnimationProps> = ({text}) => {
   return (
     <View style={styles.EmptyCartContainer}>
       <LottieView
         style={styles.LottieStyle}
-        source={require('../../../lottie/processAnimation.json')}
+        source={require('../../../lottie/empty.json')}
         autoPlay
         loop
       />
+
+      <MyText style={{textAlign: 'center', fontSize: 22}}> {text}</MyText>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   EmptyCartContainer: {
-    flex: 1,
     justifyContent: 'center',
+    flex: 1,
   },
   LottieStyle: {
-    height: 350,
+    height: 400,
   },
   LottieText: {
     fontFamily: FONTFAMILY.poppins_medium,
@@ -32,4 +39,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProcessAnimation;
+export default OrderAnimation;

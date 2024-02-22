@@ -110,7 +110,7 @@ const HomeScreen = ({
             </Text>
           </View>
 
-          <ScrollView
+          {/* <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.CategoryScrollViewStyle}>
@@ -149,7 +149,7 @@ const HomeScreen = ({
                 </TouchableOpacity>
               </View>
             ))}
-          </ScrollView>
+          </ScrollView> */}
         </View>
 
         <View style={styles.ViewDiv}>

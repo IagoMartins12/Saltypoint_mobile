@@ -1,4 +1,4 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {COLORS} from '../../theme/theme';
 import React from 'react';
 import MyText from '../Text';
@@ -17,16 +17,25 @@ export type userOptions = {
 };
 interface AddressProps {
   address: userOptions;
-  selectedDelivery: string;
-  setSelectedDelivery: (id: string) => void;
+  selectedDelivery?: string;
+  setSelectedDelivery?: (id: string) => void;
+  withBorder?: boolean;
 }
 const CartAddressCard: React.FC<AddressProps> = ({
   address,
+  withBorder,
   selectedDelivery,
   setSelectedDelivery,
 }) => {
   return (
-    <View style={styles.addressItem}>
+    <View
+      style={[
+        styles.addressItem,
+        {
+          borderBottomWidth: withBorder ? 1 : null,
+          borderColor: withBorder ? 'gray' : null,
+        },
+      ]}>
       <View style={styles.iconContainer}>{address.icon}</View>
 
       <View style={styles.textContainer}>
@@ -44,11 +53,13 @@ const CartAddressCard: React.FC<AddressProps> = ({
         )}
       </View>
 
-      <SelectButton
-        address={address}
-        selectedDelivery={selectedDelivery}
-        setSelectedDelivery={setSelectedDelivery}
-      />
+      {setSelectedDelivery ? (
+        <SelectButton
+          address={address}
+          selectedDelivery={selectedDelivery}
+          setSelectedDelivery={setSelectedDelivery}
+        />
+      ) : null}
     </View>
   );
 };
@@ -58,8 +69,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
     paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderColor: 'gray',
   },
   iconContainer: {
     width: '20%',

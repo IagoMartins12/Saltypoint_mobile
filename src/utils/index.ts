@@ -53,7 +53,7 @@ export const checkIfAddressIsValid = (address: string) => {
   );
 };
 
-const formatPhoneNumber = (inputValue: string) => {
+export const formatPhoneNumber = (inputValue: string) => {
   const numericPhoneNumber = inputValue.replace(/\D/g, '');
 
   let formattedPhoneNumber = '';
@@ -108,3 +108,6 @@ export const visibleCategories = (category: Category[]) => {
     ),
   ];
 };
+
+export const iconSize = 30;
+export const iconColor = '#000000';
