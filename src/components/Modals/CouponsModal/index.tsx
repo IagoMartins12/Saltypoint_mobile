@@ -22,6 +22,9 @@ import MyText from '../../Text';
 import CouponCard from '../../CouponCard';
 import useKeyboardOpen from '../../../hooks/useKeyboardOpen';
 import EmptyAnimation from '../../Lottie/EmptyAnimation';
+import useGlobalStore from '../../../hooks/store/useGlobalStore';
+import RewardCard from '../../RewardCard';
+import RewardCardHorizontal from '../../RewardCardHorizontal';
 
 const CouponsModal: React.FC<ModalProps> = ({
   modalOpen,
@@ -71,6 +74,8 @@ const CouponsModal: React.FC<ModalProps> = ({
       name: 'Recompensas',
     },
   ];
+
+  const {reward} = useGlobalStore();
 
   return (
     <View style={styles.centeredView}>
@@ -126,13 +131,7 @@ const CouponsModal: React.FC<ModalProps> = ({
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <TextInput
                       placeholder="Código de cupom"
-                      style={{
-                        padding: 10,
-                        borderWidth: 0.5,
-                        width: '65%',
-                        marginHorizontal: 20,
-                        marginVertical: 10,
-                      }}
+                      style={styles.inputStyle}
                       value={searchText}
                       onChangeText={ev => setSearchText(ev)}
                     />
@@ -143,14 +142,37 @@ const CouponsModal: React.FC<ModalProps> = ({
                       Adicionar
                     </MyText>
                   </View>
-                  <View style={{gap: 15, marginHorizontal: 20, marginTop: 10}}>
+                  <View style={styles.cardView}>
                     {/* <EmptyAnimation text="Sem cupons disponiveis" /> */}
+                    <CouponCard />
+                    <CouponCard />
+                    <CouponCard />
+                    <CouponCard />
                     <CouponCard />
                   </View>
                 </ScrollView>
               ) : (
                 <ScrollView>
-                  <EmptyAnimation text="Sem cupons disponiveis" />
+                  {/* <EmptyAnimation text="Sem cupons disponiveis" /> */}
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <TextInput
+                      placeholder="Procurar recompensa"
+                      style={styles.inputStyle}
+                      value={searchText}
+                      onChangeText={ev => setSearchText(ev)}
+                    />
+                    <MyText
+                      style={{
+                        color: searchText ? COLORS.secondaryRed : '#000000',
+                      }}>
+                      Adicionar
+                    </MyText>
+                  </View>
+                  <View style={styles.cardView}>
+                    {reward.map(r => (
+                      <RewardCardHorizontal reward={r} key={r.id} />
+                    ))}
+                  </View>
                 </ScrollView>
               )}
             </View>
@@ -177,6 +199,7 @@ const styles = StyleSheet.create({
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
     alignItems: 'center',
+    paddingBottom: 80,
   },
   iconStyle: {
     justifyContent: 'center',
@@ -188,6 +211,21 @@ const styles = StyleSheet.create({
     top: 15,
     left: 20,
     position: 'absolute',
+  },
+  cardView: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 15,
+    marginHorizontal: 20,
+    marginTop: 20,
+    justifyContent: 'center',
+  },
+  inputStyle: {
+    padding: 10,
+    borderWidth: 0.5,
+    width: '65%',
+    marginHorizontal: 20,
+    marginVertical: 10,
   },
 });
 

@@ -7,6 +7,7 @@ import CartScreen from '../screens/CartScreen';
 import CustomIcon from '../components/CustomIcon';
 import FavoriteScreen from '../screens/FavoriteScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import RewardScreen from '../screens/RewardScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -45,7 +46,7 @@ const TabNavigator = () => {
 
       <Tab.Screen
         name="Reward"
-        component={HomeScreen}
+        component={RewardScreen}
         options={{
           tabBarIcon: ({focused, color, size}) => (
             <CustomIcon

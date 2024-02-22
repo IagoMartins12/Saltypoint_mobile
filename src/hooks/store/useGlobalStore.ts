@@ -10,6 +10,8 @@ const useGlobalStore = create<Store>(set => ({
   setTypePagament: typePagament => set({typePagament: typePagament}),
   states: [],
   setStates: states => set({states: states}),
+  reward: [],
+  setReward: reward => set({reward: reward}),
 }));
 
 export default useGlobalStore;

@@ -170,6 +170,8 @@ export interface Store {
   setTypePagament: (typePagament: Type_Pagament[]) => void;
   states: State[];
   setStates: (states: State[]) => void;
+  reward: Reward[];
+  setReward: (Reward: Reward[]) => void;
 }
 
 export interface PrivateStore {

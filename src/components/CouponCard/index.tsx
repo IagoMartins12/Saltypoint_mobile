@@ -1,6 +1,14 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
 import {COLORS} from '../../theme/theme';
+import MyText from '../Text';
 
 const CouponCard = () => {
   const handleCopyLink = async () => {
@@ -25,17 +33,19 @@ const CouponCard = () => {
       </View>
       <View style={styles.textContainer}>
         <View>
-          <Text style={styles.couponNameText}>Desconto de 15%</Text>
-          <Text style={styles.discountText}>#F3S564</Text>
+          <MyText style={styles.couponNameText}>Desconto de 15%</MyText>
         </View>
+
+        <MyText style={styles.rewardCode}>#F3S564</MyText>
+
         <View
           style={{
             alignItems: 'center',
             justifyContent: 'space-between',
             flexDirection: 'row',
           }}>
-          <Text style={styles.validityText}>Validade:</Text>
-          <Text style={styles.normalText}>20/01/2024</Text>
+          <MyText style={styles.validityText}>Validade:</MyText>
+          <MyText style={styles.normalText}>20/01/2024</MyText>
         </View>
       </View>
     </TouchableOpacity>
@@ -44,7 +54,7 @@ const CouponCard = () => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 120,
+    height: Dimensions.get('screen').height / 6.5,
     flexDirection: 'row',
     width: '100%',
     borderWidth: 1,
@@ -52,7 +62,7 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed',
   },
   imageContainer: {
-    width: '30%',
+    width: '35%',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -67,26 +77,25 @@ const styles = StyleSheet.create({
     gap: 10,
     justifyContent: 'space-between',
   },
-  discountText: {
-    fontWeight: '300',
-    fontSize: 16,
-    color: '#000000',
+  rewardCode: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    textAlign: 'center',
+    color: 'red',
   },
   couponNameText: {
-    fontWeight: 'normal',
-    fontSize: 22,
-    color: '#000000',
+    fontWeight: '600',
+    fontSize: 18,
+    textAlign: 'center',
   },
 
   validityText: {
     fontWeight: 'bold',
     fontSize: 18,
-    color: COLORS.primaryRedHex,
   },
   normalText: {
     fontWeight: 'normal',
-    fontSize: 14,
-    color: '#000000',
+    fontSize: 16,
   },
 });
 

@@ -1,5 +1,6 @@
 import {ChangeEvent} from 'react';
 import {Category} from '../types/ModelsType';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
@@ -122,3 +123,9 @@ export const visibleCategories = (
 
 export const iconSize = 30;
 export const iconColor = '#000000';
+
+export const enableGoBack = (navigation: NativeStackNavigationProp<any>) => {
+  navigation.addListener('beforeRemove', e => {
+    e.preventDefault();
+  });
+};

@@ -58,6 +58,7 @@ const App = () => {
             component={TabNavigator}
             options={{animation: 'slide_from_bottom'}}
           />
+          {/* Settings stack  */}
           <Stack.Group>
             <Stack.Screen
               name="Profile"
@@ -74,7 +75,6 @@ const App = () => {
               component={OrderScreen}
               options={{
                 animation: 'slide_from_right',
-                fullScreenGestureEnabled: false,
               }}
             />
             <Stack.Screen

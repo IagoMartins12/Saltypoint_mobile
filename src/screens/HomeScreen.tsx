@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   FlatList,
   ScrollView,
@@ -14,7 +14,7 @@ import ProductCard from '../components/ProductCard';
 import {global} from '../style';
 import useGlobalStore from '../hooks/store/useGlobalStore';
 import {Category, Product} from '../types/ModelsType';
-import {visibleCategories} from '../utils';
+import {enableGoBack, visibleCategories} from '../utils';
 
 const HomeScreen = ({
   navigation,
@@ -31,6 +31,9 @@ const HomeScreen = ({
     return <ProductCard product={item} />;
   };
 
+  useEffect(() => {
+    enableGoBack(navigation);
+  }, []);
   return (
     <View style={styles.mainContainer}>
       <View style={[global.shadow, styles.headerContainer]}>

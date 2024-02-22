@@ -11,6 +11,7 @@ import SectionTitle from '../../components/SectionTitle';
 import {global} from '../../style';
 import OrderCard from '../../components/OrderCard';
 import {COLORS} from '../../theme/theme';
+import {enableGoBack} from '../../utils';
 
 const OrderScreen = ({
   navigation,
@@ -31,10 +32,7 @@ const OrderScreen = ({
   };
 
   useEffect(() => {
-    navigation.addListener('beforeRemove', e => {
-      e.preventDefault();
-      //clear setInterval here and go back
-    });
+    enableGoBack(navigation);
   }, []);
   return (
     <GestureHandlerRootView style={{flex: 1}}>
