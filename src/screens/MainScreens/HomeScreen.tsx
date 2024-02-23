@@ -8,13 +8,13 @@ import {
   View,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {COLORS, FONTSIZE} from '../theme/theme';
-import CustomIcon from '../components/CustomIcon';
-import ProductCard from '../components/ProductCard';
-import {global} from '../style';
-import useGlobalStore from '../hooks/store/useGlobalStore';
-import {Category, Product} from '../types/ModelsType';
-import {enableGoBack, visibleCategories} from '../utils';
+import {COLORS, FONTSIZE} from '../../theme/theme';
+import CustomIcon from '../../components/CustomIcon';
+import ProductCard from '../../components/ProductCard';
+import {global} from '../../style';
+import useGlobalStore from '../../hooks/store/useGlobalStore';
+import {Category, Product} from '../../types/ModelsType';
+import {enableGoBack, visibleCategories} from '../../utils';
 
 const HomeScreen = ({
   navigation,

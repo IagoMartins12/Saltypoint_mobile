@@ -1,18 +1,18 @@
 import {Dimensions, FlatList, ScrollView, StyleSheet, View} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import useGlobalStore from '../hooks/store/useGlobalStore';
-import EmptyAnimation from '../components/Lottie/EmptyAnimation';
+import useGlobalStore from '../../hooks/store/useGlobalStore';
+import EmptyAnimation from '../../components/Lottie/EmptyAnimation';
 import {useRef, useState} from 'react';
 import {useSharedValue, withTiming} from 'react-native-reanimated';
-import CouponsModal from '../components/Modals/CouponsModal';
-import CartTotalFixed from '../components/CartScreen/CartTotalFixed';
-import MyText from '../components/Text';
-import CustomIcon from '../components/CustomIcon';
-import ProductRecomendCard from '../components/ProductRecomendCard';
-import ProductCartCard from '../components/ProductCartCard';
-import CartInfo from '../components/CartInfo';
-import {COLORS} from '../theme/theme';
-import {global} from '../style';
+import CouponsModal from '../../components/Modals/CouponsModal';
+import CartTotalFixed from '../../components/CartScreen/CartTotalFixed';
+import MyText from '../../components/Text';
+import CustomIcon from '../../components/CustomIcon';
+import ProductRecomendCard from '../../components/ProductRecomendCard';
+import ProductCartCard from '../../components/ProductCartCard';
+import CartInfo from '../../components/CartInfo';
+import {COLORS} from '../../theme/theme';
+import {global} from '../../style';
 
 const CartScreen = ({
   navigation,
