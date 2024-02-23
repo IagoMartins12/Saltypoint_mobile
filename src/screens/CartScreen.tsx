@@ -12,6 +12,7 @@ import ProductRecomendCard from '../components/ProductRecomendCard';
 import ProductCartCard from '../components/ProductCartCard';
 import CartInfo from '../components/CartInfo';
 import {COLORS} from '../theme/theme';
+import {global} from '../style';
 
 const CartScreen = ({
   navigation,

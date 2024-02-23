@@ -24,10 +24,6 @@ const FidelityScreen = ({
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
-  const onSwipeLeft = () => {
-    // Navegar para a página desejada
-    navigation.navigate('Settings');
-  };
   const comeBack = () => {
     navigation.pop();
   };
@@ -39,7 +35,7 @@ const FidelityScreen = ({
             nativeEvent.state === State.END &&
             nativeEvent.translationX > 50
           ) {
-            onSwipeLeft();
+            comeBack();
           }
         }}>
         <View style={{flex: 1}}>
@@ -129,7 +125,7 @@ const FidelityScreen = ({
               <Text>*Prêmio não acumulativo</Text>
             </View>
 
-            <FidelityAccordeonSection />
+            <FidelityAccordeonSection showAllContent />
           </ScrollView>
         </View>
       </PanGestureHandler>

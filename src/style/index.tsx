@@ -18,6 +18,7 @@ export const global = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
     elevation: 2,
+    zIndex: -10,
   },
   buttonStyle: {
     width: Dimensions.get('screen').width / 1.25,

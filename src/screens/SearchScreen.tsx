@@ -9,7 +9,7 @@ import {
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import SearchComponent from '../components/SearchComponent';
-import {BORDERRADIUS, FONTSIZE} from '../theme/theme';
+import {BORDERRADIUS, COLORS, FONTSIZE} from '../theme/theme';
 import CustomIcon from '../components/CustomIcon';
 import SearchText from '../components/SearchText';
 import ProductCard from '../components/ProductCard';
@@ -101,7 +101,9 @@ const SearchScreen = ({
                   styles.categoryBox,
                   {
                     backgroundColor:
-                      currentCategory === category.id ? '#2FDBBC' : '#fff0f0da',
+                      currentCategory === category.id
+                        ? COLORS.primaryRedHex
+                        : '#fff0f0da',
                     opacity:
                       currentCategory !== null &&
                       currentCategory !== category.id
@@ -120,7 +122,7 @@ const SearchScreen = ({
                 {category.id === currentCategory && (
                   <CustomIcon
                     name="close"
-                    size={25}
+                    size={20}
                     color="#000000"
                     pack="Ionicons"
                   />

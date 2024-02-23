@@ -18,7 +18,11 @@ import {
 } from './data';
 import ContactModal from '../Modals/ContactModal';
 
-const FidelityAccordeonSection = () => {
+const FidelityAccordeonSection = ({
+  showAllContent,
+}: {
+  showAllContent?: boolean;
+}) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [frequentDoubtsOpen, setFrequentDoubtsOpen] = useState(false);
   const [regulamentOpen, setRegulamentOpen] = useState(false);
@@ -111,7 +115,9 @@ const FidelityAccordeonSection = () => {
         paddingBottom: 20,
       }}>
       <View>
-        <Text style={styles.accordeonBoxTittle}>Mais informações</Text>
+        {showAllContent ? (
+          <Text style={styles.accordeonBoxTittle}>Mais informações</Text>
+        ) : null}
         <Pressable onPress={toggleFrequentDoubts} style={styles.accordeonBox}>
           <Text style={styles.accordeonTitle}>Dúvidas frequentes</Text>
           <CustomIcon
@@ -130,93 +136,103 @@ const FidelityAccordeonSection = () => {
           ))}
         </Animated.View>
       </View>
-      <View>
-        <Pressable onPress={toggleRegulamentOpen} style={styles.accordeonBox}>
-          <Text style={styles.accordeonTitle}>Regulamento</Text>
-          <CustomIcon
-            name={regulamentOpen ? 'chevron-down' : 'chevron-right'}
-            size={20}
-            pack="Feather"
-          />
-        </Pressable>
-        <Animated.View
-          style={[
-            {
-              overflow: 'hidden',
-              display: regulamentOpen ? 'flex' : 'none',
-              gap: 25,
-              paddingLeft: 5,
-            },
-            animatedRegulamentStyles,
-          ]}>
-          <View style={{gap: 15}}>
+
+      {showAllContent ? (
+        <>
+          <View>
+            <Pressable
+              onPress={toggleRegulamentOpen}
+              style={styles.accordeonBox}>
+              <Text style={styles.accordeonTitle}>Regulamento</Text>
+              <CustomIcon
+                name={regulamentOpen ? 'chevron-down' : 'chevron-right'}
+                size={20}
+                pack="Feather"
+              />
+            </Pressable>
+            <Animated.View
+              style={[
+                {
+                  overflow: 'hidden',
+                  display: regulamentOpen ? 'flex' : 'none',
+                  gap: 25,
+                  paddingLeft: 5,
+                },
+                animatedRegulamentStyles,
+              ]}>
+              <View style={{gap: 15}}>
+                <Text
+                  style={{
+                    fontSize: FONTSIZE.size_16,
+                    color: COLORS.primaryBlackHex,
+                    fontWeight: 'bold',
+                  }}>
+                  1. Elegibilidade
+                </Text>
+                <View style={{gap: 10}}>
+                  {RegulamentTexts.map((i, key) => (
+                    <ListInfo text={i.text} key={key} />
+                  ))}
+                  {/* <View style={styles.hrStyle} /> */}
+                </View>
+              </View>
+
+              <View style={{gap: 15}}>
+                <Text
+                  style={{
+                    fontSize: FONTSIZE.size_16,
+                    color: COLORS.primaryBlackHex,
+                    fontWeight: 'bold',
+                  }}>
+                  2. Regras e premiação
+                </Text>
+                <View style={{gap: 10}}>
+                  {RegulamentTextsRules.map((i, key) => (
+                    <ListInfo text={i.text} key={key} />
+                  ))}
+                </View>
+              </View>
+
+              <View style={{gap: 15}}>
+                <Text
+                  style={{
+                    fontSize: FONTSIZE.size_16,
+                    color: COLORS.primaryBlackHex,
+                    fontWeight: 'bold',
+                  }}>
+                  3. Resgate de prêmios
+                </Text>
+                <View style={{gap: 10}}>
+                  {RegulamentTextsRewards.map((i, key) => (
+                    <ListInfo text={i.text} key={key} />
+                  ))}
+                  <View style={styles.hrStyle} />
+                </View>
+              </View>
+            </Animated.View>
+          </View>
+
+          <View>
+            <Text style={styles.accordeonBoxTittle}>
+              Ainda precisa de ajuda?
+            </Text>
             <Text
               style={{
                 fontSize: FONTSIZE.size_16,
+                fontWeight: '500',
                 color: COLORS.primaryBlackHex,
-                fontWeight: 'bold',
+                textDecorationLine: 'underline',
+              }}
+              onPress={() => {
+                showModal();
+                setModalOpen(true);
               }}>
-              1. Elegibilidade
+              Entre em contato com a gente!
             </Text>
-            <View style={{gap: 10}}>
-              {RegulamentTexts.map((i, key) => (
-                <ListInfo text={i.text} key={key} />
-              ))}
-              {/* <View style={styles.hrStyle} /> */}
-            </View>
           </View>
+        </>
+      ) : null}
 
-          <View style={{gap: 15}}>
-            <Text
-              style={{
-                fontSize: FONTSIZE.size_16,
-                color: COLORS.primaryBlackHex,
-                fontWeight: 'bold',
-              }}>
-              2. Regras e premiação
-            </Text>
-            <View style={{gap: 10}}>
-              {RegulamentTextsRules.map((i, key) => (
-                <ListInfo text={i.text} key={key} />
-              ))}
-            </View>
-          </View>
-
-          <View style={{gap: 15}}>
-            <Text
-              style={{
-                fontSize: FONTSIZE.size_16,
-                color: COLORS.primaryBlackHex,
-                fontWeight: 'bold',
-              }}>
-              3. Resgate de prêmios
-            </Text>
-            <View style={{gap: 10}}>
-              {RegulamentTextsRewards.map((i, key) => (
-                <ListInfo text={i.text} key={key} />
-              ))}
-              <View style={styles.hrStyle} />
-            </View>
-          </View>
-        </Animated.View>
-      </View>
-
-      <View>
-        <Text style={styles.accordeonBoxTittle}>Ainda precisa de ajuda?</Text>
-        <Text
-          style={{
-            fontSize: FONTSIZE.size_16,
-            fontWeight: '500',
-            color: COLORS.primaryBlackHex,
-            textDecorationLine: 'underline',
-          }}
-          onPress={() => {
-            showModal();
-            setModalOpen(true);
-          }}>
-          Entre em contato com a gente!
-        </Text>
-      </View>
       <ContactModal
         modalOpen={modalOpen}
         setModalOpen={setModalOpen}

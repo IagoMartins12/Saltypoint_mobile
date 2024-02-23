@@ -51,8 +51,6 @@ const HomeScreen = ({
             />
           </TouchableOpacity>
         </View>
-
-        <Text style={styles.pointsText}>105 Pontos</Text>
       </View>
 
       <ScrollView
