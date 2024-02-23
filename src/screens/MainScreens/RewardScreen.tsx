@@ -8,15 +8,15 @@ import {
   Pressable,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {BORDERRADIUS, COLORS, FONTSIZE} from '../theme/theme';
-import ProgressBar from '../components/ProgressBar';
-import {global} from '../style';
-import MyText from '../components/Text';
-import CustomIcon from '../components/CustomIcon';
-import useGlobalStore from '../hooks/store/useGlobalStore';
+import {BORDERRADIUS, COLORS, FONTSIZE} from '../../theme/theme';
+import ProgressBar from '../../components/ProgressBar';
+import {global} from '../../style';
+import MyText from '../../components/Text';
+import CustomIcon from '../../components/CustomIcon';
+import useGlobalStore from '../../hooks/store/useGlobalStore';
 import {FlatList} from 'react-native';
-import RewardCard from '../components/RewardCard';
-import FidelityAccordeonSection from '../components/FidelityAccordeonSection';
+import RewardCard from '../../components/RewardCard';
+import FidelityAccordeonSection from '../../components/FidelityAccordeonSection';
 
 const RewardScreen = ({
   navigation,

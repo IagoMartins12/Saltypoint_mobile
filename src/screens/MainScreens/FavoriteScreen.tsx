@@ -6,11 +6,11 @@ import {
   PanGestureHandler,
   State,
 } from 'react-native-gesture-handler';
-import ProductCardHorizontal from '../components/ProductCardHorizontal';
-import TitleSection from '../components/TitleSection';
-import {global} from '../style';
-import {Product} from '../types/ModelsType';
-import useGlobalStore from '../hooks/store/useGlobalStore';
+import ProductCardHorizontal from '../../components/ProductCardHorizontal';
+import TitleSection from '../../components/TitleSection';
+import {global} from '../../style';
+import {Product} from '../../types/ModelsType';
+import useGlobalStore from '../../hooks/store/useGlobalStore';
 
 const FavoriteScreen = ({
   navigation,

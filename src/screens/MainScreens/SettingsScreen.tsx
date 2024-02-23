@@ -10,10 +10,10 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {global} from '../style';
-import {FONTSIZE} from '../theme/theme';
-import SettingsOption from '../components/SettingsOption';
-import {PackNames} from '../components/CustomIcon';
+import {global} from '../../style';
+import {FONTSIZE} from '../../theme/theme';
+import SettingsOption from '../../components/SettingsOption';
+import {PackNames} from '../../components/CustomIcon';
 
 const SettingsScreen = ({
   navigation,
