@@ -21,6 +21,7 @@ import SaveAddressScreen from './src/screens/AddressScreens/SaveAddressScreen';
 import GeoAddressScreen from './src/screens/AddressScreens/GeoAddressScreen';
 import AddressCartScreen from './src/screens/CartSceens/AddressCartScreen';
 import ResumeCartScreen from './src/screens/CartSceens/ResumeScreen';
+import CatchRewardScreen from './src/screens/CatchRewardScreen';
 
 import FetchData from './src/components/FetchData/index';
 const Stack = createNativeStackNavigator();
@@ -50,6 +51,12 @@ const App = () => {
           <Stack.Screen
             name="Search"
             component={SearchScreen}
+            options={{animation: 'slide_from_right'}}
+          />
+
+          <Stack.Screen
+            name="CatchReward"
+            component={CatchRewardScreen}
             options={{animation: 'slide_from_right'}}
           />
 

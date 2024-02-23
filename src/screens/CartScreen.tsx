@@ -47,7 +47,8 @@ const CartScreen = ({
 
   return (
     <>
-      <View style={{flex: 1}}>
+      <View
+        style={{flex: 1, backgroundColor: !cartNotEmpty ? '#FFFFFF' : null}}>
         <View style={styles.mainContainer}>
           {cartNotEmpty ? (
             <View style={{flex: 1}}>

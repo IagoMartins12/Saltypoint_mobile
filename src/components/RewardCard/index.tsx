@@ -1,5 +1,3 @@
-import {global} from '../../style';
-import {COLORS} from '../../theme/theme';
 import {Reward} from '../../types/ModelsType';
 import {
   View,
@@ -13,12 +11,24 @@ import {
 export interface RewardCardProps {
   reward: Reward;
   onClick?: (reward: Reward) => void;
+  margin?: boolean;
+  showCode?: string;
 }
 
-const RewardCard: React.FC<RewardCardProps> = ({reward, onClick}) => {
+const RewardCard: React.FC<RewardCardProps> = ({
+  reward,
+  onClick,
+  margin,
+  showCode,
+}) => {
   return (
     <TouchableOpacity
-      style={[styles.container]}
+      style={[
+        styles.container,
+        {
+          marginLeft: margin ? 15 : 0,
+        },
+      ]}
       onPress={() => {
         if (onClick) {
           onClick(reward);
@@ -38,9 +48,17 @@ const RewardCard: React.FC<RewardCardProps> = ({reward, onClick}) => {
           <Text style={styles.rewardName}>{reward.name}</Text>
         </View>
 
-        <View style={styles.rewardCodeContainer}>
-          <Text style={styles.rewardCode}>{reward.quantity_points} pontos</Text>
-        </View>
+        {showCode ? (
+          <View style={styles.rewardCodeContainer}>
+            <Text style={styles.rewardCode}>{showCode}</Text>
+          </View>
+        ) : (
+          <View style={styles.rewardCodeContainer}>
+            <Text style={styles.rewardCode}>
+              {reward.quantity_points} pontos
+            </Text>
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -49,7 +67,7 @@ const RewardCard: React.FC<RewardCardProps> = ({reward, onClick}) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    width: Dimensions.get('screen').width / 2,
+    width: Dimensions.get('screen').width / 2.3,
     height: Dimensions.get('screen').height / 3.75,
     borderRadius: 15,
     alignItems: 'center',

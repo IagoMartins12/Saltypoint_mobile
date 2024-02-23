@@ -28,6 +28,10 @@ const RewardScreen = ({
   const goToInfo = () => {
     return navigation.navigate('Fidelity');
   };
+
+  const goToCatchReward = () => {
+    return navigation.navigate('CatchReward');
+  };
   return (
     <View>
       <ScrollView
@@ -81,7 +85,9 @@ const RewardScreen = ({
 
           <ProgressBar points={150} />
 
-          <TouchableOpacity style={styles.buttonStyle}>
+          <TouchableOpacity
+            style={styles.buttonStyle}
+            onPress={goToCatchReward}>
             <Text style={styles.rewardText}>Ver recompensas</Text>
           </TouchableOpacity>
         </View>

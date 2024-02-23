@@ -25,6 +25,7 @@ import EmptyAnimation from '../../Lottie/EmptyAnimation';
 import useGlobalStore from '../../../hooks/store/useGlobalStore';
 import RewardCard from '../../RewardCard';
 import RewardCardHorizontal from '../../RewardCardHorizontal';
+import OptionsTittle from '../../OptionsTittle';
 
 const CouponsModal: React.FC<ModalProps> = ({
   modalOpen,
@@ -101,31 +102,11 @@ const CouponsModal: React.FC<ModalProps> = ({
               </Pressable>
             </View>
             <View style={{width: '100%', marginTop: 30}}>
-              <View style={{width: '100%', flexDirection: 'row'}}>
-                {options.map((op, i) => (
-                  <Pressable
-                    onPress={() => setSelectedOption(i)}
-                    key={i}
-                    style={{
-                      width: '50%',
-                      paddingBottom: 10,
-                      borderBottomWidth: selectedOption === i ? 1 : 0,
-                      borderColor:
-                        selectedOption === i ? COLORS.secondaryRed : null,
-                    }}>
-                    <MyText
-                      style={{
-                        textAlign: 'center',
-                        color:
-                          selectedOption === i
-                            ? COLORS.secondaryRed
-                            : '#000000',
-                      }}>
-                      {op.name}
-                    </MyText>
-                  </Pressable>
-                ))}
-              </View>
+              <OptionsTittle
+                options={options}
+                selectedOption={selectedOption}
+                setSelectedOption={setSelectedOption}
+              />
               {selectedOption === 0 ? (
                 <ScrollView>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
