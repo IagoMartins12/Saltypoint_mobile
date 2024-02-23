@@ -8,15 +8,15 @@ import {
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-import SearchComponent from '../../components/SearchComponent';
-import {BORDERRADIUS, COLORS, FONTSIZE} from '../../theme/theme';
-import CustomIcon from '../../components/CustomIcon';
-import SearchText from '../../components/SearchText';
-import ProductCard from '../../components/ProductCard';
-import useGlobalStore from '../../hooks/store/useGlobalStore';
-import {Product} from '../../types/ModelsType';
-import {visibleCategories} from '../../utils';
-import {global} from '../../style';
+import SearchComponent from '../components/SearchComponent';
+import {BORDERRADIUS, COLORS, FONTSIZE} from '../theme/theme';
+import CustomIcon from '../components/CustomIcon';
+import SearchText from '../components/SearchText';
+import ProductCard from '../components/ProductCard';
+import useGlobalStore from '../hooks/store/useGlobalStore';
+import {Product} from '../types/ModelsType';
+import {visibleCategories} from '../utils';
+import {global} from '../style';
 
 const SearchScreen = ({
   navigation,

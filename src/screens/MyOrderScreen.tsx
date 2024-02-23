@@ -7,14 +7,14 @@ import {
   ScrollView,
   State,
 } from 'react-native-gesture-handler';
-import SectionTitle from '../../components/SectionTitle';
-import {global} from '../../style';
-import {COLORS} from '../../theme/theme';
-import CustomIcon from '../../components/CustomIcon';
-import CardProductOrder from '../../components/CardProductOrder';
-import CurrentOrderInfo from '../../components/OrderInfo';
-import CartAnimation from '../../components/Lottie/CartAnimation';
-import LoginAnimation from '../../components/Lottie/LoginAnimation';
+import SectionTitle from '../components/SectionTitle';
+import {global} from '../style';
+import {COLORS} from '../theme/theme';
+import CustomIcon from '../components/CustomIcon';
+import CardProductOrder from '../components/CardProductOrder';
+import CurrentOrderInfo from '../components/OrderInfo';
+import CartAnimation from '../components/Lottie/CartAnimation';
+import LoginAnimation from '../components/Lottie/LoginAnimation';
 
 const MyOrderScreen = ({
   navigation,

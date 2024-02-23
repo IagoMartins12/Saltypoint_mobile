@@ -6,19 +6,19 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import {BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE} from '../../theme/theme';
+import {BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE} from '../theme/theme';
 import {useForm} from 'react-hook-form';
-import CustomIcon from '../../components/CustomIcon';
+import CustomIcon from '../components/CustomIcon';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
   PanGestureHandler,
   State,
 } from 'react-native-gesture-handler';
-import PizzaAnimation from '../../components/Lottie/PizzaAnimation';
-import StyledInputComponent from '../../components/Input';
-import useKeyboardOpen from '../../hooks/useKeyboardOpen';
-import {global} from '../../style';
+import PizzaAnimation from '../components/Lottie/PizzaAnimation';
+import StyledInputComponent from '../components/Input';
+import useKeyboardOpen from '../hooks/useKeyboardOpen';
+import {global} from '../style';
 
 const RegisterScreen = ({
   navigation,

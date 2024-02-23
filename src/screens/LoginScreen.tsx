@@ -10,19 +10,19 @@ import {
   View,
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
-import {BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE} from '../../theme/theme';
+import {BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE} from '../theme/theme';
 import {useForm} from 'react-hook-form';
-import LoginAnimation from '../../components/Lottie/LoginAnimation';
+import LoginAnimation from '../components/Lottie/LoginAnimation';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
   PanGestureHandler,
   State,
 } from 'react-native-gesture-handler';
-import StyledInputComponent from '../../components/Input';
-import useKeyboardOpen from '../../hooks/useKeyboardOpen';
-import {global} from '../../style';
-import LargeButton from '../../components/Button';
+import StyledInputComponent from '../components/Input';
+import useKeyboardOpen from '../hooks/useKeyboardOpen';
+import {global} from '../style';
+import LargeButton from '../components/Button';
 
 const LoginScreen = ({
   navigation,
