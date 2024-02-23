@@ -2,12 +2,12 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {COLORS} from '../theme/theme';
-import HomeScreen from '../screens/MainScreens/HomeScreen';
-import CartScreen from '../screens/MainScreens/CartScreen';
+import HomeScreen from '../screens/HomeScreen';
+import CartScreen from '../screens/CartScreen';
 import CustomIcon from '../components/CustomIcon';
-import FavoriteScreen from '../screens/MainScreens/FavoriteScreen';
-import SettingsScreen from '../screens/MainScreens/SettingsScreen';
-import RewardScreen from '../screens/MainScreens/RewardScreen';
+import FavoriteScreen from '../screens/FavoriteScreen';
+import SettingsScreen from '../screens/SettingsScreen';
+import RewardScreen from '../screens/RewardScreen';
 
 const Tab = createBottomTabNavigator();
 
