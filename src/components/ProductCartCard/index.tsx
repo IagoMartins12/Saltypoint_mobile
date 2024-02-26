@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
 } from 'react-native';
 import MyText from '../Text';
 import CustomIcon from '../CustomIcon';
@@ -13,9 +14,10 @@ import {useState} from 'react';
 
 interface ProductCardProps {
   product: Product;
+  onPress: (id: string) => void;
 }
 
-const ProductCartCard: React.FC<ProductCardProps> = ({product}) => {
+const ProductCartCard: React.FC<ProductCardProps> = ({product, onPress}) => {
   const [count, setCount] = useState(1);
 
   const increaseCount = () => {
@@ -29,7 +31,11 @@ const ProductCartCard: React.FC<ProductCardProps> = ({product}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => {
+        onPress(product.id);
+      }}>
       <View style={styles.image}>
         <ImageBackground
           source={{
@@ -78,7 +84,7 @@ const ProductCartCard: React.FC<ProductCardProps> = ({product}) => {
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -1,15 +1,25 @@
-import {Dimensions, ImageBackground, StyleSheet, View} from 'react-native';
+import {
+  Dimensions,
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import MyText from '../Text';
 import {Product} from '../../types/ModelsType';
 import {BORDERRADIUS} from '../../theme/theme';
 
 interface ProductCardProps {
   product: Product;
+  onPress: (id: string) => void;
 }
 
-const ProductRecomendCard: React.FC<ProductCardProps> = ({product}) => {
+const ProductRecomendCard: React.FC<ProductCardProps> = ({
+  product,
+  onPress,
+}) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container}>
       <View style={styles.image}>
         <ImageBackground
           source={{
@@ -28,7 +38,7 @@ const ProductRecomendCard: React.FC<ProductCardProps> = ({product}) => {
           </MyText>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

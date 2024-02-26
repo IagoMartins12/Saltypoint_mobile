@@ -4,6 +4,7 @@ import {
   View,
   Text,
   ImageBackground,
+  TouchableOpacity,
 } from 'react-native';
 import {BORDERRADIUS, COLORS, FONTSIZE, SPACING} from '../../theme/theme';
 import CustomIcon from '../CustomIcon';
@@ -12,11 +13,16 @@ import {Product} from '../../types/ModelsType';
 
 export interface ProductCardProps {
   product: Product;
+  onPress: (id: string) => void;
 }
-const ProductCard: React.FC<ProductCardProps> = ({product}) => {
+const ProductCard: React.FC<ProductCardProps> = ({product, onPress}) => {
   const getPoints = product.value;
   return (
-    <View style={[styles.mainDiv, global.shadow]}>
+    <TouchableOpacity
+      style={[styles.mainDiv, global.shadow]}
+      onPress={() => {
+        onPress(product.id);
+      }}>
       <View style={styles.PointsText}>
         <CustomIcon name="reply" size={11} color="#ffffff" />
         <Text style={{color: '#ffffff'}}> Ganhe {getPoints} pontos </Text>
@@ -45,7 +51,7 @@ const ProductCard: React.FC<ProductCardProps> = ({product}) => {
           {/* <CustomIcon name="cart-plus" size={25} /> */}
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

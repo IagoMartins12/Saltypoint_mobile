@@ -5,7 +5,7 @@ import {
   View,
   Text,
   ImageBackground,
-  Platform,
+  TouchableOpacity,
 } from 'react-native';
 import {BORDERRADIUS, COLORS, FONTSIZE, SPACING} from '../../theme/theme';
 import CustomIcon from '../CustomIcon';
@@ -15,11 +15,13 @@ import {Product} from '../../types/ModelsType';
 interface ProductCardHorizontalProps {
   showPoints?: boolean;
   product: Product;
+  onPress: (id: string) => void;
 }
 
 const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
   product,
   showPoints = true,
+  onPress,
 }) => {
   const renderPointsText = () => {
     if (!showPoints) return null;
@@ -33,7 +35,11 @@ const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
   };
 
   return (
-    <View style={[styles.mainDiv, global.shadow]}>
+    <TouchableOpacity
+      style={[styles.mainDiv, global.shadow]}
+      onPress={() => {
+        onPress(product.id);
+      }}>
       {renderPointsText()}
       <View style={styles.cardContainer}>
         <ImageBackground
@@ -56,7 +62,7 @@ const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

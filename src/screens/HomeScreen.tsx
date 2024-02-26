@@ -27,8 +27,12 @@ const HomeScreen = ({
     navigation.push('Search');
   };
 
+  const onPress = (id: string) => {
+    navigation.navigate('Product', {id});
+  };
+
   const renderProductItem = ({item}: {item: Product}) => {
-    return <ProductCard product={item} />;
+    return <ProductCard product={item} onPress={onPress} />;
   };
 
   useEffect(() => {

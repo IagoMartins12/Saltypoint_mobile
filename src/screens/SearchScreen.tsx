@@ -51,6 +51,10 @@ const SearchScreen = ({
     setProductState(filteredProduct);
   };
 
+  const onPress = (id: string) => {
+    navigation.navigate('Product', {id});
+  };
+
   useEffect(() => {
     setCurrentWidth(onFocus ? '95%' : '90%');
   }, [onFocus]);
@@ -68,7 +72,7 @@ const SearchScreen = ({
       contentContainerStyle={[styles.productDiv, {paddingBottom: 15}]}
       showsVerticalScrollIndicator={false}>
       {productState.map((p: Product) => (
-        <ProductCard product={p} key={p.id} />
+        <ProductCard product={p} key={p.id} onPress={onPress} />
       ))}
     </ScrollView>
   );
@@ -159,7 +163,7 @@ const SearchScreen = ({
                   return p.category_id === currentCategory;
                 })
                 .map((p: Product) => (
-                  <ProductCard product={p} key={p.id} />
+                  <ProductCard product={p} key={p.id} onPress={onPress} />
                 ))}
             </ScrollView>
           )}
