@@ -20,7 +20,6 @@ const OrderAnimation: React.FC<OrderAnimationProps> = ({text, onFinished}) => {
         source={animation}
         autoPlay
         onAnimationFinish={() => {
-          console.log('finalizou');
           setAnimation(require('../../../lottie/onSucess.json'));
           setTimeout(onFinished, 1200);
         }}
