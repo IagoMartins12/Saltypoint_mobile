@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   buttonView: {
-    paddingHorizontal: 40,
+    paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: BORDERRADIUS.radius_10,
     backgroundColor: COLORS.secondaryRed,

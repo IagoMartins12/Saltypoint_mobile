@@ -34,7 +34,7 @@ const MyText: React.FC<TextProps> = ({
   const textStyles = [getTextStyles(), {color: COLORS.primaryBlackHex}, style]; // Combinando estilos dinâmicos com os estilos adicionais
 
   return (
-    <Text style={textStyles} {...props} onPress={onPress}>
+    <Text style={[textStyles]} {...props} onPress={onPress}>
       {children}
     </Text>
   ); // Passando children para o componente Text
