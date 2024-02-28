@@ -1,5 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, Dimensions, Pressable, Image, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  StyleSheet,
+  Dimensions,
+  Pressable,
+  Image,
+  View,
+  Text,
+} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
@@ -15,6 +22,7 @@ import {COLORS} from '../theme/theme';
 import PizzaDetails from '../components/PizzaDetails';
 import ProductFixed from '../components/ProductFixed';
 import ProductDetails from '../components/ProductDetails';
+import CartAnimation from '../components/Lottie/CartAnimation';
 
 export type NavigationProps = {
   navigation: NativeStackNavigationProp<any>;
@@ -24,12 +32,20 @@ const ProductScreen = ({navigation}: NavigationProps) => {
   const [quantity, setQuantity] = useState(1);
   const [value, setValue] = useState<number | string>(0);
   const [disabled, setDisabled] = useState(true);
-  const [otherProductsValue, setOtherProductsValue] = useState<number | string>(
-    0,
-  );
-
-  const brotinhoPrice = 10 * quantity;
   const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
+  const [hasPlayed, setHasPlayed] = useState(false);
+
+  const {products} = useGlobalStore();
+  const router = useRoute();
+
+  const scrollViewRef = useRef<ScrollView>(null); // Ref para o ScrollView
+
+  const onSubmit = () => {
+    setHasPlayed(true);
+  };
+  //@ts-ignore
+  const productId: string = router.params?.id;
+  const isPizza = currentProduct?.name.toUpperCase().includes('PIZZA');
 
   const increaseQuantity = () => {
     return setQuantity(value => value + 1);
@@ -39,21 +55,49 @@ const ProductScreen = ({navigation}: NavigationProps) => {
     if (quantity <= 0) return;
     return setQuantity(value => value - 1);
   };
-  const {products} = useGlobalStore();
-  const router = useRoute();
 
-  //@ts-ignore
-  const productId: string = router.params?.id;
-  const isPizza = currentProduct?.name.toUpperCase().includes('PIZZA');
+  const scrollToSection = (options: 'Size' | 'Flavour') => {
+    if (options === 'Size') {
+      if (scrollViewRef.current) {
+        scrollViewRef.current.scrollTo({
+          y: 250,
+          animated: true,
+        });
+      }
+    }
+
+    if (options === 'Flavour') {
+      if (scrollViewRef.current) {
+        scrollViewRef.current.scrollTo({
+          y: 625,
+          animated: true,
+        });
+      }
+    }
+  };
+
+  const scrollToCornicione = () => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({
+        y: 2500, // Ajuste o valor de 'y' conforme necessário para rolar até a seção desejada
+        animated: true,
+      });
+    }
+  };
+
+  const comeBack = () => {
+    navigation.pop();
+  };
 
   useEffect(() => {
     const myProduct = products.find((p: Product) => p.id === productId);
     setCurrentProduct(myProduct);
   }, []);
 
-  const comeBack = () => {
-    navigation.pop();
-  };
+  useEffect(() => {
+    if (quantity === 0) return setDisabled(true);
+    setDisabled(false);
+  }, [quantity]);
 
   if (!currentProduct) {
     return null;
@@ -70,11 +114,16 @@ const ProductScreen = ({navigation}: NavigationProps) => {
           }
         }}>
         <View style={styles.container}>
-          <ScrollView style={{flex: 1}}>
+          <ScrollView style={{flex: 1}} ref={scrollViewRef}>
             {isPizza ? (
               <PizzaDetails
                 comeBack={comeBack}
                 currentProduct={currentProduct}
+                setValue={setValue}
+                value={value}
+                quantity={quantity}
+                scrollToSection={scrollToSection}
+                scrollToCornicione={scrollToCornicione}
               />
             ) : (
               <ProductDetails
@@ -83,12 +132,19 @@ const ProductScreen = ({navigation}: NavigationProps) => {
               />
             )}
           </ScrollView>
-          <ProductFixed
-            quantity={quantity}
-            value={currentProduct.value * quantity}
-            decreaseQuantity={decreaseQuantity}
-            increaseQuantity={increaseQuantity}
-          />
+          {hasPlayed ? (
+            <View style={styles.buttonContainer}>
+              <CartAnimation setHasPlayed={setHasPlayed} product />
+            </View>
+          ) : (
+            <ProductFixed
+              quantity={quantity}
+              value={Number(value)}
+              decreaseQuantity={decreaseQuantity}
+              increaseQuantity={increaseQuantity}
+              onPress={onSubmit}
+            />
+          )}
         </View>
       </PanGestureHandler>
     </GestureHandlerRootView>
@@ -100,57 +156,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  contentContainer: {
-    gap: 20,
-  },
 
-  productImage: {
-    height: Dimensions.get('screen').height / 2,
-    justifyContent: 'flex-end',
-  },
-  CartItemImage: {
+  buttonContainer: {
     width: '100%',
-    height: '100%',
-    alignSelf: 'center',
-  },
-  CardArrow: {
-    position: 'absolute',
-    top: 25,
-    left: 20,
-  },
-  CardHeart: {
-    position: 'absolute',
-    top: 25,
-    right: 20,
-  },
-
-  containerBox: {
-    width: '90%',
-    alignSelf: 'center',
-    gap: 20,
-    flex: 1,
-  },
-
-  titleView: {
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    borderRadius: 20,
     flexDirection: 'row',
-  },
-
-  tittle: {
-    fontSize: 20,
-    fontWeight: '700',
-  },
-
-  price: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: COLORS.secondaryRed,
-  },
-
-  description: {
-    fontSize: 16,
-    fontWeight: '300',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
   },
 });
 

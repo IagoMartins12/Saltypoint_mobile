@@ -5,18 +5,26 @@ import {COLORS, FONTFAMILY, FONTSIZE} from '../../../theme/theme';
 
 interface AnimationCommponentProps {
   setHasPlayed: React.Dispatch<React.SetStateAction<boolean>>;
+  product?: boolean;
   //   repeat?: boolean;
   // text?: string;
 }
-const CartAnimation: React.FC<AnimationCommponentProps> = ({setHasPlayed}) => {
+const CartAnimation: React.FC<AnimationCommponentProps> = ({
+  setHasPlayed,
+  product,
+}) => {
   const endAnimation = () => {
-    console.log('encerrando');
     setHasPlayed(false);
   };
   return (
     <View style={styles.EmptyCartContainer}>
       <LottieView
-        style={styles.LottieStyle}
+        style={[
+          styles.LottieStyle,
+          {
+            height: product ? 40 : 28,
+          },
+        ]}
         source={require('../../../lottie/cartAnimation.json')}
         autoPlay
         loop={false}
@@ -32,7 +40,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   LottieStyle: {
-    height: 28,
+    height: 32,
   },
   LottieText: {
     fontFamily: FONTFAMILY.poppins_medium,

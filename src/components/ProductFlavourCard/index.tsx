@@ -11,15 +11,19 @@ import {Product} from '../../types/ModelsType';
 import {COLORS} from '../../theme/theme';
 
 interface ProductCardProps {
+  pageProduct?: Product;
   product: Product;
   selectedFlavour2: string;
-  setSelectedFlavour2: React.Dispatch<React.SetStateAction<string>>;
+  handleSecondFlavour: (flavourId: string | null) => void;
+  checkDiference?: (product: Product) => string | undefined;
 }
 
 const ProductFlavourCard: React.FC<ProductCardProps> = ({
   product,
+  pageProduct,
   selectedFlavour2,
-  setSelectedFlavour2,
+  handleSecondFlavour,
+  checkDiference,
 }) => {
   return (
     <View style={styles.container}>
@@ -45,17 +49,27 @@ const ProductFlavourCard: React.FC<ProductCardProps> = ({
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <MyText style={styles.textPrice}>
-            R$ {product.value.toFixed(2)}
-          </MyText>
+          {checkDiference ? (
+            <>
+              {pageProduct && pageProduct?.value >= product.value ? null : (
+                <MyText style={[styles.textPrice]}>
+                  + R$ {checkDiference(product)}
+                </MyText>
+              )}
+            </>
+          ) : (
+            <MyText style={styles.textPrice}>
+              R$ {product.value.toFixed(2)}
+            </MyText>
+          )}
         </View>
       </View>
 
       <TouchableOpacity
         style={styles.iconBox}
         onPress={() => {
-          if (selectedFlavour2) return setSelectedFlavour2(null);
-          setSelectedFlavour2(product.id);
+          if (selectedFlavour2 === product.id) return handleSecondFlavour(null);
+          handleSecondFlavour(product.id);
         }}>
         {selectedFlavour2 === product.id ? (
           <CustomIcon
@@ -120,6 +134,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'left',
     fontWeight: '500',
+    color: COLORS.secondaryRed,
   },
   iconBox: {
     position: 'absolute',

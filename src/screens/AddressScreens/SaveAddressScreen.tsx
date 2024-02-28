@@ -39,7 +39,6 @@ const SaveAddressScreen = ({
   };
 
   const setValuesGeometry = (result: Result) => {
-    console.log('result', result.types);
     if (result.types.some(type => type === 'route')) {
       setValue('address', result.address_components[1]?.long_name);
       setValue('cep', result.address_components[6]?.long_name);
@@ -80,7 +79,6 @@ const SaveAddressScreen = ({
     }
 
     if (geometryResponse) {
-      console.log('geometryResponse', geometryResponse);
       setValuesGeometry(geometryResponse);
     }
   }, []);
