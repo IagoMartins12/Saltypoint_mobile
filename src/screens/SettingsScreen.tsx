@@ -4,7 +4,6 @@ import {
   Modal,
   Pressable,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -26,6 +25,7 @@ const SettingsScreen = ({
   const [animation] = useState(new Animated.Value(5));
   const [isMoving, setIsMoving] = useState(false);
   const [isImageModalVisible, setImageModalVisible] = useState(false);
+  const [imageBackground, setImageBackground] = useState(null);
 
   const {currentTheme} = useTheme();
   const handleNavigate = (name: string) => {
@@ -96,9 +96,12 @@ const SettingsScreen = ({
     const toValue = isMoving ? 5 : 1;
     Animated.timing(animation, {
       toValue,
-      duration: 500,
+      duration: 1000,
       useNativeDriver: false,
-    }).start();
+    }).start(() => {
+      // Define o background da imagem com base no estado de isMoving
+      setImageBackground(isMoving ? COLORS.backgroundColorDark : null); // Defina COLORS.someColor conforme necessário
+    });
   };
 
   return (
@@ -106,16 +109,17 @@ const SettingsScreen = ({
       style={[
         global.mainContainer,
         {
-          backgroundColor:
-            currentTheme === 'light'
-              ? COLORS.backgroundColorLight
-              : COLORS.backgroundColorDark,
+          backgroundColor: COLORS.backgroundColorLight,
         },
       ]}>
       <Animated.View
         style={[
           styles.box,
           {
+            backgroundColor:
+              currentTheme === 'dark'
+                ? COLORS.backgroundColorDark
+                : imageBackground,
             transform: [
               {
                 scaleX: animation.interpolate({
@@ -231,7 +235,6 @@ const styles = StyleSheet.create({
     width: 1,
     height: 1,
     borderRadius: 50,
-    // backgroundColor: 'black',
   },
 });
 
