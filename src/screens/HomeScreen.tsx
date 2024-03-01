@@ -15,6 +15,8 @@ import {global} from '../style';
 import useGlobalStore from '../hooks/store/useGlobalStore';
 import {Category, Product} from '../types/ModelsType';
 import {enableGoBack, visibleCategories} from '../utils';
+import useTheme from '../hooks/useTheme';
+import MyText from '../components/Text';
 
 const HomeScreen = ({
   navigation,
@@ -35,16 +37,27 @@ const HomeScreen = ({
     return <ProductCard product={item} onPress={onPress} />;
   };
 
+  const {currentTheme} = useTheme();
+
   useEffect(() => {
     enableGoBack(navigation);
   }, []);
   return (
-    <View style={styles.mainContainer}>
+    <View
+      style={[
+        styles.mainContainer,
+        {
+          backgroundColor:
+            currentTheme === 'light'
+              ? COLORS.backgroundColorLight
+              : COLORS.backgroundColorDark,
+        },
+      ]}>
       <View style={[global.shadow, styles.headerContainer]}>
         <View style={styles.textDiv}>
-          <Text style={styles.mainText}>
+          <MyText style={styles.mainText}>
             Olá, <Text style={{color: COLORS.primaryRedHex}}>Iago! </Text>
-          </Text>
+          </MyText>
           <TouchableOpacity
             onPress={buttonPressHandler}
             style={styles.searchIcon}>
@@ -62,7 +75,9 @@ const HomeScreen = ({
         showsVerticalScrollIndicator={false}>
         {visibleCategories(categorys).map((category, index) => (
           <View key={index} style={styles.categoryContainer}>
-            <Text style={styles.categoryTitle}>{category.category_name}</Text>
+            <MyText style={styles.categoryTitle}>
+              {category.category_name}
+            </MyText>
             <FlatList
               data={products.filter(
                 (product: Product) => product.category_id === category.id,
@@ -93,7 +108,6 @@ const styles = StyleSheet.create({
   mainText: {
     fontSize: FONTSIZE.size_24,
     fontWeight: '700',
-    color: COLORS.primaryBlackHex,
   },
   textDiv: {
     flexDirection: 'row',
@@ -104,11 +118,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
   },
-  pointsText: {
-    fontSize: FONTSIZE.size_14,
-    color: COLORS.primaryBlackHex,
-    textDecorationLine: 'underline',
-  },
+
   productsDiv: {
     paddingHorizontal: 25,
     marginVertical: 15,
@@ -122,7 +132,6 @@ const styles = StyleSheet.create({
   categoryTitle: {
     fontSize: 22,
     fontWeight: '600',
-    color: COLORS.primaryBlackHex,
   },
   flatListView: {
     gap: 15,

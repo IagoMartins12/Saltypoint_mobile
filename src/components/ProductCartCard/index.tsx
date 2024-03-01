@@ -14,7 +14,7 @@ import {useState} from 'react';
 
 interface ProductCardProps {
   product: Product;
-  onPress: (id: string) => void;
+  onPress?: (id: string) => void;
 }
 
 const ProductCartCard: React.FC<ProductCardProps> = ({product, onPress}) => {
@@ -32,9 +32,11 @@ const ProductCartCard: React.FC<ProductCardProps> = ({product, onPress}) => {
 
   return (
     <TouchableOpacity
-      style={styles.container}
+      style={[styles.container]}
       onPress={() => {
-        onPress(product.id);
+        if (onPress) {
+          onPress(product.id);
+        }
       }}>
       <View style={styles.image}>
         <ImageBackground
@@ -76,7 +78,7 @@ const ProductCartCard: React.FC<ProductCardProps> = ({product, onPress}) => {
             )}
 
             <View style={[styles.iconBox]}>
-              <Text> {count} </Text>
+              <MyText textSize="mediumText2"> {count} </MyText>
             </View>
             <Pressable style={[styles.iconBox]} onPress={increaseCount}>
               <CustomIcon name="plus" size={20} color="red" pack="Feather" />

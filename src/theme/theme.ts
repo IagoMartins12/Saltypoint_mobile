@@ -52,20 +52,28 @@ export const SPACING: Spacing = {
 
 export const COLORS = {
   themeColor: color === 'dark' ? '#000000' : '#ffffff',
-  themeFontColor: color === 'dark' ? '#ffffff' : '#000000',
   primaryRedHex: '#FF6347',
-  primaryYellowHex: '#FFD700',
   primaryGreenHex: '#228B22',
   primaryOrangeHex: '#D17842',
   primaryBlackHex: '#0C0F14',
-  primaryDarkGreyHex: '#141921',
   primaryGreyHex: '#252A32',
   primaryLightGreyHex: '#52555A',
-  primaryWhiteHex: '#FFFFFF',
   primaryBlackRGBA: 'rgba(12,15,20,0.5)',
   secondaryBlackRGBA: 'rgba(0,0,0,0.7)',
   primaryGray: '#ededed',
   secondaryRed: '#FF3131',
+  textColorLight: '#000000',
+  textColorDark: '#FFFFFF',
+  backgroundColorLight: '#FFFFFF',
+  backgroundColorDark: '#333333',
+  iconColorLight: '#000000',
+  iconColorDark: '#FFFFFF',
+  cardColorLight: '#FFFFFF',
+  cardColorDark: '#000000',
+  iconBgDark: '#000000',
+  iconBgLight: '#f0efef',
+  borderColorLight: '#000000',
+  borderColorDark: '#FFFFFF',
 };
 
 interface FontFamily {

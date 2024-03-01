@@ -11,6 +11,8 @@ import TitleSection from '../components/TitleSection';
 import {global} from '../style';
 import {Product} from '../types/ModelsType';
 import useGlobalStore from '../hooks/store/useGlobalStore';
+import useTheme from '../hooks/useTheme';
+import {COLORS} from '../theme/theme';
 
 const FavoriteScreen = ({
   navigation,
@@ -23,9 +25,18 @@ const FavoriteScreen = ({
     navigation.navigate('Product', {id});
   };
 
+  const {currentTheme} = useTheme();
   return (
     <ScrollView
-      style={global.mainContainer}
+      style={[
+        global.mainContainer,
+        {
+          backgroundColor:
+            currentTheme === 'light'
+              ? COLORS.backgroundColorLight
+              : COLORS.backgroundColorDark,
+        },
+      ]}
       showsVerticalScrollIndicator={false}>
       <TitleSection title="Favoritos" />
       <View style={styles.productsDiv}>

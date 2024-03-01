@@ -20,6 +20,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import useTheme from '../../hooks/useTheme';
 interface PizzaProps {
   currentProduct: Product;
   comeBack: () => void;
@@ -33,12 +34,12 @@ interface PizzaProps {
 const pizzaSize = [
   {
     name: 'Pizza',
-    icon: <CustomIcon name="pizza" size={25} pack="Ionicons" />,
+    icon: <CustomIcon name="pizza" size={25} pack="Ionicons" color="#000000" />,
     id: '0',
   },
   {
     name: 'Brotinho',
-    icon: <CustomIcon name="pizza" size={25} pack="Ionicons" />,
+    icon: <CustomIcon name="pizza" size={25} pack="Ionicons" color="#000000" />,
     id: '1',
   },
 ];
@@ -76,6 +77,7 @@ const PizzaDetails: React.FC<PizzaProps> = ({
 
   const {products, categorys} = useGlobalStore();
   const fadeInOpacity = useSharedValue(0);
+  const {currentTheme} = useTheme();
   const brotinhoPrice = 10 * quantity;
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -280,20 +282,10 @@ const PizzaDetails: React.FC<PizzaProps> = ({
         />
 
         <Pressable style={styles.CardArrow} onPress={comeBack}>
-          <CustomIcon
-            name={'arrow-left'}
-            size={30}
-            pack="Feather"
-            color={'#000000'}
-          />
+          <CustomIcon name={'arrow-left'} size={30} pack="Feather" />
         </Pressable>
         <Pressable style={styles.CardHeart}>
-          <CustomIcon
-            name={'heart'}
-            color={'#000000'}
-            size={30}
-            pack="Feather"
-          />
+          <CustomIcon name={'heart'} size={30} pack="Feather" />
         </Pressable>
       </View>
 
@@ -330,7 +322,7 @@ const PizzaDetails: React.FC<PizzaProps> = ({
                   {
                     backgroundColor:
                       op.id === selectedOptions.size
-                        ? '#f19b9b'
+                        ? COLORS.secondaryRed
                         : COLORS.primaryGray,
 
                     borderWidth: op.id === selectedOptions.size ? 1 : 0.5,
@@ -348,12 +340,32 @@ const PizzaDetails: React.FC<PizzaProps> = ({
 
           {/* Pizza flavour select  */}
           <View>
-            <View style={[styles.hrStyle]}>
+            <View
+              style={[
+                styles.hrStyle,
+                {
+                  borderColor:
+                    currentTheme === 'dark'
+                      ? COLORS.borderColorDark
+                      : COLORS.borderColorLight,
+                },
+              ]}>
               <MyText>Quantos sabores? </MyText>
             </View>
 
             {pizzaFlavour.map((p, i) => (
-              <View style={[styles.hrStyle, styles.flavourBox]} key={i}>
+              <View
+                style={[
+                  styles.hrStyle,
+                  styles.flavourBox,
+                  {
+                    borderColor:
+                      currentTheme === 'dark'
+                        ? COLORS.borderColorDark
+                        : COLORS.borderColorLight,
+                  },
+                ]}
+                key={i}>
                 <MyText>{p.name}</MyText>
                 <TouchableOpacity
                   style={[
@@ -385,16 +397,46 @@ const PizzaDetails: React.FC<PizzaProps> = ({
           {/* Pizza second flavour */}
           {selectedOptions.flavour === '1' ? (
             <Animated.View style={[styles.fadeInView, animatedStyle]}>
-              <View style={[styles.hrStyle]}>
+              <View
+                style={[
+                  styles.hrStyle,
+                  {
+                    borderColor:
+                      currentTheme === 'dark'
+                        ? COLORS.borderColorDark
+                        : COLORS.borderColorLight,
+                  },
+                ]}>
                 <MyText>Selecione o sabor? </MyText>
               </View>
-              <View style={[styles.InputContainerComponent]}>
+              <View
+                style={[
+                  styles.InputContainerComponent,
+                  {
+                    borderColor:
+                      currentTheme === 'dark'
+                        ? COLORS.borderColorDark
+                        : COLORS.borderColorLight,
+                  },
+                ]}>
                 <TextInput
                   placeholder="Calabresa / Mussarela"
                   value={searchText}
                   onChangeText={text => setSearchText(text)}
-                  placeholderTextColor={COLORS.primaryLightGreyHex}
-                  style={styles.TextInputContainer}
+                  placeholderTextColor={
+                    currentTheme === 'dark'
+                      ? COLORS.textColorDark
+                      : COLORS.textColorLight
+                  }
+                  style={[
+                    styles.TextInputContainer,
+                    {
+                      color:
+                        currentTheme === 'dark'
+                          ? COLORS.textColorDark
+                          : COLORS.textColorLight,
+                    },
+                  ]}
                 />
                 <TouchableOpacity>
                   <CustomIcon name="search" size={18} />
@@ -405,7 +447,15 @@ const PizzaDetails: React.FC<PizzaProps> = ({
                     <View
                       style={[
                         i !== filteredProducts.length - 1
-                          ? styles.hrStyle
+                          ? [
+                              styles.hrStyle,
+                              {
+                                borderColor:
+                                  currentTheme === 'dark'
+                                    ? COLORS.borderColorDark
+                                    : COLORS.borderColorLight,
+                              },
+                            ]
                           : null,
                         styles.flavourBox,
                       ]}
@@ -446,7 +496,16 @@ const PizzaDetails: React.FC<PizzaProps> = ({
 
           {getCategory && !getCategory.includes('Doces') && (
             <View>
-              <View style={[styles.hrStyle]}>
+              <View
+                style={[
+                  styles.hrStyle,
+                  {
+                    borderColor:
+                      currentTheme === 'dark'
+                        ? COLORS.borderColorDark
+                        : COLORS.borderColorLight,
+                  },
+                ]}>
                 <MyText>Bordas? </MyText>
               </View>
 
@@ -459,7 +518,15 @@ const PizzaDetails: React.FC<PizzaProps> = ({
                       <View
                         style={[
                           i !== filteredProducts.length - 1
-                            ? styles.hrStyle
+                            ? [
+                                styles.hrStyle,
+                                {
+                                  borderColor:
+                                    currentTheme === 'dark'
+                                      ? COLORS.borderColorDark
+                                      : COLORS.borderColorLight,
+                                },
+                              ]
                             : null,
                           ,
                           styles.flavourBox,
@@ -490,6 +557,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     gap: 20,
+    paddingBottom: 20,
   },
 
   productImage: {
@@ -563,10 +631,10 @@ const styles = StyleSheet.create({
   iconText: {
     fontSize: 18,
     fontWeight: '600',
+    color: '#000000',
   },
 
   hrStyle: {
-    borderBottomColor: 'black',
     borderBottomWidth: 1,
     paddingVertical: 10,
   },
@@ -594,21 +662,21 @@ const styles = StyleSheet.create({
   },
   InputContainerComponent: {
     flexDirection: 'row',
-    marginTop: 15,
     borderRadius: BORDERRADIUS.radius_10,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'transparent',
     alignItems: 'center',
     paddingHorizontal: 20,
     borderWidth: 1,
     alignSelf: 'flex-end',
+    marginTop: 15,
   },
 
   TextInputContainer: {
     flex: 1,
     fontFamily: FONTFAMILY.poppins_medium,
     fontSize: FONTSIZE.size_14,
-    color: '#000000',
   },
+
   fadeInView: {},
 
   contentBox: {

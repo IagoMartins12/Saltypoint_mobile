@@ -16,6 +16,8 @@ import {global} from '../../style';
 import {getAddressPerCep} from '../../services';
 import CallToast from '../../components/Toast';
 import CustomIcon from '../../components/CustomIcon';
+import useTheme from '../../hooks/useTheme';
+import {COLORS} from '../../theme/theme';
 
 const CepStepScreen = ({
   navigation,
@@ -59,6 +61,8 @@ const CepStepScreen = ({
     navigation.navigate('GeoAddress');
   };
 
+  const {currentTheme} = useTheme();
+
   const {register, handleSubmit, setValue, control} = useForm<FieldValues>({
     defaultValues: {
       cep: '',
@@ -82,7 +86,16 @@ const CepStepScreen = ({
   return (
     <View style={{flex: 1}}>
       <SectionTitle comeBack={comeBack} />
-      <ScrollView style={[global.mainContainer]}>
+      <ScrollView
+        style={[
+          global.mainContainer,
+          {
+            backgroundColor:
+              currentTheme === 'light'
+                ? COLORS.backgroundColorLight
+                : COLORS.backgroundColorDark,
+          },
+        ]}>
         <View style={{width: '100%'}}>
           <CepInput
             handleOnChange={handleOnChange}

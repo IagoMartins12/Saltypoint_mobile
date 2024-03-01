@@ -1,6 +1,7 @@
 import {View} from 'react-native';
 import MyText from '../Text';
 import {COLORS} from '../../theme/theme';
+import useTheme from '../../hooks/useTheme';
 
 interface InfoProps {
   label: string;
@@ -9,6 +10,7 @@ interface InfoProps {
   boldText?: boolean;
 }
 const CartInfo: React.FC<InfoProps> = ({label, text, color, boldText}) => {
+  const {currentTheme} = useTheme();
   return (
     <View
       style={{
@@ -29,7 +31,11 @@ const CartInfo: React.FC<InfoProps> = ({label, text, color, boldText}) => {
           fontSize: boldText ? 18 : 16,
           fontWeight: color === 'green' || boldText ? '600' : '300',
           color:
-            color === 'green' ? COLORS.primaryGreenHex : COLORS.primaryBlackHex,
+            color === 'green'
+              ? COLORS.primaryGreenHex
+              : currentTheme === 'dark'
+              ? COLORS.textColorDark
+              : COLORS.textColorLight,
         }}>
         {text}
       </MyText>

@@ -7,6 +7,8 @@ import StyledInputComponent2 from '../../components/Input2';
 import {FieldValues, SubmitHandler, useForm} from 'react-hook-form';
 import {useEffect} from 'react';
 import {Result} from '../../types/GeolocationType';
+import useTheme from '../../hooks/useTheme';
+import {COLORS} from '../../theme/theme';
 
 export const onlyDistrict = ['sublocality', 'postal_code'];
 
@@ -87,6 +89,8 @@ const SaveAddressScreen = ({
     setValue(id, value);
   };
 
+  const {currentTheme} = useTheme();
+
   return (
     <View style={{flex: 1}}>
       <SectionTitle comeBack={comeBack} />
@@ -96,6 +100,10 @@ const SaveAddressScreen = ({
           global.mainContainer,
           {
             gap: 50,
+            backgroundColor:
+              currentTheme === 'light'
+                ? COLORS.backgroundColorLight
+                : COLORS.backgroundColorDark,
           },
         ]}>
         <View

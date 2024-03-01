@@ -1,10 +1,11 @@
 import {StyleSheet, Text, View} from 'react-native';
 import {FONTSIZE} from '../../theme/theme';
+import MyText from '../Text';
 
 const TitleSection = ({title}: {title: string}) => {
   return (
     <View>
-      <Text style={styles.textStyle}> {title} </Text>
+      <MyText style={styles.textStyle}> {title} </MyText>
     </View>
   );
 };
@@ -14,7 +15,6 @@ const styles = StyleSheet.create({
     fontSize: FONTSIZE.size_20,
     fontWeight: '700',
     textAlign: 'center',
-    color: '#000000',
   },
 });
 

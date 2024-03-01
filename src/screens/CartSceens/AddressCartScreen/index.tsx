@@ -14,10 +14,11 @@ import CartCellphoneCard from '../../../components/CartCellphoneCard';
 import CartAddressCard from '../../../components/CartAddressCard';
 import CartTittleSection from '../../../components/CartTittleSection';
 import CallToast from '../../../components/Toast';
-import {userOptions} from '../../../components/CartScreen/AddressStep';
 import {global} from '../../../style';
 import {iconColor, iconSize} from '../../../utils';
-import {cellPhoneIcon} from '../ResumeScreen';
+import {cellPhoneIcon, userOptions} from '../ResumeScreen';
+import useTheme from '../../../hooks/useTheme';
+import {COLORS} from '../../../theme/theme';
 
 export enum STEPS {
   CART = 0,
@@ -27,44 +28,18 @@ export enum STEPS {
 export const getIcon = (options: Type_Pagament) => {
   if (options.type_pagament_name.toUpperCase().includes('CREDITO')) {
     return (
-      <CustomIcon
-        name="credit-card"
-        size={iconSize}
-        color={iconColor}
-        pack="MaterialIcons"
-      />
+      <CustomIcon name="credit-card" size={iconSize} pack="MaterialIcons" />
     );
   }
 
   if (options.type_pagament_name.toUpperCase().includes('DEBITO')) {
-    return (
-      <CustomIcon
-        name="credit-card"
-        size={iconSize}
-        color={iconColor}
-        pack="Feather"
-      />
-    );
+    return <CustomIcon name="credit-card" size={iconSize} pack="Feather" />;
   }
   if (options.type_pagament_name.toUpperCase().includes('DINHEIRO')) {
-    return (
-      <CustomIcon
-        name="money"
-        size={iconSize}
-        color={iconColor}
-        pack="MaterialIcons"
-      />
-    );
+    return <CustomIcon name="money" size={iconSize} pack="MaterialIcons" />;
   }
   if (options.type_pagament_name.toUpperCase().includes('PIX')) {
-    return (
-      <CustomIcon
-        name="pix"
-        size={iconSize}
-        color={iconColor}
-        pack="MaterialIcons"
-      />
-    );
+    return <CustomIcon name="pix" size={iconSize} pack="MaterialIcons" />;
   }
 
   return (
@@ -137,111 +112,135 @@ const AddressCartScreen = ({
     }
   };
 
+  const {currentTheme} = useTheme();
   return (
-    <>
-      <View style={{flex: 1}}>
-        <SectionTitle comeBack={comeBack} />
+    <View
+      style={{
+        flex: 1,
+        backgroundColor:
+          currentTheme === 'light'
+            ? COLORS.backgroundColorLight
+            : COLORS.backgroundColorDark,
+      }}>
+      <SectionTitle comeBack={comeBack} />
 
-        <ScrollView style={styles.mainContainer}>
-          <View>
-            <View
-              style={[styles.paddingView, styles.couponView, global.shadow]}>
-              {/* Delivery Options  */}
-              <View style={styles.wFull}>
-                <CartTittleSection
-                  showModal={showModal}
-                  title="Entregar em"
-                  currentTarget="Address"
-                  secondTitle="Trocar"
-                />
+      <ScrollView style={styles.mainContainer}>
+        <View>
+          <View
+            style={[
+              styles.paddingView,
+              styles.couponView,
+              global.shadow,
+              {
+                backgroundColor:
+                  currentTheme === 'dark'
+                    ? COLORS.cardColorDark
+                    : COLORS.cardColorLight,
+              },
+            ]}>
+            {/* Delivery Options  */}
+            <View style={[styles.wFull]}>
+              <CartTittleSection
+                showModal={showModal}
+                title="Entregar em"
+                currentTarget="Address"
+                secondTitle="Trocar"
+              />
 
-                <View>
-                  {userOptions.map((op, i) => (
-                    <CartAddressCard
-                      address={op}
-                      selectedDelivery={selectedDelivery}
-                      setSelectedDelivery={setTitle}
-                      withBorder={i === userOptions.length - 1 ? false : true}
-                      key={i}
-                    />
-                  ))}
-                </View>
-              </View>
-            </View>
-
-            {/* Cellphone  */}
-            <View
-              style={[
-                styles.paddingView,
-                styles.couponView,
-                global.shadow,
-                {
-                  marginTop: 20,
-                },
-              ]}>
-              <View style={[styles.wFull]}>
-                <CartTittleSection title="Contato" />
-
-                <CartCellphoneCard
-                  cellphone="(11) 98859-8530"
-                  showModal={showModal}
-                  icon={cellPhoneIcon}
-                />
-              </View>
-            </View>
-
-            {/* typePagament  */}
-            <View
-              style={[
-                styles.paddingView,
-                styles.couponView,
-                global.shadow,
-                {
-                  marginTop: 20,
-                },
-              ]}>
-              <View style={[styles.wFull]}>
-                <CartTittleSection title="Forma de pagamento" />
-
-                <View style={styles.typePagamentView}>
-                  {typePagament.map(typePagament => {
-                    const icon = getIcon(typePagament);
-                    return (
-                      <PaymentCard
-                        key={typePagament.id}
-                        typePagament={typePagament}
-                        active={selectedPayment}
-                        setActive={setSeletedPayment}
-                        icon={icon}
-                      />
-                    );
-                  })}
-                </View>
+              <View>
+                {userOptions.map((op, i) => (
+                  <CartAddressCard
+                    address={op}
+                    selectedDelivery={selectedDelivery}
+                    setSelectedDelivery={setTitle}
+                    withBorder={i === userOptions.length - 1 ? false : true}
+                    key={i}
+                  />
+                ))}
               </View>
             </View>
           </View>
-          <ChangeCellphoneModal
-            modalOpen={modalOpen}
-            setModalOpen={setModalOpen}
-            hideModal={hideModal}
-            translateY={translateY}
-          />
-          <AddressModal
-            modalOpen={modalAddressOpen}
-            translateY={translateY}
-            setModalOpen={setModalAddressOpen}
-            hideModal={hideModal}
-            addAddress={addAddress}
-          />
-        </ScrollView>
-        <CartTotalFixed
-          onPress={goToResumeScreen}
-          quantity={2}
-          value={57}
-          title={title}
+
+          {/* Cellphone  */}
+          <View
+            style={[
+              styles.paddingView,
+              styles.couponView,
+              global.shadow,
+              {
+                marginTop: 20,
+                backgroundColor:
+                  currentTheme === 'dark'
+                    ? COLORS.cardColorDark
+                    : COLORS.cardColorLight,
+              },
+            ]}>
+            <View style={[styles.wFull]}>
+              <CartTittleSection title="Contato" />
+
+              <CartCellphoneCard
+                cellphone="(11) 98859-8530"
+                showModal={showModal}
+                icon={cellPhoneIcon}
+              />
+            </View>
+          </View>
+
+          {/* typePagament  */}
+          <View
+            style={[
+              styles.paddingView,
+              styles.couponView,
+              global.shadow,
+              {
+                marginTop: 20,
+                backgroundColor:
+                  currentTheme === 'dark'
+                    ? COLORS.cardColorDark
+                    : COLORS.cardColorLight,
+              },
+            ]}>
+            <View style={[styles.wFull]}>
+              <CartTittleSection title="Forma de pagamento" />
+
+              <View style={styles.typePagamentView}>
+                {typePagament.map(typePagament => {
+                  const icon = getIcon(typePagament);
+                  return (
+                    <PaymentCard
+                      key={typePagament.id}
+                      typePagament={typePagament}
+                      active={selectedPayment}
+                      setActive={setSeletedPayment}
+                      icon={icon}
+                    />
+                  );
+                })}
+              </View>
+            </View>
+          </View>
+        </View>
+        <ChangeCellphoneModal
+          modalOpen={modalOpen}
+          setModalOpen={setModalOpen}
+          hideModal={hideModal}
+          translateY={translateY}
         />
-      </View>
-    </>
+        <AddressModal
+          modalOpen={modalAddressOpen}
+          translateY={translateY}
+          setModalOpen={setModalAddressOpen}
+          hideModal={hideModal}
+          addAddress={addAddress}
+        />
+      </ScrollView>
+      <CartTotalFixed
+        onPress={goToResumeScreen}
+        quantity={2}
+        value={57}
+        title={title}
+      />
+    </View>
   );
 };
 
@@ -256,7 +255,6 @@ const styles = StyleSheet.create({
   },
 
   couponView: {
-    backgroundColor: '#FFFFFF',
     width: '100%',
   },
 

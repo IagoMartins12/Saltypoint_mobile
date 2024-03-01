@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {FaCrown} from 'react-icons/fa';
 import CustomIcon from '../CustomIcon';
+import MyText from '../Text';
 
 const ProgressBar = ({points}) => {
   const maxWidth = 620;
@@ -24,10 +25,9 @@ const ProgressBar = ({points}) => {
             name="crown-outline"
             pack="MaterialCommunityIcons"
             size={25}
-            // color="#000000"
           />
         </View>
-        <Text style={styles.text}>{(index + 1) * step}</Text>
+        <MyText style={styles.text}>{(index + 1) * step}</MyText>
       </View>
     );
   });
@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 12,
+    marginTop: 2,
   },
 });
 

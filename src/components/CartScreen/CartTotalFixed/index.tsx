@@ -3,6 +3,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import MyText from '../../Text';
 import {BORDERRADIUS, COLORS} from '../../../theme/theme';
 import {global} from '../../../style';
+import useTheme from '../../../hooks/useTheme';
 
 interface CartTotalProps {
   onPress?: () => void;
@@ -19,12 +20,13 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
   value,
   lastStep,
 }) => {
-  const renderLastStep = () => (
-    <TouchableOpacity style={styles.lastButton} onPress={onPress}>
-      <MyText style={styles.buttonText}>Finalizar pedido </MyText>
-      <MyText style={styles.buttonText}> • </MyText>
+  const {currentTheme} = useTheme();
 
-      <MyText style={styles.buttonText}> R$ {value.toFixed(2)}</MyText>
+  const renderLastStep = () => (
+    <TouchableOpacity style={[styles.lastButton]} onPress={onPress}>
+      <MyText style={styles.buttonText}>
+        Finalizar pedido • R$ {value.toFixed(2)}
+      </MyText>
     </TouchableOpacity>
   );
 
@@ -35,8 +37,26 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
   );
 
   return (
-    <View style={[styles.totalView, global.shadow]}>
-      {lastStep ? renderLastStep() : renderContinueButton()}
+    <View
+      style={[
+        styles.totalView,
+        global.shadow,
+        {
+          backgroundColor:
+            currentTheme === 'dark'
+              ? COLORS.cardColorDark
+              : COLORS.cardColorLight,
+        },
+      ]}>
+      {lastStep ? (
+        <TouchableOpacity style={[styles.lastButton]} onPress={onPress}>
+          <MyText style={styles.buttonText}>
+            Finalizar pedido • R$ {value.toFixed(2)}
+          </MyText>
+        </TouchableOpacity>
+      ) : (
+        renderContinueButton()
+      )}
       {!lastStep && (
         <View>
           <MyText style={styles.subTitleTotal}>{title}</MyText>
@@ -52,7 +72,6 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
 
 const styles = StyleSheet.create({
   totalView: {
-    backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
     paddingVertical: 15,
     flexDirection: 'row-reverse',

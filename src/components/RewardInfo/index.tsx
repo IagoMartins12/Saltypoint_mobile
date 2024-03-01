@@ -1,8 +1,11 @@
-import {Dimensions, Text, View} from 'react-native';
+import {Dimensions, View} from 'react-native';
 import CustomIcon from '../CustomIcon';
 import {COLORS, FONTSIZE} from '../../theme/theme';
+import useTheme from '../../hooks/useTheme';
+import MyText from '../Text';
 
 const RewardInfo = () => {
+  const {currentTheme} = useTheme();
   return (
     <View
       style={{
@@ -24,13 +27,18 @@ const RewardInfo = () => {
             height: 40,
             width: 40,
             borderRadius: 100,
-            backgroundColor: '#f0efef',
+            backgroundColor:
+              currentTheme === 'light' ? COLORS.iconBgLight : COLORS.iconBgDark,
           }}>
           <CustomIcon
             name="gift-sharp"
             size={25}
             pack="Ionicons"
-            color={COLORS.primaryBlackHex}
+            color={
+              currentTheme === 'light'
+                ? COLORS.iconColorLight
+                : COLORS.iconColorDark
+            }
           />
         </View>
       </View>
@@ -39,22 +47,20 @@ const RewardInfo = () => {
           width: '85%',
           backgroundColor: '#fffff',
         }}>
-        <Text
+        <MyText
           style={{
             fontSize: FONTSIZE.size_16,
             fontWeight: 'bold',
-            color: COLORS.primaryBlackHex,
           }}>
           Refrigerante Lata
-        </Text>
-        <Text
+        </MyText>
+        <MyText
           style={{
             fontSize: FONTSIZE.size_14,
             fontWeight: '500',
-            color: COLORS.primaryBlackHex,
           }}>
           Resgate com 150 pontos
-        </Text>
+        </MyText>
       </View>
     </View>
   );

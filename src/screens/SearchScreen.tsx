@@ -17,6 +17,8 @@ import useGlobalStore from '../hooks/store/useGlobalStore';
 import {Product} from '../types/ModelsType';
 import {visibleCategories} from '../utils';
 import {global} from '../style';
+import MyText from '../components/Text';
+import useTheme from '../hooks/useTheme';
 
 const SearchScreen = ({
   navigation,
@@ -30,7 +32,7 @@ const SearchScreen = ({
   const [searchText, setSearchText] = useState('');
 
   const {products, categorys} = useGlobalStore();
-
+  const {currentTheme} = useTheme();
   const buttonPressHandler = () => {
     navigation.pop();
   };
@@ -55,6 +57,16 @@ const SearchScreen = ({
     navigation.navigate('Product', {id});
   };
 
+  const renderProductList = () => (
+    <ScrollView
+      contentContainerStyle={[styles.productDiv, {paddingBottom: 15}]}
+      showsVerticalScrollIndicator={false}>
+      {productState.map((p: Product) => (
+        <ProductCard product={p} key={p.id} onPress={onPress} />
+      ))}
+    </ScrollView>
+  );
+
   useEffect(() => {
     setCurrentWidth(onFocus ? '95%' : '90%');
   }, [onFocus]);
@@ -67,18 +79,17 @@ const SearchScreen = ({
     handleSearchInput(searchText);
   }, [searchText]);
 
-  const renderProductList = () => (
-    <ScrollView
-      contentContainerStyle={[styles.productDiv, {paddingBottom: 15}]}
-      showsVerticalScrollIndicator={false}>
-      {productState.map((p: Product) => (
-        <ProductCard product={p} key={p.id} onPress={onPress} />
-      ))}
-    </ScrollView>
-  );
-
   return (
-    <View style={global.mainContainer}>
+    <View
+      style={[
+        global.mainContainer,
+        {
+          backgroundColor:
+            currentTheme === 'light'
+              ? COLORS.backgroundColorLight
+              : COLORS.backgroundColorDark,
+        },
+      ]}>
       <SearchComponent
         setOnFocus={setOnFocus}
         width={currentWidth}
@@ -92,7 +103,7 @@ const SearchScreen = ({
 
       {!onFocus && (
         <View style={{marginVertical: 20, gap: 10}}>
-          <Text style={styles.categoryText}>Categorias</Text>
+          <MyText style={styles.categoryText}>Categorias</MyText>
 
           <ScrollView
             horizontal
@@ -143,8 +154,8 @@ const SearchScreen = ({
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                <Text style={styles.categoryText}>Recentes</Text>
-                <Text style={styles.categoryText}>Limpar</Text>
+                <MyText style={styles.categoryText}>Recentes</MyText>
+                <MyText style={styles.categoryText}>Limpar</MyText>
               </View>
 
               <View style={styles.searchTextHistory}>
@@ -177,7 +188,6 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: FONTSIZE.size_14,
     fontWeight: '700',
-    color: 'black',
   },
 
   categoryBox: {
@@ -193,7 +203,6 @@ const styles = StyleSheet.create({
   categoryBoxName: {
     fontSize: FONTSIZE.size_14,
     fontWeight: '500',
-    color: 'black',
   },
 
   CategoryScrollViewStyle: {

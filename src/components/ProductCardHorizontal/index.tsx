@@ -11,6 +11,8 @@ import {BORDERRADIUS, COLORS, FONTSIZE, SPACING} from '../../theme/theme';
 import CustomIcon from '../CustomIcon';
 import {global} from '../../style';
 import {Product} from '../../types/ModelsType';
+import MyText from '../Text';
+import useTheme from '../../hooks/useTheme';
 
 interface ProductCardHorizontalProps {
   showPoints?: boolean;
@@ -23,20 +25,30 @@ const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
   showPoints = true,
   onPress,
 }) => {
+  const {currentTheme} = useTheme();
+
   const renderPointsText = () => {
     if (!showPoints) return null;
-
     return (
       <View style={styles.pointsText}>
         <CustomIcon name="reply" size={11} color="#ffffff" />
-        <Text style={{color: '#ffffff'}}> Ganhe {product.value} pontos </Text>
+        <MyText> Ganhe {product.value} pontos </MyText>
       </View>
     );
   };
 
   return (
     <TouchableOpacity
-      style={[styles.mainDiv, global.shadow]}
+      style={[
+        styles.mainDiv,
+        global.shadow,
+        {
+          backgroundColor:
+            currentTheme === 'light'
+              ? COLORS.cardColorLight
+              : COLORS.cardColorDark,
+        },
+      ]}
       onPress={() => {
         onPress(product.id);
       }}>
@@ -52,12 +64,15 @@ const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
           </View>
         </ImageBackground>
         <View style={styles.cardInfoContainer}>
-          <Text style={styles.productTitle}>{product.name}</Text>
+          <MyText style={styles.productTitle}>{product.name}</MyText>
 
-          <Text style={styles.subTextProduct}>{product.description}</Text>
+          <MyText style={styles.subTextProduct}>{product.description}</MyText>
 
           <View style={styles.infoDiv}>
-            <Text style={styles.priceText}> R$ {product.value.toFixed(2)}</Text>
+            <MyText style={styles.priceText}>
+              {' '}
+              R$ {product.value.toFixed(2)}
+            </MyText>
             {/* <CustomIcon name="cart-plus" size={25} /> */}
           </View>
         </View>
@@ -113,12 +128,10 @@ const styles = StyleSheet.create({
   productTitle: {
     fontSize: FONTSIZE.size_18,
     fontWeight: '700',
-    color: '#000000',
   },
   subTextProduct: {
     fontSize: FONTSIZE.size_12,
     fontWeight: '400',
-    color: '#000000',
     overflow: 'hidden',
     height: '30%',
   },

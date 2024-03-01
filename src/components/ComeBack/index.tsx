@@ -1,6 +1,8 @@
 import {TouchableOpacity, View} from 'react-native';
 import CustomIcon from '../CustomIcon';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import useTheme from '../../hooks/useTheme';
+import {COLORS} from '../../theme/theme';
 
 const ComeBack = ({
   navigation,
@@ -10,6 +12,8 @@ const ComeBack = ({
   const comeBack = () => {
     navigation.pop();
   };
+
+  const {currentTheme} = useTheme();
   return (
     <TouchableOpacity
       onPress={comeBack}
@@ -18,13 +22,23 @@ const ComeBack = ({
         alignItems: 'center',
         height: 35,
         width: 35,
-        backgroundColor: '#f0efef',
+        backgroundColor:
+          currentTheme === 'light' ? COLORS.iconBgLight : COLORS.iconBgDark,
         borderRadius: 100,
         top: 25,
         left: 20,
         position: 'absolute',
       }}>
-      <CustomIcon name="arrow-left" size={17} pack="SimpleLineIcons" />
+      <CustomIcon
+        name="arrow-left"
+        size={17}
+        pack="SimpleLineIcons"
+        color={
+          currentTheme === 'light'
+            ? COLORS.iconColorLight
+            : COLORS.iconColorDark
+        }
+      />
     </TouchableOpacity>
   );
 };

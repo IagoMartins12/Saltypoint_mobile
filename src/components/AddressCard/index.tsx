@@ -3,6 +3,7 @@ import CustomIcon from '../CustomIcon';
 import {COLORS} from '../../theme/theme';
 import React from 'react';
 import MyText from '../Text';
+import useTheme from '../../hooks/useTheme';
 
 interface AddressProps {
   address: any;
@@ -12,18 +13,23 @@ const AddressCard: React.FC<AddressProps> = ({
   address,
   handleOpenDeleteModal,
 }) => {
+  const {currentTheme} = useTheme();
   return (
-    <View style={styles.addressItem}>
+    <View
+      style={[
+        styles.addressItem,
+        {
+          borderBottomColor:
+            currentTheme === 'dark'
+              ? COLORS.borderColorDark
+              : COLORS.borderColorLight,
+        },
+      ]}>
       <View style={styles.iconContainer}>
         {address.type_adress === 0 ? (
-          <CustomIcon name="home" size={30} color="#000000" pack="Feather" />
+          <CustomIcon name="home" size={30} pack="Feather" />
         ) : (
-          <CustomIcon
-            name="briefcase"
-            size={30}
-            color="#000000"
-            pack="Feather"
-          />
+          <CustomIcon name="briefcase" size={30} pack="Feather" />
         )}
       </View>
 
@@ -58,8 +64,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
     paddingVertical: 15,
-    borderBottomWidth: 2,
-    borderColor: 'gray',
+    borderBottomWidth: 1,
   },
   iconContainer: {
     width: '20%',
@@ -73,11 +78,9 @@ const styles = StyleSheet.create({
   addressType: {
     fontWeight: 'bold',
     fontSize: 18,
-    color: COLORS.primaryBlackHex,
   },
   addressText: {
     fontSize: 14,
-    color: COLORS.primaryBlackHex,
     fontWeight: '400',
   },
   deleteIconContainer: {

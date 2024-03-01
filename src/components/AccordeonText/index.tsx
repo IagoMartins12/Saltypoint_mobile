@@ -8,6 +8,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import {COLORS, FONTSIZE} from '../../theme/theme';
 import CustomIcon from '../CustomIcon';
+import MyText from '../Text';
+import useTheme from '../../hooks/useTheme';
 
 interface AccordeonTextProps {
   label: string;
@@ -16,7 +18,7 @@ interface AccordeonTextProps {
 
 const AccordeonText: React.FC<AccordeonTextProps> = ({label, text}) => {
   const isOpen = useSharedValue(false);
-
+  const {currentTheme} = useTheme();
   const toggleAccordion = () => {
     isOpen.value = !isOpen.value;
   };
@@ -37,15 +39,20 @@ const AccordeonText: React.FC<AccordeonTextProps> = ({label, text}) => {
   return (
     <View style={{paddingHorizontal: 5}}>
       <Pressable onPress={toggleAccordion} style={styles.accordeonBox}>
-        <Text style={styles.accordeonTitle}>{label}</Text>
+        <MyText style={styles.accordeonTitle}>{label}</MyText>
         <CustomIcon
           name={isOpen.value ? 'chevron-down' : 'chevron-right'}
           size={20}
           pack="Feather"
+          color={
+            currentTheme === 'light'
+              ? COLORS.iconColorLight
+              : COLORS.iconColorDark
+          }
         />
       </Pressable>
       <Animated.View style={[{overflow: 'hidden'}, animatedStyles]}>
-        <Text>{text}</Text>
+        <MyText textSize="mediumText2">{text}</MyText>
         <View style={styles.hrStyle} />
       </Animated.View>
     </View>
@@ -63,7 +70,6 @@ const styles = StyleSheet.create({
     width: '85%',
     fontSize: FONTSIZE.size_18,
     fontWeight: 'bold',
-    color: COLORS.primaryBlackHex,
   },
   hrStyle: {
     borderBottomColor: 'black',

@@ -3,12 +3,14 @@ import CustomIcon from '../CustomIcon';
 import {global} from '../../style';
 import {Dimensions} from 'react-native';
 import {COLORS} from '../../theme/theme';
+import useTheme from '../../hooks/useTheme';
 
 interface SectionTitleProps {
   comeBack: () => void;
   title?: string;
 }
 const SectionTitle: React.FC<SectionTitleProps> = ({comeBack, title}) => {
+  const {currentTheme} = useTheme();
   return (
     <View
       style={{
@@ -33,7 +35,10 @@ const SectionTitle: React.FC<SectionTitleProps> = ({comeBack, title}) => {
               alignItems: 'center',
               height: 30,
               width: 30,
-              backgroundColor: '#f0efef',
+              backgroundColor:
+                currentTheme === 'light'
+                  ? COLORS.iconBgLight
+                  : COLORS.iconBgDark,
               borderRadius: 100,
             }}>
             <CustomIcon name="arrow-left" size={17} pack="SimpleLineIcons" />

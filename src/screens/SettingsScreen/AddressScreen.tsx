@@ -21,6 +21,7 @@ import {useSharedValue, withTiming} from 'react-native-reanimated';
 import DeleteAddressModal from '../../components/Modals/DeleteAddressModal';
 
 import AddressCard from '../../components/AddressCard';
+import useTheme from '../../hooks/useTheme';
 
 const AddressScreen = ({
   navigation,
@@ -28,7 +29,7 @@ const AddressScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
-
+  const {currentTheme} = useTheme();
   const translateY = useSharedValue(Dimensions.get('window').height);
 
   const showModal = () => {
@@ -94,7 +95,16 @@ const AddressScreen = ({
         }}>
         <View style={{flex: 1}}>
           <SectionTitle comeBack={comeBack} />
-          <ScrollView style={global.mainContainer}>
+          <ScrollView
+            style={[
+              global.mainContainer,
+              {
+                backgroundColor:
+                  currentTheme === 'light'
+                    ? COLORS.backgroundColorLight
+                    : COLORS.backgroundColorDark,
+              },
+            ]}>
             <View style={styles.contentContainer}>
               {address.length > 0 &&
                 address.map((address, i) => (

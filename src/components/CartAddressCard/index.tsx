@@ -82,11 +82,9 @@ const styles = StyleSheet.create({
   addressType: {
     fontWeight: '600',
     fontSize: 16,
-    color: COLORS.primaryBlackHex,
   },
   addressText: {
     fontSize: 14,
-    color: COLORS.primaryBlackHex,
     fontWeight: '400',
   },
 });

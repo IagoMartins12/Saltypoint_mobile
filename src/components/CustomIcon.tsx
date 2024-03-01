@@ -7,6 +7,8 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import useTheme from '../hooks/useTheme';
+import {COLORS} from '../theme/theme';
 
 export type PackNames =
   | 'FontAwesome'
@@ -32,40 +34,149 @@ const CustomIcon: React.FC<CustomIconProps> = ({
   color,
   pack = 'FontAwesome',
 }) => {
+  const {currentTheme} = useTheme();
   if (pack === 'FontAwesome') {
-    return <FontAwesome name={name} size={size} color={color} />;
+    return (
+      <FontAwesome
+        name={name}
+        size={size}
+        color={
+          !color
+            ? currentTheme === 'light'
+              ? COLORS.iconColorLight
+              : COLORS.iconColorDark
+            : color
+        }
+      />
+    );
   }
 
   if (pack === 'Feather') {
-    return <Feather name={name} size={size} color={color} />;
+    return (
+      <Feather
+        name={name}
+        size={size}
+        color={
+          !color
+            ? currentTheme === 'light'
+              ? COLORS.iconColorLight
+              : COLORS.iconColorDark
+            : color
+        }
+      />
+    );
   }
 
   if (pack === 'FontAwesome5') {
-    return <FontAwesome5 name={name} size={size} color={color} />;
+    return (
+      <FontAwesome5
+        name={name}
+        size={size}
+        color={
+          !color
+            ? currentTheme === 'light'
+              ? COLORS.iconColorLight
+              : COLORS.iconColorDark
+            : color
+        }
+      />
+    );
   }
 
   if (pack === 'FontAwesome6') {
-    return <FontAwesome6 name={name} size={size} color={color} />;
+    return (
+      <FontAwesome6
+        name={name}
+        size={size}
+        color={
+          !color
+            ? currentTheme === 'light'
+              ? COLORS.iconColorLight
+              : COLORS.iconColorDark
+            : color
+        }
+      />
+    );
   }
 
   if (pack === 'Ionicons') {
-    return <Ionicons name={name} size={size} color={color} />;
+    return (
+      <Ionicons
+        name={name}
+        size={size}
+        color={
+          !color
+            ? currentTheme === 'light'
+              ? COLORS.iconColorLight
+              : COLORS.iconColorDark
+            : color
+        }
+      />
+    );
   }
 
   if (pack === 'SimpleLineIcons') {
-    return <SimpleLineIcons name={name} size={size} color={color} />;
+    return (
+      <SimpleLineIcons
+        name={name}
+        size={size}
+        color={
+          !color
+            ? currentTheme === 'light'
+              ? COLORS.iconColorLight
+              : COLORS.iconColorDark
+            : color
+        }
+      />
+    );
   }
 
   if (pack === 'MaterialCommunityIcons') {
-    return <MaterialCommunityIcons name={name} size={size} color={color} />;
+    return (
+      <MaterialCommunityIcons
+        name={name}
+        size={size}
+        color={
+          !color
+            ? currentTheme === 'light'
+              ? COLORS.iconColorLight
+              : COLORS.iconColorDark
+            : color
+        }
+      />
+    );
   }
 
   if (pack === 'Entypo') {
-    return <Entypo name={name} size={size} color={color} />;
+    return (
+      <Entypo
+        name={name}
+        size={size}
+        color={
+          !color
+            ? currentTheme === 'light'
+              ? COLORS.iconColorLight
+              : COLORS.iconColorDark
+            : color
+        }
+      />
+    );
   }
 
   if (pack === 'MaterialIcons') {
-    return <MaterialIcons name={name} size={size} color={color} />;
+    return (
+      <MaterialIcons
+        name={name}
+        size={size}
+        color={
+          !color
+            ? currentTheme === 'light'
+              ? COLORS.iconColorLight
+              : COLORS.iconColorDark
+            : color
+        }
+      />
+    );
   }
 };
 

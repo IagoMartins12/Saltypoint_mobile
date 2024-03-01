@@ -10,7 +10,6 @@ import CartTittleSection from '../../../components/CartTittleSection';
 import CartInfo from '../../../components/CartInfo';
 import {global} from '../../../style';
 import CartAddressCard from '../../../components/CartAddressCard';
-import {userOptions} from '../../../components/CartScreen/AddressStep';
 import {Type_Pagament} from '../../../types/ModelsType';
 import {getIcon} from '../AddressCartScreen';
 import PaymentCard from '../../../components/PaymentCard';
@@ -18,6 +17,34 @@ import CartCellphoneCard from '../../../components/CartCellphoneCard';
 import {iconColor, iconSize} from '../../../utils';
 import OrderAnimation from '../../../components/Lottie/OrderAnimation';
 import CallToast from '../../../components/Toast';
+import useTheme from '../../../hooks/useTheme';
+import {COLORS} from '../../../theme/theme';
+
+export const userOptions = [
+  {
+    id: '0',
+    name: 'Delivery',
+    address: 'Luiza maria rosa',
+    number: '222',
+    district: 'Décima area',
+    city: 'São paulo',
+    uf: 'SP',
+    reference: 'Esquina',
+    icon: (
+      <CustomIcon name="delivery-dining" size={iconSize} pack="MaterialIcons" />
+    ),
+  },
+  {
+    id: '1',
+    name: 'Retirar na loja',
+    address: 'Estrada de ligação',
+    number: '22',
+    district: 'Sol nascente',
+    city: 'São paulo',
+    uf: 'SP',
+    icon: <CustomIcon name="home" size={iconSize} pack="MaterialIcons" />,
+  },
+];
 
 export enum STEPS {
   CART = 0,
@@ -30,12 +57,7 @@ type responseType = {
 };
 
 export const cellPhoneIcon = (
-  <CustomIcon
-    size={iconSize}
-    color={iconColor}
-    name="phone"
-    pack="MaterialCommunityIcons"
-  />
+  <CustomIcon size={iconSize} name="phone" pack="MaterialCommunityIcons" />
 );
 
 const ResumeCartScreen = ({
@@ -57,7 +79,7 @@ const ResumeCartScreen = ({
   const getBack = () => {
     showToast('Pedido feito', 'success');
     navigation.navigate('Order');
-    setHasPlayed(false);
+    // setHasPlayed(false);
   };
   const {typePagament} = useGlobalStore();
 
@@ -77,19 +99,40 @@ const ResumeCartScreen = ({
 
   if (hasPlayed) {
     return (
-      <View style={{flex: 1, backgroundColor: '#FFFFFF'}}>
+      <View style={{flex: 1}}>
         <OrderAnimation onFinished={getBack} />
       </View>
     );
   }
 
+  const {currentTheme} = useTheme();
+
   return (
     <View style={{flex: 1}}>
       <SectionTitle comeBack={comeBack} />
 
-      <ScrollView style={styles.mainContainer}>
+      <ScrollView
+        style={[
+          styles.mainContainer,
+          {
+            backgroundColor:
+              currentTheme === 'dark'
+                ? COLORS.backgroundColorDark
+                : COLORS.backgroundColorLight,
+          },
+        ]}>
         {/* Resume  */}
-        <View style={[styles.paddingView, styles.couponView, global.shadow]}>
+        <View
+          style={[
+            styles.paddingView,
+            global.shadow,
+            {
+              backgroundColor:
+                currentTheme === 'dark'
+                  ? COLORS.cardColorDark
+                  : COLORS.cardColorLight,
+            },
+          ]}>
           <View style={styles.wFull}>
             <CartTittleSection title="Resumo de valores" />
             <View style={{gap: 10}}>
@@ -111,9 +154,12 @@ const ResumeCartScreen = ({
         <View
           style={[
             styles.paddingView,
-            styles.couponView,
             global.shadow,
             {
+              backgroundColor:
+                currentTheme === 'dark'
+                  ? COLORS.cardColorDark
+                  : COLORS.cardColorLight,
               marginTop: 20,
             },
           ]}>
@@ -131,9 +177,12 @@ const ResumeCartScreen = ({
         <View
           style={[
             styles.paddingView,
-            styles.couponView,
             global.shadow,
             {
+              backgroundColor:
+                currentTheme === 'dark'
+                  ? COLORS.cardColorDark
+                  : COLORS.cardColorLight,
               marginTop: 20,
             },
           ]}>
@@ -150,10 +199,12 @@ const ResumeCartScreen = ({
         <View
           style={[
             styles.paddingView,
-            styles.couponView,
             global.shadow,
-
             {
+              backgroundColor:
+                currentTheme === 'dark'
+                  ? COLORS.cardColorDark
+                  : COLORS.cardColorLight,
               marginTop: 20,
             },
           ]}>
@@ -186,17 +237,14 @@ const styles = StyleSheet.create({
   },
 
   couponView: {
-    backgroundColor: '#FFFFFF',
-    shadow: {
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 1,
-      },
-      shadowOpacity: 0.2,
-      shadowRadius: 1.41,
-      elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
     },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
   },
 
   wFull: {

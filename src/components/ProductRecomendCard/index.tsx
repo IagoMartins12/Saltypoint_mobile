@@ -7,7 +7,8 @@ import {
 } from 'react-native';
 import MyText from '../Text';
 import {Product} from '../../types/ModelsType';
-import {BORDERRADIUS} from '../../theme/theme';
+import {BORDERRADIUS, COLORS} from '../../theme/theme';
+import useTheme from '../../hooks/useTheme';
 
 interface ProductCardProps {
   product: Product;
@@ -18,8 +19,22 @@ const ProductRecomendCard: React.FC<ProductCardProps> = ({
   product,
   onPress,
 }) => {
+  const {currentTheme} = useTheme();
+
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity
+      style={[
+        styles.container,
+        {
+          backgroundColor:
+            currentTheme === 'dark'
+              ? COLORS.cardColorDark
+              : COLORS.cardColorLight,
+        },
+      ]}
+      onPress={() => {
+        onPress(product.id);
+      }}>
       <View style={styles.image}>
         <ImageBackground
           source={{

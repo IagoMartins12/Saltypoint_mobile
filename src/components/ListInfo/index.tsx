@@ -1,8 +1,11 @@
 import {Text, View} from 'react-native';
 import CustomIcon from '../CustomIcon';
 import {COLORS, FONTSIZE} from '../../theme/theme';
+import useTheme from '../../hooks/useTheme';
+import MyText from '../Text';
 
 const ListInfo = ({text}: {text: string}) => {
+  const {currentTheme} = useTheme();
   return (
     <View style={{flexDirection: 'row', width: '90%', gap: 5}}>
       <View
@@ -14,18 +17,21 @@ const ListInfo = ({text}: {text: string}) => {
           name="dot-single"
           size={20}
           pack="Entypo"
-          color={COLORS.primaryBlackHex}
+          color={
+            currentTheme === 'light'
+              ? COLORS.iconColorLight
+              : COLORS.iconColorDark
+          }
         />
       </View>
 
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <Text
+        <MyText
           style={{
             fontSize: FONTSIZE.size_14,
-            color: COLORS.primaryBlackHex,
           }}>
           {text}
-        </Text>
+        </MyText>
       </View>
     </View>
   );

@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {COLORS} from '../../theme/theme';
 import MyText from '../Text';
+import useTheme from '../../hooks/useTheme';
 
 const CouponCard = () => {
   const handleCopyLink = async () => {
@@ -20,8 +21,20 @@ const CouponCard = () => {
     // }
   };
 
+  const {currentTheme} = useTheme();
+
   return (
-    <TouchableOpacity style={[styles.container]} onPress={handleCopyLink}>
+    <TouchableOpacity
+      style={[
+        styles.container,
+        {
+          borderColor:
+            currentTheme === 'light'
+              ? COLORS.borderColorLight
+              : COLORS.borderColorDark,
+        },
+      ]}
+      onPress={handleCopyLink}>
       <View style={styles.imageContainer}>
         <Image
           source={require('../../assets/coupon.png')}

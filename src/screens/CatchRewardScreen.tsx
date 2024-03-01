@@ -11,6 +11,8 @@ import FilterReward from '../components/FilterReward';
 import {useSharedValue, withTiming} from 'react-native-reanimated';
 import CatchRewardModal from '../components/Modals/CatchRewardModal';
 import {Reward} from '../types/ModelsType';
+import useTheme from '../hooks/useTheme';
+import {COLORS} from '../theme/theme';
 
 const CatchRewardScreen = ({
   navigation,
@@ -52,6 +54,7 @@ const CatchRewardScreen = ({
   };
 
   const {reward} = useGlobalStore();
+  const {currentTheme} = useTheme();
   const userReward = false;
 
   const userRewards = reward.map(r => {
@@ -60,8 +63,6 @@ const CatchRewardScreen = ({
       code: '#444566s',
     };
   });
-  const flatListKey = `flatList-${2}`;
-
   const filterRewardsByPointsRange = () => {
     if (selectedPointsRange) {
       const [minPoints, maxPoints] = selectedPointsRange;
@@ -78,7 +79,16 @@ const CatchRewardScreen = ({
     <>
       <View style={{flex: 1}}>
         <SectionTitle comeBack={comeBack} />
-        <View style={global.mainContainer}>
+        <View
+          style={[
+            global.mainContainer,
+            {
+              backgroundColor:
+                currentTheme === 'light'
+                  ? COLORS.backgroundColorLight
+                  : COLORS.backgroundColorDark,
+            },
+          ]}>
           <OptionsTittle
             options={options}
             selectedOption={selectedOption}
@@ -123,46 +133,6 @@ const CatchRewardScreen = ({
             translateY={translateY}
             selectedReward={selectedReward}
           />
-          {/* <FilterReward
-            isActive={isActive}
-            rewards={reward}
-            selectedPointsRange={selectedPointsRange}
-            setIsActive={setIsActive}
-            setSelectedPointsRange={setSelectedPointsRange}
-          />
-          <FlatList
-            key={flatListKey} // Defina uma chave única para o FlatList
-            data={
-              selectedOption === 1 ? userRewards : filterRewardsByPointsRange()
-            }
-            ListEmptyComponent={() => {
-              return <EmptyAnimation text="Sem recompensas disponiveis" />;
-            }}
-            contentContainerStyle={{
-              gap: 15,
-              paddingVertical: 10,
-              alignItems: 'center',
-            }}
-            renderItem={({item, index}) => (
-              <>
-                <RewardCard
-                  reward={item}
-                  margin={index % 2 === 1}
-                  //@ts-ignore
-                  showCode={selectedOption === 0 ? null : item.code}
-                />
-              </>
-            )}
-            keyExtractor={(item, index) => index.toString()}
-            numColumns={2}
-            showsVerticalScrollIndicator={false}
-          /> */}
-
-          {/* <ScrollView>
-            {reward.map(r => (
-              <RewardCard reward={r} />
-            ))}
-          </ScrollView> */}
         </View>
       </View>
     </>

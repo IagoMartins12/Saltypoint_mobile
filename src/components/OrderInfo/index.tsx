@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import OrderSpanInfo from '../OrderSpanInfo';
 import {COLORS} from '../../theme/theme';
+import MyText from '../Text';
 
 interface OrderComponentType {}
 const CurrentOrderInfo: React.FC<OrderComponentType> = ({}) => {
@@ -57,16 +58,16 @@ const CurrentOrderInfo: React.FC<OrderComponentType> = ({}) => {
     <View style={styles.container}>
       <View style={styles.totalContainer}>
         <View style={styles.rowContainer}>
-          <Text style={styles.text2xl}>Subtotal:</Text>
-          <Text style={styles.textGray}>R$ 30.00</Text>
+          <MyText style={styles.text2xl}>Subtotal:</MyText>
+          <MyText style={styles.textGray}>R$ 30.00</MyText>
         </View>
 
         {/* {order.discount_coupon_id && ( */}
         <View style={styles.rowContainer}>
-          <Text style={styles.text2xl}>Cupom:</Text>
-          <Text style={[styles.textBase, styles.textGreen]}>
+          <MyText style={styles.text2xl}>Cupom:</MyText>
+          <MyText style={[styles.textBase, styles.textGreen]}>
             {/* - R$ {order.discount_value?.toFixed(2)} */}- R$ 5,00
-          </Text>
+          </MyText>
         </View>
         {/* // )} */}
 
@@ -81,17 +82,17 @@ const CurrentOrderInfo: React.FC<OrderComponentType> = ({}) => {
 
         {/* {order.user_adress_id && ( */}
         <View style={styles.rowContainer}>
-          <Text style={styles.text2xl}>Taxa:</Text>
-          <Text style={styles.textGray}>R$ 3.00</Text>
+          <MyText style={styles.text2xl}>Taxa:</MyText>
+          <MyText style={styles.textGray}>R$ 3.00</MyText>
         </View>
         {/* )} */}
 
         <View style={styles.rowContainer}>
-          <Text style={styles.text3xl}>Total:</Text>
-          <Text style={[styles.text3xl]}>
+          <MyText style={styles.text3xl}>Total:</MyText>
+          <MyText style={[styles.text3xl]}>
             R$ 55,00
             {/* R$ {order.total_amount.toFixed(2)} */}
-          </Text>
+          </MyText>
         </View>
       </View>
 
@@ -146,7 +147,6 @@ const styles = StyleSheet.create({
   textBase: {
     fontSize: 14,
     fontFamily: 'light',
-    color: COLORS.primaryBlackHex,
   },
   textGreen: {
     color: 'green',
@@ -160,19 +160,16 @@ const styles = StyleSheet.create({
   },
   text2xl: {
     fontSize: 20,
-    color: COLORS.primaryBlackHex,
     fontWeight: '300',
   },
   text3xl: {
     fontSize: 24,
     lineHeight: 40,
-    color: COLORS.primaryBlackHex,
     fontWeight: '400',
   },
   infoLabel: {
     fontSize: 16,
     paddingBottom: 2,
-    color: COLORS.primaryBlackHex,
   },
 });
 

@@ -13,6 +13,8 @@ import CustomIcon from '../../CustomIcon';
 import {useForm} from 'react-hook-form';
 import StyledInputComponent from '../../Input';
 import LargeButton from '../../Button';
+import useTheme from '../../../hooks/useTheme';
+import {COLORS} from '../../../theme/theme';
 
 export interface ModalProps {
   modalOpen: boolean;
@@ -27,6 +29,8 @@ const ChangeCellphoneModal: React.FC<ModalProps> = ({
   hideModal,
   translateY,
 }) => {
+  const {currentTheme} = useTheme();
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
@@ -46,7 +50,17 @@ const ChangeCellphoneModal: React.FC<ModalProps> = ({
     <View style={styles.centeredView}>
       <Modal animationType="none" transparent={true} visible={modalOpen}>
         <View style={styles.overlay}>
-          <Animated.View style={[styles.modalContainer, animatedStyle]}>
+          <Animated.View
+            style={[
+              styles.modalContainer,
+              animatedStyle,
+              {
+                backgroundColor:
+                  currentTheme === 'light'
+                    ? COLORS.backgroundColorLight
+                    : COLORS.backgroundColorDark,
+              },
+            ]}>
             <Pressable
               style={{
                 width: '100%',
@@ -54,12 +68,25 @@ const ChangeCellphoneModal: React.FC<ModalProps> = ({
                 position: 'relative',
               }}>
               <TouchableOpacity
-                style={styles.iconStyle}
+                style={[
+                  styles.iconStyle,
+                  {
+                    backgroundColor:
+                      currentTheme === 'light'
+                        ? COLORS.iconBgLight
+                        : COLORS.iconBgDark,
+                  },
+                ]}
                 onPress={handleOverlayPress}>
                 <CustomIcon
                   name="arrow-down"
                   size={20}
                   pack="SimpleLineIcons"
+                  color={
+                    currentTheme === 'light'
+                      ? COLORS.iconColorLight
+                      : COLORS.iconColorDark
+                  }
                 />
               </TouchableOpacity>
             </Pressable>

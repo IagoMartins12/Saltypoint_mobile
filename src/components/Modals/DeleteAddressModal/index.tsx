@@ -14,6 +14,8 @@ import CustomIcon from '../../CustomIcon';
 import LargeButton from '../../Button';
 import {BORDERRADIUS, COLORS} from '../../../theme/theme';
 import {global} from '../../../style';
+import useTheme from '../../../hooks/useTheme';
+import MyText from '../../Text';
 
 export interface ModalProps {
   modalOpen: boolean;
@@ -28,6 +30,8 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
   hideModal,
   translateY,
 }) => {
+  const {currentTheme} = useTheme();
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
@@ -42,7 +46,17 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
     <View style={styles.centeredView}>
       <Modal animationType="none" transparent={true} visible={modalOpen}>
         <View style={styles.overlay}>
-          <Animated.View style={[styles.modalContainer, animatedStyle]}>
+          <Animated.View
+            style={[
+              styles.modalContainer,
+              animatedStyle,
+              {
+                backgroundColor:
+                  currentTheme === 'dark'
+                    ? COLORS.backgroundColorDark
+                    : COLORS.backgroundColorLight,
+              },
+            ]}>
             <Pressable
               onPress={handleOverlayPress}
               style={{
@@ -51,9 +65,26 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
                 position: 'relative',
               }}>
               <TouchableOpacity
-                style={styles.iconStyle}
+                style={[
+                  styles.iconStyle,
+                  {
+                    backgroundColor:
+                      currentTheme === 'dark'
+                        ? COLORS.iconBgDark
+                        : COLORS.iconBgLight,
+                  },
+                ]}
                 onPress={handleOverlayPress}>
-                <CustomIcon name="x" size={20} pack="Feather" />
+                <CustomIcon
+                  name="x"
+                  size={20}
+                  pack="Feather"
+                  color={
+                    currentTheme === 'dark'
+                      ? COLORS.iconColorDark
+                      : COLORS.iconColorLight
+                  }
+                />
               </TouchableOpacity>
             </Pressable>
             <View style={styles.contentDiv}>
@@ -69,9 +100,9 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
                 style={{
                   gap: 10,
                 }}>
-                <Text style={styles.textStyle}>
+                <MyText style={styles.textStyle}>
                   Deseja deletar esse endereço?
-                </Text>
+                </MyText>
 
                 <TouchableOpacity
                   onPress={handleOverlayPress}
@@ -96,24 +127,19 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    // justifyContent: 'flex-end',
     justifyContent: 'center',
   },
   modalContainer: {
-    // width: '100%',
     width: '90%',
     alignSelf: 'center',
     height: Dimensions.get('window').height * 0.4,
-    backgroundColor: '#ffffff',
-    // borderTopEndRadius: 20,
-    // borderTopStartRadius: 20,
+
     borderRadius: 20,
     alignItems: 'center',
     gap: 20,
   },
 
   textStyle: {
-    color: COLORS.primaryBlackHex,
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',

@@ -44,20 +44,10 @@ const ProductDetails: React.FC<PizzaProps> = ({comeBack, currentProduct}) => {
         />
 
         <Pressable style={styles.CardArrow} onPress={comeBack}>
-          <CustomIcon
-            name={'arrow-left'}
-            size={30}
-            pack="Feather"
-            color={'#000000'}
-          />
+          <CustomIcon name={'arrow-left'} size={30} pack="Feather" />
         </Pressable>
         <Pressable style={styles.CardHeart}>
-          <CustomIcon
-            name={'heart'}
-            color={'#000000'}
-            size={30}
-            pack="Feather"
-          />
+          <CustomIcon name={'heart'} size={30} pack="Feather" />
         </Pressable>
       </View>
 
@@ -87,7 +77,6 @@ const ProductDetails: React.FC<PizzaProps> = ({comeBack, currentProduct}) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff',
     gap: 20,
   },
 

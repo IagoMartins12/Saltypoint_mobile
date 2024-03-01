@@ -1,15 +1,9 @@
 import {useState} from 'react';
 import {Control, Controller, FieldValues} from 'react-hook-form';
-import {
-  StyleProp,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  ViewStyle,
-} from 'react-native';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
 import {BORDERRADIUS, COLORS, FONTSIZE} from '../../theme/theme';
 import CustomIcon, {PackNames} from '../CustomIcon';
+import useTheme from '../../hooks/useTheme';
 
 interface InputProps {
   name: string;
@@ -30,7 +24,7 @@ const StyledInputComponent: React.FC<InputProps> = ({
   pack = 'MaterialCommunityIcons',
 }) => {
   const [isFocused, setIsFocused] = useState(false);
-
+  const {currentTheme} = useTheme();
   return (
     <>
       <Controller
@@ -41,7 +35,11 @@ const StyledInputComponent: React.FC<InputProps> = ({
             style={[
               styles.InputContainerComponent,
               {
-                borderColor: isFocused ? COLORS.primaryRedHex : 'black',
+                borderColor: isFocused
+                  ? COLORS.primaryRedHex
+                  : currentTheme === 'light'
+                  ? COLORS.borderColorLight
+                  : COLORS.borderColorDark,
               },
             ]}>
             <View
@@ -52,9 +50,20 @@ const StyledInputComponent: React.FC<InputProps> = ({
                 borderRightWidth: 0.5,
                 borderRightColor: isFocused
                   ? COLORS.primaryRedHex
-                  : COLORS.primaryBlackHex,
+                  : currentTheme === 'light'
+                  ? COLORS.borderColorLight
+                  : COLORS.borderColorDark,
               }}>
-              <CustomIcon name={icon} size={25} pack={pack} />
+              <CustomIcon
+                name={icon}
+                size={25}
+                pack={pack}
+                color={
+                  currentTheme === 'light'
+                    ? COLORS.iconColorLight
+                    : COLORS.iconColorDark
+                }
+              />
             </View>
             <TextInput
               placeholder={isFocused ? '' : placeholder}
@@ -64,8 +73,21 @@ const StyledInputComponent: React.FC<InputProps> = ({
               }}
               onFocus={() => setIsFocused(true)}
               onChangeText={onChange}
+              placeholderTextColor={
+                currentTheme === 'light'
+                  ? COLORS.textColorLight
+                  : COLORS.textColorDark
+              }
               value={value}
-              style={styles.input}
+              style={[
+                styles.input,
+                {
+                  color:
+                    currentTheme === 'light'
+                      ? COLORS.textColorLight
+                      : COLORS.textColorDark,
+                },
+              ]}
               secureTextEntry={isPassword}
             />
             {isFocused || value ? (
@@ -73,7 +95,11 @@ const StyledInputComponent: React.FC<InputProps> = ({
                 style={[
                   styles.placeholder,
                   {
-                    color: isFocused ? COLORS.primaryRedHex : '#000000',
+                    color: isFocused
+                      ? COLORS.primaryRedHex
+                      : currentTheme === 'light'
+                      ? COLORS.textColorLight
+                      : COLORS.textColorDark,
                   },
                 ]}>
                 {placeholder}
@@ -93,7 +119,7 @@ const styles = StyleSheet.create({
   InputContainerComponent: {
     flexDirection: 'row',
     borderRadius: BORDERRADIUS.radius_10,
-    borderWidth: 0.5,
+    borderWidth: 1,
     position: 'relative',
     height: 50,
   },
@@ -106,7 +132,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 50,
     top: -10,
-    backgroundColor: 'white',
     paddingHorizontal: 4,
     fontSize: FONTSIZE.size_14,
   },

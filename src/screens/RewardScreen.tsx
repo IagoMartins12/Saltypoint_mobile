@@ -17,6 +17,7 @@ import useGlobalStore from '../hooks/store/useGlobalStore';
 import {FlatList} from 'react-native';
 import RewardCard from '../components/RewardCard';
 import FidelityAccordeonSection from '../components/FidelityAccordeonSection';
+import useTheme from '../hooks/useTheme';
 
 const RewardScreen = ({
   navigation,
@@ -24,7 +25,7 @@ const RewardScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const {reward} = useGlobalStore();
-
+  const {currentTheme} = useTheme();
   const goToInfo = () => {
     return navigation.navigate('Fidelity');
   };
@@ -38,12 +39,22 @@ const RewardScreen = ({
         contentContainerStyle={{
           gap: 10,
           paddingBottom: 40,
+          backgroundColor:
+            currentTheme === 'light'
+              ? COLORS.cardColorLight
+              : COLORS.cardColorDark,
         }}>
         <View
           style={[
             styles.headerContainer,
             global.shadow,
-            {gap: 25, backgroundColor: '#FFFFFF'},
+            {
+              gap: 25,
+              backgroundColor:
+                currentTheme === 'light'
+                  ? COLORS.cardColorLight
+                  : COLORS.cardColorDark,
+            },
           ]}>
           <View>
             <MyText style={styles.firstTittle}>Você possui </MyText>
@@ -55,12 +66,7 @@ const RewardScreen = ({
                 <MyText style={styles.pointsText}>pontos</MyText>
 
                 <Pressable onPress={goToInfo}>
-                  <CustomIcon
-                    name="info"
-                    pack="Feather"
-                    size={15}
-                    color="#000000"
-                  />
+                  <CustomIcon name="info" pack="Feather" size={15} />
                 </Pressable>
               </View>
             </View>
@@ -106,7 +112,17 @@ const RewardScreen = ({
           <View style={styles.arrowDown} />
         </View>
 
-        <View style={[styles.couponBox, global.shadow]}>
+        <View
+          style={[
+            styles.couponBox,
+            global.shadow,
+            {
+              backgroundColor:
+                currentTheme === 'light'
+                  ? COLORS.cardColorLight
+                  : COLORS.cardColorDark,
+            },
+          ]}>
           <FlatList
             horizontal
             showsHorizontalScrollIndicator={false}

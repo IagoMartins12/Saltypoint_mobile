@@ -1,6 +1,8 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import CustomIcon, {PackNames} from '../CustomIcon';
-import {FONTSIZE} from '../../theme/theme';
+import {COLORS, FONTSIZE} from '../../theme/theme';
+import MyText from '../Text';
+import useTheme from '../../hooks/useTheme';
 
 interface optionProps {
   icon: string;
@@ -14,6 +16,7 @@ const SettingsOption: React.FC<optionProps> = ({
   onClick,
   pack = 'FontAwesome',
 }) => {
+  const {currentTheme} = useTheme();
   return (
     <TouchableOpacity
       onPress={onClick}
@@ -24,16 +27,24 @@ const SettingsOption: React.FC<optionProps> = ({
         paddingVertical: 12,
       }}>
       <View style={styles.mainContainer}>
-        <CustomIcon name={icon} size={20} pack={pack} color="#000000" />
-        <Text
+        <CustomIcon
+          name={icon}
+          size={20}
+          pack={pack}
+          color={
+            currentTheme === 'dark'
+              ? COLORS.iconColorDark
+              : COLORS.iconColorLight
+          }
+        />
+        <MyText
           style={{
             fontSize: FONTSIZE.size_16,
             fontWeight: '500',
-            color: '#000000',
           }}>
           {' '}
           {label}{' '}
-        </Text>
+        </MyText>
       </View>
 
       <View>
@@ -41,7 +52,11 @@ const SettingsOption: React.FC<optionProps> = ({
           name="arrow-right"
           size={20}
           pack="SimpleLineIcons"
-          color="#000000f8"
+          color={
+            currentTheme === 'dark'
+              ? COLORS.iconColorDark
+              : COLORS.iconColorLight
+          }
         />
       </View>
     </TouchableOpacity>

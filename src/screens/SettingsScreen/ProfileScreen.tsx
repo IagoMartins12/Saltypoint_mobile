@@ -22,6 +22,8 @@ import ComeBack from '../../components/ComeBack';
 import useKeyboardOpen from '../../hooks/useKeyboardOpen';
 import ForgetPasswordModal from '../../components/Modals/ForgetPasswordModal';
 import {useSharedValue, withTiming} from 'react-native-reanimated';
+import useTheme from '../../hooks/useTheme';
+import MyText from '../../components/Text';
 
 const ProfileScreen = ({
   navigation,
@@ -32,7 +34,7 @@ const ProfileScreen = ({
   const {control, handleSubmit} = useForm();
   const onSubmit = (data: any) => console.log(data);
   const translateY = useSharedValue(Dimensions.get('window').height);
-
+  const {currentTheme} = useTheme();
   const isKeyboardVisible = useKeyboardOpen();
   const onSwipeLeft = () => {
     // Navegar para a página desejada
@@ -60,7 +62,16 @@ const ProfileScreen = ({
             onSwipeLeft();
           }
         }}>
-        <View style={styles.mainContainer}>
+        <View
+          style={[
+            styles.mainContainer,
+            {
+              backgroundColor:
+                currentTheme === 'light'
+                  ? COLORS.backgroundColorLight
+                  : COLORS.backgroundColorDark,
+            },
+          ]}>
           <View style={[global.shadow, styles.profileContainer]}>
             <ComeBack navigation={navigation} />
             <View
@@ -77,15 +88,14 @@ const ProfileScreen = ({
                   source={require('../../assets/profile.png')}
                 />
               </View>
-              <Text
+              <MyText
                 style={{
                   fontSize: FONTSIZE.size_18,
                   fontWeight: '500',
-                  color: '#000000',
                   marginTop: 10,
                 }}>
                 Iago martins
-              </Text>
+              </MyText>
             </View>
           </View>
 

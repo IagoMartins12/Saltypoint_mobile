@@ -2,6 +2,7 @@ import {Pressable} from 'react-native';
 import {StyleSheet, Text, View} from 'react-native';
 import MyText from '../Text';
 import {COLORS} from '../../theme/theme';
+import useTheme from '../../hooks/useTheme';
 
 type OptionsType = {
   name: string;
@@ -16,6 +17,7 @@ const OptionsTittle: React.FC<OptionsProps> = ({
   selectedOption,
   setSelectedOption,
 }) => {
+  const {currentTheme} = useTheme();
   return (
     <View style={{width: '100%', flexDirection: 'row', gap: 5}}>
       {options.map((op, i) => (
@@ -31,7 +33,12 @@ const OptionsTittle: React.FC<OptionsProps> = ({
           <MyText
             style={{
               textAlign: 'center',
-              color: selectedOption === i ? COLORS.secondaryRed : '#000000',
+              color:
+                selectedOption === i
+                  ? COLORS.secondaryRed
+                  : currentTheme === 'dark'
+                  ? COLORS.textColorDark
+                  : COLORS.textColorLight,
               fontSize: 16,
             }}>
             {op.name}

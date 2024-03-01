@@ -9,6 +9,8 @@ import {
 import MyText from '../Text';
 import {BORDERRADIUS, COLORS} from '../../theme/theme';
 import CustomIcon from '../CustomIcon';
+import {global} from '../../style';
+import useTheme from '../../hooks/useTheme';
 
 interface CartTotalProps {
   onPress?: () => void;
@@ -27,15 +29,27 @@ const ProductFixed: React.FC<CartTotalProps> = ({
 }) => {
   const renderContinueButton = () => (
     <TouchableOpacity style={styles.buttonView} onPress={onPress}>
-      <CustomIcon name="plus" size={20} color="#FFFFFF" pack="Feather" />
+      <CustomIcon name="plus" size={20} pack="Feather" />
       <MyText style={styles.buttonText}>Adicionar</MyText>
       <MyText style={styles.buttonText}> • </MyText>
       <MyText style={styles.buttonText}> R$ {value.toFixed(2)}</MyText>
     </TouchableOpacity>
   );
 
+  const {currentTheme} = useTheme();
+
   return (
-    <View style={[styles.totalView, global.shadow]}>
+    <View
+      style={[
+        styles.totalView,
+        global.shadow,
+        {
+          backgroundColor:
+            currentTheme === 'dark'
+              ? COLORS.cardColorDark
+              : COLORS.cardColorLight,
+        },
+      ]}>
       {renderContinueButton()}
       <View style={styles.quantityView}>
         <Pressable style={styles.quantityBox} onPress={decreaseQuantity}>
@@ -43,7 +57,12 @@ const ProductFixed: React.FC<CartTotalProps> = ({
         </Pressable>
 
         <View style={styles.quantityBox}>
-          <MyText>{quantity}</MyText>
+          <MyText
+            style={{
+              color: '#000000',
+            }}>
+            {quantity}
+          </MyText>
         </View>
 
         <Pressable style={[styles.quantityBox]} onPress={increaseQuantity}>
@@ -56,7 +75,6 @@ const ProductFixed: React.FC<CartTotalProps> = ({
 
 const styles = StyleSheet.create({
   totalView: {
-    backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
     paddingVertical: 15,
     flexDirection: 'row-reverse',
@@ -78,7 +96,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 40,
     paddingVertical: 12,
-    borderRadius: BORDERRADIUS.radius_10,
+    borderRadius: 15,
     backgroundColor: COLORS.secondaryRed,
     alignItems: 'center',
     justifyContent: 'center',
@@ -87,13 +105,12 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#FFFFFF',
   },
 
   quantityView: {
     flexDirection: 'row',
     color: COLORS.primaryGreyHex,
-    borderRadius: 10,
+    borderRadius: 15,
   },
 
   quantityBox: {

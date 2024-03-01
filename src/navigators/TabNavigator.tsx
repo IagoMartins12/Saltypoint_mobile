@@ -7,17 +7,27 @@ import CustomIcon from '../components/CustomIcon';
 import FavoriteScreen from '../screens/FavoriteScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import RewardScreen from '../screens/RewardScreen';
+import useTheme from '../hooks/useTheme';
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+  const {currentTheme} = useTheme();
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarHideOnKeyboard: true,
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarStyle: styles.tabBarStyle,
+        tabBarStyle: [
+          styles.tabBarStyle,
+          {
+            backgroundColor:
+              currentTheme === 'light'
+                ? COLORS.backgroundColorLight
+                : COLORS.backgroundColorDark,
+          },
+        ],
       }}>
       <Tab.Screen
         name="Home"
@@ -28,7 +38,11 @@ const TabNavigator = () => {
               name="home"
               size={25}
               color={
-                focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
+                focused
+                  ? COLORS.primaryOrangeHex
+                  : currentTheme === 'dark'
+                  ? COLORS.iconColorDark
+                  : COLORS.iconColorLight
               }
               pack="Feather"
             />
@@ -45,7 +59,11 @@ const TabNavigator = () => {
               name="award"
               size={25}
               color={
-                focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
+                focused
+                  ? COLORS.primaryOrangeHex
+                  : currentTheme === 'dark'
+                  ? COLORS.iconColorDark
+                  : COLORS.iconColorLight
               }
               pack="Feather"
             />
@@ -62,7 +80,11 @@ const TabNavigator = () => {
               name="shopping-cart"
               size={25}
               color={
-                focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
+                focused
+                  ? COLORS.primaryOrangeHex
+                  : currentTheme === 'dark'
+                  ? COLORS.iconColorDark
+                  : COLORS.iconColorLight
               }
               pack="Feather"
             />
@@ -79,7 +101,11 @@ const TabNavigator = () => {
               name="heart"
               size={25}
               color={
-                focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
+                focused
+                  ? COLORS.primaryOrangeHex
+                  : currentTheme === 'dark'
+                  ? COLORS.iconColorDark
+                  : COLORS.iconColorLight
               }
               pack="Feather"
             />
@@ -95,7 +121,11 @@ const TabNavigator = () => {
               name="settings"
               size={25}
               color={
-                focused ? COLORS.primaryOrangeHex : COLORS.primaryLightGreyHex
+                focused
+                  ? COLORS.primaryOrangeHex
+                  : currentTheme === 'dark'
+                  ? COLORS.iconColorDark
+                  : COLORS.iconColorLight
               }
               pack="Feather"
             />

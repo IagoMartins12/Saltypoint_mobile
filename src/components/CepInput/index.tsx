@@ -7,6 +7,9 @@ import {
 } from 'react-hook-form';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 import {formatCep} from '../../utils';
+import MyText from '../Text';
+import useTheme from '../../hooks/useTheme';
+import {COLORS} from '../../theme/theme';
 
 export interface CepInputProps {
   register: UseFormRegister<FieldValues>;
@@ -31,6 +34,8 @@ const CepInput: React.FC<CepInputProps> = ({
     setFocus(false);
   };
 
+  const {currentTheme} = useTheme();
+
   return (
     <Controller
       name="cep"
@@ -38,9 +43,24 @@ const CepInput: React.FC<CepInputProps> = ({
       rules={{required: required}}
       render={({field: {onChange, onBlur, value}}) => (
         <View style={styles.container}>
-          <Text style={[styles.label, focus && styles.labelFocus]}>CEP</Text>
+          <MyText style={[styles.label, focus && styles.labelFocus]}>
+            CEP
+          </MyText>
           <TextInput
-            style={[styles.input, focus && styles.inputError]}
+            style={[
+              styles.input,
+              {
+                borderBottomColor:
+                  currentTheme === 'dark'
+                    ? COLORS.borderColorDark
+                    : COLORS.borderColorLight,
+                color:
+                  currentTheme === 'dark'
+                    ? COLORS.textColorDark
+                    : COLORS.textColorLight,
+              },
+              focus && styles.inputError,
+            ]}
             placeholder="Exemplo: 05280-000"
             onChangeText={text => {
               const formattedCep = formatCep(text);
@@ -48,6 +68,11 @@ const CepInput: React.FC<CepInputProps> = ({
               onChange(formattedCep);
               1;
             }}
+            placeholderTextColor={
+              currentTheme === 'dark'
+                ? COLORS.textColorDark
+                : COLORS.textColorLight
+            }
             onFocus={handleFocus}
             onBlur={handleBlur}
             value={value}
@@ -69,7 +94,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Arial',
     fontSize: 16,
     fontWeight: '300',
-    color: '#000',
   },
   labelFocus: {
     color: '#FF0000',
@@ -78,7 +102,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderBottomWidth: 2,
-    borderBottomColor: '#000',
   },
   inputError: {
     borderBottomColor: '#FF0000',

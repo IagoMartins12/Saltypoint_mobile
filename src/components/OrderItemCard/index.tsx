@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {COLORS} from '../../theme/theme';
+import MyText from '../Text';
 
 const OrderItemCard = () => {
   //   const {products} = useGlobalStore();
@@ -33,13 +34,13 @@ const OrderItemCard = () => {
         <View style={styles.itemInfo}>
           <View style={styles.quantityContainer}>
             <View style={styles.quantityBadge}>
-              <Text style={styles.quantityText}>10</Text>
+              <MyText style={styles.quantityText}>10</MyText>
             </View>
           </View>
-          <Text style={styles.productName}>Pizza de portuguesa</Text>
+          <MyText style={styles.productName}>Pizza de portuguesa</MyText>
         </View>
 
-        <Text style={styles.moreItemsText}>mais 2 itens</Text>
+        <MyText style={styles.moreItemsText}>mais 2 itens</MyText>
       </View>
     </View>
   );
@@ -80,17 +81,15 @@ const styles = StyleSheet.create({
   quantityText: {
     fontSize: 12,
     fontWeight: '700',
-    color: COLORS.primaryBlackHex,
+    color: '#000000',
   },
   productName: {
     fontSize: 16,
     fontWeight: '400',
-    color: COLORS.primaryBlackHex,
   },
   moreItemsText: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: COLORS.primaryBlackHex,
   },
 });
 

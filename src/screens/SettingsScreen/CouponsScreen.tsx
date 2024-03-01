@@ -12,6 +12,7 @@ import {global} from '../../style';
 import SectionTitle from '../../components/SectionTitle';
 import {COLORS} from '../../theme/theme';
 import CouponCard from '../../components/CouponCard';
+import useTheme from '../../hooks/useTheme';
 
 const CouponsScreen = ({
   navigation,
@@ -24,6 +25,9 @@ const CouponsScreen = ({
   const comeBack = () => {
     navigation.pop();
   };
+
+  const {currentTheme} = useTheme();
+
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <PanGestureHandler
@@ -36,10 +40,17 @@ const CouponsScreen = ({
           }
         }}>
         <View style={{flex: 1}}>
-          <View style={{flex: 0.09, backgroundColor: COLORS.primaryBlackHex}}>
-            <SectionTitle comeBack={comeBack} />
-          </View>
-          <ScrollView style={global.mainContainer}>
+          <SectionTitle comeBack={comeBack} />
+          <ScrollView
+            style={[
+              global.mainContainer,
+              {
+                backgroundColor:
+                  currentTheme === 'light'
+                    ? COLORS.backgroundColorLight
+                    : COLORS.backgroundColorDark,
+              },
+            ]}>
             <View style={{gap: 15, flex: 1}}>
               <CouponCard />
               <CouponCard />

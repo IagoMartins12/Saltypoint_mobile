@@ -7,6 +7,8 @@ import {
   Image,
 } from 'react-native';
 import MyText from '../Text';
+import useTheme from '../../hooks/useTheme';
+import {COLORS} from '../../theme/theme';
 
 export interface RewardCardHorizontalProps {
   reward: Reward;
@@ -17,8 +19,18 @@ const RewardCardHorizontal: React.FC<RewardCardHorizontalProps> = ({
   reward,
   onClick,
 }) => {
+  const {currentTheme} = useTheme();
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity
+      style={[
+        styles.container,
+        {
+          borderColor:
+            currentTheme === 'dark'
+              ? COLORS.borderColorDark
+              : COLORS.borderColorLight,
+        },
+      ]}>
       <View style={styles.imageContainer}>
         <Image source={{uri: reward.image}} style={styles.image} />
       </View>

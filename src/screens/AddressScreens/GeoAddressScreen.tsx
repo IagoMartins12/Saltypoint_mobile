@@ -13,6 +13,9 @@ import useGeoAddressLocation from '../../hooks/store/useGeoAddressLocation';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import SectionTitle from '../../components/SectionTitle';
 import {global} from '../../style';
+import useTheme from '../../hooks/useTheme';
+import {COLORS} from '../../theme/theme';
+import MyText from '../../components/Text';
 
 const GeoAddressScreen = ({
   navigation,
@@ -62,6 +65,8 @@ const GeoAddressScreen = ({
   const goToAddressScreen = () => {
     navigation.navigate('SaveAddress');
   };
+
+  const {currentTheme} = useTheme();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -91,19 +96,32 @@ const GeoAddressScreen = ({
   return (
     <View style={{flex: 1}}>
       <SectionTitle comeBack={comeBack} />
-      <View style={global.mainContainer}>
+      <View
+        style={[
+          global.mainContainer,
+          {
+            backgroundColor:
+              currentTheme === 'light'
+                ? COLORS.backgroundColorLight
+                : COLORS.backgroundColorDark,
+          },
+        ]}>
         {!location.loaded ? (
           <View style={styles.loaderContainer}>
             <View style={styles.loaderContent}>
               {/* <PuffLoader /> */}
-              <Text style={styles.loaderText}>Aguardando localização...</Text>
+              <MyText style={styles.loaderText}>
+                Aguardando localização...
+              </MyText>
             </View>
           </View>
         ) : location.error ? (
           <View style={styles.errorContainer}>
             <View style={styles.errorContent}>
               {/* <BsWifiOff size={55} /> */}
-              <Text style={styles.errorText}>Erro ao buscar localização</Text>
+              <MyText style={styles.errorText}>
+                Erro ao buscar localização
+              </MyText>
             </View>
 
             <TouchableOpacity
@@ -116,9 +134,9 @@ const GeoAddressScreen = ({
           </View>
         ) : (
           <View style={styles.resultContainer}>
-            <Text style={styles.resultText}>
+            <MyText style={styles.resultText}>
               Selecione um dos resultados abaixo
-            </Text>
+            </MyText>
             <ScrollView style={styles.scrollContainer}>
               {GeoAddress?.results ? (
                 <>
@@ -133,12 +151,22 @@ const GeoAddressScreen = ({
 
                       return (
                         <TouchableOpacity
-                          style={styles.resultItem}
+                          style={[
+                            styles.resultItem,
+                            {
+                              borderColor:
+                                currentTheme === 'dark'
+                                  ? COLORS.borderColorDark
+                                  : COLORS.borderColorLight,
+                            },
+                          ]}
                           key={i}
                           onPress={() => {
                             handleResultClick(result, isValidAddress);
                           }}>
-                          <Text>{result.formatted_address}</Text>
+                          <MyText textSize="mediumText2">
+                            {result.formatted_address}
+                          </MyText>
                         </TouchableOpacity>
                       );
                     })}
@@ -211,7 +239,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     backgroundColor: 'red',
-    marginTop: 10,
+    marginTop: 30,
   },
   buttonText: {
     fontSize: 18,
@@ -235,8 +263,8 @@ const styles = StyleSheet.create({
   },
   resultItem: {
     flexDirection: 'column',
-    borderBottomWidth: 2,
-    paddingVertical: 10,
+    borderBottomWidth: 1,
+    paddingVertical: 15,
     borderColor: 'gray',
     cursor: 'pointer',
   },

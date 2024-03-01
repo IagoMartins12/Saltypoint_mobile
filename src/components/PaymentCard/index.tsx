@@ -3,6 +3,7 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {BORDERRADIUS, COLORS, FONTSIZE} from '../../theme/theme';
 import MyText from '../Text';
 import {Type_Pagament} from '../../types/ModelsType';
+import useTheme from '../../hooks/useTheme';
 
 interface PaymentCardProps {
   typePagament: Type_Pagament;
@@ -17,10 +18,17 @@ const PaymentCard: React.FC<PaymentCardProps> = ({
   typePagament,
   icon,
 }) => {
+  const {currentTheme} = useTheme();
   const isActive = active === typePagament.id;
   const borderStyle = isActive
-    ? {borderColor: COLORS.secondaryRed, borderWidth: 0.75}
-    : {borderColor: 'black', borderWidth: 0.5};
+    ? {borderColor: COLORS.secondaryRed, borderWidth: 1.25}
+    : {
+        borderColor:
+          currentTheme === 'dark'
+            ? COLORS.borderColorDark
+            : COLORS.borderColorLight,
+        borderWidth: 1,
+      };
 
   const onPressHandler = () => {
     if (setActive) setActive(typePagament.id);

@@ -11,9 +11,12 @@ import {
 import React, {useState} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {global} from '../style';
-import {FONTSIZE} from '../theme/theme';
+import {COLORS, FONTSIZE} from '../theme/theme';
 import SettingsOption from '../components/SettingsOption';
 import {PackNames} from '../components/CustomIcon';
+import ThemeSwitch from '../components/ThemeSwitch';
+import useTheme from '../hooks/useTheme';
+import MyText from '../components/Text';
 
 const SettingsScreen = ({
   navigation,
@@ -24,6 +27,7 @@ const SettingsScreen = ({
   const [isMoving, setIsMoving] = useState(false);
   const [isImageModalVisible, setImageModalVisible] = useState(false);
 
+  const {currentTheme} = useTheme();
   const handleNavigate = (name: string) => {
     navigation.push(name);
   };
@@ -98,7 +102,16 @@ const SettingsScreen = ({
   };
 
   return (
-    <View style={global.mainContainer}>
+    <View
+      style={[
+        global.mainContainer,
+        {
+          backgroundColor:
+            currentTheme === 'light'
+              ? COLORS.backgroundColorLight
+              : COLORS.backgroundColorDark,
+        },
+      ]}>
       <Animated.View
         style={[
           styles.box,
@@ -131,15 +144,14 @@ const SettingsScreen = ({
             />
           </TouchableOpacity>
         </View>
-        <Text
+        <MyText
           style={{
             fontSize: FONTSIZE.size_18,
             fontWeight: '500',
-            color: '#000000',
             marginTop: 10,
           }}>
           Iago martins
-        </Text>
+        </MyText>
       </View>
 
       <View style={styles.listContainar}>
@@ -154,7 +166,7 @@ const SettingsScreen = ({
             />
           ))}
         </View>
-        {/* <ThemeSwitch moveView={moveView} /> */}
+        <ThemeSwitch moveView={moveView} />
       </View>
 
       <Modal

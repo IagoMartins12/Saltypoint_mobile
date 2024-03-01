@@ -42,7 +42,6 @@ const CartCellphoneCard: React.FC<AddressProps> = ({
           }}>
           <CustomIcon
             name="pencil-outline"
-            color="#000000"
             pack="MaterialCommunityIcons"
             size={20}
           />
@@ -73,7 +72,6 @@ const styles = StyleSheet.create({
   },
   addressText: {
     fontSize: 14,
-    color: COLORS.primaryBlackHex,
     fontWeight: '400',
   },
 });

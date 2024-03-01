@@ -23,6 +23,7 @@ import PizzaDetails from '../components/PizzaDetails';
 import ProductFixed from '../components/ProductFixed';
 import ProductDetails from '../components/ProductDetails';
 import CartAnimation from '../components/Lottie/CartAnimation';
+import useTheme from '../hooks/useTheme';
 
 export type NavigationProps = {
   navigation: NativeStackNavigationProp<any>;
@@ -37,7 +38,7 @@ const ProductScreen = ({navigation}: NavigationProps) => {
 
   const {products} = useGlobalStore();
   const router = useRoute();
-
+  const {currentTheme} = useTheme();
   const scrollViewRef = useRef<ScrollView>(null); // Ref para o ScrollView
 
   const onSubmit = () => {
@@ -103,7 +104,16 @@ const ProductScreen = ({navigation}: NavigationProps) => {
     return null;
   }
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <GestureHandlerRootView
+      style={[
+        styles.container,
+        {
+          backgroundColor:
+            currentTheme === 'dark'
+              ? COLORS.backgroundColorDark
+              : COLORS.backgroundColorLight,
+        },
+      ]}>
       <PanGestureHandler
         onHandlerStateChange={({nativeEvent}) => {
           if (
@@ -113,7 +123,16 @@ const ProductScreen = ({navigation}: NavigationProps) => {
             comeBack();
           }
         }}>
-        <View style={styles.container}>
+        <View
+          style={[
+            styles.container,
+            {
+              backgroundColor:
+                currentTheme === 'dark'
+                  ? COLORS.backgroundColorDark
+                  : COLORS.backgroundColorLight,
+            },
+          ]}>
           <ScrollView style={{flex: 1}} ref={scrollViewRef}>
             {isPizza ? (
               <PizzaDetails
@@ -154,7 +173,6 @@ const ProductScreen = ({navigation}: NavigationProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
   },
 
   buttonContainer: {

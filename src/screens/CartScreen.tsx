@@ -13,6 +13,7 @@ import ProductCartCard from '../components/ProductCartCard';
 import CartInfo from '../components/CartInfo';
 import {COLORS} from '../theme/theme';
 import {global} from '../style';
+import useTheme from '../hooks/useTheme';
 
 const CartScreen = ({
   navigation,
@@ -23,7 +24,7 @@ const CartScreen = ({
   const translateY = useSharedValue(Dimensions.get('window').height);
 
   const cartNotEmpty = true;
-
+  const {currentTheme} = useTheme();
   const {products} = useGlobalStore();
   const ListRef = useRef<FlatList>();
 
@@ -45,22 +46,52 @@ const CartScreen = ({
     navigation.push('AddressCart');
   };
 
+  const onPress = (id: string) => {
+    navigation.navigate('Product', {id});
+  };
+
   return (
     <>
       <View
-        style={{flex: 1, backgroundColor: !cartNotEmpty ? '#FFFFFF' : null}}>
+        style={{
+          flex: 1,
+          backgroundColor:
+            currentTheme === 'light'
+              ? COLORS.backgroundColorLight
+              : COLORS.backgroundColorDark,
+        }}>
         <View style={styles.mainContainer}>
           {cartNotEmpty ? (
             <View style={{flex: 1}}>
               <ScrollView>
                 {/* Cart Products  */}
-                <View style={[styles.productView, styles.paddingView]}>
+                <View
+                  style={[
+                    styles.productView,
+                    styles.paddingView,
+                    // {
+                    //   backgroundColor:
+                    //     currentTheme === 'dark'
+                    //       ? COLORS.cardColorDark
+                    //       : COLORS.cardColorLight,
+                    // },
+                  ]}>
                   {totalProducts.map((p, i) => (
                     <View key={i}>
                       <ProductCartCard product={p} />
 
                       {i !== totalProducts.length - 1 ? (
-                        <View style={global.hrStyle} />
+                        <View
+                          style={[
+                            global.hrStyle,
+                            {
+                              borderColor:
+                                currentTheme === 'dark'
+                                  ? COLORS.borderColorDark
+                                  : COLORS.borderColorLight,
+                            },
+                          ]}
+                        />
                       ) : null}
                     </View>
                   ))}
@@ -80,7 +111,13 @@ const CartScreen = ({
                   ]}
                   keyExtractor={item => item.id}
                   renderItem={({item}) => {
-                    return <ProductRecomendCard product={item} key={item.id} />;
+                    return (
+                      <ProductRecomendCard
+                        product={item}
+                        key={item.id}
+                        onPress={onPress}
+                      />
+                    );
                   }}
                 />
 
@@ -158,8 +195,6 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   productView: {
-    backgroundColor: '#FFFFFF',
-
     gap: 10,
   },
 
@@ -181,7 +216,6 @@ const styles = StyleSheet.create({
 
   couponView: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
   },
 
   couponIcon: {
@@ -217,7 +251,6 @@ const styles = StyleSheet.create({
   },
 
   totalView: {
-    backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
     paddingVertical: 15,
     flexDirection: 'row',

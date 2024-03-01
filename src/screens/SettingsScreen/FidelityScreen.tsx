@@ -18,12 +18,15 @@ import {global} from '../../style';
 import {COLORS, FONTSIZE} from '../../theme/theme';
 import RewardInfo from '../../components/RewardInfo';
 import FidelityAccordeonSection from '../../components/FidelityAccordeonSection';
+import useTheme from '../../hooks/useTheme';
+import MyText from '../../components/Text';
 
 const FidelityScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const {currentTheme} = useTheme();
   const comeBack = () => {
     navigation.pop();
   };
@@ -39,45 +42,52 @@ const FidelityScreen = ({
           }
         }}>
         <View style={{flex: 1}}>
-          <View
+          <SectionTitle comeBack={comeBack} />
+
+          <ScrollView
             style={{
-              flex: 0.09,
-              backgroundColor: COLORS.primaryBlackHex,
+              flex: 1,
+              backgroundColor:
+                currentTheme === 'light' ? '' : COLORS.backgroundColorDark,
             }}>
-            <SectionTitle comeBack={comeBack} />
-          </View>
-
-          <ScrollView style={{flex: 1}}>
-            <View style={styles.boxContainer}>
-              {/* <View style={styles.customIconBox}>
-                <CustomIcon name="gift" size={20} pack="Feather" />
-              </View> */}
-
-              <Text
+            <View
+              style={[
+                styles.boxContainer,
+                {
+                  backgroundColor:
+                    currentTheme === 'light'
+                      ? COLORS.cardColorLight
+                      : COLORS.cardColorDark,
+                },
+              ]}>
+              <MyText
                 style={{
                   fontSize: 20,
                   textAlign: 'center',
-                  color: COLORS.primaryBlackHex,
                   fontWeight: 'bold',
                 }}>
                 Programa de fidelidade
-              </Text>
+              </MyText>
 
-              <Text
+              <MyText
                 style={{
                   fontSize: 16,
                   textAlign: 'center',
-                  color: COLORS.primaryBlackHex,
                   fontWeight: '500',
                 }}>
                 Ganhe 1 ponto a cada R$ 1,00, e troque por recompensas
                 incríveis.
-              </Text>
+              </MyText>
 
               <TouchableOpacity
                 style={[
                   global.buttonStyle,
-                  {backgroundColor: COLORS.primaryBlackHex},
+                  {
+                    backgroundColor:
+                      currentTheme === 'light'
+                        ? '#000000'
+                        : COLORS.backgroundColorDark,
+                  },
                 ]}>
                 <Text
                   style={{
@@ -96,18 +106,26 @@ const FidelityScreen = ({
                 alignItems: 'center',
                 marginVertical: 40,
               }}>
-              <Text
+              <MyText
                 style={{
                   fontSize: 20,
                   fontWeight: 'bold',
                   textAlign: 'center',
-                  color: COLORS.primaryBlackHex,
                 }}>
                 Beneficios que você pode ganhar
-              </Text>
+              </MyText>
             </View>
 
-            <View style={styles.rewardsDiv}>
+            <View
+              style={[
+                styles.rewardsDiv,
+                {
+                  backgroundColor:
+                    currentTheme === 'light'
+                      ? COLORS.cardColorLight
+                      : COLORS.cardColorDark,
+                },
+              ]}>
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i, key) => (
                 <View
                   key={key}
@@ -122,7 +140,7 @@ const FidelityScreen = ({
             </View>
 
             <View style={styles.rewardsText}>
-              <Text>*Prêmio não acumulativo</Text>
+              <MyText textSize="smallText">*Prêmio não acumulativo</MyText>
             </View>
 
             <FidelityAccordeonSection showAllContent />
@@ -140,14 +158,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 20,
     borderBottomWidth: 2,
-    backgroundColor: '#ffffff',
   },
 
   rewardsDiv: {
     marginHorizontal: 20,
     flex: 1,
     borderRadius: 25,
-    backgroundColor: '#ffffff',
     paddingVertical: 20,
     gap: 20,
   },

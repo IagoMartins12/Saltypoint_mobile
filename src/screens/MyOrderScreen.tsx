@@ -15,6 +15,7 @@ import CardProductOrder from '../components/CardProductOrder';
 import CurrentOrderInfo from '../components/OrderInfo';
 import CartAnimation from '../components/Lottie/CartAnimation';
 import LoginAnimation from '../components/Lottie/LoginAnimation';
+import useTheme from '../hooks/useTheme';
 
 const MyOrderScreen = ({
   navigation,
@@ -23,6 +24,7 @@ const MyOrderScreen = ({
 }) => {
   const [hasPlayed, setHasPlayed] = useState(false);
 
+  const {currentTheme} = useTheme();
   const onSwipeLeft = () => {
     navigation.navigate('Order');
   };
@@ -42,7 +44,16 @@ const MyOrderScreen = ({
         }}>
         <View style={{flex: 1}}>
           <SectionTitle comeBack={comeBack} />
-          <ScrollView style={styles.mainContainer}>
+          <ScrollView
+            style={[
+              styles.mainContainer,
+              {
+                backgroundColor:
+                  currentTheme === 'light'
+                    ? COLORS.backgroundColorLight
+                    : COLORS.backgroundColorDark,
+              },
+            ]}>
             <View style={{flex: 1, paddingBottom: 15}}>
               <View>
                 <View>
@@ -71,12 +82,7 @@ const MyOrderScreen = ({
                 <TouchableOpacity
                   style={[styles.buttonContainer, {backgroundColor: 'red'}]}
                   onPress={() => setHasPlayed(true)}>
-                  <CustomIcon
-                    name="shopping-cart"
-                    pack="Feather"
-                    size={22}
-                    color={COLORS.primaryBlackHex}
-                  />
+                  <CustomIcon name="shopping-cart" pack="Feather" size={22} />
                   <Text style={styles.buttonText}>Repetir pedido</Text>
                 </TouchableOpacity>
               )}

@@ -13,6 +13,8 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import CustomIcon from '../../CustomIcon';
 import {ModalProps} from '../ForgetPasswordModal';
 import {COLORS, FONTSIZE} from '../../../theme/theme';
+import useTheme from '../../../hooks/useTheme';
+import MyText from '../../Text';
 
 const ContactModal: React.FC<ModalProps> = ({
   modalOpen,
@@ -20,6 +22,8 @@ const ContactModal: React.FC<ModalProps> = ({
   hideModal,
   translateY,
 }) => {
+  const {currentTheme} = useTheme();
+  //@ts-ignore
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
@@ -35,7 +39,17 @@ const ContactModal: React.FC<ModalProps> = ({
     <View style={styles.centeredView}>
       <Modal animationType="none" transparent={true} visible={modalOpen}>
         <View style={styles.overlay}>
-          <Animated.View style={[styles.modalContainer, animatedStyle]}>
+          <Animated.View
+            style={[
+              styles.modalContainer,
+              animatedStyle,
+              {
+                backgroundColor:
+                  currentTheme === 'light'
+                    ? COLORS.backgroundColorLight
+                    : COLORS.backgroundColorDark,
+              },
+            ]}>
             <Pressable
               onPress={handleOverlayPress}
               style={{
@@ -58,62 +72,94 @@ const ContactModal: React.FC<ModalProps> = ({
               }}>
               <View style={{gap: 20}}>
                 <View style={{gap: 10}}>
-                  <Text style={styles.textTitle}>Whatsapp</Text>
+                  <MyText style={styles.textTitle}>Whatsapp</MyText>
 
                   <View style={[styles.boxInfo]}>
                     <View style={styles.iconContainer}>
-                      <View style={styles.iconBox}>
+                      <View
+                        style={[
+                          styles.iconBox,
+                          {
+                            backgroundColor:
+                              currentTheme === 'light'
+                                ? COLORS.iconBgLight
+                                : COLORS.iconBgDark,
+                          },
+                        ]}>
                         <CustomIcon
                           name="whatsapp"
                           size={18}
                           pack="MaterialCommunityIcons"
-                          color={COLORS.primaryBlackHex}
                         />
                       </View>
 
-                      <Text style={styles.textNumber}>(11) 98859-8530 </Text>
+                      <MyText style={styles.textNumber}>
+                        (11) 98859-8530{' '}
+                      </MyText>
                     </View>
 
-                    <Text style={styles.textAction}>Iniciar chat</Text>
+                    <MyText style={styles.textAction}>Iniciar chat</MyText>
                   </View>
                 </View>
 
                 <View style={{gap: 10}}>
-                  <Text style={styles.textTitle}>Telefone</Text>
+                  <MyText style={styles.textTitle}>Telefone</MyText>
 
                   <View style={{gap: 5}}>
                     <View style={[styles.boxInfo]}>
                       <View style={styles.iconContainer}>
-                        <View style={styles.iconBox}>
+                        <View
+                          style={[
+                            styles.iconBox,
+                            {
+                              backgroundColor:
+                                currentTheme === 'light'
+                                  ? COLORS.iconBgLight
+                                  : COLORS.iconBgDark,
+                            },
+                          ]}>
                           <CustomIcon
                             name="phone"
                             size={18}
                             pack="SimpleLineIcons"
-                            color={COLORS.primaryBlackHex}
                           />
                         </View>
 
-                        <Text style={styles.textNumber}> (11) 3943-3038 </Text>
+                        <MyText style={styles.textNumber}>
+                          {' '}
+                          (11) 3943-3038{' '}
+                        </MyText>
                       </View>
 
-                      <Text style={styles.textAction}>Ligar agora</Text>
+                      <MyText style={styles.textAction}>Ligar agora</MyText>
                     </View>
 
                     <View style={[styles.boxInfo]}>
                       <View style={styles.iconContainer}>
-                        <View style={styles.iconBox}>
+                        <View
+                          style={[
+                            styles.iconBox,
+                            {
+                              backgroundColor:
+                                currentTheme === 'light'
+                                  ? COLORS.iconBgLight
+                                  : COLORS.iconBgDark,
+                            },
+                          ]}>
                           <CustomIcon
                             name="phone"
                             size={18}
                             pack="SimpleLineIcons"
-                            color={COLORS.primaryBlackHex}
                           />
                         </View>
 
-                        <Text style={styles.textNumber}> (11) 3943-3038 </Text>
+                        <MyText style={styles.textNumber}>
+                          {' '}
+                          (11) 3943-3038{' '}
+                        </MyText>
                       </View>
 
-                      <Text style={styles.textAction}>Ligar agora</Text>
+                      <MyText style={styles.textAction}>Ligar agora</MyText>
                     </View>
                   </View>
                 </View>
@@ -139,7 +185,6 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: '100%',
     height: Dimensions.get('window').height * 0.5,
-    backgroundColor: '#fffbfb',
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
     alignItems: 'center',
@@ -150,7 +195,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 35,
     width: 35,
-    backgroundColor: '#f0efef',
     borderRadius: 100,
     top: 15,
     left: 20,
@@ -176,25 +220,20 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 15,
-    backgroundColor: '#ffffff',
   },
 
   textTitle: {
     fontSize: FONTSIZE.size_16,
-    color: COLORS.primaryBlackHex,
     fontWeight: '600',
     paddingHorizontal: 20,
   },
   textAction: {
     fontSize: FONTSIZE.size_14,
-    color: COLORS.primaryBlackHex,
     textDecorationLine: 'underline',
     fontWeight: '500',
   },
 
-  textNumber: {
-    color: COLORS.primaryBlackHex,
-  },
+  textNumber: {},
 });
 
 export default ContactModal;

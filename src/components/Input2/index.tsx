@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import {Control, Controller, FieldValues} from 'react-hook-form';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
+import useTheme from '../../hooks/useTheme';
+import MyText from '../Text';
+import {COLORS} from '../../theme/theme';
 
 export interface CepInputProps {
   name: string;
@@ -20,7 +23,7 @@ const StyledInputComponent2: React.FC<CepInputProps> = ({
   disabled = false,
 }) => {
   const [focus, setFocus] = useState(false);
-
+  const {currentTheme} = useTheme();
   const handleFocus = () => {
     setFocus(true);
   };
@@ -36,10 +39,30 @@ const StyledInputComponent2: React.FC<CepInputProps> = ({
       rules={{required: required}}
       render={({field: {onChange, onBlur, value}}) => (
         <View style={styles.container}>
-          <Text style={[styles.label, focus && styles.labelFocus]}>{name}</Text>
+          <MyText style={[styles.label, focus && styles.labelFocus]}>
+            {name}
+          </MyText>
           <TextInput
-            style={[styles.input, focus && styles.inputError]}
-            placeholder={name}
+            style={[
+              styles.input,
+              {
+                color:
+                  currentTheme === 'dark'
+                    ? COLORS.textColorDark
+                    : COLORS.textColorLight,
+                borderColor:
+                  currentTheme === 'dark'
+                    ? COLORS.borderColorDark
+                    : COLORS.borderColorLight,
+              },
+              focus && styles.inputError,
+            ]}
+            // placeholder={name}
+            placeholderTextColor={
+              currentTheme === 'dark'
+                ? COLORS.textColorDark
+                : COLORS.textColorLight
+            }
             onChangeText={text => {
               onChangeFunction(text, id);
             }}
@@ -63,7 +86,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Arial',
     fontSize: 16,
     fontWeight: '300',
-    color: '#000',
   },
   labelFocus: {
     color: '#FF0000',
@@ -71,10 +93,8 @@ const styles = StyleSheet.create({
   input: {
     paddingHorizontal: 10,
     paddingVertical: 8,
-    borderBottomWidth: 2,
-    borderBottomColor: '#000',
+    borderBottomWidth: 1,
     fontSize: 18,
-    color: '#000000',
   },
   inputError: {
     borderBottomColor: '#FF0000',

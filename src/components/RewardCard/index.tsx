@@ -1,3 +1,5 @@
+import useTheme from '../../hooks/useTheme';
+import {COLORS} from '../../theme/theme';
 import {Reward} from '../../types/ModelsType';
 import {
   View,
@@ -7,6 +9,8 @@ import {
   Dimensions,
   ImageBackground,
 } from 'react-native';
+import MyText from '../Text';
+import {global} from '../../style';
 
 export interface RewardCardProps {
   reward: Reward;
@@ -21,10 +25,12 @@ const RewardCard: React.FC<RewardCardProps> = ({
   margin,
   showCode,
 }) => {
+  const {currentTheme} = useTheme();
   return (
     <TouchableOpacity
       style={[
         styles.container,
+        global.shadow,
         {
           marginLeft: margin ? 15 : 0,
         },
@@ -43,20 +49,29 @@ const RewardCard: React.FC<RewardCardProps> = ({
         />
       </View>
 
-      <View style={styles.textContainer}>
+      <View
+        style={[
+          styles.textContainer,
+          {
+            backgroundColor:
+              currentTheme === 'light'
+                ? COLORS.cardColorLight
+                : COLORS.cardColorDark,
+          },
+        ]}>
         <View style={styles.rewardNameContainer}>
-          <Text style={styles.rewardName}>{reward.name}</Text>
+          <MyText style={styles.rewardName}>{reward.name}</MyText>
         </View>
 
         {showCode ? (
           <View style={styles.rewardCodeContainer}>
-            <Text style={styles.rewardCode}>{showCode}</Text>
+            <MyText style={styles.rewardCode}>{showCode}</MyText>
           </View>
         ) : (
           <View style={styles.rewardCodeContainer}>
-            <Text style={styles.rewardCode}>
+            <MyText style={styles.rewardCode}>
               {reward.quantity_points} pontos
-            </Text>
+            </MyText>
           </View>
         )}
       </View>
@@ -98,7 +113,6 @@ const styles = StyleSheet.create({
     gap: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#eeeded',
 
     borderBottomEndRadius: 20,
     borderBottomStartRadius: 20,

@@ -13,6 +13,8 @@ import CustomIcon from '../../CustomIcon';
 import {useForm} from 'react-hook-form';
 import StyledInputComponent from '../../Input';
 import LargeButton from '../../Button';
+import useTheme from '../../../hooks/useTheme';
+import {COLORS} from '../../../theme/theme';
 
 export interface ModalProps {
   modalOpen: boolean;
@@ -27,6 +29,7 @@ const ForgetPasswordModal: React.FC<ModalProps> = ({
   hideModal,
   translateY,
 }) => {
+  //@ts-ignore
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
@@ -35,16 +38,27 @@ const ForgetPasswordModal: React.FC<ModalProps> = ({
   const {control, handleSubmit} = useForm();
   const onSubmit = (data: any) => console.log(data);
   const handleOverlayPress = (e: GestureResponderEvent) => {
-    // Clique fora do modal, executa o hideModal
     hideModal();
     setTimeout(() => setModalOpen(!modalOpen), 300);
   };
+
+  const {currentTheme} = useTheme();
 
   return (
     <View style={styles.centeredView}>
       <Modal animationType="none" transparent={true} visible={modalOpen}>
         <View style={styles.overlay}>
-          <Animated.View style={[styles.modalContainer, animatedStyle]}>
+          <Animated.View
+            style={[
+              styles.modalContainer,
+              animatedStyle,
+              {
+                backgroundColor:
+                  currentTheme === 'light'
+                    ? COLORS.backgroundColorLight
+                    : COLORS.backgroundColorDark,
+              },
+            ]}>
             <Pressable
               onPress={handleOverlayPress}
               style={{
@@ -52,11 +66,25 @@ const ForgetPasswordModal: React.FC<ModalProps> = ({
                 height: '15%',
                 position: 'relative',
               }}>
-              <TouchableOpacity style={styles.iconStyle}>
+              <TouchableOpacity
+                style={[
+                  styles.iconStyle,
+                  {
+                    backgroundColor:
+                      currentTheme === 'light'
+                        ? COLORS.iconBgLight
+                        : COLORS.iconBgDark,
+                  },
+                ]}>
                 <CustomIcon
                   name="arrow-down"
                   size={20}
                   pack="SimpleLineIcons"
+                  color={
+                    currentTheme === 'light'
+                      ? COLORS.iconColorLight
+                      : COLORS.iconColorDark
+                  }
                 />
               </TouchableOpacity>
             </Pressable>
@@ -103,7 +131,6 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: '100%',
     height: Dimensions.get('window').height * 0.4,
-    backgroundColor: '#ffffff',
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
     alignItems: 'center',

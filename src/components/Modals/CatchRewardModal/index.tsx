@@ -11,12 +11,12 @@ import {
 } from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
 import CustomIcon from '../../CustomIcon';
-import LargeButton from '../../Button';
-import {BORDERRADIUS, COLORS} from '../../../theme/theme';
-import {global} from '../../../style';
+
 import {Reward} from '../../../types/ModelsType';
 import MyText from '../../Text';
 import RewardAnimation from '../../Lottie/RewardAnimation';
+import useTheme from '../../../hooks/useTheme';
+import {COLORS} from '../../../theme/theme';
 
 export interface ModalProps {
   modalOpen: boolean;
@@ -45,6 +45,8 @@ const CatchRewardModal: React.FC<ModalProps> = ({
     setTimeout(() => setModalOpen(!modalOpen), 300);
     setTimeout(() => setHasPlayed(false), 600);
   };
+
+  const {currentTheme} = useTheme();
 
   let body = (
     <>
@@ -152,7 +154,17 @@ const CatchRewardModal: React.FC<ModalProps> = ({
     <View style={styles.centeredView}>
       <Modal animationType="none" transparent={true} visible={modalOpen}>
         <View style={styles.overlay}>
-          <Animated.View style={[styles.modalContainer, animatedStyle]}>
+          <Animated.View
+            style={[
+              styles.modalContainer,
+              animatedStyle,
+              {
+                backgroundColor:
+                  currentTheme === 'dark'
+                    ? COLORS.backgroundColorDark
+                    : COLORS.backgroundColorLight,
+              },
+            ]}>
             <Pressable
               onPress={handleOverlayPress}
               style={{
@@ -161,9 +173,26 @@ const CatchRewardModal: React.FC<ModalProps> = ({
                 position: 'relative',
               }}>
               <TouchableOpacity
-                style={styles.iconStyle}
+                style={[
+                  styles.iconStyle,
+                  {
+                    backgroundColor:
+                      currentTheme === 'light'
+                        ? COLORS.iconBgLight
+                        : COLORS.iconBgDark,
+                  },
+                ]}
                 onPress={handleOverlayPress}>
-                <CustomIcon name="x" size={20} pack="Feather" />
+                <CustomIcon
+                  name="arrow-down"
+                  size={20}
+                  pack="SimpleLineIcons"
+                  color={
+                    currentTheme === 'light'
+                      ? COLORS.iconColorLight
+                      : COLORS.iconColorDark
+                  }
+                />
               </TouchableOpacity>
             </Pressable>
 
@@ -188,7 +217,6 @@ const styles = StyleSheet.create({
     width: '90%',
     alignSelf: 'center',
     height: Dimensions.get('window').height * 0.7,
-    backgroundColor: '#ffffff',
     borderRadius: 20,
     alignItems: 'center',
     gap: 20,

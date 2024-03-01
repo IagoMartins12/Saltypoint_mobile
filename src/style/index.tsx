@@ -1,12 +1,22 @@
 import {Dimensions, StyleSheet} from 'react-native';
 import {BORDERRADIUS, COLORS} from '../theme/theme';
+import useTheme from '../hooks/useTheme';
 
 export const global = StyleSheet.create({
   mainContainer: {
     flex: 1,
     paddingHorizontal: 15,
     paddingVertical: 15,
+  },
+  light: {
     backgroundColor: '#FFFFFF',
+    text: '#000000',
+    headers: '#000000',
+  },
+  dark: {
+    backgroundColor: '#0F0E17',
+    text: '#A7A9BE',
+    headers: '#FFFFFE',
   },
 
   shadow: {
@@ -60,7 +70,7 @@ export const global = StyleSheet.create({
 
   hrStyle: {
     borderBottomColor: 'black',
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 1,
     paddingTop: 10,
     marginHorizontal: 10,
   },

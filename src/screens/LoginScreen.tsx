@@ -23,6 +23,8 @@ import StyledInputComponent from '../components/Input';
 import useKeyboardOpen from '../hooks/useKeyboardOpen';
 import {global} from '../style';
 import LargeButton from '../components/Button';
+import useTheme from '../hooks/useTheme';
+import MyText from '../components/Text';
 
 const LoginScreen = ({
   navigation,
@@ -42,6 +44,7 @@ const LoginScreen = ({
     navigation.navigate('Main');
   }, [navigation]);
 
+  const {currentTheme} = useTheme();
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <PanGestureHandler
@@ -53,7 +56,16 @@ const LoginScreen = ({
             onSwipeRight();
           }
         }}>
-        <View style={styles.loginMainView}>
+        <View
+          style={[
+            styles.loginMainView,
+            {
+              backgroundColor:
+                currentTheme === 'light'
+                  ? COLORS.backgroundColorLight
+                  : COLORS.backgroundColorDark,
+            },
+          ]}>
           <View
             style={[
               styles.imageContainer,
@@ -61,12 +73,14 @@ const LoginScreen = ({
             ]}>
             <LoginAnimation />
           </View>
-          <View style={styles.subContainer}>
+          <View style={[styles.subContainer]}>
             <View style={styles.brandwView}>
-              <Text style={styles.brandwViewText}>Bem-vindo de volta! </Text>
-              <Text style={styles.brandwViewSubText}>
+              <MyText style={styles.brandwViewText}>
+                Bem-vindo de volta!{' '}
+              </MyText>
+              <MyText style={styles.brandwViewSubText}>
                 Faça o login para se autenticar e realizar o seu pedido
-              </Text>
+              </MyText>
             </View>
             <View style={styles.bottomView}>
               {/* Form  */}
@@ -88,9 +102,11 @@ const LoginScreen = ({
                 />
 
                 <View style={styles.forgetPasswordDiv}>
-                  <Text style={{textDecorationLine: 'underline'}}>
+                  <MyText
+                    style={{textDecorationLine: 'underline'}}
+                    textSize="mediumText2">
                     Esqueci minha senha
-                  </Text>
+                  </MyText>
                 </View>
 
                 <View>
@@ -121,22 +137,31 @@ const LoginScreen = ({
                             />
                           </View>
 
-                          <Text style={{color: '#000000'}}>
+                          <MyText
+                            style={{
+                              color:
+                                currentTheme === 'dark'
+                                  ? COLORS.textColorDark
+                                  : COLORS.textColorLight,
+                            }}
+                            textSize="mediumText2">
                             Continuar com Google
-                          </Text>
+                          </MyText>
                         </TouchableOpacity>
                         <View style={styles.registerText}>
-                          <Text>
+                          <MyText textSize="mediumText2">
                             Não possui conta?{' '}
-                            <Text
+                            <MyText
                               style={{
                                 color: '#031475',
                                 textDecorationLine: 'underline',
                               }}
+                              textSize="mediumText2"
                               onPress={buttonPressHandler}>
+                              {' '}
                               Se cadastre
-                            </Text>
-                          </Text>
+                            </MyText>
+                          </MyText>
                         </View>
                       </>
                     ) : null}
@@ -158,9 +183,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  imageContainer: {
-    backgroundColor: '#ffffff',
-  },
+  imageContainer: {},
   brandwView: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -170,7 +193,6 @@ const styles = StyleSheet.create({
     fontSize: FONTSIZE.size_28,
     fontFamily: FONTFAMILY.poppins_semibold,
     fontWeight: '700',
-    color: COLORS.primaryBlackHex,
   },
 
   brandwViewSubText: {
@@ -178,12 +200,10 @@ const styles = StyleSheet.create({
     fontFamily: FONTFAMILY.poppins_medium,
     textAlign: 'center',
     paddingHorizontal: 60,
-    color: COLORS.primaryLightGreyHex,
   },
 
   bottomView: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
   },
 
   mainContainer: {
@@ -194,7 +214,6 @@ const styles = StyleSheet.create({
   },
 
   subContainer: {
-    backgroundColor: '#FFFFFF',
     flex: 1.5,
   },
 

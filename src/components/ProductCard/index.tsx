@@ -10,6 +10,8 @@ import {BORDERRADIUS, COLORS, FONTSIZE, SPACING} from '../../theme/theme';
 import CustomIcon from '../CustomIcon';
 import {global} from '../../style';
 import {Product} from '../../types/ModelsType';
+import useTheme from '../../hooks/useTheme';
+import MyText from '../Text';
 
 export interface ProductCardProps {
   product: Product;
@@ -17,15 +19,25 @@ export interface ProductCardProps {
 }
 const ProductCard: React.FC<ProductCardProps> = ({product, onPress}) => {
   const getPoints = product.value;
+  const {currentTheme} = useTheme();
   return (
     <TouchableOpacity
-      style={[styles.mainDiv, global.shadow]}
+      style={[
+        styles.mainDiv,
+        global.shadow,
+        {
+          backgroundColor:
+            currentTheme === 'dark'
+              ? COLORS.cardColorDark
+              : COLORS.cardColorLight,
+        },
+      ]}
       onPress={() => {
         onPress(product.id);
       }}>
       <View style={styles.PointsText}>
-        <CustomIcon name="reply" size={11} color="#ffffff" />
-        <Text style={{color: '#ffffff'}}> Ganhe {getPoints} pontos </Text>
+        <CustomIcon name="reply" size={11} />
+        <MyText textSize="mediumText2"> Ganhe {getPoints} pontos </MyText>
       </View>
 
       <ImageBackground
@@ -34,7 +46,7 @@ const ProductCard: React.FC<ProductCardProps> = ({product, onPress}) => {
         }}
         style={styles.CartItemImage}>
         <View style={styles.CardRatingContainer}>
-          <CustomIcon name={'heart'} color={'gray'} size={20} />
+          <CustomIcon name={'heart'} size={20} />
         </View>
       </ImageBackground>
 
@@ -44,10 +56,13 @@ const ProductCard: React.FC<ProductCardProps> = ({product, onPress}) => {
           justifyContent: 'space-around',
           flex: 1,
         }}>
-        <Text style={styles.productTitle}>{product.name}</Text>
+        <MyText style={styles.productTitle}>{product.name}</MyText>
 
         <View style={styles.infoDiv}>
-          <Text style={styles.priceText}> R$ {product.value.toFixed(2)}</Text>
+          <MyText style={styles.priceText}>
+            {' '}
+            R$ {product.value.toFixed(2)}
+          </MyText>
           {/* <CustomIcon name="cart-plus" size={25} /> */}
         </View>
       </View>
@@ -57,7 +72,6 @@ const ProductCard: React.FC<ProductCardProps> = ({product, onPress}) => {
 
 const styles = StyleSheet.create({
   mainDiv: {
-    backgroundColor: '#FFFFFF',
     height: Dimensions.get('window').height / 3.15,
     width: Dimensions.get('window').width / 2.4,
     borderRadius: BORDERRADIUS.radius_15,
@@ -82,7 +96,6 @@ const styles = StyleSheet.create({
   productTitle: {
     fontSize: FONTSIZE.size_16,
     fontWeight: '700',
-    color: '#000000',
   },
   infoDiv: {
     flexDirection: 'row',

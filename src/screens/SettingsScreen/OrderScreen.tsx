@@ -12,12 +12,14 @@ import {global} from '../../style';
 import OrderCard from '../../components/OrderCard';
 import {COLORS} from '../../theme/theme';
 import {enableGoBack} from '../../utils';
+import useTheme from '../../hooks/useTheme';
 
 const OrderScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const {currentTheme} = useTheme();
   const onSwipeLeft = () => {
     // Navegar para a página desejada
     navigation.navigate('Settings');
@@ -46,10 +48,17 @@ const OrderScreen = ({
           }
         }}>
         <View style={{flex: 1}}>
-          <View style={{flex: 0.09, backgroundColor: COLORS.primaryBlackHex}}>
-            <SectionTitle comeBack={comeBack} />
-          </View>
-          <ScrollView style={global.mainContainer}>
+          <SectionTitle comeBack={comeBack} />
+          <ScrollView
+            style={[
+              styles.mainContainer,
+              {
+                backgroundColor:
+                  currentTheme === 'light'
+                    ? COLORS.backgroundColorLight
+                    : COLORS.backgroundColorDark,
+              },
+            ]}>
             <View style={{gap: 10, flex: 1}}>
               <OrderCard onPress={goToOrder} />
               <OrderCard onPress={goToOrder} />
@@ -66,8 +75,9 @@ const OrderScreen = ({
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    marginHorizontal: 20,
-    marginVertical: 30,
+    paddingHorizontal: 20,
+    paddingTop: 15,
+    paddingBottom: 60,
   },
 });
 

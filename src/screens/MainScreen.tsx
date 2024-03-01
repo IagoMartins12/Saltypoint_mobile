@@ -13,6 +13,8 @@ import {
   PanGestureHandler,
   State,
 } from 'react-native-gesture-handler';
+import MyText from '../components/Text';
+import useTheme from '../hooks/useTheme';
 
 const MainScreen = ({navigation}: any) => {
   const buttonRegister = () => {
@@ -35,6 +37,7 @@ const MainScreen = ({navigation}: any) => {
     navigation.push('Tab');
   };
 
+  const {currentTheme} = useTheme();
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <PanGestureHandler
@@ -53,24 +56,44 @@ const MainScreen = ({navigation}: any) => {
             onSwipeLeft();
           }
         }}>
-        <View style={styles.loginMainView}>
+        <View style={[styles.loginMainView]}>
           <ImageBackground
             style={styles.bgStyle}
             source={require('../assets/pizzaWallpapper.jpg')}></ImageBackground>
 
-          <View style={styles.subContainer}>
-            <View style={styles.bottomView}>
+          <View
+            style={[
+              styles.subContainer,
+              {
+                backgroundColor:
+                  currentTheme === 'light'
+                    ? COLORS.backgroundColorLight
+                    : COLORS.backgroundColorDark,
+              },
+            ]}>
+            <View
+              style={[
+                styles.bottomView,
+                {
+                  backgroundColor:
+                    currentTheme === 'light'
+                      ? COLORS.backgroundColorLight
+                      : COLORS.backgroundColorDark,
+                },
+              ]}>
               <View style={{padding: 40, gap: 20}}>
                 <View>
-                  <Text style={styles.WelcomeText}>Seja bem vindo a </Text>
-                  <Text style={styles.WelcomeSubText}>Salty Point</Text>
+                  <MyText style={styles.WelcomeText}>Seja bem vindo a </MyText>
+                  <MyText style={styles.WelcomeSubText}>Salty Point</MyText>
                 </View>
 
                 <View>
-                  <Text>Bateu aquela fome? Nós resolvemos o seu problema!</Text>
-                  <Text>
+                  <MyText textSize="mediumText2">
+                    Bateu aquela fome? Nós resolvemos o seu problema!
+                  </MyText>
+                  <MyText textSize="mediumText2">
                     Peça a melhor pizza da região pelo nosso aplicativo
-                  </Text>
+                  </MyText>
                 </View>
               </View>
 
@@ -84,13 +107,22 @@ const MainScreen = ({navigation}: any) => {
                   <TouchableOpacity
                     style={styles.secondButton}
                     onPress={buttonRegister}>
-                    <Text style={{color: '#000000'}}>Cadastro</Text>
+                    <MyText
+                      style={{
+                        color:
+                          currentTheme === 'dark'
+                            ? COLORS.textColorDark
+                            : COLORS.textColorLight,
+                      }}
+                      textSize="mediumText2">
+                      Cadastro
+                    </MyText>
                   </TouchableOpacity>
                 </View>
 
-                <Text style={styles.noAuthText} onPress={buttonHome}>
+                <MyText style={styles.noAuthText} onPress={buttonHome}>
                   Continuar sem se autenticar
-                </Text>
+                </MyText>
               </View>
             </View>
           </View>
@@ -108,13 +140,12 @@ const styles = StyleSheet.create({
   },
 
   bgStyle: {
-    height: Dimensions.get('window').height / 2.25,
+    height: Dimensions.get('window').height / 2,
     opacity: 0.75,
   },
 
   bottomView: {
     flex: 1,
-    backgroundColor: COLORS.themeColor,
     bottom: 50,
     borderTopStartRadius: 60,
     borderTopEndRadius: 60,
@@ -124,7 +155,6 @@ const styles = StyleSheet.create({
 
   WelcomeText: {
     fontSize: 36,
-    color: COLORS.primaryBlackHex,
     fontWeight: '700',
     textAlign: 'left',
   },

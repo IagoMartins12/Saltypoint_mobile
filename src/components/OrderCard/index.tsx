@@ -3,13 +3,27 @@ import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import CustomIcon from '../CustomIcon';
 import OrderItemCard from '../OrderItemCard';
 import {COLORS} from '../../theme/theme';
+import useTheme from '../../hooks/useTheme';
+import MyText from '../Text';
 
 interface OrderProps {
   onPress: () => void;
 }
 const OrderCard: React.FC<OrderProps> = ({onPress}) => {
+  const {currentTheme} = useTheme();
+
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity
+      style={[
+        styles.container,
+        {
+          backgroundColor:
+            currentTheme === 'light'
+              ? COLORS.cardColorLight
+              : COLORS.cardColorDark,
+        },
+      ]}
+      onPress={onPress}>
       <View style={styles.cardContainer}>
         <View style={styles.header}>
           <View style={styles.logoContainer}>
@@ -20,17 +34,12 @@ const OrderCard: React.FC<OrderProps> = ({onPress}) => {
           </View>
 
           <View style={styles.infoContainer}>
-            <Text style={styles.title}>Pizzaria Salty Point</Text>
-            <Text style={styles.subtitle}>Em analise</Text>
+            <MyText style={styles.title}>Pizzaria Salty Point</MyText>
+            <MyText style={styles.subtitle}>Em analise</MyText>
           </View>
 
           <View style={{alignItems: 'center', justifyContent: 'center'}}>
-            <CustomIcon
-              size={25}
-              name="chevron-right"
-              pack="Feather"
-              color="#000000"
-            />
+            <CustomIcon size={25} name="chevron-right" pack="Feather" />
           </View>
         </View>
 
@@ -85,12 +94,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: COLORS.primaryBlackHex,
   },
   subtitle: {
     fontSize: 14,
     fontWeight: '400',
-    color: COLORS.primaryBlackHex,
   },
   itemsContainer: {
     width: '95%',

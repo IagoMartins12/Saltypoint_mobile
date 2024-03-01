@@ -17,6 +17,8 @@ import {
   RegulamentTextsRules,
 } from './data';
 import ContactModal from '../Modals/ContactModal';
+import MyText from '../Text';
+import useTheme from '../../hooks/useTheme';
 
 const FidelityAccordeonSection = ({
   showAllContent,
@@ -107,23 +109,33 @@ const FidelityAccordeonSection = ({
     };
   });
 
+  const {currentTheme} = useTheme();
+
   return (
     <View
       style={{
-        backgroundColor: COLORS.primaryWhiteHex,
         paddingHorizontal: 20,
         paddingBottom: 20,
+        backgroundColor:
+          currentTheme === 'light'
+            ? COLORS.cardColorLight
+            : COLORS.cardColorDark,
       }}>
       <View>
         {showAllContent ? (
-          <Text style={styles.accordeonBoxTittle}>Mais informações</Text>
+          <MyText style={styles.accordeonBoxTittle}>Mais informações</MyText>
         ) : null}
         <Pressable onPress={toggleFrequentDoubts} style={styles.accordeonBox}>
-          <Text style={styles.accordeonTitle}>Dúvidas frequentes</Text>
+          <MyText style={styles.accordeonTitle}>Dúvidas frequentes</MyText>
           <CustomIcon
             name={frequentDoubtsOpen ? 'chevron-down' : 'chevron-right'}
             size={20}
             pack="Feather"
+            color={
+              currentTheme === 'light'
+                ? COLORS.iconColorLight
+                : COLORS.iconColorDark
+            }
           />
         </Pressable>
         <Animated.View
@@ -143,11 +155,16 @@ const FidelityAccordeonSection = ({
             <Pressable
               onPress={toggleRegulamentOpen}
               style={styles.accordeonBox}>
-              <Text style={styles.accordeonTitle}>Regulamento</Text>
+              <MyText style={styles.accordeonTitle}>Regulamento</MyText>
               <CustomIcon
                 name={regulamentOpen ? 'chevron-down' : 'chevron-right'}
                 size={20}
                 pack="Feather"
+                color={
+                  currentTheme === 'light'
+                    ? COLORS.iconColorLight
+                    : COLORS.iconColorDark
+                }
               />
             </Pressable>
             <Animated.View
@@ -161,31 +178,28 @@ const FidelityAccordeonSection = ({
                 animatedRegulamentStyles,
               ]}>
               <View style={{gap: 15}}>
-                <Text
+                <MyText
                   style={{
                     fontSize: FONTSIZE.size_16,
-                    color: COLORS.primaryBlackHex,
                     fontWeight: 'bold',
                   }}>
                   1. Elegibilidade
-                </Text>
+                </MyText>
                 <View style={{gap: 10}}>
                   {RegulamentTexts.map((i, key) => (
                     <ListInfo text={i.text} key={key} />
                   ))}
-                  {/* <View style={styles.hrStyle} /> */}
                 </View>
               </View>
 
               <View style={{gap: 15}}>
-                <Text
+                <MyText
                   style={{
                     fontSize: FONTSIZE.size_16,
-                    color: COLORS.primaryBlackHex,
                     fontWeight: 'bold',
                   }}>
                   2. Regras e premiação
-                </Text>
+                </MyText>
                 <View style={{gap: 10}}>
                   {RegulamentTextsRules.map((i, key) => (
                     <ListInfo text={i.text} key={key} />
@@ -194,14 +208,13 @@ const FidelityAccordeonSection = ({
               </View>
 
               <View style={{gap: 15}}>
-                <Text
+                <MyText
                   style={{
                     fontSize: FONTSIZE.size_16,
-                    color: COLORS.primaryBlackHex,
                     fontWeight: 'bold',
                   }}>
                   3. Resgate de prêmios
-                </Text>
+                </MyText>
                 <View style={{gap: 10}}>
                   {RegulamentTextsRewards.map((i, key) => (
                     <ListInfo text={i.text} key={key} />
@@ -213,14 +226,13 @@ const FidelityAccordeonSection = ({
           </View>
 
           <View>
-            <Text style={styles.accordeonBoxTittle}>
+            <MyText style={styles.accordeonBoxTittle}>
               Ainda precisa de ajuda?
-            </Text>
-            <Text
+            </MyText>
+            <MyText
               style={{
                 fontSize: FONTSIZE.size_16,
                 fontWeight: '500',
-                color: COLORS.primaryBlackHex,
                 textDecorationLine: 'underline',
               }}
               onPress={() => {
@@ -228,7 +240,7 @@ const FidelityAccordeonSection = ({
                 setModalOpen(true);
               }}>
               Entre em contato com a gente!
-            </Text>
+            </MyText>
           </View>
         </>
       ) : null}
@@ -258,7 +270,6 @@ const styles = StyleSheet.create({
   accordeonTitle: {
     fontSize: FONTSIZE.size_18,
     fontWeight: 'bold',
-    color: COLORS.primaryBlackHex,
   },
   hrStyle: {
     borderBottomColor: 'black',

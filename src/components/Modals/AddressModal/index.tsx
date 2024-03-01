@@ -20,8 +20,10 @@ import {ModalProps} from '../ForgetPasswordModal';
 import MyText from '../../Text';
 import useKeyboardOpen from '../../../hooks/useKeyboardOpen';
 import EmptyAnimation from '../../Lottie/EmptyAnimation';
-import {userOptions} from '../../CartScreen/AddressStep';
 import AddressCardSelected from '../../AddressCardSelected';
+import {userOptions} from '../../../screens/CartSceens/ResumeScreen';
+import useTheme from '../../../hooks/useTheme';
+import {COLORS} from '../../../theme/theme';
 
 interface AddressModalProps extends ModalProps {
   addAddress: () => void;
@@ -60,6 +62,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
       height: modalHeight.value,
     };
   });
+  const {currentTheme} = useTheme();
 
   const handleOverlayPress = (e: GestureResponderEvent) => {
     hideModal();
@@ -72,7 +75,17 @@ const AddressModal: React.FC<AddressModalProps> = ({
     <View style={styles.centeredView}>
       <Modal animationType="none" transparent={true} visible={modalOpen}>
         <View style={styles.overlay}>
-          <Animated.View style={[styles.modalContainer, animatedStyle]}>
+          <Animated.View
+            style={[
+              styles.modalContainer,
+              animatedStyle,
+              {
+                backgroundColor:
+                  currentTheme === 'light'
+                    ? COLORS.backgroundColorLight
+                    : COLORS.backgroundColorDark,
+              },
+            ]}>
             <View style={{width: '100%'}}>
               <Pressable
                 style={{
@@ -81,12 +94,25 @@ const AddressModal: React.FC<AddressModalProps> = ({
                   position: 'relative',
                 }}>
                 <TouchableOpacity
-                  style={styles.iconStyle}
+                  style={[
+                    styles.iconStyle,
+                    {
+                      backgroundColor:
+                        currentTheme === 'light'
+                          ? COLORS.iconBgLight
+                          : COLORS.iconBgDark,
+                    },
+                  ]}
                   onPress={handleOverlayPress}>
                   <CustomIcon
                     name="arrow-down"
                     size={20}
                     pack="SimpleLineIcons"
+                    color={
+                      currentTheme === 'light'
+                        ? COLORS.iconColorLight
+                        : COLORS.iconColorDark
+                    }
                   />
                 </TouchableOpacity>
               </Pressable>

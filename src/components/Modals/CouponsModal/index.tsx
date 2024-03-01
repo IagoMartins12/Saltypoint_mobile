@@ -26,6 +26,7 @@ import useGlobalStore from '../../../hooks/store/useGlobalStore';
 import RewardCard from '../../RewardCard';
 import RewardCardHorizontal from '../../RewardCardHorizontal';
 import OptionsTittle from '../../OptionsTittle';
+import useTheme from '../../../hooks/useTheme';
 
 const CouponsModal: React.FC<ModalProps> = ({
   modalOpen,
@@ -77,12 +78,22 @@ const CouponsModal: React.FC<ModalProps> = ({
   ];
 
   const {reward} = useGlobalStore();
-
+  const {currentTheme} = useTheme();
   return (
     <View style={styles.centeredView}>
       <Modal animationType="none" transparent={true} visible={modalOpen}>
         <View style={styles.overlay}>
-          <Animated.View style={[styles.modalContainer, animatedStyle]}>
+          <Animated.View
+            style={[
+              styles.modalContainer,
+              animatedStyle,
+              {
+                backgroundColor:
+                  currentTheme === 'light'
+                    ? COLORS.backgroundColorLight
+                    : COLORS.backgroundColorDark,
+              },
+            ]}>
             <View style={{width: '100%'}}>
               <Pressable
                 style={{
@@ -91,12 +102,25 @@ const CouponsModal: React.FC<ModalProps> = ({
                   position: 'relative',
                 }}>
                 <TouchableOpacity
-                  style={styles.iconStyle}
+                  style={[
+                    styles.iconStyle,
+                    {
+                      backgroundColor:
+                        currentTheme === 'light'
+                          ? COLORS.iconBgLight
+                          : COLORS.iconBgDark,
+                    },
+                  ]}
                   onPress={handleOverlayPress}>
                   <CustomIcon
                     name="arrow-down"
                     size={20}
                     pack="SimpleLineIcons"
+                    color={
+                      currentTheme === 'light'
+                        ? COLORS.iconColorLight
+                        : COLORS.iconColorDark
+                    }
                   />
                 </TouchableOpacity>
               </Pressable>
@@ -112,13 +136,34 @@ const CouponsModal: React.FC<ModalProps> = ({
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <TextInput
                       placeholder="Código de cupom"
-                      style={styles.inputStyle}
+                      style={[
+                        styles.inputStyle,
+                        {
+                          color:
+                            currentTheme === 'dark'
+                              ? COLORS.textColorDark
+                              : COLORS.textColorLight,
+                          borderColor:
+                            currentTheme === 'dark'
+                              ? COLORS.borderColorDark
+                              : COLORS.borderColorLight,
+                        },
+                      ]}
                       value={searchText}
                       onChangeText={ev => setSearchText(ev)}
+                      placeholderTextColor={
+                        currentTheme === 'dark'
+                          ? COLORS.textColorDark
+                          : COLORS.textColorLight
+                      }
                     />
                     <MyText
                       style={{
-                        color: searchText ? COLORS.secondaryRed : '#000000',
+                        color: searchText
+                          ? COLORS.secondaryRed
+                          : currentTheme === 'light'
+                          ? COLORS.textColorLight
+                          : COLORS.textColorDark,
                       }}>
                       Adicionar
                     </MyText>
@@ -138,13 +183,34 @@ const CouponsModal: React.FC<ModalProps> = ({
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <TextInput
                       placeholder="Procurar recompensa"
-                      style={styles.inputStyle}
+                      style={[
+                        styles.inputStyle,
+                        {
+                          color:
+                            currentTheme === 'dark'
+                              ? COLORS.textColorDark
+                              : COLORS.textColorLight,
+                          borderColor:
+                            currentTheme === 'dark'
+                              ? COLORS.borderColorDark
+                              : COLORS.borderColorLight,
+                        },
+                      ]}
                       value={searchText}
                       onChangeText={ev => setSearchText(ev)}
+                      placeholderTextColor={
+                        currentTheme === 'dark'
+                          ? COLORS.textColorDark
+                          : COLORS.textColorLight
+                      }
                     />
                     <MyText
                       style={{
-                        color: searchText ? COLORS.secondaryRed : '#000000',
+                        color: searchText
+                          ? COLORS.secondaryRed
+                          : currentTheme === 'light'
+                          ? COLORS.textColorLight
+                          : COLORS.textColorDark,
                       }}>
                       Adicionar
                     </MyText>

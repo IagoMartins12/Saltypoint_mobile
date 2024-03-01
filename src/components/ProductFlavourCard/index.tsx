@@ -9,6 +9,7 @@ import MyText from '../Text';
 import CustomIcon from '../CustomIcon';
 import {Product} from '../../types/ModelsType';
 import {COLORS} from '../../theme/theme';
+import useTheme from '../../hooks/useTheme';
 
 interface ProductCardProps {
   pageProduct?: Product;
@@ -25,8 +26,9 @@ const ProductFlavourCard: React.FC<ProductCardProps> = ({
   handleSecondFlavour,
   checkDiference,
 }) => {
+  const {currentTheme} = useTheme();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <View style={styles.image}>
         <ImageBackground
           source={{

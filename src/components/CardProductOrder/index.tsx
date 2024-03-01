@@ -2,9 +2,12 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {COLORS} from '../../theme/theme';
 import CustomIcon from '../CustomIcon';
+import MyText from '../Text';
+import useTheme from '../../hooks/useTheme';
 
 interface CartProductCardType {}
 const CardProductOrder: React.FC<CartProductCardType> = ({}) => {
+  const {currentTheme} = useTheme();
   //   const {products} = useGlobalStore();
 
   //   const getProductName2 = (productId: string, size: number | null) => {
@@ -27,12 +30,12 @@ const CardProductOrder: React.FC<CartProductCardType> = ({}) => {
       <View style={styles.container}>
         <View style={styles.infoContainer}>
           <View style={styles.titleContainer}>
-            <Text style={styles.titleText}>
+            <MyText style={styles.titleText}>
               2x{' '}
               {/* {getProductName2(cart_product.product_id, cart_product.size)} */}
               Pizza de mussarela
-            </Text>
-            <Text style={styles.priceText}>R$ 30,00</Text>
+            </MyText>
+            <MyText style={styles.priceText}>R$ 30,00</MyText>
           </View>
           <View style={styles.productInfoContainer}>
             {/* {cart_product.product_id_2 ? (
@@ -49,14 +52,9 @@ const CardProductOrder: React.FC<CartProductCardType> = ({}) => {
           ) : ( */}
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View>
-                <CustomIcon
-                  pack="Entypo"
-                  name="dot-single"
-                  size={25}
-                  color={COLORS.primaryBlackHex}
-                />
+                <CustomIcon pack="Entypo" name="dot-single" size={25} />
               </View>
-              <Text style={styles.productText}>2x Pizza de mussarela</Text>
+              <MyText style={styles.productText}>2x Pizza de mussarela</MyText>
             </View>
 
             {/* )} */}
@@ -70,14 +68,9 @@ const CardProductOrder: React.FC<CartProductCardType> = ({}) => {
 
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <View>
-                <CustomIcon
-                  pack="Entypo"
-                  name="dot-single"
-                  size={25}
-                  color={COLORS.primaryBlackHex}
-                />
+                <CustomIcon pack="Entypo" name="dot-single" size={25} />
               </View>
-              <Text style={styles.productText}>2x Borda de catupiry</Text>
+              <MyText style={styles.productText}>2x Borda de catupiry</MyText>
             </View>
 
             {/* {cart_product.observation ? ( */}
@@ -88,13 +81,23 @@ const CardProductOrder: React.FC<CartProductCardType> = ({}) => {
                 alignItems: 'center',
                 paddingLeft: 22,
               }}>
-              <Text style={styles.observationText}> Bem passada</Text>
+              <MyText style={styles.observationText}> Bem passada</MyText>
             </View>
             {/* ) : null} */}
           </View>
         </View>
       </View>
-      <View style={styles.hrStyle} />
+      <View
+        style={[
+          styles.hrStyle,
+          {
+            borderBottomColor:
+              currentTheme === 'dark'
+                ? COLORS.borderColorDark
+                : COLORS.borderColorLight,
+          },
+        ]}
+      />
     </View>
   );
 };
@@ -111,8 +114,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   hrStyle: {
-    borderBottomColor: 'black',
-    borderBottomWidth: StyleSheet.hairlineWidth * 0.5,
+    borderBottomWidth: 1,
     marginHorizontal: 10,
   },
   titleContainer: {
@@ -123,13 +125,11 @@ const styles = StyleSheet.create({
   titleText: {
     fontWeight: '600',
     fontSize: 20,
-    color: COLORS.primaryBlackHex,
   },
   priceText: {
     fontWeight: '400',
     fontSize: 18,
     alignSelf: 'center',
-    color: COLORS.primaryBlackHex,
   },
   productInfoContainer: {
     flexDirection: 'column',
@@ -139,13 +139,11 @@ const styles = StyleSheet.create({
     fontFamily: 'light',
     fontSize: 16,
     paddingHorizontal: 2,
-    color: COLORS.primaryBlackHex,
   },
   observationText: {
     fontFamily: 'light',
     fontSize: 16,
     paddingHorizontal: 2,
-    color: COLORS.primaryBlackHex,
   },
 });
 

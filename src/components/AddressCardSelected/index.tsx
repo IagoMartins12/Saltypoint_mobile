@@ -26,14 +26,9 @@ const AddressCardSelected: React.FC<AddressProps> = ({
       ]}>
       <View style={styles.iconContainer}>
         {address.type_adress === 0 ? (
-          <CustomIcon name="home" size={30} color="#000000" pack="Feather" />
+          <CustomIcon name="home" size={30} pack="Feather" />
         ) : (
-          <CustomIcon
-            name="briefcase"
-            size={30}
-            color="#000000"
-            pack="Feather"
-          />
+          <CustomIcon name="briefcase" size={30} pack="Feather" />
         )}
       </View>
 
@@ -83,11 +78,9 @@ const styles = StyleSheet.create({
   addressType: {
     fontWeight: 'bold',
     fontSize: 18,
-    color: COLORS.primaryBlackHex,
   },
   addressText: {
     fontSize: 14,
-    color: COLORS.primaryBlackHex,
     fontWeight: '400',
   },
   deleteIconContainer: {
