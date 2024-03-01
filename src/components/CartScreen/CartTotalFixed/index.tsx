@@ -49,7 +49,11 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
         },
       ]}>
       {lastStep ? (
-        <TouchableOpacity style={[styles.lastButton]} onPress={onPress}>
+        <TouchableOpacity
+          style={[styles.lastButton]}
+          onPress={() => {
+            onPress();
+          }}>
           <MyText style={styles.buttonText}>
             Finalizar pedido • R$ {value.toFixed(2)}
           </MyText>

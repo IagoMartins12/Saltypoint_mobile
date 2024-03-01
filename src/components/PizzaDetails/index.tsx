@@ -1,26 +1,22 @@
-import {
-  Dimensions,
-  Image,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import CustomIcon from '../CustomIcon';
-import MyText from '../Text';
-import {BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE} from '../../theme/theme';
+import {StyleSheet, View} from 'react-native';
+
 import {Category, Product} from '../../types/ModelsType';
 import useGlobalStore from '../../hooks/store/useGlobalStore';
-import ProductFlavourCard from '../ProductFlavourCard';
 import {useEffect, useState} from 'react';
-import {ScrollView, TextInput} from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import TextAreaComponent from '../TextArea';
-import Animated, {
+import {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import useTheme from '../../hooks/useTheme';
+import Cornicione from './Cornicione';
+import SecondFlavour from './SecondFlavour';
+import SelectFlavour from './SelectFlavour';
+import PizzaSize from './PizzaSize';
+import PizzaContainer from './PizzaContainer';
+import PizzaImage from './PizzaImage';
+import ProductFlavourCard from '../ProductFlavourCard';
 interface PizzaProps {
   currentProduct: Product;
   comeBack: () => void;
@@ -30,30 +26,6 @@ interface PizzaProps {
   scrollToSection: (options: 'Size' | 'Flavour') => void;
   scrollToCornicione: () => void;
 }
-
-const pizzaSize = [
-  {
-    name: 'Pizza',
-    icon: <CustomIcon name="pizza" size={25} pack="Ionicons" color="#000000" />,
-    id: '0',
-  },
-  {
-    name: 'Brotinho',
-    icon: <CustomIcon name="pizza" size={25} pack="Ionicons" color="#000000" />,
-    id: '1',
-  },
-];
-
-const pizzaFlavour = [
-  {
-    name: '1 Sabor',
-    id: '0',
-  },
-  {
-    name: '2 Sabores',
-    id: '1',
-  },
-];
 
 const PizzaDetails: React.FC<PizzaProps> = ({
   currentProduct,
@@ -77,64 +49,35 @@ const PizzaDetails: React.FC<PizzaProps> = ({
 
   const {products, categorys} = useGlobalStore();
   const fadeInOpacity = useSharedValue(0);
-  const {currentTheme} = useTheme();
   const brotinhoPrice = 10 * quantity;
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       opacity: fadeInOpacity.value,
     };
   });
 
-  const filteredProducts = products
-    .filter(
-      (p: Product) =>
-        p.id !== currentProduct.id &&
-        p.category_id === currentProduct.category_id,
-    )
-    .filter(
-      p =>
-        p.name.toUpperCase().includes(searchText.toUpperCase()) ||
-        p.description.toUpperCase().includes(searchText.toUpperCase()),
-    );
-
-  const brotinhoList = products
-    .filter(
-      (p: Product) =>
-        p.id !== currentProduct.id &&
-        p.category_id === currentProduct.category_id,
-    )
-    .filter(
-      p =>
-        p.name.toUpperCase().includes(searchText.toUpperCase()) ||
-        p.description.toUpperCase().includes(searchText.toUpperCase()),
-    )
-    .map(p => ({
-      ...p,
-      name: p.name.replace('Pizza', 'Brotinho'),
-    }));
+  const filteredProducts = products.filter(
+    (p: Product) =>
+      p.id !== currentProduct.id &&
+      p.category_id === currentProduct.category_id &&
+      (p.name.toUpperCase().includes(searchText.toUpperCase()) ||
+        p.description.toUpperCase().includes(searchText.toUpperCase())),
+  );
+  const brotinhoList = filteredProducts.map(p => ({
+    ...p,
+    name: p.name.replace('Pizza', 'Brotinho'),
+  }));
 
   const getCategory = categorys.find(
     (c: Category) => c.id === currentProduct.category_id,
   )?.category_name;
 
-  const getName = (flavour2?: string) => {
-    const name =
-      currentProduct.name.toUpperCase().includes('PIZZA') &&
-      selectedOptions.size === '1'
-        ? currentProduct.name.replace('Pizza', 'Brotinho')
-        : currentProduct.name;
-
-    // if (!flavour2) return name;
-
-    // const getFlavourName = products.find((p: Product) => p.id === flavour2);
-    // const spliFlavourName = getFlavourName.name
-    //   .replace('Pizza', '')
-    //   .replace('de', '')
-    //   .replace(' ', '');
-    // const splitName = name.replace('de', 'meia').concat(` /${spliFlavourName}`);
-
-    return name;
-  };
+  const getName = () =>
+    currentProduct.name.toUpperCase().includes('PIZZA') &&
+    selectedOptions.size === '1'
+      ? currentProduct.name.replace('Pizza', 'Brotinho')
+      : currentProduct.name;
 
   const handleSizeSelect = (sizeId: string) => {
     setSelectedOptions({...selectedOptions, size: sizeId});
@@ -158,6 +101,18 @@ const PizzaDetails: React.FC<PizzaProps> = ({
     if (flavourId) scrollToCornicione();
   };
 
+  const returnCard = (product: Product) => {
+    return (
+      <ProductFlavourCard
+        pageProduct={currentProduct}
+        checkDiference={checkDiference}
+        product={product}
+        selectedFlavour2={selectedOptions.flavour2}
+        handleSecondFlavour={handleSecondFlavour}
+      />
+    );
+  };
+
   const handleCornicioneSelect = (cornicioneId: string) => {
     setSelectedOptions({...selectedOptions, flavour3: cornicioneId});
   };
@@ -171,6 +126,11 @@ const PizzaDetails: React.FC<PizzaProps> = ({
   const checkValue = () => {
     let newValue = currentProduct.value * quantity;
 
+    const otherProductsCheck =
+      otherProductsValue !== 0 && +otherProductsValue > currentProduct.value;
+
+    const isBrotinho = selectedOptions.size === '1';
+
     //Se uma borda for selecionado
     if (selectedOptions.flavour3 && currentProduct) {
       const product = products.find(
@@ -180,12 +140,8 @@ const PizzaDetails: React.FC<PizzaProps> = ({
       if (!product) return;
 
       //Se um segundo sabor for selecionado
-      if (
-        selectedOptions.flavour2 &&
-        otherProductsValue !== 0 &&
-        +otherProductsValue > +currentProduct.value
-      ) {
-        if (selectedOptions.size === '1') {
+      if (selectedOptions.flavour2 && otherProductsCheck) {
+        if (isBrotinho) {
           const newValue =
             +otherProductsValue * quantity + product.value * quantity;
           return setValue((newValue - brotinhoPrice).toFixed(2));
@@ -196,7 +152,7 @@ const PizzaDetails: React.FC<PizzaProps> = ({
           ),
         );
       } else {
-        if (selectedOptions.size === '1') {
+        if (isBrotinho) {
           return setValue(
             (
               currentProduct.value * quantity +
@@ -215,12 +171,8 @@ const PizzaDetails: React.FC<PizzaProps> = ({
     }
 
     //Se um segundo sabor for selecionado
-    if (
-      selectedOptions.flavour2 &&
-      otherProductsValue !== 0 &&
-      +otherProductsValue > currentProduct.value
-    ) {
-      if (selectedOptions.size === '1') {
+    if (selectedOptions.flavour2 && otherProductsCheck) {
+      if (isBrotinho) {
         return setValue(
           (+otherProductsValue * quantity - brotinhoPrice).toFixed(2),
         );
@@ -231,7 +183,7 @@ const PizzaDetails: React.FC<PizzaProps> = ({
 
     //Se nenhum outro produto foi selecionado
     if (!selectedOptions.flavour3 && !selectedOptions.flavour2) {
-      if (selectedOptions.size === '1') {
+      if (isBrotinho) {
         const newValue = currentProduct.value * quantity - brotinhoPrice;
         return setValue(newValue.toFixed(2));
       }
@@ -243,20 +195,17 @@ const PizzaDetails: React.FC<PizzaProps> = ({
     return setValue(newValue.toFixed(2));
   };
 
-  // Atualizar o valor compartilhado quando a segunda opção de sabor for selecionada
-  useEffect(() => {
-    if (selectedOptions.flavour === '1') {
-      fadeInOpacity.value = withTiming(1, {duration: 800});
-    } else {
-      fadeInOpacity.value = withTiming(0, {duration: 500});
-    }
-  }, [selectedOptions.flavour]);
-
   useEffect(() => {
     checkValue();
   }, [value, quantity, selectedOptions, otherProductsValue]);
 
   useEffect(() => {
+    if (selectedOptions.flavour === '1') {
+      fadeInOpacity.value = withTiming(1, {duration: 500});
+    } else {
+      fadeInOpacity.value = withTiming(0, {duration: 500});
+    }
+
     if (selectedOptions.flavour2) {
       const product = products.find(
         (p: Product) => p.id === selectedOptions.flavour2,
@@ -268,279 +217,51 @@ const PizzaDetails: React.FC<PizzaProps> = ({
         setOtherProductsValue(maxValue);
       }
     }
-  }, [selectedOptions.flavour2]);
+  }, [selectedOptions.flavour2, selectedOptions.flavour]);
 
   return (
     <ScrollView contentContainerStyle={styles.contentContainer}>
-      <View style={[styles.productImage]}>
-        <Image
-          resizeMode={'contain'}
-          source={{
-            uri: currentProduct?.product_image ?? '',
-          }}
-          style={styles.CartItemImage}
-        />
-
-        <Pressable style={styles.CardArrow} onPress={comeBack}>
-          <CustomIcon name={'arrow-left'} size={30} pack="Feather" />
-        </Pressable>
-        <Pressable style={styles.CardHeart}>
-          <CustomIcon name={'heart'} size={30} pack="Feather" />
-        </Pressable>
-      </View>
-
+      <PizzaImage comeBack={comeBack} currentProduct={currentProduct} />
       <View style={styles.containerBox}>
-        <View
-          style={{
-            gap: 15,
-          }}>
-          <View style={styles.titleView}>
-            <MyText style={styles.tittle}>
-              {getName(selectedOptions.flavour2)}
-            </MyText>
-
-            <MyText style={styles.price}>
-              R${' '}
-              {selectedOptions.size === '1'
-                ? (currentProduct.value - 10).toFixed(2)
-                : currentProduct.value.toFixed(2)}
-            </MyText>
-          </View>
-
-          <MyText style={styles.description}>
-            {currentProduct.description}
-          </MyText>
-        </View>
+        {/* Pizza Details  */}
+        <PizzaContainer
+          currentProduct={currentProduct}
+          getName={getName}
+          size={selectedOptions.size}
+        />
 
         <View style={styles.contentBox}>
           {/* Pizza size */}
-          <View style={styles.iconContainer}>
-            {pizzaSize.map((op, i) => (
-              <Pressable
-                style={[
-                  styles.iconBox,
-                  {
-                    backgroundColor:
-                      op.id === selectedOptions.size
-                        ? COLORS.secondaryRed
-                        : COLORS.primaryGray,
-
-                    borderWidth: op.id === selectedOptions.size ? 1 : 0.5,
-                    borderColor: '#000000',
-                  },
-                ]}
-                key={i}
-                onPress={() => handleSizeSelect(op.id)}>
-                {op.icon}
-
-                <MyText style={styles.iconText}>{op.name}</MyText>
-              </Pressable>
-            ))}
-          </View>
+          <PizzaSize
+            handleSizeSelect={handleSizeSelect}
+            size={selectedOptions.size}
+          />
 
           {/* Pizza flavour select  */}
-          <View>
-            <View
-              style={[
-                styles.hrStyle,
-                {
-                  borderColor:
-                    currentTheme === 'dark'
-                      ? COLORS.borderColorDark
-                      : COLORS.borderColorLight,
-                },
-              ]}>
-              <MyText>Quantos sabores? </MyText>
-            </View>
-
-            {pizzaFlavour.map((p, i) => (
-              <View
-                style={[
-                  styles.hrStyle,
-                  styles.flavourBox,
-                  {
-                    borderColor:
-                      currentTheme === 'dark'
-                        ? COLORS.borderColorDark
-                        : COLORS.borderColorLight,
-                  },
-                ]}
-                key={i}>
-                <MyText>{p.name}</MyText>
-                <TouchableOpacity
-                  style={[
-                    styles.roundedButton,
-                    {
-                      backgroundColor:
-                        selectedOptions.flavour === p.id
-                          ? COLORS.secondaryRed
-                          : COLORS.primaryGray,
-                    },
-                  ]}
-                  onPress={() => handleFlavourSelect(p.id)}>
-                  <View
-                    style={[
-                      styles.insideRoundedButton,
-                      {
-                        backgroundColor:
-                          selectedOptions.flavour === p.id
-                            ? '#ffffff'
-                            : COLORS.primaryGray,
-                      },
-                    ]}
-                  />
-                </TouchableOpacity>
-              </View>
-            ))}
-          </View>
+          <SelectFlavour
+            flavour={selectedOptions.flavour}
+            handleFlavourSelect={handleFlavourSelect}
+          />
 
           {/* Pizza second flavour */}
           {selectedOptions.flavour === '1' ? (
-            <Animated.View style={[styles.fadeInView, animatedStyle]}>
-              <View
-                style={[
-                  styles.hrStyle,
-                  {
-                    borderColor:
-                      currentTheme === 'dark'
-                        ? COLORS.borderColorDark
-                        : COLORS.borderColorLight,
-                  },
-                ]}>
-                <MyText>Selecione o sabor? </MyText>
-              </View>
-              <View
-                style={[
-                  styles.InputContainerComponent,
-                  {
-                    borderColor:
-                      currentTheme === 'dark'
-                        ? COLORS.borderColorDark
-                        : COLORS.borderColorLight,
-                  },
-                ]}>
-                <TextInput
-                  placeholder="Calabresa / Mussarela"
-                  value={searchText}
-                  onChangeText={text => setSearchText(text)}
-                  placeholderTextColor={
-                    currentTheme === 'dark'
-                      ? COLORS.textColorDark
-                      : COLORS.textColorLight
-                  }
-                  style={[
-                    styles.TextInputContainer,
-                    {
-                      color:
-                        currentTheme === 'dark'
-                          ? COLORS.textColorDark
-                          : COLORS.textColorLight,
-                    },
-                  ]}
-                />
-                <TouchableOpacity>
-                  <CustomIcon name="search" size={18} />
-                </TouchableOpacity>
-              </View>
-              {selectedOptions.size === '0'
-                ? filteredProducts.map((p, i) => (
-                    <View
-                      style={[
-                        i !== filteredProducts.length - 1
-                          ? [
-                              styles.hrStyle,
-                              {
-                                borderColor:
-                                  currentTheme === 'dark'
-                                    ? COLORS.borderColorDark
-                                    : COLORS.borderColorLight,
-                              },
-                            ]
-                          : null,
-                        styles.flavourBox,
-                      ]}
-                      key={i}>
-                      <ProductFlavourCard
-                        pageProduct={currentProduct}
-                        checkDiference={checkDiference}
-                        product={p}
-                        key={i}
-                        selectedFlavour2={selectedOptions.flavour2}
-                        handleSecondFlavour={handleSecondFlavour}
-                      />
-                    </View>
-                  ))
-                : brotinhoList.map((p, i) => (
-                    <View
-                      style={[
-                        i !== filteredProducts.length - 1
-                          ? styles.hrStyle
-                          : null,
-                        styles.flavourBox,
-                      ]}
-                      key={i}>
-                      <ProductFlavourCard
-                        pageProduct={currentProduct}
-                        checkDiference={checkDiference}
-                        product={p}
-                        key={i}
-                        selectedFlavour2={selectedOptions.flavour2}
-                        handleSecondFlavour={handleSecondFlavour}
-                      />
-                    </View>
-                  ))}
-            </Animated.View>
+            <SecondFlavour
+              animatedStyle={animatedStyle}
+              filteredProducts={filteredProducts}
+              searchText={searchText}
+              setSearchText={setSearchText}
+              size={selectedOptions.size}
+              returnCard={returnCard}
+            />
           ) : null}
 
           {/* Cornicione  */}
-
           {getCategory && !getCategory.includes('Doces') && (
-            <View>
-              <View
-                style={[
-                  styles.hrStyle,
-                  {
-                    borderColor:
-                      currentTheme === 'dark'
-                        ? COLORS.borderColorDark
-                        : COLORS.borderColorLight,
-                  },
-                ]}>
-                <MyText>Bordas? </MyText>
-              </View>
-
-              {categorys
-                .filter((c: Category) => c.category_name === 'Bordas')
-                .map(category =>
-                  products
-                    .filter((p: Product) => p.category_id === category.id)
-                    .map((product, i) => (
-                      <View
-                        style={[
-                          i !== filteredProducts.length - 1
-                            ? [
-                                styles.hrStyle,
-                                {
-                                  borderColor:
-                                    currentTheme === 'dark'
-                                      ? COLORS.borderColorDark
-                                      : COLORS.borderColorLight,
-                                },
-                              ]
-                            : null,
-                          ,
-                          styles.flavourBox,
-                        ]}
-                        key={i}>
-                        <ProductFlavourCard
-                          product={product}
-                          selectedFlavour2={selectedOptions.flavour3}
-                          handleSecondFlavour={handleCornicioneSelect}
-                        />
-                      </View>
-                    )),
-                )}
-            </View>
+            <Cornicione
+              filteredProducts={filteredProducts}
+              flavour3={selectedOptions.flavour3}
+              handleCornicioneSelect={handleCornicioneSelect}
+            />
           )}
         </View>
 
@@ -560,124 +281,12 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
 
-  productImage: {
-    height: Dimensions.get('screen').height / 2,
-    justifyContent: 'flex-end',
-    paddingVertical: 50,
-  },
-  CartItemImage: {
-    width: '100%',
-    height: '100%',
-    alignSelf: 'center',
-  },
-  CardArrow: {
-    position: 'absolute',
-    top: 25,
-    left: 20,
-  },
-  CardHeart: {
-    position: 'absolute',
-    top: 25,
-    right: 20,
-  },
-
   containerBox: {
     width: '90%',
     alignSelf: 'center',
     gap: 20,
     flex: 1,
   },
-
-  titleView: {
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-  },
-
-  tittle: {
-    fontSize: 20,
-    fontWeight: '700',
-    width: '60%',
-  },
-
-  price: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: COLORS.secondaryRed,
-  },
-
-  description: {
-    fontSize: 16,
-    fontWeight: '300',
-  },
-
-  iconContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 15,
-  },
-  iconBox: {
-    width: '48%',
-    flexDirection: 'row',
-    gap: 10,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  iconText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#000000',
-  },
-
-  hrStyle: {
-    borderBottomWidth: 1,
-    paddingVertical: 10,
-  },
-
-  flavourBox: {
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-  },
-
-  roundedButton: {
-    width: 25,
-    height: 25,
-    borderRadius: 1000,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: COLORS.secondaryRed,
-  },
-
-  insideRoundedButton: {
-    width: 10,
-    height: 10,
-    borderRadius: 1000,
-  },
-  InputContainerComponent: {
-    flexDirection: 'row',
-    borderRadius: BORDERRADIUS.radius_10,
-    backgroundColor: 'transparent',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    borderWidth: 1,
-    alignSelf: 'flex-end',
-    marginTop: 15,
-  },
-
-  TextInputContainer: {
-    flex: 1,
-    fontFamily: FONTFAMILY.poppins_medium,
-    fontSize: FONTSIZE.size_14,
-  },
-
-  fadeInView: {},
 
   contentBox: {
     gap: 15,

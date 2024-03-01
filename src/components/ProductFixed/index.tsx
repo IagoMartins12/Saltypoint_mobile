@@ -52,7 +52,15 @@ const ProductFixed: React.FC<CartTotalProps> = ({
       ]}>
       {renderContinueButton()}
       <View style={styles.quantityView}>
-        <Pressable style={styles.quantityBox} onPress={decreaseQuantity}>
+        <Pressable
+          style={[
+            styles.quantityBox,
+            {
+              borderTopLeftRadius: 10,
+              borderBottomLeftRadius: 10,
+            },
+          ]}
+          onPress={decreaseQuantity}>
           <CustomIcon name="minus" size={17} color="#000" pack="Feather" />
         </Pressable>
 
@@ -65,7 +73,15 @@ const ProductFixed: React.FC<CartTotalProps> = ({
           </MyText>
         </View>
 
-        <Pressable style={[styles.quantityBox]} onPress={increaseQuantity}>
+        <Pressable
+          style={[
+            styles.quantityBox,
+            {
+              borderTopRightRadius: 10,
+              borderBottomRightRadius: 10,
+            },
+          ]}
+          onPress={increaseQuantity}>
           <CustomIcon name="plus" size={17} color="#000" pack="Feather" />
         </Pressable>
       </View>
@@ -85,7 +101,7 @@ const styles = StyleSheet.create({
   buttonView: {
     paddingHorizontal: 20,
     paddingVertical: 12,
-    borderRadius: BORDERRADIUS.radius_10,
+    borderRadius: 10,
     backgroundColor: COLORS.secondaryRed,
     flexDirection: 'row',
     alignItems: 'center',
@@ -109,8 +125,6 @@ const styles = StyleSheet.create({
 
   quantityView: {
     flexDirection: 'row',
-    color: COLORS.primaryGreyHex,
-    borderRadius: 15,
   },
 
   quantityBox: {

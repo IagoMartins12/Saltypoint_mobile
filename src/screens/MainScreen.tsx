@@ -59,7 +59,8 @@ const MainScreen = ({navigation}: any) => {
         <View style={[styles.loginMainView]}>
           <ImageBackground
             style={styles.bgStyle}
-            source={require('../assets/pizzaWallpapper.jpg')}></ImageBackground>
+            source={require('../assets/pizzaWallpapper.jpg')}
+          />
 
           <View
             style={[
@@ -100,12 +101,40 @@ const MainScreen = ({navigation}: any) => {
               <View>
                 <View style={styles.buttonsDiv}>
                   <TouchableOpacity
-                    style={styles.firstButton}
+                    style={[
+                      styles.firstButton,
+                      {
+                        backgroundColor:
+                          currentTheme === 'dark'
+                            ? COLORS.cardColorLight
+                            : COLORS.cardColorDark,
+                        borderColor:
+                          currentTheme === 'dark'
+                            ? COLORS.borderColorLight
+                            : COLORS.borderColorDark,
+                      },
+                    ]}
                     onPress={buttonLogin}>
-                    <Text style={{color: COLORS.themeColor}}>Login</Text>
+                    <Text
+                      style={{
+                        color:
+                          currentTheme === 'dark'
+                            ? COLORS.textColorLight
+                            : COLORS.textColorDark,
+                      }}>
+                      Login
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style={styles.secondButton}
+                    style={[
+                      styles.secondButton,
+                      {
+                        borderColor:
+                          currentTheme === 'dark'
+                            ? COLORS.borderColorDark
+                            : COLORS.borderColorLight,
+                      },
+                    ]}
                     onPress={buttonRegister}>
                     <MyText
                       style={{
@@ -141,7 +170,7 @@ const styles = StyleSheet.create({
 
   bgStyle: {
     height: Dimensions.get('window').height / 2,
-    opacity: 0.75,
+    opacity: 0.7,
   },
 
   bottomView: {
@@ -205,7 +234,7 @@ const styles = StyleSheet.create({
   noAuthText: {
     textAlign: 'center',
     textDecorationLine: 'underline',
-    fontSize: FONTSIZE.size_16,
+    fontSize: 16,
     marginVertical: 10,
   },
 });

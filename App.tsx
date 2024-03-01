@@ -23,6 +23,7 @@ import AddressCartScreen from './src/screens/CartSceens/AddressCartScreen';
 import ResumeCartScreen from './src/screens/CartSceens/ResumeScreen';
 import CatchRewardScreen from './src/screens/CatchRewardScreen';
 import ProductScreen from './src/screens/ProductScreen';
+import IntroScreen from './src/screens/Intro/IntroScreen';
 
 import FetchData from './src/components/FetchData/index';
 const Stack = createNativeStackNavigator();
@@ -32,12 +33,18 @@ const App = () => {
     <>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Main"
+          initialRouteName="Intro"
           screenOptions={{headerShown: false}}>
+          <Stack.Screen
+            name="Intro"
+            component={IntroScreen}
+            options={{animation: 'slide_from_left'}}
+          />
+
           <Stack.Screen
             name="Main"
             component={MainScreen}
-            options={{animation: 'slide_from_left'}}
+            options={{animation: 'slide_from_bottom'}}
           />
           <Stack.Screen
             name="Login"
@@ -64,7 +71,7 @@ const App = () => {
           <Stack.Screen
             name="Product"
             component={ProductScreen}
-            options={{animation: 'fade'}}
+            options={{animation: 'slide_from_right'}}
           />
 
           <Stack.Screen

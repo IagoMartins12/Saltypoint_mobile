@@ -71,15 +71,17 @@ const ResumeCartScreen = ({
 
   //@ts-ignore
   const response: responseType = route.params;
+  const {currentTheme} = useTheme();
 
   const finishOrder = () => {
     setHasPlayed(true);
+    console.log('onpress');
   };
 
   const getBack = () => {
     showToast('Pedido feito', 'success');
     navigation.navigate('Order');
-    // setHasPlayed(false);
+    setHasPlayed(false);
   };
   const {typePagament} = useGlobalStore();
 
@@ -99,13 +101,18 @@ const ResumeCartScreen = ({
 
   if (hasPlayed) {
     return (
-      <View style={{flex: 1}}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor:
+            currentTheme === 'dark'
+              ? COLORS.backgroundColorDark
+              : COLORS.backgroundColorLight,
+        }}>
         <OrderAnimation onFinished={getBack} />
       </View>
     );
   }
-
-  const {currentTheme} = useTheme();
 
   return (
     <View style={{flex: 1}}>

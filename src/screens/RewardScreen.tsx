@@ -41,8 +41,8 @@ const RewardScreen = ({
           paddingBottom: 40,
           backgroundColor:
             currentTheme === 'light'
-              ? COLORS.cardColorLight
-              : COLORS.cardColorDark,
+              ? COLORS.secondBackgroundLight
+              : COLORS.secondBackgroundDark,
         }}>
         <View
           style={[
@@ -52,8 +52,8 @@ const RewardScreen = ({
               gap: 25,
               backgroundColor:
                 currentTheme === 'light'
-                  ? COLORS.cardColorLight
-                  : COLORS.cardColorDark,
+                  ? COLORS.backgroundColorLight
+                  : COLORS.backgroundColorDark,
             },
           ]}>
           <View>
@@ -119,8 +119,8 @@ const RewardScreen = ({
             {
               backgroundColor:
                 currentTheme === 'light'
-                  ? COLORS.cardColorLight
-                  : COLORS.cardColorDark,
+                  ? COLORS.backgroundColorLight
+                  : COLORS.backgroundColorDark,
             },
           ]}>
           <FlatList
@@ -129,7 +129,11 @@ const RewardScreen = ({
             contentContainerStyle={[styles.flatListView]}
             data={reward}
             renderItem={item => (
-              <RewardCard reward={item.item} key={item.index} />
+              <RewardCard
+                reward={item.item}
+                key={item.index}
+                onClick={goToCatchReward}
+              />
             )}
           />
         </View>

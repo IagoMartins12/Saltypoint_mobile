@@ -55,6 +55,7 @@ const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
       {renderPointsText()}
       <View style={styles.cardContainer}>
         <ImageBackground
+          resizeMode={'contain'}
           source={{
             uri: product.product_image,
           }}
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
   mainDiv: {
     borderBottomEndRadius: 25,
     borderBottomLeftRadius: 26,
-    height: Dimensions.get('window').height / 4.5,
+    height: Dimensions.get('window').height / 5,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     flex: 1,

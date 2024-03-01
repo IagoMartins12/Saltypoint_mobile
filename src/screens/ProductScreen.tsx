@@ -101,8 +101,19 @@ const ProductScreen = ({navigation}: NavigationProps) => {
   }, [quantity]);
 
   if (!currentProduct) {
-    return null;
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor:
+            currentTheme === 'dark'
+              ? COLORS.backgroundColorDark
+              : COLORS.backgroundColorLight,
+        }}
+      />
+    );
   }
+
   return (
     <GestureHandlerRootView
       style={[
@@ -158,7 +169,11 @@ const ProductScreen = ({navigation}: NavigationProps) => {
           ) : (
             <ProductFixed
               quantity={quantity}
-              value={Number(value)}
+              value={
+                isPizza
+                  ? Number(value)
+                  : Number(currentProduct.value) * quantity
+              }
               decreaseQuantity={decreaseQuantity}
               increaseQuantity={increaseQuantity}
               onPress={onSubmit}

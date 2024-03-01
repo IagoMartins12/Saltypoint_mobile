@@ -61,9 +61,10 @@ export const COLORS = {
   primaryBlackRGBA: 'rgba(12,15,20,0.5)',
   secondaryBlackRGBA: 'rgba(0,0,0,0.7)',
   primaryGray: '#ededed',
+  primaryBlue: '#3e59f3',
   secondaryRed: '#FF3131',
   textColorLight: '#000000',
-  textColorDark: '#FFFFFF',
+  textColorDark: '#E4E6EB',
   backgroundColorLight: '#FAFAFA',
   backgroundColorDark: '#18191A',
   iconColorLight: '#000000',
@@ -74,6 +75,8 @@ export const COLORS = {
   iconBgLight: '#f0efef',
   borderColorLight: '#000000',
   borderColorDark: '#FFFFFF',
+  secondBackgroundDark: '#3a3b3c',
+  secondBackgroundLight: '#ffffff',
 };
 
 interface FontFamily {

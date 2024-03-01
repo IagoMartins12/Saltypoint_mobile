@@ -23,11 +23,11 @@ export const global = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 2,
     },
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
-    elevation: 2,
+    elevation: 1,
     zIndex: -10,
   },
   buttonStyle: {

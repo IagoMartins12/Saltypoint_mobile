@@ -153,12 +153,11 @@ const LoginScreen = ({
                             Não possui conta?{' '}
                             <MyText
                               style={{
-                                color: '#031475',
+                                color: COLORS.primaryBlue,
                                 textDecorationLine: 'underline',
+                                fontSize: 16,
                               }}
-                              textSize="mediumText2"
                               onPress={buttonPressHandler}>
-                              {' '}
                               Se cadastre
                             </MyText>
                           </MyText>

@@ -33,6 +33,10 @@ const RewardCard: React.FC<RewardCardProps> = ({
         global.shadow,
         {
           marginLeft: margin ? 15 : 0,
+          backgroundColor:
+            currentTheme === 'dark'
+              ? COLORS.cardColorDark
+              : COLORS.cardColorLight,
         },
       ]}
       onPress={() => {
