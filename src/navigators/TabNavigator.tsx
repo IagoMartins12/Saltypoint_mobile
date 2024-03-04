@@ -39,7 +39,7 @@ const TabNavigator = () => {
               size={25}
               color={
                 focused
-                  ? COLORS.primaryOrangeHex
+                  ? COLORS.primaryRedHex
                   : currentTheme === 'dark'
                   ? COLORS.iconColorDark
                   : COLORS.iconColorLight
@@ -60,7 +60,7 @@ const TabNavigator = () => {
               size={25}
               color={
                 focused
-                  ? COLORS.primaryOrangeHex
+                  ? COLORS.primaryRedHex
                   : currentTheme === 'dark'
                   ? COLORS.iconColorDark
                   : COLORS.iconColorLight
@@ -81,7 +81,7 @@ const TabNavigator = () => {
               size={25}
               color={
                 focused
-                  ? COLORS.primaryOrangeHex
+                  ? COLORS.primaryRedHex
                   : currentTheme === 'dark'
                   ? COLORS.iconColorDark
                   : COLORS.iconColorLight
@@ -102,7 +102,7 @@ const TabNavigator = () => {
               size={25}
               color={
                 focused
-                  ? COLORS.primaryOrangeHex
+                  ? COLORS.primaryRedHex
                   : currentTheme === 'dark'
                   ? COLORS.iconColorDark
                   : COLORS.iconColorLight
@@ -122,7 +122,7 @@ const TabNavigator = () => {
               size={25}
               color={
                 focused
-                  ? COLORS.primaryOrangeHex
+                  ? COLORS.primaryRedHex
                   : currentTheme === 'dark'
                   ? COLORS.iconColorDark
                   : COLORS.iconColorLight

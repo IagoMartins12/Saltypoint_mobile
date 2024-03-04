@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
+  Dimensions,
   FlatList,
   ScrollView,
   StyleSheet,
@@ -17,6 +18,9 @@ import {Category, Product} from '../types/ModelsType';
 import {enableGoBack, visibleCategories} from '../utils';
 import useTheme from '../hooks/useTheme';
 import MyText from '../components/Text';
+import Carousel from '../components/Carrousel';
+import CarouselHome from '../components/Carrousel';
+import IMAGES from '../assets';
 
 const HomeScreen = ({
   navigation,
@@ -38,7 +42,28 @@ const HomeScreen = ({
   };
 
   const {currentTheme} = useTheme();
-
+  const data = [
+    {
+      id: 1,
+      image: IMAGES.CAROUSEL.CAROUSEL,
+    },
+    {
+      id: 2,
+      image: IMAGES.CAROUSEL.CAROUSEL2,
+    },
+    {
+      id: 3,
+      image: IMAGES.CAROUSEL.CAROUSEL3,
+    },
+    {
+      id: 4,
+      image: IMAGES.CAROUSEL.PIZZA,
+    },
+    {
+      id: 5,
+      image: IMAGES.CAROUSEL.ESFIHA,
+    },
+  ];
   useEffect(() => {
     enableGoBack(navigation);
   }, []);
@@ -73,6 +98,12 @@ const HomeScreen = ({
       <ScrollView
         contentContainerStyle={[styles.productsDiv]}
         showsVerticalScrollIndicator={false}>
+        <View
+          style={{
+            height: Dimensions.get('screen').height * 0.3,
+          }}>
+          <CarouselHome entries={data} />
+        </View>
         {visibleCategories(categorys).map((category, index) => (
           <View key={index} style={styles.categoryContainer}>
             <MyText style={styles.categoryTitle}>

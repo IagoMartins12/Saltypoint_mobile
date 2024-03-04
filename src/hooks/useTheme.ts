@@ -1,12 +1,17 @@
 import {create} from 'zustand';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Store {
   currentTheme: 'light' | 'dark';
   setCurrentTheme: (theme: 'light' | 'dark') => void;
 }
+
 const useTheme = create<Store>(set => ({
   currentTheme: 'light',
-  setCurrentTheme: currentTheme => set({currentTheme: currentTheme}),
+  setCurrentTheme: async currentTheme => {
+    await AsyncStorage.setItem('theme', currentTheme);
+    set({currentTheme: currentTheme});
+  },
 }));
 
 export default useTheme;

@@ -78,7 +78,7 @@ const IntroScreen = ({
 
   const handleNext = () => {
     if (activeDotIndex === 3) {
-      navigation.navigate('Tab');
+      navigation.navigate('Main');
     } else {
       _carousel.current?.snapToItem(activeDotIndex + 1);
     }
