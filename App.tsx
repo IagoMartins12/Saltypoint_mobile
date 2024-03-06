@@ -24,7 +24,7 @@ import ResumeCartScreen from './src/screens/CartSceens/ResumeScreen';
 import CatchRewardScreen from './src/screens/CatchRewardScreen';
 import ProductScreen from './src/screens/ProductScreen';
 import IntroScreen from './src/screens/Intro/IntroScreen';
-
+import ForgetPasswordScreen from './src/screens/ForgetPasswordScreen';
 import FetchData from './src/components/FetchData/index';
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +50,11 @@ const App = () => {
             name="Login"
             component={LoginScreen}
             options={{animation: 'slide_from_left'}}
+          />
+          <Stack.Screen
+            name="ForgetPassword"
+            component={ForgetPasswordScreen}
+            options={{animation: 'slide_from_bottom'}}
           />
           <Stack.Screen
             name="Register"

@@ -5,7 +5,7 @@ import {FieldValues, UseFormHandleSubmit} from 'react-hook-form';
 interface LargeButtonProps {
   text: string;
   handleSubmit?: UseFormHandleSubmit<FieldValues, undefined>;
-  onSubmit?: (data: any) => void;
+  onSubmit?: (data?: any) => void;
 }
 const LargeButton: React.FC<LargeButtonProps> = ({
   handleSubmit,
@@ -17,6 +17,10 @@ const LargeButton: React.FC<LargeButtonProps> = ({
       onPress={() => {
         if (handleSubmit && onSubmit) {
           handleSubmit(onSubmit);
+        }
+
+        if (onSubmit) {
+          onSubmit();
         }
       }}
       style={global.buttonStyle}>

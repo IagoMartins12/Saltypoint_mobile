@@ -2,12 +2,12 @@ import {StyleSheet, View} from 'react-native';
 import LottieView from 'lottie-react-native';
 import {COLORS, FONTFAMILY, FONTSIZE} from '../../../theme/theme';
 
-const LoginAnimation = () => {
+const ForgetAnimation = () => {
   return (
     <View style={styles.EmptyCartContainer}>
       <LottieView
         style={styles.LottieStyle}
-        source={require('../../../lottie/pizzaLogin.json')}
+        source={require('../../../lottie/forget.json')}
         autoPlay
         loop
       />
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   LottieStyle: {
-    height: 350,
+    height: 300,
   },
   LottieText: {
     fontFamily: FONTFAMILY.poppins_medium,
@@ -31,4 +31,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginAnimation;
+export default ForgetAnimation;

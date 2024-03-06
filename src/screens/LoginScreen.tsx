@@ -1,26 +1,23 @@
 import {
   Dimensions,
   Image,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
+  Pressable,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
-import {BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE} from '../theme/theme';
+import {useCallback} from 'react';
+import {COLORS, FONTFAMILY, FONTSIZE} from '../theme/theme';
 import {useForm} from 'react-hook-form';
 import LoginAnimation from '../components/Lottie/LoginAnimation';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
   PanGestureHandler,
+  ScrollView,
   State,
 } from 'react-native-gesture-handler';
 import StyledInputComponent from '../components/Input';
-import useKeyboardOpen from '../hooks/useKeyboardOpen';
 import {global} from '../style';
 import LargeButton from '../components/Button';
 import useTheme from '../hooks/useTheme';
@@ -33,18 +30,20 @@ const LoginScreen = ({
 }) => {
   const {control, handleSubmit} = useForm();
   const onSubmit = (data: any) => console.log(data);
+  const {currentTheme} = useTheme();
 
   const buttonPressHandler = useCallback(() => {
     navigation.push('Register');
   }, [navigation]);
 
-  const isKeyboardVisible = useKeyboardOpen();
+  const navigateForgetPassword = () => {
+    navigation.push('ForgetPassword');
+  };
 
   const onSwipeRight = useCallback(() => {
     navigation.navigate('Main');
   }, [navigation]);
 
-  const {currentTheme} = useTheme();
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <PanGestureHandler
@@ -56,7 +55,8 @@ const LoginScreen = ({
             onSwipeRight();
           }
         }}>
-        <View
+        <ScrollView
+          showsVerticalScrollIndicator={false}
           style={[
             styles.loginMainView,
             {
@@ -66,11 +66,7 @@ const LoginScreen = ({
                   : COLORS.backgroundColorDark,
             },
           ]}>
-          <View
-            style={[
-              styles.imageContainer,
-              {flex: isKeyboardVisible ? 0.75 : 0.5},
-            ]}>
+          <View style={[styles.imageContainer]}>
             <LoginAnimation />
           </View>
           <View style={[styles.subContainer]}>
@@ -101,75 +97,71 @@ const LoginScreen = ({
                   isPassword
                 />
 
-                <View style={styles.forgetPasswordDiv}>
+                <Pressable
+                  style={styles.forgetPasswordDiv}
+                  onPress={navigateForgetPassword}>
                   <MyText
                     style={{textDecorationLine: 'underline'}}
                     textSize="mediumText2">
                     Esqueci minha senha
                   </MyText>
-                </View>
+                </Pressable>
 
-                <View>
-                  <View style={styles.buttonDiv}>
-                    <LargeButton
-                      handleSubmit={handleSubmit}
-                      onSubmit={onSubmit}
-                      text="Continuar"
-                    />
+                <View style={styles.buttonDiv}>
+                  <LargeButton
+                    handleSubmit={handleSubmit}
+                    onSubmit={onSubmit}
+                    text="Continuar"
+                  />
 
-                    {!isKeyboardVisible ? (
-                      <>
-                        <TouchableOpacity
-                          onPress={handleSubmit(onSubmit)}
-                          style={global.buttonStyleWhite}>
-                          <View
-                            style={{
-                              height: 25,
-                              width: 25,
-                              marginRight: 10,
-                            }}>
-                            <Image
-                              source={require('../assets/googleIcon.png')}
-                              style={{
-                                height: '100%',
-                                width: '100%',
-                              }}
-                            />
-                          </View>
+                  <TouchableOpacity
+                    onPress={handleSubmit(onSubmit)}
+                    style={global.buttonStyleWhite}>
+                    <View
+                      style={{
+                        height: 25,
+                        width: 25,
+                        marginRight: 10,
+                      }}>
+                      <Image
+                        source={require('../assets/googleIcon.png')}
+                        style={{
+                          height: '100%',
+                          width: '100%',
+                        }}
+                      />
+                    </View>
 
-                          <MyText
-                            style={{
-                              color:
-                                currentTheme === 'dark'
-                                  ? COLORS.textColorDark
-                                  : COLORS.textColorLight,
-                            }}
-                            textSize="mediumText2">
-                            Continuar com Google
-                          </MyText>
-                        </TouchableOpacity>
-                        <View style={styles.registerText}>
-                          <MyText textSize="mediumText2">
-                            Não possui conta?{' '}
-                            <MyText
-                              style={{
-                                color: COLORS.primaryBlue,
-                                textDecorationLine: 'underline',
-                                fontSize: 16,
-                              }}
-                              onPress={buttonPressHandler}>
-                              Se cadastre
-                            </MyText>
-                          </MyText>
-                        </View>
-                      </>
-                    ) : null}
+                    <MyText
+                      style={{
+                        color:
+                          currentTheme === 'dark'
+                            ? COLORS.textColorDark
+                            : COLORS.textColorLight,
+                      }}
+                      textSize="mediumText2">
+                      Continuar com Google
+                    </MyText>
+                  </TouchableOpacity>
+                  <View style={styles.registerText}>
+                    <MyText textSize="mediumText2">
+                      Não possui conta?{' '}
+                      <MyText
+                        style={{
+                          color: COLORS.primaryBlue,
+                          textDecorationLine: 'underline',
+                          fontSize: 16,
+                        }}
+                        onPress={buttonPressHandler}>
+                        Se cadastre
+                      </MyText>
+                    </MyText>
                   </View>
                 </View>
               </View>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </PanGestureHandler>
     </GestureHandlerRootView>
   );
@@ -182,7 +174,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  imageContainer: {},
+  imageContainer: {
+    height: Dimensions.get('screen').height * 0.3,
+    maxHeight: Dimensions.get('screen').height * 0.3,
+  },
   brandwView: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -201,9 +196,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 60,
   },
 
-  bottomView: {
-    flex: 1,
-  },
+  bottomView: {},
 
   mainContainer: {
     marginHorizontal: 40,

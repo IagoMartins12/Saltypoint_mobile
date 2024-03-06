@@ -13,19 +13,9 @@ const ThemeSwitch: React.FC<ThemeProps> = ({moveView}) => {
   const {setCurrentTheme, currentTheme} = useTheme();
   const colorScheme = useColorScheme();
 
-  useEffect(() => {
-    const fetchTheme = async () => {
-      const savedTheme = await AsyncStorage.getItem('theme');
-      console.log('savedTheme', savedTheme);
-      if (!savedTheme) {
-        const systemTheme = colorScheme === 'dark' ? 'dark' : 'light';
-        setCurrentTheme(systemTheme);
-      }
-    };
-    fetchTheme();
-  }, []);
+  console.log('currentTheme', currentTheme);
 
-  const toggleSwitch = () => {
+  const toggleSwitch = async () => {
     moveView();
     setIsSwitchOn(prevValue => !prevValue);
     const newTheme = isSwitchOn ? 'dark' : 'light';

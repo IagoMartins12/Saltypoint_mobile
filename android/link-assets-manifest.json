@@ -61,10 +61,7 @@
       "path": "src/assets/fonts/openSans.ttf",
       "sha1": "ecdf1d58c0932a775c89b5ad48a7a0aaad66de4f"
     },
-    {
-      "path": "src/assets/googleIcon.png",
-      "sha1": "0973341e2b2c04ac17699bc04aa985627a503f09"
-    },
+
     {
       "path": "src/assets/logo.png",
       "sha1": "3ab21e2ba7f229481e8db85f9a20a6277d2a8003"

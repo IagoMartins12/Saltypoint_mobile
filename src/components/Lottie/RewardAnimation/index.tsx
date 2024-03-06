@@ -3,14 +3,21 @@ import React from 'react';
 import LottieView from 'lottie-react-native';
 import {COLORS, FONTFAMILY, FONTSIZE} from '../../../theme/theme';
 import CallToast from '../../Toast';
+import useTheme from '../../../hooks/useTheme';
 
 const RewardAnimation = () => {
   const {showToast} = CallToast();
+  const {currentTheme} = useTheme();
+  const lottieSource =
+    currentTheme === 'light'
+      ? require('../../../lottie/crown.json')
+      : require('../../../lottie/crownDark.json');
+
   return (
     <View style={styles.EmptyCartContainer}>
       <LottieView
         style={styles.LottieStyle}
-        source={require('../../../lottie/crown.json')}
+        source={lottieSource}
         autoPlay
         loop={false}
         onAnimationFinish={() => {
@@ -27,7 +34,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   LottieStyle: {
-    height: '100%',
+    flex: 1,
   },
   LottieText: {
     fontFamily: FONTFAMILY.poppins_medium,

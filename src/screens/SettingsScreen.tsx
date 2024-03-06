@@ -96,7 +96,7 @@ const SettingsScreen = ({
     const toValue = isMoving ? 5 : 1;
     Animated.timing(animation, {
       toValue,
-      duration: 750,
+      duration: 1000,
       useNativeDriver: false,
     }).start(() => {
       // Define o background da imagem com base no estado de isMoving

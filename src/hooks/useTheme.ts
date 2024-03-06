@@ -9,8 +9,8 @@ interface Store {
 const useTheme = create<Store>(set => ({
   currentTheme: 'light',
   setCurrentTheme: async currentTheme => {
-    await AsyncStorage.setItem('theme', currentTheme);
     set({currentTheme: currentTheme});
+    await AsyncStorage.setItem('theme', currentTheme);
   },
 }));
 

@@ -11,6 +11,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
   PanGestureHandler,
+  ScrollView,
   State,
 } from 'react-native-gesture-handler';
 import PizzaAnimation from '../components/Lottie/PizzaAnimation';
@@ -50,7 +51,8 @@ const RegisterScreen = ({
             onSwipeRight();
           }
         }}>
-        <View
+        <ScrollView
+          showsVerticalScrollIndicator={false}
           style={[
             styles.loginMainView,
             {
@@ -60,11 +62,7 @@ const RegisterScreen = ({
                   : COLORS.backgroundColorDark,
             },
           ]}>
-          <View
-            style={[
-              styles.imageContainer,
-              {flex: isKeyboardVisible ? 0.75 : 0.5},
-            ]}>
+          <View style={[styles.imageContainer]}>
             <PizzaAnimation />
           </View>
           <View style={styles.subContainer}>
@@ -127,7 +125,7 @@ const RegisterScreen = ({
               </View>
             </View>
           </View>
-        </View>
+        </ScrollView>
       </PanGestureHandler>
     </GestureHandlerRootView>
   );
@@ -145,7 +143,8 @@ const styles = StyleSheet.create({
   },
 
   imageContainer: {
-    flex: 1,
+    height: Dimensions.get('screen').height * 0.3,
+    maxHeight: Dimensions.get('screen').height * 0.3,
   },
   brandwView: {
     justifyContent: 'center',
