@@ -47,7 +47,7 @@ const SelectComponent = () => {
       <RNPickerSelect
         style={{
           inputAndroidContainer: {
-            backgroundColor: '#000000',
+            backgroundColor: '#693b3b',
           },
           viewContainer: viewStyle,
           iconContainer: {
@@ -69,7 +69,7 @@ const SelectComponent = () => {
             marginLeft: 40,
           },
           modalViewTop: {
-            backgroundColor: '#000000', // Defina a cor do background do modal aqui
+            backgroundColor: '#FFFFFF', // Defina a cor do background do modal aqui
           },
         }}
         //@ts-ignore
@@ -77,32 +77,20 @@ const SelectComponent = () => {
         onValueChange={value => console.log(value)}
         placeholder={Placeholder}
         itemStyle={{
-          backgroundColor: '#000000',
+          backgroundColor: '#FFFFFF',
         }}
         items={[
           {
             label: 'Football',
             value: 'football',
-            color:
-              currentTheme === 'dark'
-                ? COLORS.textColorDark
-                : COLORS.textColorLight,
           },
           {
             label: 'Baseball',
             value: 'baseball',
-            color:
-              currentTheme === 'dark'
-                ? COLORS.textColorDark
-                : COLORS.textColorLight,
           },
           {
             label: 'Hockey',
             value: 'hockey',
-            color:
-              currentTheme === 'dark'
-                ? COLORS.textColorDark
-                : COLORS.textColorLight,
           },
         ]}
       />

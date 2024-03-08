@@ -10,21 +10,12 @@ import {
 } from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
 import CustomIcon from '../../CustomIcon';
-import {useForm} from 'react-hook-form';
-import StyledInputComponent from '../../Input';
-import LargeButton from '../../Button';
 import useTheme from '../../../hooks/useTheme';
 import {COLORS} from '../../../theme/theme';
+import {ModalProps} from '../ForgetPasswordModal';
 import ModalIcon from '../ModalIcon';
 
-export interface ModalProps {
-  modalOpen: boolean;
-  setModalOpen: (modalOpen: boolean) => void;
-  hideModal: () => void;
-  translateY: Animated.SharedValue<number>;
-}
-
-const ChangeCellphoneModal: React.FC<ModalProps> = ({
+const PixModal: React.FC<ModalProps> = ({
   modalOpen,
   setModalOpen,
   hideModal,
@@ -37,10 +28,7 @@ const ChangeCellphoneModal: React.FC<ModalProps> = ({
       transform: [{translateY: translateY.value}],
     };
   });
-  const {control, handleSubmit} = useForm();
-  const onSubmit = (data: any) => {
-    console.log('data', data);
-  };
+
   const handleOverlayPress = () => {
     // Clique fora do modal, executa o hideModal
     hideModal();
@@ -63,22 +51,6 @@ const ChangeCellphoneModal: React.FC<ModalProps> = ({
               },
             ]}>
             <ModalIcon handleOverlayPress={handleOverlayPress} height="15%" />
-            <View style={styles.contentDiv}>
-              <View style={{gap: 20}}>
-                <StyledInputComponent
-                  control={control}
-                  name="cellphone"
-                  placeholder="Telefone "
-                  icon="phone"
-                  pack="MaterialIcons"
-                />
-                <LargeButton
-                  handleSubmit={handleSubmit}
-                  onSubmit={onSubmit}
-                  text="Atualizar"
-                />
-              </View>
-            </View>
           </Animated.View>
         </View>
       </Modal>
@@ -125,14 +97,6 @@ const styles = StyleSheet.create({
     left: 20,
     position: 'absolute',
   },
-
-  contentDiv: {
-    paddingTop: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '90%',
-    height: '60%',
-  },
 });
 
-export default ChangeCellphoneModal;
+export default PixModal;

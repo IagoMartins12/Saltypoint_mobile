@@ -11,6 +11,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
   PanGestureHandler,
+  ScrollView,
   State,
 } from 'react-native-gesture-handler';
 import {global} from '../../style';
@@ -35,7 +36,6 @@ const ProfileScreen = ({
   const onSubmit = (data: any) => console.log(data);
   const translateY = useSharedValue(Dimensions.get('window').height);
   const {currentTheme} = useTheme();
-  const isKeyboardVisible = useKeyboardOpen();
   const onSwipeLeft = () => {
     // Navegar para a página desejada
     navigation.navigate('Settings');
@@ -62,7 +62,8 @@ const ProfileScreen = ({
             onSwipeLeft();
           }
         }}>
-        <View
+        <ScrollView
+          contentContainerStyle={{}}
           style={[
             styles.mainContainer,
             {
@@ -99,7 +100,7 @@ const ProfileScreen = ({
             </View>
           </View>
 
-          <View style={styles.listContainar}>
+          <View style={styles.listContainer}>
             <View style={{gap: 12}}>
               <StyledInputComponent
                 control={control}
@@ -122,31 +123,29 @@ const ProfileScreen = ({
               <Dropdown />
             </View>
 
-            {!isKeyboardVisible ? (
-              <View
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: 10,
+              }}>
+              <TouchableOpacity
+                onPress={handleSubmit(onSubmit)}
+                style={global.buttonStyle}>
+                <Text style={{color: '#FFFFFF'}}>Editar</Text>
+              </TouchableOpacity>
+              <Text
+                onPress={() => {
+                  showModal();
+                  setModalOpen(true);
+                }}
                 style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: 10,
+                  color: COLORS.primaryRedHex,
+                  textDecorationLine: 'underline',
                 }}>
-                <TouchableOpacity
-                  onPress={handleSubmit(onSubmit)}
-                  style={global.buttonStyle}>
-                  <Text style={{color: '#FFFFFF'}}>Editar</Text>
-                </TouchableOpacity>
-                <Text
-                  onPress={() => {
-                    showModal();
-                    setModalOpen(true);
-                  }}
-                  style={{
-                    color: COLORS.primaryRedHex,
-                    textDecorationLine: 'underline',
-                  }}>
-                  Alterar senha
-                </Text>
-              </View>
-            ) : null}
+                Alterar senha
+              </Text>
+            </View>
           </View>
           <ForgetPasswordModal
             modalOpen={modalOpen}
@@ -154,7 +153,7 @@ const ProfileScreen = ({
             hideModal={hideModal}
             translateY={translateY}
           />
-        </View>
+        </ScrollView>
       </PanGestureHandler>
     </GestureHandlerRootView>
   );
@@ -162,17 +161,16 @@ const ProfileScreen = ({
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flex: 1,
     backgroundColor: '#ffffff',
+    flex: 1,
   },
 
   profileContainer: {
-    flex: 1.75,
+    height: Dimensions.get('screen').height * 0.3,
     paddingVertical: 30,
     position: 'relative',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'transparent',
   },
 
   profilePhotoDiv: {
@@ -186,12 +184,11 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     overflow: 'hidden',
   },
-  listContainar: {
+  listContainer: {
     paddingHorizontal: 20,
     paddingVertical: 10,
-    flex: 3,
-    justifyContent: 'flex-start',
-    gap: 45,
+
+    gap: 20,
   },
 });
 

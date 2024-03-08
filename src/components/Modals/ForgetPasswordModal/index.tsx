@@ -15,6 +15,7 @@ import StyledInputComponent from '../../Input';
 import LargeButton from '../../Button';
 import useTheme from '../../../hooks/useTheme';
 import {COLORS} from '../../../theme/theme';
+import ModalIcon from '../ModalIcon';
 
 export interface ModalProps {
   modalOpen: boolean;
@@ -37,7 +38,7 @@ const ForgetPasswordModal: React.FC<ModalProps> = ({
   });
   const {control, handleSubmit} = useForm();
   const onSubmit = (data: any) => console.log(data);
-  const handleOverlayPress = (e: GestureResponderEvent) => {
+  const handleOverlayPress = () => {
     hideModal();
     setTimeout(() => setModalOpen(!modalOpen), 300);
   };
@@ -59,35 +60,8 @@ const ForgetPasswordModal: React.FC<ModalProps> = ({
                     : COLORS.backgroundColorDark,
               },
             ]}>
-            <Pressable
-              onPress={handleOverlayPress}
-              style={{
-                width: '100%',
-                height: '15%',
-                position: 'relative',
-              }}>
-              <TouchableOpacity
-                style={[
-                  styles.iconStyle,
-                  {
-                    backgroundColor:
-                      currentTheme === 'light'
-                        ? COLORS.iconBgLight
-                        : COLORS.iconBgDark,
-                  },
-                ]}>
-                <CustomIcon
-                  name="arrow-down"
-                  size={20}
-                  pack="SimpleLineIcons"
-                  color={
-                    currentTheme === 'light'
-                      ? COLORS.iconColorLight
-                      : COLORS.iconColorDark
-                  }
-                />
-              </TouchableOpacity>
-            </Pressable>
+            <ModalIcon handleOverlayPress={handleOverlayPress} height="15%" />
+
             <View style={styles.contentDiv}>
               <View style={{gap: 20}}>
                 <StyledInputComponent

@@ -24,6 +24,7 @@ import AddressCardSelected from '../../AddressCardSelected';
 import {userOptions} from '../../../screens/CartSceens/ResumeScreen';
 import useTheme from '../../../hooks/useTheme';
 import {COLORS} from '../../../theme/theme';
+import ModalIcon from '../ModalIcon';
 
 interface AddressModalProps extends ModalProps {
   addAddress: () => void;
@@ -64,7 +65,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
   });
   const {currentTheme} = useTheme();
 
-  const handleOverlayPress = (e: GestureResponderEvent) => {
+  const handleOverlayPress = () => {
     hideModal();
     setTimeout(() => setModalOpen(!modalOpen), 300);
   };
@@ -86,37 +87,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
                     : COLORS.backgroundColorDark,
               },
             ]}>
-            <View style={{width: '100%'}}>
-              <Pressable
-                style={{
-                  width: '100%',
-                  height: '3%',
-                  position: 'relative',
-                }}>
-                <TouchableOpacity
-                  style={[
-                    styles.iconStyle,
-                    {
-                      backgroundColor:
-                        currentTheme === 'light'
-                          ? COLORS.iconBgLight
-                          : COLORS.iconBgDark,
-                    },
-                  ]}
-                  onPress={handleOverlayPress}>
-                  <CustomIcon
-                    name="arrow-down"
-                    size={20}
-                    pack="SimpleLineIcons"
-                    color={
-                      currentTheme === 'light'
-                        ? COLORS.iconColorLight
-                        : COLORS.iconColorDark
-                    }
-                  />
-                </TouchableOpacity>
-              </Pressable>
-            </View>
+            <ModalIcon handleOverlayPress={handleOverlayPress} height="5%" />
             <View style={{width: '100%', marginTop: 30}}>
               {notEmpty ? (
                 <ScrollView>

@@ -16,6 +16,7 @@ import {BORDERRADIUS, COLORS} from '../../../theme/theme';
 import {global} from '../../../style';
 import useTheme from '../../../hooks/useTheme';
 import MyText from '../../Text';
+import ModalIcon from '../ModalIcon';
 
 export interface ModalProps {
   modalOpen: boolean;
@@ -37,7 +38,7 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
       transform: [{translateY: translateY.value}],
     };
   });
-  const handleOverlayPress = (e: GestureResponderEvent) => {
+  const handleOverlayPress = () => {
     hideModal();
     setTimeout(() => setModalOpen(!modalOpen), 300);
   };
@@ -57,36 +58,8 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
                     : COLORS.backgroundColorLight,
               },
             ]}>
-            <Pressable
-              onPress={handleOverlayPress}
-              style={{
-                width: '100%',
-                height: '15%',
-                position: 'relative',
-              }}>
-              <TouchableOpacity
-                style={[
-                  styles.iconStyle,
-                  {
-                    backgroundColor:
-                      currentTheme === 'dark'
-                        ? COLORS.iconBgDark
-                        : COLORS.iconBgLight,
-                  },
-                ]}
-                onPress={handleOverlayPress}>
-                <CustomIcon
-                  name="x"
-                  size={20}
-                  pack="Feather"
-                  color={
-                    currentTheme === 'dark'
-                      ? COLORS.iconColorDark
-                      : COLORS.iconColorLight
-                  }
-                />
-              </TouchableOpacity>
-            </Pressable>
+            <ModalIcon handleOverlayPress={handleOverlayPress} height="15%" />
+
             <View style={styles.contentDiv}>
               <View style={styles.iconStyle2}>
                 <CustomIcon

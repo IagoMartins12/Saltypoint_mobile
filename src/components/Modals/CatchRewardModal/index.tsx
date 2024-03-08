@@ -17,6 +17,7 @@ import MyText from '../../Text';
 import RewardAnimation from '../../Lottie/RewardAnimation';
 import useTheme from '../../../hooks/useTheme';
 import {COLORS} from '../../../theme/theme';
+import ModalIcon from '../ModalIcon';
 
 export interface ModalProps {
   modalOpen: boolean;
@@ -40,7 +41,7 @@ const CatchRewardModal: React.FC<ModalProps> = ({
       transform: [{translateY: translateY.value}],
     };
   });
-  const handleOverlayPress = (e: GestureResponderEvent) => {
+  const handleOverlayPress = () => {
     hideModal();
     setTimeout(() => setModalOpen(!modalOpen), 300);
     setTimeout(() => setHasPlayed(false), 600);
@@ -49,97 +50,95 @@ const CatchRewardModal: React.FC<ModalProps> = ({
   const {currentTheme} = useTheme();
 
   let body = (
-    <>
-      <View style={styles.container}>
-        {selectedReward ? (
-          <View style={styles.warningContainer}>
-            <View style={styles.warningIconBox}>
-              <CustomIcon
-                name="warning-outline"
-                size={45}
-                color="#000000"
-                pack="Ionicons"
-              />
-            </View>
-            <MyText style={styles.warningText}>
-              Resgatar {selectedReward?.name}
+    <View style={styles.container}>
+      {selectedReward ? (
+        <View style={styles.warningContainer}>
+          <View style={styles.warningIconBox}>
+            <CustomIcon
+              name="warning-outline"
+              size={45}
+              color="#000000"
+              pack="Ionicons"
+            />
+          </View>
+          <MyText style={styles.warningText}>
+            Resgatar {selectedReward?.name}
+          </MyText>
+          <View style={styles.rewardDetailsContainer}>
+            <MyText style={styles.rewardDetailText}>
+              Você está resgatando uma recompensa de{' '}
+              {selectedReward.quantity_points} pontos
             </MyText>
-            <View style={styles.rewardDetailsContainer}>
-              <MyText style={styles.rewardDetailText}>
-                Você está resgatando uma recompensa de{' '}
-                {selectedReward.quantity_points} pontos
-              </MyText>
 
-              <View
-                style={{
-                  flexDirection: 'row',
-                  marginVertical: 15,
-                  alignItems: 'center',
-                  gap: 25,
-                }}>
-                <View style={styles.column}>
-                  <MyText style={styles.text}>Saldo atual: </MyText>
-                  <View style={styles.row}>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginVertical: 15,
+                alignItems: 'center',
+                gap: 25,
+              }}>
+              <View style={styles.column}>
+                <MyText style={styles.text}>Saldo atual: </MyText>
+                <View style={styles.row}>
+                  <CustomIcon
+                    name="crown-outline"
+                    size={25}
+                    pack="MaterialCommunityIcons"
+                  />
+                  <MyText style={styles.boldText}>
+                    {/* {user?.points} */}
+                    200
+                  </MyText>
+                </View>
+              </View>
+
+              <CustomIcon
+                name="chevron-double-right"
+                size={30}
+                pack="MaterialCommunityIcons"
+              />
+
+              <View style={styles.column}>
+                <MyText style={styles.text}>Saldo após: </MyText>
+                <View style={styles.row}>
+                  <View style={styles.arrowContainer}>
+                    <CustomIcon
+                      name="arrow-down"
+                      size={25}
+                      pack="Feather"
+                      color="red"
+                    />
                     <CustomIcon
                       name="crown-outline"
                       size={25}
                       pack="MaterialCommunityIcons"
                     />
-                    <MyText style={styles.boldText}>
-                      {/* {user?.points} */}
-                      200
-                    </MyText>
                   </View>
-                </View>
-
-                <CustomIcon
-                  name="chevron-double-right"
-                  size={30}
-                  pack="MaterialCommunityIcons"
-                />
-
-                <View style={styles.column}>
-                  <MyText style={styles.text}>Saldo após: </MyText>
-                  <View style={styles.row}>
-                    <View style={styles.arrowContainer}>
-                      <CustomIcon
-                        name="arrow-down"
-                        size={25}
-                        pack="Feather"
-                        color="red"
-                      />
-                      <CustomIcon
-                        name="crown-outline"
-                        size={25}
-                        pack="MaterialCommunityIcons"
-                      />
-                    </View>
-                    <MyText style={styles.boldText}>
-                      {/* {user?.points - warningModal.currentItem.quantity_points} */}
-                      125
-                    </MyText>
-                  </View>
+                  <MyText style={styles.boldText}>
+                    {/* {user?.points - warningModal.currentItem.quantity_points} */}
+                    125
+                  </MyText>
                 </View>
               </View>
             </View>
           </View>
-        ) : null}
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.cancelButton}
-            onPress={handleOverlayPress}>
-            <MyText style={styles.buttonText}>Cancelar</MyText>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.rewardButton}
-            onPress={() => {
-              setHasPlayed(true);
-            }}>
-            <MyText style={styles.buttonText}>Resgatar recompensa</MyText>
-          </TouchableOpacity>
         </View>
+      ) : null}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.cancelButton}
+          onPress={handleOverlayPress}>
+          <MyText style={styles.buttonText}>Cancelar</MyText>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.rewardButton}
+          onPress={() => {
+            setHasPlayed(true);
+          }}>
+          <MyText style={styles.buttonText}>Resgatar recompensa</MyText>
+        </TouchableOpacity>
       </View>
-    </>
+    </View>
   );
 
   if (hasPlayed) {
@@ -165,36 +164,7 @@ const CatchRewardModal: React.FC<ModalProps> = ({
                     : COLORS.backgroundColorLight,
               },
             ]}>
-            <Pressable
-              onPress={handleOverlayPress}
-              style={{
-                width: '100%',
-                height: '5%',
-                position: 'relative',
-              }}>
-              <TouchableOpacity
-                style={[
-                  styles.iconStyle,
-                  {
-                    backgroundColor:
-                      currentTheme === 'light'
-                        ? COLORS.iconBgLight
-                        : COLORS.iconBgDark,
-                  },
-                ]}
-                onPress={handleOverlayPress}>
-                <CustomIcon
-                  name="arrow-down"
-                  size={20}
-                  pack="SimpleLineIcons"
-                  color={
-                    currentTheme === 'light'
-                      ? COLORS.iconColorLight
-                      : COLORS.iconColorDark
-                  }
-                />
-              </TouchableOpacity>
-            </Pressable>
+            <ModalIcon handleOverlayPress={handleOverlayPress} height="5%" />
 
             {body}
           </Animated.View>

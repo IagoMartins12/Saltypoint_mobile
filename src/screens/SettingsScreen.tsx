@@ -100,7 +100,7 @@ const SettingsScreen = ({
       useNativeDriver: false,
     }).start(() => {
       // Define o background da imagem com base no estado de isMoving
-      setImageBackground(isMoving ? COLORS.backgroundColorDark : null); // Defina COLORS.someColor conforme necessário
+      setImageBackground(isMoving ? COLORS.backgroundColorDark : null);
     });
   };
 

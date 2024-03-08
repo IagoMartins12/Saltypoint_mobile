@@ -15,6 +15,7 @@ import {ModalProps} from '../ForgetPasswordModal';
 import {COLORS, FONTSIZE} from '../../../theme/theme';
 import useTheme from '../../../hooks/useTheme';
 import MyText from '../../Text';
+import ModalIcon from '../ModalIcon';
 
 const ContactModal: React.FC<ModalProps> = ({
   modalOpen,
@@ -29,7 +30,7 @@ const ContactModal: React.FC<ModalProps> = ({
       transform: [{translateY: translateY.value}],
     };
   });
-  const handleOverlayPress = (e: GestureResponderEvent) => {
+  const handleOverlayPress = () => {
     // Clique fora do modal, executa o hideModal
     hideModal();
     setTimeout(() => setModalOpen(!modalOpen), 300);
@@ -50,21 +51,8 @@ const ContactModal: React.FC<ModalProps> = ({
                     : COLORS.backgroundColorDark,
               },
             ]}>
-            <Pressable
-              onPress={handleOverlayPress}
-              style={{
-                width: '100%',
-                height: '10%',
-                position: 'relative',
-              }}>
-              <TouchableOpacity style={styles.iconStyle}>
-                <CustomIcon
-                  name="arrow-down"
-                  size={20}
-                  pack="SimpleLineIcons"
-                />
-              </TouchableOpacity>
-            </Pressable>
+            <ModalIcon handleOverlayPress={handleOverlayPress} height="10%" />
+
             <View
               style={{
                 paddingTop: 15,
