@@ -14,6 +14,8 @@ import useTheme from '../../../hooks/useTheme';
 import {COLORS} from '../../../theme/theme';
 import {ModalProps} from '../ForgetPasswordModal';
 import ModalIcon from '../ModalIcon';
+import MyText from '../../Text';
+import useGlobalStore from '../../../hooks/store/useGlobalStore';
 
 const PixModal: React.FC<ModalProps> = ({
   modalOpen,
@@ -22,7 +24,8 @@ const PixModal: React.FC<ModalProps> = ({
   translateY,
 }) => {
   const {currentTheme} = useTheme();
-
+  const {generalData} = useGlobalStore();
+  // const {  } = useGlobalStore()
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
@@ -50,7 +53,31 @@ const PixModal: React.FC<ModalProps> = ({
                     : COLORS.backgroundColorDark,
               },
             ]}>
-            <ModalIcon handleOverlayPress={handleOverlayPress} height="15%" />
+            <ModalIcon handleOverlayPress={handleOverlayPress} height="10%" />
+
+            <View style={{width: '90%', marginHorizontal: 'auto', gap: 20}}>
+              <MyText style={styles.title}>
+                Para compras com pix, necessitamos que o cliente envie o
+                comprovante da transação em nosso whatsapp:
+              </MyText>
+
+              <View style={styles.textBox}>
+                <MyText style={styles.subtitle}>Chave pix:</MyText>
+                <MyText style={styles.subtitle2}>{generalData?.pixKey}</MyText>
+              </View>
+
+              <View style={styles.textBox}>
+                <MyText style={styles.subtitle}>Nome da chave:</MyText>
+                <MyText style={styles.subtitle2}>{generalData?.pixName}</MyText>
+              </View>
+
+              <View style={styles.textBox}>
+                <MyText style={styles.subtitle}>Whatsapp:</MyText>
+                <MyText style={styles.subtitle2}>
+                  {generalData?.cellphone}
+                </MyText>
+              </View>
+            </View>
           </Animated.View>
         </View>
       </Modal>
@@ -70,32 +97,34 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: '100%',
-    height: Dimensions.get('window').height * 0.3,
+    height: Dimensions.get('window').height * 0.45,
     backgroundColor: '#ffffff',
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
     alignItems: 'center',
     gap: 20,
   },
-  modalView: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'flex-end',
-    backgroundColor: 'transparent',
-    padding: 35,
-    zIndex: 10,
+
+  title: {
+    fontSize: 20,
+    fontWeight: '600',
+  },
+  textBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+  },
+  subtitle: {
+    width: '50%',
+    fontWeight: '300',
+    fontSize: 18,
   },
 
-  iconStyle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 35,
-    width: 35,
-    backgroundColor: '#f0efef',
-    borderRadius: 100,
-    top: 15,
-    left: 20,
-    position: 'absolute',
+  subtitle2: {
+    width: '50%',
+    fontWeight: '500',
+    fontSize: 18,
   },
 });
 

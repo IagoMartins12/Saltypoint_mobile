@@ -19,6 +19,7 @@ import {iconColor, iconSize} from '../../../utils';
 import {cellPhoneIcon, userOptions} from '../ResumeScreen';
 import useTheme from '../../../hooks/useTheme';
 import {COLORS} from '../../../theme/theme';
+import PixModal from '../../../components/Modals/PixModal';
 
 export enum STEPS {
   CART = 0,
@@ -61,13 +62,19 @@ const AddressCartScreen = ({
   const [selectedDelivery, setSelectedDelivery] = useState<null | string>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalAddressOpen, setModalAddressOpen] = useState(false);
+  const [modalPixOpen, setModalPixOpen] = useState(false);
+
   const [title, setTittle] = useState('Total');
   const translateY = useSharedValue(Dimensions.get('window').height);
 
-  const showModal = (currentTarget: 'Address' | 'Cellphone') => {
+  const showModal = (currentTarget: 'Address' | 'Cellphone' | 'Pix') => {
     translateY.value = withTiming(0, {duration: 500});
     if (currentTarget === 'Cellphone') {
       return setModalOpen(true);
+    }
+
+    if (currentTarget === 'Pix') {
+      return setModalPixOpen(true);
     }
 
     return setModalAddressOpen(true);
@@ -113,6 +120,7 @@ const AddressCartScreen = ({
   };
 
   const {currentTheme} = useTheme();
+
   return (
     <View
       style={{
@@ -213,6 +221,7 @@ const AddressCartScreen = ({
                       active={selectedPayment}
                       setActive={setSeletedPayment}
                       icon={icon}
+                      showModal={showModal}
                     />
                   );
                 })}
@@ -232,6 +241,13 @@ const AddressCartScreen = ({
           setModalOpen={setModalAddressOpen}
           hideModal={hideModal}
           addAddress={addAddress}
+        />
+
+        <PixModal
+          modalOpen={modalPixOpen}
+          translateY={translateY}
+          setModalOpen={setModalPixOpen}
+          hideModal={hideModal}
         />
       </ScrollView>
       <CartTotalFixed

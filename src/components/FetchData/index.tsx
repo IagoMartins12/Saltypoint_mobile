@@ -2,6 +2,7 @@ import {useEffect} from 'react';
 import useGlobalStore from '../../hooks/store/useGlobalStore';
 import {
   getCategories,
+  getGeneralData,
   getProducts,
   getRewards,
   getStates,
@@ -12,8 +13,14 @@ import useTheme from '../../hooks/useTheme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const FetchData = () => {
-  const {setProducts, setCategorys, setStates, setTypePagament, setReward} =
-    useGlobalStore();
+  const {
+    setProducts,
+    setCategorys,
+    setStates,
+    setTypePagament,
+    setReward,
+    setGeneralData,
+  } = useGlobalStore();
   const {setCurrentTheme} = useTheme();
   const colorScheme = useColorScheme();
 
@@ -38,12 +45,14 @@ const FetchData = () => {
         typePagamentData,
         statesDate,
         rewardData,
+        generalData,
       ] = await Promise.all([
         getCategories(),
         getProducts(),
         getTypePagaments(),
         getStates(),
         getRewards(),
+        getGeneralData(),
       ]);
 
       setCategorys(categoryData);
@@ -51,6 +60,7 @@ const FetchData = () => {
       setTypePagament(typePagamentData);
       setStates(statesDate);
       setReward(rewardData);
+      setGeneralData(generalData);
     } catch (error) {
       console.log(error);
     }

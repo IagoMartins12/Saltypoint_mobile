@@ -7,16 +7,18 @@ import useTheme from '../../hooks/useTheme';
 
 interface PaymentCardProps {
   typePagament: Type_Pagament;
+  icon: JSX.Element;
   active?: string;
   setActive?: (id: string) => void;
-  icon: JSX.Element;
+  showModal?: (currentTarget: 'Address' | 'Cellphone' | 'Pix') => void;
 }
 
 const PaymentCard: React.FC<PaymentCardProps> = ({
-  active,
-  setActive,
   typePagament,
   icon,
+  active,
+  setActive,
+  showModal,
 }) => {
   const {currentTheme} = useTheme();
   const isActive = active === typePagament.id;
@@ -37,7 +39,12 @@ const PaymentCard: React.FC<PaymentCardProps> = ({
   return (
     <TouchableOpacity
       style={[styles.mainContainer, borderStyle]}
-      onPress={onPressHandler}
+      onPress={() => {
+        onPressHandler();
+        if (typePagament.type_pagament_name.toUpperCase() === 'PIX') {
+          showModal('Pix');
+        }
+      }}
       disabled={!setActive}>
       <View style={styles.icon}>{icon}</View>
       <View style={styles.textView}>

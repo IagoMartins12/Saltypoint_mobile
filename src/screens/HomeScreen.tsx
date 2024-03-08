@@ -21,6 +21,7 @@ import MyText from '../components/Text';
 import Carousel from '../components/Carrousel';
 import CarouselHome from '../components/Carrousel';
 import IMAGES from '../assets';
+import ClosedView from '../components/ClosedView';
 
 const HomeScreen = ({
   navigation,
@@ -122,6 +123,7 @@ const HomeScreen = ({
           </View>
         ))}
       </ScrollView>
+      <ClosedView />
     </View>
   );
 };

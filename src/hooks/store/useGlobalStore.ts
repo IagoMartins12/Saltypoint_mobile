@@ -12,6 +12,8 @@ const useGlobalStore = create<Store>(set => ({
   setStates: states => set({states: states}),
   reward: [],
   setReward: reward => set({reward: reward}),
+  generalData: null,
+  setGeneralData: generalData => set({generalData: generalData}),
 }));
 
 export default useGlobalStore;

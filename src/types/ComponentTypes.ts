@@ -4,6 +4,7 @@ import {
   Category,
   Discount_cupom,
   Favorite,
+  General_data,
   Order,
   Product,
   Reward,
@@ -172,6 +173,8 @@ export interface Store {
   setStates: (states: State[]) => void;
   reward: Reward[];
   setReward: (Reward: Reward[]) => void;
+  generalData: null | General_data;
+  setGeneralData: (generalData: General_data) => void;
 }
 
 export interface PrivateStore {
