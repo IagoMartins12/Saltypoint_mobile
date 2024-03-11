@@ -3,7 +3,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const getUserLocalStorage = async () => {
   try {
     const json = await AsyncStorage.getItem('secret');
-
     if (!json) {
       return null;
     }

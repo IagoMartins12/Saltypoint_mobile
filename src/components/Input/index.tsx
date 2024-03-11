@@ -1,17 +1,17 @@
 import {useState} from 'react';
 import {Control, Controller, FieldValues} from 'react-hook-form';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 import {BORDERRADIUS, COLORS, FONTSIZE} from '../../theme/theme';
 import CustomIcon, {PackNames} from '../CustomIcon';
 import useTheme from '../../hooks/useTheme';
 
 interface InputProps {
   name: string;
-  placeholder?: string;
-  text?: string;
   control: Control<FieldValues, any>;
-  isPassword?: boolean;
   icon: string;
+  text?: string;
+  isPassword?: boolean;
+  placeholder?: string;
   pack?: PackNames;
 }
 
@@ -23,10 +23,14 @@ const StyledInputComponent: React.FC<InputProps> = ({
   icon,
   pack = 'MaterialCommunityIcons',
 }) => {
+  const [typeState, setTypeState] = useState(isPassword);
   const [isFocused, setIsFocused] = useState(false);
   const {currentTheme} = useTheme();
   return (
-    <>
+    <View
+      style={{
+        position: 'relative',
+      }}>
       <Controller
         control={control}
         rules={{required: true}}
@@ -88,7 +92,7 @@ const StyledInputComponent: React.FC<InputProps> = ({
                       : COLORS.textColorDark,
                 },
               ]}
-              secureTextEntry={isPassword}
+              secureTextEntry={typeState}
             />
             {isFocused || value ? (
               <Text
@@ -109,7 +113,20 @@ const StyledInputComponent: React.FC<InputProps> = ({
         )}
         name={name}
       />
-    </>
+      {isPassword ? (
+        <Pressable
+          style={styles.iconContainer}
+          onPress={() => {
+            setTypeState(!typeState);
+          }}>
+          <CustomIcon
+            name={typeState ? 'eye' : 'eye-with-line'}
+            pack="Entypo"
+            size={20}
+          />
+        </Pressable>
+      ) : null}
+    </View>
   );
 };
 
@@ -134,5 +151,11 @@ const styles = StyleSheet.create({
     top: -10,
     paddingHorizontal: 4,
     fontSize: FONTSIZE.size_14,
+  },
+
+  iconContainer: {
+    position: 'absolute',
+    top: 15,
+    right: 15,
   },
 });

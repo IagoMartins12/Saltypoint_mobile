@@ -18,6 +18,7 @@ const ModalIcon = ({
         width: '100%',
         height: height,
         position: 'relative',
+        zIndex: 50,
       }}>
       <TouchableOpacity
         style={[
@@ -27,7 +28,10 @@ const ModalIcon = ({
               currentTheme === 'light' ? COLORS.iconBgLight : COLORS.iconBgDark,
           },
         ]}
-        onPress={handleOverlayPress}>
+        onPress={() => {
+          console.log('teste');
+          handleOverlayPress();
+        }}>
         <CustomIcon
           name="arrow-down"
           size={20}

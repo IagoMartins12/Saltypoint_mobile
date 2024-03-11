@@ -19,7 +19,6 @@ const MyCarousel = ({entries}) => {
   };
 
   const sliderWidth = Dimensions.get('screen').width * 0.87;
-  const itemWidth = sliderWidth; // Defina o valor apropriado
 
   return (
     <Carousel
@@ -29,10 +28,11 @@ const MyCarousel = ({entries}) => {
       sliderWidth={sliderWidth}
       layout="stack"
       layoutCardOffset={18}
-      itemWidth={itemWidth}
-      autoplay={true} // Ativar o autoplay
-      autoplayDelay={1000} // Definir o atraso entre os slides em milissegundos
-      autoplayInterval={3000} // Definir o intervalo entre os slides em milissegundos    />
+      itemWidth={sliderWidth}
+      autoplay={true}
+      autoplayDelay={1000}
+      autoplayInterval={3000}
+      loop
     />
   );
 };

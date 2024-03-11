@@ -16,20 +16,36 @@ import {
 } from 'react-native-gesture-handler';
 import PizzaAnimation from '../components/Lottie/PizzaAnimation';
 import StyledInputComponent from '../components/Input';
-import useKeyboardOpen from '../hooks/useKeyboardOpen';
 import {global} from '../style';
 import useTheme from '../hooks/useTheme';
 import MyText from '../components/Text';
+import {createUser} from '../services';
+import {CreateUserDto} from '../types/Dtos';
+import CallToast from '../components/Toast';
 
 const RegisterScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
-  const {control, handleSubmit} = useForm();
+  const {control, handleSubmit, reset} = useForm();
   const {currentTheme} = useTheme();
-  const onSubmit = (data: any) => console.log(data);
-  const isKeyboardVisible = useKeyboardOpen();
+  const {showToast} = CallToast();
+  const onSubmit = async data => {
+    const createUserDto = data as CreateUserDto;
+    console.log('createUserDto', createUserDto);
+    const response = await createUser(createUserDto);
+
+    if (response.status === 400) {
+      return showToast(response.data.message, 'success');
+    } else if (response.status === 201) {
+      showToast('conta criada com sucesso!', 'success');
+      navigation.navigate('Login');
+      reset();
+    } else {
+      showToast('Erro ao realizar cadastro!', 'error');
+    }
+  };
 
   const buttonPressHandler = () => {
     navigation.push('Login');
@@ -77,23 +93,23 @@ const RegisterScreen = ({
               <View style={styles.mainContainer}>
                 <StyledInputComponent
                   control={control}
-                  name="Email"
+                  name="name"
+                  placeholder="Nome: "
+                  icon="user"
+                  pack="Feather"
+                />
+
+                <StyledInputComponent
+                  control={control}
+                  name="email"
                   placeholder="Email: "
                   icon="email-outline"
                 />
 
                 <StyledInputComponent
                   control={control}
-                  name="Senha"
+                  name="password"
                   placeholder="Senha: "
-                  icon="asterisk"
-                  isPassword
-                />
-
-                <StyledInputComponent
-                  control={control}
-                  name="confirmPassword"
-                  placeholder="Confirme a senha: "
                   icon="asterisk"
                   isPassword
                 />

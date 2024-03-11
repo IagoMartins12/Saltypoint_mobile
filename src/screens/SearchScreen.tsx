@@ -118,7 +118,7 @@ const SearchScreen = ({
                     backgroundColor:
                       currentCategory === category.id
                         ? COLORS.primaryRedHex
-                        : '#fff0f0da',
+                        : '#fcd4d4da',
                     opacity:
                       currentCategory !== null &&
                       currentCategory !== category.id
@@ -131,16 +131,11 @@ const SearchScreen = ({
                     prev === category.id ? null : category.id,
                   );
                 }}>
-                <Text style={styles.categoryBoxName}>
+                <MyText style={styles.categoryBoxName}>
                   {category.category_name}
-                </Text>
+                </MyText>
                 {category.id === currentCategory && (
-                  <CustomIcon
-                    name="close"
-                    size={20}
-                    color="#000000"
-                    pack="Ionicons"
-                  />
+                  <CustomIcon name="close" size={20} pack="Ionicons" />
                 )}
               </TouchableOpacity>
             ))}

@@ -1,8 +1,7 @@
-import {Pressable, useColorScheme} from 'react-native';
+import {Pressable} from 'react-native';
 import CustomIcon from '../CustomIcon';
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import useTheme from '../../hooks/useTheme';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface ThemeProps {
   moveView: () => void;
@@ -11,9 +10,6 @@ interface ThemeProps {
 const ThemeSwitch: React.FC<ThemeProps> = ({moveView}) => {
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const {setCurrentTheme, currentTheme} = useTheme();
-  const colorScheme = useColorScheme();
-
-  console.log('currentTheme', currentTheme);
 
   const toggleSwitch = async () => {
     moveView();

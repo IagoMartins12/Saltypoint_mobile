@@ -1,15 +1,6 @@
 import React from 'react';
-import {
-  Dimensions,
-  GestureResponderEvent,
-  Modal,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Dimensions, Modal, StyleSheet, View} from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
-import CustomIcon from '../../CustomIcon';
 import useTheme from '../../../hooks/useTheme';
 import {COLORS} from '../../../theme/theme';
 import {ModalProps} from '../ForgetPasswordModal';
@@ -26,7 +17,6 @@ const NotOpenModal: React.FC<ModalProps> = ({
 }) => {
   const {currentTheme} = useTheme();
   const {generalData} = useGlobalStore();
-  // const {  } = useGlobalStore()
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
@@ -35,8 +25,6 @@ const NotOpenModal: React.FC<ModalProps> = ({
 
   const handleOverlayPress = () => {
     // Clique fora do modal, executa o hideModal
-    console.log('clicou');
-    hideModal();
     setTimeout(() => setModalOpen(!modalOpen), 300);
   };
 
@@ -56,7 +44,7 @@ const NotOpenModal: React.FC<ModalProps> = ({
               },
             ]}>
             <ModalIcon handleOverlayPress={handleOverlayPress} height="10%" />
-            <View style={{}}>
+            <View>
               <View
                 style={{
                   height: '50%',

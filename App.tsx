@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import Toast, {ToastRef} from 'react-native-toast-message';
 
 import TabNavigator from './src/navigators/TabNavigator';
@@ -26,14 +26,26 @@ import ProductScreen from './src/screens/ProductScreen';
 import IntroScreen from './src/screens/Intro/IntroScreen';
 import ForgetPasswordScreen from './src/screens/ForgetPasswordScreen';
 import FetchData from './src/components/FetchData/index';
+import useAuth, {checkAndSetToken} from './src/hooks/auth/useAuth';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+  const [mainScreen, setMainScreen] = useState(''); // Definindo estado inicial
+
+  const {isLogged} = useAuth();
+
+  useEffect(() => {
+    if (isLogged) {
+      setMainScreen('Tab');
+    } else {
+      setMainScreen('Intro');
+    }
+  }, [isLogged]);
   return (
     <>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Intro"
+          initialRouteName={mainScreen}
           screenOptions={{headerShown: false}}>
           <Stack.Screen
             name="Intro"

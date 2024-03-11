@@ -3,6 +3,7 @@ import {
   Image,
   Pressable,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -22,15 +23,43 @@ import {global} from '../style';
 import LargeButton from '../components/Button';
 import useTheme from '../hooks/useTheme';
 import MyText from '../components/Text';
+import {LoginUserDto} from '../types/Dtos';
+import {loginUser} from '../services';
+import useAuth from '../hooks/auth/useAuth';
+import CallToast from '../components/Toast';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
-  const {control, handleSubmit} = useForm();
-  const onSubmit = (data: any) => console.log(data);
+  const {control, handleSubmit, reset} = useForm();
+  const auth = useAuth();
+  const {showToast} = CallToast();
   const {currentTheme} = useTheme();
+
+  const setUserLocalStorage = async (acessToken: string) => {
+    auth.setToken(acessToken);
+    await AsyncStorage.setItem('secret', JSON.stringify(acessToken));
+    auth.setIsLogged();
+  };
+
+  const onSubmit = async (data: any) => {
+    const loginUserDto = data as LoginUserDto;
+    const response = await loginUser(loginUserDto);
+    console.log('response', response);
+    if (response.status === 400 || response.status === 401) {
+      return showToast(response.data.message, 'error');
+    } else if (response.status === 200) {
+      showToast('Login feito com sucesso!', 'success');
+      setUserLocalStorage(response.data.access_token);
+      navigation.push('Tab');
+      reset();
+    } else {
+      showToast('Erro ao realizar login!', 'error');
+    }
+  };
 
   const buttonPressHandler = useCallback(() => {
     navigation.push('Register');
@@ -79,19 +108,17 @@ const LoginScreen = ({
               </MyText>
             </View>
             <View style={styles.bottomView}>
-              {/* Form  */}
-
               <View style={styles.mainContainer}>
                 <StyledInputComponent
                   control={control}
-                  name="Email"
+                  name="email"
                   placeholder="Email: "
                   icon="email-outline"
                 />
 
                 <StyledInputComponent
                   control={control}
-                  name="Senha"
+                  name="password"
                   placeholder="Senha: "
                   icon="asterisk"
                   isPassword
@@ -108,12 +135,11 @@ const LoginScreen = ({
                 </Pressable>
 
                 <View style={styles.buttonDiv}>
-                  <LargeButton
-                    handleSubmit={handleSubmit}
-                    onSubmit={onSubmit}
-                    text="Continuar"
-                  />
-
+                  <TouchableOpacity
+                    onPress={handleSubmit(onSubmit)}
+                    style={global.buttonStyle}>
+                    <Text style={{color: '#FFFFFF'}}>Continuar</Text>
+                  </TouchableOpacity>
                   <TouchableOpacity
                     onPress={handleSubmit(onSubmit)}
                     style={global.buttonStyleWhite}>
@@ -132,16 +158,7 @@ const LoginScreen = ({
                       />
                     </View>
 
-                    <MyText
-                      style={{
-                        color:
-                          currentTheme === 'dark'
-                            ? COLORS.textColorDark
-                            : COLORS.textColorLight,
-                      }}
-                      textSize="mediumText2">
-                      Continuar com Google
-                    </MyText>
+                    <MyText textSize="mediumText2">Continuar com Google</MyText>
                   </TouchableOpacity>
                   <View style={styles.registerText}>
                     <MyText textSize="mediumText2">

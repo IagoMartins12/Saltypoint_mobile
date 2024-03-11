@@ -171,6 +171,7 @@ export const getAddressPerGeoLocation = async (
 export const getMe = async (): Promise<User> => {
   try {
     const response = await Api.get('/me');
+    console.log('responseeee', response);
     return response.data;
   } catch (error: any) {
     return error;
@@ -322,6 +323,16 @@ export const googleLogin = async () => {
 export const getGeneralData = async () => {
   try {
     const response = await Api.get('/general-data');
+    return response.data;
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const getUserInfos = async () => {
+  try {
+    const response = await Api.get('/me/info');
+    console.log('my response', response);
     return response.data;
   } catch (error: any) {
     return error;

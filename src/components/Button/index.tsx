@@ -16,11 +16,12 @@ const LargeButton: React.FC<LargeButtonProps> = ({
     <TouchableOpacity
       onPress={() => {
         if (handleSubmit && onSubmit) {
-          handleSubmit(onSubmit);
+          console.log('caiu aqui');
+          return handleSubmit(onSubmit);
         }
 
         if (onSubmit) {
-          onSubmit();
+          return onSubmit();
         }
       }}
       style={global.buttonStyle}>

@@ -16,6 +16,7 @@ import {PackNames} from '../components/CustomIcon';
 import ThemeSwitch from '../components/ThemeSwitch';
 import useTheme from '../hooks/useTheme';
 import MyText from '../components/Text';
+import usePrivateStore from '../hooks/store/usePrivateStore';
 
 const SettingsScreen = ({
   navigation,
@@ -26,8 +27,11 @@ const SettingsScreen = ({
   const [isMoving, setIsMoving] = useState(false);
   const [isImageModalVisible, setImageModalVisible] = useState(false);
   const [imageBackground, setImageBackground] = useState(null);
-
   const {currentTheme} = useTheme();
+
+  const {user, address} = usePrivateStore();
+
+  console.log('user', address);
   const handleNavigate = (name: string) => {
     navigation.push(name);
   };

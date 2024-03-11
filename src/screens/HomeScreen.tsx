@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import {useEffect} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -14,14 +14,37 @@ import CustomIcon from '../components/CustomIcon';
 import ProductCard from '../components/ProductCard';
 import {global} from '../style';
 import useGlobalStore from '../hooks/store/useGlobalStore';
-import {Category, Product} from '../types/ModelsType';
+import {Product} from '../types/ModelsType';
 import {enableGoBack, visibleCategories} from '../utils';
 import useTheme from '../hooks/useTheme';
 import MyText from '../components/Text';
-import Carousel from '../components/Carrousel';
 import CarouselHome from '../components/Carrousel';
 import IMAGES from '../assets';
 import ClosedView from '../components/ClosedView';
+import usePrivateStore from '../hooks/store/usePrivateStore';
+
+const data = [
+  {
+    id: 1,
+    image: IMAGES.CAROUSEL.CAROUSEL,
+  },
+  {
+    id: 2,
+    image: IMAGES.CAROUSEL.CAROUSEL2,
+  },
+  {
+    id: 3,
+    image: IMAGES.CAROUSEL.CAROUSEL3,
+  },
+  {
+    id: 4,
+    image: IMAGES.CAROUSEL.PIZZA,
+  },
+  {
+    id: 5,
+    image: IMAGES.CAROUSEL.ESFIHA,
+  },
+];
 
 const HomeScreen = ({
   navigation,
@@ -29,7 +52,8 @@ const HomeScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const {products, categorys} = useGlobalStore();
-
+  const {currentTheme} = useTheme();
+  const {user} = usePrivateStore();
   const buttonPressHandler = () => {
     navigation.push('Search');
   };
@@ -42,29 +66,6 @@ const HomeScreen = ({
     return <ProductCard product={item} onPress={onPress} />;
   };
 
-  const {currentTheme} = useTheme();
-  const data = [
-    {
-      id: 1,
-      image: IMAGES.CAROUSEL.CAROUSEL,
-    },
-    {
-      id: 2,
-      image: IMAGES.CAROUSEL.CAROUSEL2,
-    },
-    {
-      id: 3,
-      image: IMAGES.CAROUSEL.CAROUSEL3,
-    },
-    {
-      id: 4,
-      image: IMAGES.CAROUSEL.PIZZA,
-    },
-    {
-      id: 5,
-      image: IMAGES.CAROUSEL.ESFIHA,
-    },
-  ];
   useEffect(() => {
     enableGoBack(navigation);
   }, []);
@@ -81,9 +82,13 @@ const HomeScreen = ({
       ]}>
       <View style={[global.shadow, styles.headerContainer]}>
         <View style={styles.textDiv}>
-          <MyText style={styles.mainText}>
-            Olá, <Text style={{color: COLORS.primaryRedHex}}>Iago! </Text>
-          </MyText>
+          {user ? (
+            <MyText style={styles.mainText}>
+              Olá,{' '}
+              <Text style={{color: COLORS.primaryRedHex}}>{user.name}! </Text>
+            </MyText>
+          ) : null}
+
           <TouchableOpacity
             onPress={buttonPressHandler}
             style={styles.searchIcon}>

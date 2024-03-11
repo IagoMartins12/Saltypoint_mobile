@@ -16,7 +16,6 @@ const ClosedView = () => {
   };
 
   const hideModal = () => {
-    console.log('cliocu');
     setGeneralDataModalOpen(false);
     translateY.value = withTiming(Dimensions.get('window').height, {
       duration: 500,
