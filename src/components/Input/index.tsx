@@ -1,18 +1,19 @@
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {Control, Controller, FieldValues} from 'react-hook-form';
 import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
 import {BORDERRADIUS, COLORS, FONTSIZE} from '../../theme/theme';
 import CustomIcon, {PackNames} from '../CustomIcon';
 import useTheme from '../../hooks/useTheme';
+import MyText from '../Text';
 
 interface InputProps {
   name: string;
   control: Control<FieldValues, any>;
   icon: string;
-  text?: string;
   isPassword?: boolean;
   placeholder?: string;
   pack?: PackNames;
+  disabled?: boolean;
 }
 
 const StyledInputComponent: React.FC<InputProps> = ({
@@ -21,17 +22,25 @@ const StyledInputComponent: React.FC<InputProps> = ({
   placeholder,
   isPassword,
   icon,
+  disabled,
   pack = 'MaterialCommunityIcons',
 }) => {
   const [typeState, setTypeState] = useState(isPassword);
   const [isFocused, setIsFocused] = useState(false);
   const {currentTheme} = useTheme();
+
+  const inputStyle = [
+    styles.input,
+    {
+      color:
+        currentTheme === 'light' ? COLORS.textColorLight : COLORS.textColorDark,
+    },
+  ];
+
   return (
-    <View
-      style={{
-        position: 'relative',
-      }}>
+    <View style={{position: 'relative'}}>
       <Controller
+        disabled={disabled}
         control={control}
         rules={{required: true}}
         render={({field: {onChange, onBlur, value}}) => (
@@ -83,21 +92,15 @@ const StyledInputComponent: React.FC<InputProps> = ({
                   : COLORS.textColorDark
               }
               value={value}
-              style={[
-                styles.input,
-                {
-                  color:
-                    currentTheme === 'light'
-                      ? COLORS.textColorLight
-                      : COLORS.textColorDark,
-                },
-              ]}
+              style={inputStyle}
               secureTextEntry={typeState}
+              editable={!disabled} // <-- Desativa o campo se disabled for verdadeiro
             />
-            {isFocused || value ? (
-              <Text
+            {(isFocused || value) && (
+              <MyText
                 style={[
                   styles.placeholder,
+
                   {
                     color: isFocused
                       ? COLORS.primaryRedHex
@@ -107,13 +110,13 @@ const StyledInputComponent: React.FC<InputProps> = ({
                   },
                 ]}>
                 {placeholder}
-              </Text>
-            ) : null}
+              </MyText>
+            )}
           </View>
         )}
         name={name}
       />
-      {isPassword ? (
+      {isPassword && (
         <Pressable
           style={styles.iconContainer}
           onPress={() => {
@@ -125,7 +128,7 @@ const StyledInputComponent: React.FC<InputProps> = ({
             size={20}
           />
         </Pressable>
-      ) : null}
+      )}
     </View>
   );
 };
@@ -136,8 +139,7 @@ const styles = StyleSheet.create({
   InputContainerComponent: {
     flexDirection: 'row',
     borderRadius: BORDERRADIUS.radius_10,
-    borderWidth: 1,
-    position: 'relative',
+    borderWidth: 0.75,
     height: 50,
   },
   input: {
@@ -149,6 +151,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 50,
     top: -10,
+    fontWeight: 'bold',
+    zIndex: 50,
     paddingHorizontal: 4,
     fontSize: FONTSIZE.size_14,
   },

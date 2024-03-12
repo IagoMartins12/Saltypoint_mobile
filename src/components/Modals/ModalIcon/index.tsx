@@ -29,7 +29,6 @@ const ModalIcon = ({
           },
         ]}
         onPress={() => {
-          console.log('teste');
           handleOverlayPress();
         }}>
         <CustomIcon

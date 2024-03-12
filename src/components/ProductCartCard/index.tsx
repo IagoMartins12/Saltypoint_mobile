@@ -9,17 +9,21 @@ import {
 } from 'react-native';
 import MyText from '../Text';
 import CustomIcon from '../CustomIcon';
-import {Product} from '../../types/ModelsType';
+import {Cart_product, Product} from '../../types/ModelsType';
 import {useState} from 'react';
+import useGlobalStore from '../../hooks/store/useGlobalStore';
 
 interface ProductCardProps {
-  product: Product;
+  cartProduct: Cart_product;
   onPress?: (id: string) => void;
 }
 
-const ProductCartCard: React.FC<ProductCardProps> = ({product, onPress}) => {
+const ProductCartCard: React.FC<ProductCardProps> = ({
+  cartProduct,
+  onPress,
+}) => {
   const [count, setCount] = useState(1);
-
+  const {products} = useGlobalStore();
   const increaseCount = () => {
     setCount(count + 1);
   };
@@ -30,25 +34,53 @@ const ProductCartCard: React.FC<ProductCardProps> = ({product, onPress}) => {
     }
   };
 
+  const getProductName2 = (productId: string, size: number | null) => {
+    let name: string;
+    const product = products.find((p: Product) => p.id === productId);
+
+    if (!product) {
+      return 'Produto desconhecido';
+    }
+
+    if (size === 1) {
+      return product?.name.replace('Pizza', 'Brotinho');
+    } else {
+      return product?.name;
+    }
+  };
+
+  const getProductImage = (productId: string) => {
+    let name: string;
+    const product = products.find((p: Product) => p.id === productId);
+
+    if (!product) {
+      return 'P';
+    }
+
+    return product.product_image;
+  };
+
   return (
     <TouchableOpacity
       style={[styles.container]}
       onPress={() => {
         if (onPress) {
-          onPress(product.id);
+          // onPress(product.id);
         }
       }}>
       <View style={styles.image}>
         <ImageBackground
           source={{
-            uri: product.product_image,
+            uri: getProductImage(cartProduct.product_id),
           }}
           style={styles.CartItemImage}
         />
       </View>
 
       <View style={styles.content}>
-        <MyText style={styles.textName}>{product.name} </MyText>
+        <MyText style={styles.textName}>
+          {getProductName2(cartProduct.product_id, cartProduct.size)}{' '}
+        </MyText>
 
         <View
           style={{
@@ -57,9 +89,9 @@ const ProductCartCard: React.FC<ProductCardProps> = ({product, onPress}) => {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <MyText style={styles.textPrice}>
-            R$ {product.value.toFixed(2)}
-          </MyText>
+          {/* <MyText style={styles.textPrice}>
+            R$ {product?.value?.toFixed(2)}
+          </MyText> */}
 
           <View style={[styles.addItemsDiv]}>
             {count === 1 ? (

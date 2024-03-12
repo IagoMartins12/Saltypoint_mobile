@@ -1,18 +1,22 @@
-import {StyleSheet, View, ViewStyle} from 'react-native';
-import RNPickerSelect, {PickerStyle} from 'react-native-picker-select';
-import {BORDERRADIUS, COLORS, FONTSIZE} from '../../theme/theme';
+import {View, ViewStyle} from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
+import {BORDERRADIUS, COLORS} from '../../theme/theme';
 import CustomIcon from '../CustomIcon';
-import {useState} from 'react';
 import useTheme from '../../hooks/useTheme';
+import usePrivateStore from '../../hooks/store/usePrivateStore';
 
-interface CustomPickerStyle extends PickerStyle {
-  // Adicione quaisquer propriedades personalizadas que você precise
+interface CustomPickerStyle {
+  value: string | null;
+  setOnChangeDropdown: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SelectComponent = () => {
-  const [isFocused, setIsFocused] = useState(false);
-
+const SelectComponent: React.FC<CustomPickerStyle> = ({
+  value,
+  setOnChangeDropdown,
+}) => {
   const {currentTheme} = useTheme();
+  const {address, user} = usePrivateStore();
+
   const CustomSelectIcon = () => {
     return (
       <CustomIcon
@@ -28,37 +32,39 @@ const SelectComponent = () => {
     );
   };
 
-  const Placeholder = {label: 'Selecione um endereço', value: null};
+  const Placeholder = {label: 'Selecione um endereço', value: value};
+
+  const addressArr = address.map((address, i) => {
+    return {
+      label: `${address.address}, ${address.number} / ${address.district}`,
+      value: address.id,
+    };
+  });
 
   const viewStyle: ViewStyle = {
     height: 50,
     borderRadius: BORDERRADIUS.radius_10,
     borderWidth: 1,
     position: 'relative',
-    borderColor: isFocused
-      ? COLORS.primaryRedHex
-      : currentTheme === 'light'
-      ? COLORS.borderColorLight
-      : COLORS.borderColorDark,
+    borderColor:
+      currentTheme === 'light'
+        ? COLORS.borderColorLight
+        : COLORS.borderColorDark,
   };
 
   return (
     <View>
       <RNPickerSelect
         style={{
-          inputAndroidContainer: {
-            backgroundColor: '#693b3b',
-          },
           viewContainer: viewStyle,
           iconContainer: {
             width: '10%',
             height: '100%',
             left: 10,
-            borderRightColor: isFocused
-              ? COLORS.primaryRedHex
-              : currentTheme === 'light'
-              ? COLORS.borderColorLight
-              : COLORS.borderColorDark,
+            borderRightColor:
+              currentTheme === 'light'
+                ? COLORS.borderColorLight
+                : COLORS.borderColorDark,
             borderRightWidth: 0.5,
             justifyContent: 'center',
           },
@@ -68,44 +74,18 @@ const SelectComponent = () => {
           inputAndroid: {
             marginLeft: 40,
           },
-          modalViewTop: {
-            backgroundColor: '#FFFFFF', // Defina a cor do background do modal aqui
-          },
         }}
         //@ts-ignore
         Icon={CustomSelectIcon}
-        onValueChange={value => console.log(value)}
+        onValueChange={value => setOnChangeDropdown(value)}
         placeholder={Placeholder}
         itemStyle={{
           backgroundColor: '#FFFFFF',
         }}
-        items={[
-          {
-            label: 'Football',
-            value: 'football',
-          },
-          {
-            label: 'Baseball',
-            value: 'baseball',
-          },
-          {
-            label: 'Hockey',
-            value: 'hockey',
-          },
-        ]}
+        items={addressArr}
       />
     </View>
   );
 };
 
 export default SelectComponent;
-
-const styles = StyleSheet.create<CustomPickerStyle>({
-  inputAndroid: {
-    // backgroundColor: '#000000',
-    height: 50,
-    borderRadius: BORDERRADIUS.radius_10,
-    borderWidth: 1,
-    position: 'relative',
-  },
-});

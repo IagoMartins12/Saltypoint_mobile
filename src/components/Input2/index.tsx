@@ -19,7 +19,7 @@ const StyledInputComponent2: React.FC<CepInputProps> = ({
   id,
   control,
   onChangeFunction,
-  required = true,
+  required = false,
   disabled = false,
 }) => {
   const [focus, setFocus] = useState(false);

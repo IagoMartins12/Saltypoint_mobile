@@ -10,8 +10,10 @@ import {
 import {COLORS} from '../../theme/theme';
 import MyText from '../Text';
 import useTheme from '../../hooks/useTheme';
+import {Discount_cupom} from '../../types/ModelsType';
+import {formatDate} from '../../utils';
 
-const CouponCard = () => {
+const CouponCard = ({coupon}: {coupon: Discount_cupom}) => {
   const handleCopyLink = async () => {
     // try {
     //   await Clipboard.setString(coupon.cupom_name); // Import Clipboard from react-native
@@ -46,10 +48,12 @@ const CouponCard = () => {
       </View>
       <View style={styles.textContainer}>
         <View>
-          <MyText style={styles.couponNameText}>Desconto de 15%</MyText>
+          <MyText style={styles.couponNameText}>
+            Desconto de {coupon.discount}%
+          </MyText>
         </View>
 
-        <MyText style={styles.rewardCode}>#F3S564</MyText>
+        <MyText style={styles.rewardCode}>#{coupon.cupom_name}</MyText>
 
         <View
           style={{
@@ -58,7 +62,9 @@ const CouponCard = () => {
             flexDirection: 'row',
           }}>
           <MyText style={styles.validityText}>Validade:</MyText>
-          <MyText style={styles.normalText}>20/01/2024</MyText>
+          <MyText style={styles.normalText}>
+            {formatDate(coupon.expiration_date.toString(), true)}
+          </MyText>
         </View>
       </View>
     </TouchableOpacity>

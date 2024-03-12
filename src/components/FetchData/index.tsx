@@ -101,7 +101,6 @@ const FetchData = () => {
 
   useEffect(() => {
     if (isLogged) {
-      console.log('fetch....');
       fetchPrivateData();
     }
   }, [isLogged]);

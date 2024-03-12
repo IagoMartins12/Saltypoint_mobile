@@ -12,14 +12,12 @@ import useTheme from '../../hooks/useTheme';
 import {COLORS} from '../../theme/theme';
 
 export interface CepInputProps {
-  register: UseFormRegister<FieldValues>;
-  handleOnChange: (value: string) => void;
+  handleOnChange: (value: string, id) => void;
   required?: boolean;
   control: Control<FieldValues, any>;
 }
 
 const CepInput: React.FC<CepInputProps> = ({
-  register,
   control,
   handleOnChange,
   required = true,
@@ -64,7 +62,7 @@ const CepInput: React.FC<CepInputProps> = ({
             placeholder="Exemplo: 05280-000"
             onChangeText={text => {
               const formattedCep = formatCep(text);
-              handleOnChange(formattedCep);
+              handleOnChange(formattedCep, 'cep');
               onChange(formattedCep);
               1;
             }}

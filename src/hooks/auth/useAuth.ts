@@ -13,7 +13,6 @@ const useAuth = create<AuthStore>(set => ({
 export const checkAndSetToken = async () => {
   try {
     const storedToken = await AsyncStorage.getItem('secret');
-    console.log('storedToken', storedToken);
     if (storedToken) {
       useAuth.getState().setToken(storedToken);
       useAuth.getState().setIsLogged();

@@ -13,6 +13,7 @@ import OrderCard from '../../components/OrderCard';
 import {COLORS} from '../../theme/theme';
 import {enableGoBack} from '../../utils';
 import useTheme from '../../hooks/useTheme';
+import usePrivateStore from '../../hooks/store/usePrivateStore';
 
 const OrderScreen = ({
   navigation,
@@ -20,6 +21,7 @@ const OrderScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const {currentTheme} = useTheme();
+  const {orders} = usePrivateStore();
   const onSwipeLeft = () => {
     // Navegar para a página desejada
     navigation.navigate('Settings');

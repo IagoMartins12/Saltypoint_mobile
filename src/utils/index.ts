@@ -4,29 +4,33 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {Dimensions} from 'react-native';
 import {useSharedValue} from 'react-native-reanimated';
 
-export const formatDate = (dateString: string): string => {
+export const formatDate = (dateString: string, numericOnly = false): string => {
   const date = new Date(dateString);
 
   const day = date.getDate();
   const monthIndex = date.getMonth();
   const year = date.getFullYear();
 
-  const monthNames = [
-    'janeiro',
-    'fevereiro',
-    'março',
-    'abril',
-    'maio',
-    'junho',
-    'julho',
-    'agosto',
-    'setembro',
-    'outubro',
-    'novembro',
-    'dezembro',
-  ];
+  if (numericOnly) {
+    return `${day}/${monthIndex + 1}/${year}`;
+  } else {
+    const monthNames = [
+      'janeiro',
+      'fevereiro',
+      'março',
+      'abril',
+      'maio',
+      'junho',
+      'julho',
+      'agosto',
+      'setembro',
+      'outubro',
+      'novembro',
+      'dezembro',
+    ];
 
-  return `${day} de ${monthNames[monthIndex]} de ${year}`;
+    return `${day} de ${monthNames[monthIndex]} de ${year}`;
+  }
 };
 
 export const formatCep = (value: string) => {

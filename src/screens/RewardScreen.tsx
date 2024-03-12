@@ -18,6 +18,8 @@ import {FlatList} from 'react-native';
 import RewardCard from '../components/RewardCard';
 import FidelityAccordeonSection from '../components/FidelityAccordeonSection';
 import useTheme from '../hooks/useTheme';
+import usePrivateStore from '../hooks/store/usePrivateStore';
+import EmptyAnimation from '../components/Lottie/EmptyAnimation';
 
 const RewardScreen = ({
   navigation,
@@ -26,6 +28,7 @@ const RewardScreen = ({
 }) => {
   const {reward} = useGlobalStore();
   const {currentTheme} = useTheme();
+  const {user} = usePrivateStore();
   const goToInfo = () => {
     return navigation.navigate('Fidelity');
   };
@@ -33,117 +36,130 @@ const RewardScreen = ({
   const goToCatchReward = () => {
     return navigation.navigate('CatchReward');
   };
-  return (
-    <View>
-      <ScrollView
-        contentContainerStyle={{
-          gap: 10,
-          paddingBottom: 40,
-          backgroundColor:
-            currentTheme === 'light'
-              ? COLORS.secondBackgroundLight
-              : COLORS.secondBackgroundDark,
-        }}>
-        <View
-          style={[
-            styles.headerContainer,
-            global.shadow,
-            {
-              gap: 25,
-              backgroundColor:
-                currentTheme === 'light'
-                  ? COLORS.backgroundColorLight
-                  : COLORS.backgroundColorDark,
-            },
-          ]}>
-          <View>
-            <MyText style={styles.firstTittle}>Você possui </MyText>
-            <View
-              style={{flexDirection: 'row', alignItems: 'flex-end', gap: 5}}>
-              <MyText style={styles.numberOfPoints}>25</MyText>
-              <View
-                style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
-                <MyText style={styles.pointsText}>pontos</MyText>
 
-                <Pressable onPress={goToInfo}>
-                  <CustomIcon name="info" pack="Feather" size={15} />
-                </Pressable>
+  if (user) {
+    return (
+      <View>
+        <ScrollView
+          contentContainerStyle={{
+            gap: 10,
+            paddingBottom: 40,
+            backgroundColor:
+              currentTheme === 'light'
+                ? COLORS.secondBackgroundLight
+                : COLORS.secondBackgroundDark,
+          }}>
+          <View
+            style={[
+              styles.headerContainer,
+              global.shadow,
+              {
+                gap: 25,
+                backgroundColor:
+                  currentTheme === 'light'
+                    ? COLORS.backgroundColorLight
+                    : COLORS.backgroundColorDark,
+              },
+            ]}>
+            <View>
+              <MyText style={styles.firstTittle}>Você possui </MyText>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'flex-end',
+                  gap: 5,
+                }}>
+                <MyText style={styles.numberOfPoints}>{user.points}</MyText>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 5,
+                  }}>
+                  <MyText style={styles.pointsText}>pontos</MyText>
+
+                  <Pressable onPress={goToInfo}>
+                    <CustomIcon name="info" pack="Feather" size={15} />
+                  </Pressable>
+                </View>
               </View>
             </View>
-          </View>
 
-          <View style={styles.infoBox}>
-            <View style={styles.iconBox}>
-              <CustomIcon
-                name="warning"
-                pack="Ionicons"
-                size={30}
-                color="#000000"
-              />
+            <View style={styles.infoBox}>
+              <View style={styles.iconBox}>
+                <CustomIcon
+                  name="warning"
+                  pack="Ionicons"
+                  size={30}
+                  color="#000000"
+                />
+              </View>
+
+              <View style={styles.infoTextBox}>
+                <MyText style={styles.infoText}>
+                  Seus pontos só serão atualizados quando o pedido for concluido
+                </MyText>
+              </View>
             </View>
 
-            <View style={styles.infoTextBox}>
-              <MyText style={styles.infoText}>
-                Seus pontos só serão atualizados quando o pedido for concluido
-              </MyText>
+            <ProgressBar points={user.points} />
+
+            <TouchableOpacity
+              style={styles.buttonStyle}
+              onPress={goToCatchReward}>
+              <Text style={styles.rewardText}>Ver recompensas</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={[
+              global.shadow,
+              {
+                justifyContent: 'center',
+                alignItems: 'center',
+              },
+            ]}>
+            <View style={styles.featuredBox}>
+              <MyText style={styles.featuredText}>Destaque</MyText>
             </View>
+            <View style={styles.arrowDown} />
           </View>
 
-          <ProgressBar points={150} />
-
-          <TouchableOpacity
-            style={styles.buttonStyle}
-            onPress={goToCatchReward}>
-            <Text style={styles.rewardText}>Ver recompensas</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View
-          style={[
-            global.shadow,
-            {
-              justifyContent: 'center',
-              alignItems: 'center',
-            },
-          ]}>
-          <View style={styles.featuredBox}>
-            <MyText style={styles.featuredText}>Destaque</MyText>
+          <View
+            style={[
+              styles.couponBox,
+              global.shadow,
+              {
+                backgroundColor:
+                  currentTheme === 'light'
+                    ? COLORS.backgroundColorLight
+                    : COLORS.backgroundColorDark,
+              },
+            ]}>
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={[styles.flatListView]}
+              data={reward}
+              renderItem={item => (
+                <RewardCard
+                  reward={item.item}
+                  key={item.index}
+                  onClick={goToCatchReward}
+                />
+              )}
+            />
           </View>
-          <View style={styles.arrowDown} />
-        </View>
 
-        <View
-          style={[
-            styles.couponBox,
-            global.shadow,
-            {
-              backgroundColor:
-                currentTheme === 'light'
-                  ? COLORS.backgroundColorLight
-                  : COLORS.backgroundColorDark,
-            },
-          ]}>
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={[styles.flatListView]}
-            data={reward}
-            renderItem={item => (
-              <RewardCard
-                reward={item.item}
-                key={item.index}
-                onClick={goToCatchReward}
-              />
-            )}
-          />
-        </View>
+          <View style={[global.shadow]}>
+            <FidelityAccordeonSection />
+          </View>
+        </ScrollView>
+      </View>
+    );
+  }
 
-        <View style={[global.shadow]}>
-          <FidelityAccordeonSection />
-        </View>
-      </ScrollView>
-    </View>
-  );
+  return <EmptyAnimation text="Faça o login para acessar esta pagina" />;
 };
 
 const styles = StyleSheet.create({

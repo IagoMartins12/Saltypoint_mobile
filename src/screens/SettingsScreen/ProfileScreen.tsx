@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
@@ -25,6 +25,11 @@ import ForgetPasswordModal from '../../components/Modals/ForgetPasswordModal';
 import {useSharedValue, withTiming} from 'react-native-reanimated';
 import useTheme from '../../hooks/useTheme';
 import MyText from '../../components/Text';
+import usePrivateStore from '../../hooks/store/usePrivateStore';
+import {UpdateUserDto} from '../../types/Dtos';
+import {updatedMe} from '../../services';
+import CallToast from '../../components/Toast';
+import {User} from '../../types/ModelsType';
 
 const ProfileScreen = ({
   navigation,
@@ -32,10 +37,50 @@ const ProfileScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const {control, handleSubmit} = useForm();
-  const onSubmit = (data: any) => console.log(data);
-  const translateY = useSharedValue(Dimensions.get('window').height);
+  const [onChangeDropdown, setOnChangeDropdown] = useState<null | string>(null);
+  const {control, handleSubmit, setValue} = useForm();
   const {currentTheme} = useTheme();
+  const {user, setUser} = usePrivateStore();
+  const {showToast} = CallToast();
+
+  const setUserWithCallback = (callback: (user: User) => User) => {
+    if (!user) return;
+
+    const updatedUser = callback(user);
+
+    setUser(updatedUser);
+  };
+
+  const onSubmit = async (data: any) => {
+    console.log(data);
+    if (!user) return;
+    if (data.phone.length !== 15 && data.phone)
+      return showToast('Insira um numero valido', 'error');
+
+    const object = {
+      name: data.name,
+      phone: data.phone !== '' ? data.phone : null,
+      user_Adress_id: onChangeDropdown !== '' ? onChangeDropdown : null,
+    } as UpdateUserDto;
+    try {
+      await updatedMe(object);
+
+      setUserWithCallback(oldUser => ({
+        ...oldUser,
+        phone: data.phone !== '' ? data.phone : null,
+        user_Adress_id: onChangeDropdown !== '' ? onChangeDropdown : null,
+        name: data.name,
+      }));
+
+      showToast('Perfil atualizado com sucesso!', 'success');
+    } catch (error) {
+      // Handle errors here
+      console.error(error);
+      showToast('Erro ao atualizar o perfil.', 'error');
+    }
+  };
+  const translateY = useSharedValue(Dimensions.get('window').height);
+
   const onSwipeLeft = () => {
     // Navegar para a página desejada
     navigation.navigate('Settings');
@@ -51,112 +96,122 @@ const ProfileScreen = ({
     });
   };
 
-  return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <PanGestureHandler
-        onHandlerStateChange={({nativeEvent}) => {
-          if (
-            nativeEvent.state === State.END &&
-            nativeEvent.translationX > 50
-          ) {
-            onSwipeLeft();
-          }
-        }}>
-        <ScrollView
-          contentContainerStyle={{}}
-          style={[
-            styles.mainContainer,
-            {
-              backgroundColor:
-                currentTheme === 'light'
-                  ? COLORS.backgroundColorLight
-                  : COLORS.backgroundColorDark,
-            },
-          ]}>
-          <View style={[global.shadow, styles.profileContainer]}>
-            <ComeBack navigation={navigation} />
-            <View
-              style={{
-                alignSelf: 'center',
-                height: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-                position: 'absolute',
-              }}>
-              <View style={styles.profilePhotoDiv}>
-                <Image
-                  style={styles.CartItemImage}
-                  source={require('../../assets/profile.png')}
+  useEffect(() => {
+    setValue('name', user.name);
+    setValue('email', user.email);
+    setValue('phone', user?.phone);
+    setOnChangeDropdown(user.id);
+  }, [user]);
+
+  if (user) {
+    return (
+      <GestureHandlerRootView style={{flex: 1}}>
+        <PanGestureHandler
+          onHandlerStateChange={({nativeEvent}) => {
+            if (
+              nativeEvent.state === State.END &&
+              nativeEvent.translationX > 50
+            ) {
+              onSwipeLeft();
+            }
+          }}>
+          <ScrollView
+            contentContainerStyle={{}}
+            style={[
+              styles.mainContainer,
+              {
+                backgroundColor:
+                  currentTheme === 'light'
+                    ? COLORS.backgroundColorLight
+                    : COLORS.backgroundColorDark,
+              },
+            ]}>
+            <View style={[global.shadow, styles.profileContainer]}>
+              <ComeBack navigation={navigation} />
+              <View style={styles.photoContainer}>
+                <View style={styles.profilePhotoDiv}>
+                  <Image
+                    style={styles.CartItemImage}
+                    source={
+                      user.image
+                        ? user.image
+                        : require('../../assets/profile.png')
+                    }
+                  />
+                </View>
+                <MyText
+                  style={{
+                    fontSize: FONTSIZE.size_18,
+                    fontWeight: '500',
+                    marginTop: 10,
+                  }}>
+                  {user.name}
+                </MyText>
+              </View>
+            </View>
+
+            <View style={styles.listContainer}>
+              <View style={{gap: 12}}>
+                <StyledInputComponent
+                  control={control}
+                  name="name"
+                  icon="account-circle-outline"
+                  placeholder="Nome: "
+                />
+                <StyledInputComponent
+                  control={control}
+                  name="email"
+                  placeholder="Email: "
+                  icon="email-outline"
+                  disabled
+                />
+                <StyledInputComponent
+                  control={control}
+                  name="phone"
+                  placeholder="Telefone: "
+                  icon="email-outline"
+                />
+                <Dropdown
+                  setOnChangeDropdown={setOnChangeDropdown}
+                  value={onChangeDropdown}
                 />
               </View>
-              <MyText
-                style={{
-                  fontSize: FONTSIZE.size_18,
-                  fontWeight: '500',
-                  marginTop: 10,
-                }}>
-                Iago martins
-              </MyText>
-            </View>
-          </View>
 
-          <View style={styles.listContainer}>
-            <View style={{gap: 12}}>
-              <StyledInputComponent
-                control={control}
-                name="name"
-                icon="account-circle-outline"
-                placeholder="Nome: "
-              />
-              <StyledInputComponent
-                control={control}
-                name="Email"
-                placeholder="Email: "
-                icon="email-outline"
-              />
-              <StyledInputComponent
-                control={control}
-                name="cellphone"
-                placeholder="Telefone: "
-                icon="email-outline"
-              />
-              <Dropdown />
-            </View>
-
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                gap: 10,
-              }}>
-              <TouchableOpacity
-                onPress={handleSubmit(onSubmit)}
-                style={global.buttonStyle}>
-                <Text style={{color: '#FFFFFF'}}>Editar</Text>
-              </TouchableOpacity>
-              <Text
-                onPress={() => {
-                  showModal();
-                  setModalOpen(true);
-                }}
+              <View
                 style={{
-                  color: COLORS.primaryRedHex,
-                  textDecorationLine: 'underline',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: 10,
                 }}>
-                Alterar senha
-              </Text>
+                <TouchableOpacity
+                  onPress={handleSubmit(onSubmit)}
+                  style={global.buttonStyle}>
+                  <Text style={{color: '#FFFFFF'}}>Editar</Text>
+                </TouchableOpacity>
+                <Text
+                  onPress={() => {
+                    showModal();
+                    setModalOpen(true);
+                  }}
+                  style={{
+                    color: COLORS.primaryRedHex,
+                    textDecorationLine: 'underline',
+                  }}>
+                  Alterar senha
+                </Text>
+              </View>
             </View>
-          </View>
-          <ForgetPasswordModal
-            modalOpen={modalOpen}
-            setModalOpen={setModalOpen}
-            hideModal={hideModal}
-            translateY={translateY}
-          />
-        </ScrollView>
-      </PanGestureHandler>
-    </GestureHandlerRootView>
-  );
+            <ForgetPasswordModal
+              modalOpen={modalOpen}
+              setModalOpen={setModalOpen}
+              hideModal={hideModal}
+              translateY={translateY}
+            />
+          </ScrollView>
+        </PanGestureHandler>
+      </GestureHandlerRootView>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
@@ -173,6 +228,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
+  photoContainer: {
+    alignSelf: 'center',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+  },
   profilePhotoDiv: {
     height: 150,
     width: 150,

@@ -81,7 +81,13 @@ const HomeScreen = ({
         },
       ]}>
       <View style={[global.shadow, styles.headerContainer]}>
-        <View style={styles.textDiv}>
+        <View
+          style={[
+            styles.textDiv,
+            {
+              justifyContent: user ? 'space-between' : 'flex-end',
+            },
+          ]}>
           {user ? (
             <MyText style={styles.mainText}>
               Olá,{' '}
@@ -149,7 +155,6 @@ const styles = StyleSheet.create({
   },
   textDiv: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
   },
   searchIcon: {

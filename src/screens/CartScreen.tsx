@@ -14,6 +14,7 @@ import CartInfo from '../components/CartInfo';
 import {COLORS} from '../theme/theme';
 import {global} from '../style';
 import useTheme from '../hooks/useTheme';
+import usePrivateStore from '../hooks/store/usePrivateStore';
 
 const CartScreen = ({
   navigation,
@@ -23,10 +24,11 @@ const CartScreen = ({
   const [modalOpen, setModalOpen] = useState(false);
   const translateY = useSharedValue(Dimensions.get('window').height);
 
-  const cartNotEmpty = true;
   const {currentTheme} = useTheme();
   const {products} = useGlobalStore();
+  const {cart_product, user} = usePrivateStore();
   const ListRef = useRef<FlatList>();
+  const cartNotEmpty = true;
 
   const showModal = () => {
     translateY.value = withTiming(0, {duration: 500});
@@ -50,8 +52,8 @@ const CartScreen = ({
     navigation.navigate('Product', {id});
   };
 
-  return (
-    <>
+  if (user) {
+    return (
       <View
         style={{
           flex: 1,
@@ -61,7 +63,7 @@ const CartScreen = ({
               : COLORS.backgroundColorDark,
         }}>
         <View style={styles.mainContainer}>
-          {cartNotEmpty ? (
+          {cart_product.length > 0 ? (
             <View style={{flex: 1}}>
               <ScrollView>
                 {/* Cart Products  */}
@@ -76,7 +78,7 @@ const CartScreen = ({
                     //       : COLORS.cardColorLight,
                     // },
                   ]}>
-                  {totalProducts.map((p, i) => (
+                  {cart_product.map((p, i) => (
                     <View key={i}>
                       <ProductCartCard product={p} />
 
@@ -185,8 +187,10 @@ const CartScreen = ({
           )}
         </View>
       </View>
-    </>
-  );
+    );
+  }
+
+  return <EmptyAnimation text="Faça o login para acessar esta pagina" />;
 };
 
 const styles = StyleSheet.create({

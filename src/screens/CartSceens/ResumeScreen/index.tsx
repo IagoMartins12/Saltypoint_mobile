@@ -75,7 +75,6 @@ const ResumeCartScreen = ({
 
   const finishOrder = () => {
     setHasPlayed(true);
-    console.log('onpress');
   };
 
   const getBack = () => {

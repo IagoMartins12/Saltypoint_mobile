@@ -22,6 +22,10 @@ import DeleteAddressModal from '../../components/Modals/DeleteAddressModal';
 
 import AddressCard from '../../components/AddressCard';
 import useTheme from '../../hooks/useTheme';
+import usePrivateStore from '../../hooks/store/usePrivateStore';
+import MyText from '../../components/Text';
+import {User_Adress} from '../../types/ModelsType';
+import CallToast from '../../components/Toast';
 
 const AddressScreen = ({
   navigation,
@@ -29,9 +33,11 @@ const AddressScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [currentAddress, setCurrentAddress] = useState<null | string>(null);
   const {currentTheme} = useTheme();
+  const {address} = usePrivateStore();
   const translateY = useSharedValue(Dimensions.get('window').height);
-
+  const {showToast} = CallToast();
   const showModal = () => {
     translateY.value = withTiming(0, {duration: 500});
   };
@@ -54,34 +60,22 @@ const AddressScreen = ({
     navigation.navigate('Cep');
   };
 
-  const address = [
-    {
-      isActive: 1,
-      id: '0',
-      type_adress: 0,
-      address: 'Estrada de ligação',
-      number: 22,
-      district: 'Sol nascente',
-      city: 'São Paulo',
-      uf: 'SP',
-      reference: 'Ao lado da farmacia',
-    },
-    {
-      isActive: 1,
-      id: '1',
-      type_adress: 1,
-      address: 'Estrada de ligação',
-      number: 22,
-      district: 'Sol nascente',
-      city: 'São Paulo',
-      uf: 'SP',
-    },
-  ];
-
   const handleOpenDeleteModal = (id: string) => {
+    setCurrentAddress(id);
     setModalOpen(!modalOpen);
     showModal();
   };
+
+  const isValid = () => {
+    const addressLenght = address.filter(
+      (address: User_Adress) => address.isActive === 0,
+    ).length;
+
+    if (addressLenght <= 4) return true;
+
+    return false;
+  };
+
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <PanGestureHandler
@@ -107,20 +101,33 @@ const AddressScreen = ({
             ]}>
             <View style={styles.contentContainer}>
               {address.length > 0 &&
-                address.map((address, i) => (
-                  <AddressCard
-                    address={address}
-                    handleOpenDeleteModal={handleOpenDeleteModal}
-                    key={i}
-                  />
-                ))}
+                address
+                  .filter((address: User_Adress) => address.isActive === 0)
+                  .map((address, i) => (
+                    <AddressCard
+                      address={address}
+                      handleOpenDeleteModal={handleOpenDeleteModal}
+                      key={i}
+                    />
+                  ))}
               {address.length === 0 && (
-                <Text style={styles.emptyResultText}>
+                <MyText style={styles.emptyResultText}>
                   Sem endereço cadastrado
-                </Text>
+                </MyText>
               )}
 
-              <TouchableOpacity style={styles.addButton} onPress={addAddress}>
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => {
+                  isValid()
+                    ? addAddress()
+                    : showToast(
+                        'Quantidade maxima de endereços atingida!',
+                        'error',
+                      );
+
+                  addAddress();
+                }}>
                 <CustomIcon name="plus" size={25} color="red" pack="Feather" />
                 <Text style={styles.addButtonText}>Adicionar endereço</Text>
               </TouchableOpacity>
@@ -130,6 +137,7 @@ const AddressScreen = ({
                 modalOpen={modalOpen}
                 translateY={translateY}
                 setModalOpen={setModalOpen}
+                currentAddress={currentAddress}
               />
             </View>
           </ScrollView>
@@ -182,6 +190,8 @@ const styles = StyleSheet.create({
   emptyResultText: {
     textAlign: 'center',
     marginTop: 10,
+    fontSize: 20,
+    fontWeight: '700',
   },
   addButton: {
     flexDirection: 'row',

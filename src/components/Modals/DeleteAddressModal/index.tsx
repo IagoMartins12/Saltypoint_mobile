@@ -17,21 +17,50 @@ import {global} from '../../../style';
 import useTheme from '../../../hooks/useTheme';
 import MyText from '../../Text';
 import ModalIcon from '../ModalIcon';
+import usePrivateStore from '../../../hooks/store/usePrivateStore';
+import CallToast from '../../Toast';
+import {deleteAddress} from '../../../services';
 
 export interface ModalProps {
   modalOpen: boolean;
   setModalOpen: (modalOpen: boolean) => void;
   hideModal: () => void;
   translateY: Animated.SharedValue<number>;
+  currentAddress: string;
 }
 
 const DeleteAddressModal: React.FC<ModalProps> = ({
   modalOpen,
   setModalOpen,
+  currentAddress,
   hideModal,
   translateY,
 }) => {
   const {currentTheme} = useTheme();
+  const {address, setAddress, user} = usePrivateStore();
+  const {showToast} = CallToast();
+  const handleDeleteAddress = async () => {
+    if (currentAddress) {
+      if (user?.user_Adress_id === currentAddress) {
+        return showToast(
+          'Não é possível excluir o endereço que está vinculado a sua conta!',
+          'error',
+        );
+      }
+      const response = await deleteAddress(currentAddress);
+
+      if (response.status === 200) {
+        const updatedAddressList = address.filter(
+          address => address.id !== currentAddress,
+        );
+        setAddress(updatedAddressList);
+        handleOverlayPress();
+        return showToast('Endereço excluido', 'success');
+      } else {
+        return showToast('Erro ao deletar endereço', 'error');
+      }
+    }
+  };
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -78,7 +107,7 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
                 </MyText>
 
                 <TouchableOpacity
-                  onPress={handleOverlayPress}
+                  onPress={handleDeleteAddress}
                   style={styles.buttonStyle}>
                   <Text style={{color: '#FFFFFF', paddingRight: 10}}>
                     Deletar

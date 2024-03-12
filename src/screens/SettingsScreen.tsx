@@ -31,7 +31,6 @@ const SettingsScreen = ({
 
   const {user, address} = usePrivateStore();
 
-  console.log('user', address);
   const handleNavigate = (name: string) => {
     navigation.push(name);
   };
@@ -95,6 +94,33 @@ const SettingsScreen = ({
     },
   ];
 
+  const commonOptions = [
+    {
+      label: 'Programa de fidelidade',
+      icon: 'badge',
+      pack: 'SimpleLineIcons' as PackNames,
+      onClick: () => {
+        handleNavigate('Fidelity');
+      },
+    },
+    {
+      label: 'Termos de uso e privacidade',
+      icon: 'shield',
+      pack: 'SimpleLineIcons' as PackNames,
+      onClick: () => {
+        handleNavigate('Term');
+      },
+    },
+    {
+      label: 'Fazer login',
+      icon: 'login',
+      pack: 'SimpleLineIcons' as PackNames,
+      onClick: () => {
+        handleNavigate('Login');
+      },
+    },
+  ];
+
   const moveView = () => {
     setIsMoving(!isMoving);
     const toValue = isMoving ? 5 : 1;
@@ -107,6 +133,93 @@ const SettingsScreen = ({
       setImageBackground(isMoving ? COLORS.backgroundColorDark : null);
     });
   };
+
+  if (user) {
+    return (
+      <View
+        style={[
+          global.mainContainer,
+          {
+            backgroundColor: COLORS.backgroundColorLight,
+          },
+        ]}>
+        <Animated.View
+          style={[
+            styles.box,
+            {
+              backgroundColor:
+                currentTheme === 'dark'
+                  ? COLORS.backgroundColorDark
+                  : imageBackground,
+              transform: [
+                {
+                  scaleX: animation.interpolate({
+                    inputRange: [1, 5],
+                    outputRange: [1, 2000],
+                  }),
+                }, // Vary scaleX between 1 and 2
+                {
+                  scaleY: animation.interpolate({
+                    inputRange: [1, 5],
+                    outputRange: [1, 2000],
+                  }),
+                }, // Vary scaleY between 1 and 3
+              ],
+            },
+          ]}
+        />
+        <View style={styles.profileContainer}>
+          <View style={styles.profilePhotoDiv}>
+            <TouchableOpacity
+              onPress={() => setImageModalVisible(true)}
+              style={styles.profilePhotoDiv}>
+              <Image
+                style={styles.CartItemImage}
+                source={user.image ?? require('../assets/profile.png')}
+              />
+            </TouchableOpacity>
+          </View>
+          <MyText
+            style={{
+              fontSize: FONTSIZE.size_18,
+              fontWeight: '500',
+              marginTop: 10,
+            }}>
+            {user.name}
+          </MyText>
+        </View>
+
+        <View style={styles.listContainar}>
+          <View style={{gap: 8}}>
+            {settingsOptions.map((option, key) => (
+              <SettingsOption
+                icon={option.icon}
+                label={option.label}
+                pack={option.pack}
+                key={key}
+                onClick={option.onClick}
+              />
+            ))}
+          </View>
+          <ThemeSwitch moveView={moveView} />
+        </View>
+
+        <Modal
+          animationType={isImageModalVisible ? 'fade' : 'none'}
+          transparent={true}
+          visible={isImageModalVisible}>
+          <Pressable
+            style={styles.modalContainer}
+            onPress={() => setImageModalVisible(false)}>
+            <Image
+              style={styles.modalImage}
+              source={require('../assets/profile.png')}
+            />
+          </Pressable>
+        </Modal>
+      </View>
+    );
+  }
 
   return (
     <View
@@ -152,19 +265,11 @@ const SettingsScreen = ({
             />
           </TouchableOpacity>
         </View>
-        <MyText
-          style={{
-            fontSize: FONTSIZE.size_18,
-            fontWeight: '500',
-            marginTop: 10,
-          }}>
-          Iago martins
-        </MyText>
       </View>
 
       <View style={styles.listContainar}>
         <View style={{gap: 8}}>
-          {settingsOptions.map((option, key) => (
+          {commonOptions.map((option, key) => (
             <SettingsOption
               icon={option.icon}
               label={option.label}

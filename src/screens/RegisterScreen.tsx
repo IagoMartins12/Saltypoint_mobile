@@ -33,7 +33,6 @@ const RegisterScreen = ({
   const {showToast} = CallToast();
   const onSubmit = async data => {
     const createUserDto = data as CreateUserDto;
-    console.log('createUserDto', createUserDto);
     const response = await createUser(createUserDto);
 
     if (response.status === 400) {

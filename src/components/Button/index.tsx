@@ -16,7 +16,6 @@ const LargeButton: React.FC<LargeButtonProps> = ({
     <TouchableOpacity
       onPress={() => {
         if (handleSubmit && onSubmit) {
-          console.log('caiu aqui');
           return handleSubmit(onSubmit);
         }
 

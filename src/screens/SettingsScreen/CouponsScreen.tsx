@@ -13,20 +13,22 @@ import SectionTitle from '../../components/SectionTitle';
 import {COLORS} from '../../theme/theme';
 import CouponCard from '../../components/CouponCard';
 import useTheme from '../../hooks/useTheme';
+import usePrivateStore from '../../hooks/store/usePrivateStore';
+import EmptyAnimation from '../../components/Lottie/EmptyAnimation';
 
 const CouponsScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const {currentTheme} = useTheme();
+  const {coupons} = usePrivateStore();
   const onSwipeLeft = () => {
     navigation.navigate('Settings');
   };
   const comeBack = () => {
     navigation.pop();
   };
-
-  const {currentTheme} = useTheme();
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
@@ -51,10 +53,15 @@ const CouponsScreen = ({
                     : COLORS.backgroundColorDark,
               },
             ]}>
-            <View style={{gap: 15, flex: 1}}>
-              <CouponCard />
-              <CouponCard />
-            </View>
+            {coupons.length > 0 ? (
+              <View style={{gap: 15, flex: 1}}>
+                {coupons.map((c, i) => (
+                  <CouponCard key={i} coupon={c} />
+                ))}
+              </View>
+            ) : (
+              <EmptyAnimation text="Você não possui nenhum cupom disponivel" />
+            )}
           </ScrollView>
         </View>
       </PanGestureHandler>

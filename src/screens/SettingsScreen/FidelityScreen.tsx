@@ -20,6 +20,7 @@ import RewardInfo from '../../components/RewardInfo';
 import FidelityAccordeonSection from '../../components/FidelityAccordeonSection';
 import useTheme from '../../hooks/useTheme';
 import MyText from '../../components/Text';
+import usePrivateStore from '../../hooks/store/usePrivateStore';
 
 const FidelityScreen = ({
   navigation,
@@ -27,6 +28,7 @@ const FidelityScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const {currentTheme} = useTheme();
+  const {user} = usePrivateStore();
   const comeBack = () => {
     navigation.pop();
   };
@@ -80,6 +82,10 @@ const FidelityScreen = ({
               </MyText>
 
               <TouchableOpacity
+                onPress={() => {
+                  if (user) return navigation.push('CatchReward');
+                  navigation.push('Login');
+                }}
                 style={[
                   global.buttonStyle,
                   {
@@ -89,14 +95,25 @@ const FidelityScreen = ({
                         : COLORS.backgroundColorDark,
                   },
                 ]}>
-                <Text
-                  style={{
-                    color: '#FFFFFF',
-                    paddingRight: 10,
-                    fontWeight: 'bold',
-                  }}>
-                  ENTRE E PARTICIPE
-                </Text>
+                {user ? (
+                  <Text
+                    style={{
+                      color: '#FFFFFF',
+                      paddingRight: 10,
+                      fontWeight: 'bold',
+                    }}>
+                    Você possui {user.points} pontos
+                  </Text>
+                ) : (
+                  <Text
+                    style={{
+                      color: '#FFFFFF',
+                      paddingRight: 10,
+                      fontWeight: 'bold',
+                    }}>
+                    ENTRE E PARTICIPE
+                  </Text>
+                )}
               </TouchableOpacity>
             </View>
 
