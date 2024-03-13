@@ -1,6 +1,7 @@
 import {Dimensions, Image, Pressable, StyleSheet, View} from 'react-native';
 import {Product} from '../../../types/ModelsType';
 import CustomIcon from '../../CustomIcon';
+import HeartIcon from '../../HeartIcon';
 
 interface SelectProps {
   currentProduct: Product;
@@ -20,9 +21,7 @@ const PizzaImage: React.FC<SelectProps> = ({currentProduct, comeBack}) => {
       <Pressable style={styles.CardArrow} onPress={comeBack}>
         <CustomIcon name={'arrow-left'} size={30} pack="Feather" />
       </Pressable>
-      <Pressable style={styles.CardHeart}>
-        <CustomIcon name={'heart'} size={30} pack="Feather" />
-      </Pressable>
+      <HeartIcon productId={currentProduct.id} isProductPage />
     </View>
   );
 };
@@ -42,11 +41,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 25,
     left: 20,
-  },
-  CardHeart: {
-    position: 'absolute',
-    top: 25,
-    right: 20,
   },
 });
 

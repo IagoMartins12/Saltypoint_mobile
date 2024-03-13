@@ -9,7 +9,6 @@ export interface CepInputProps {
   name: string;
   id: string;
   control: Control<FieldValues, any>;
-  required?: boolean;
   disabled?: boolean;
   onChangeFunction: (value: string, id: string) => void;
 }
@@ -19,7 +18,6 @@ const StyledInputComponent2: React.FC<CepInputProps> = ({
   id,
   control,
   onChangeFunction,
-  required = false,
   disabled = false,
 }) => {
   const [focus, setFocus] = useState(false);

@@ -1,21 +1,12 @@
-import {
-  Dimensions,
-  Image,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Dimensions, Image, Pressable, StyleSheet, View} from 'react-native';
 import CustomIcon from '../CustomIcon';
 import MyText from '../Text';
 import {COLORS} from '../../theme/theme';
 import {Product} from '../../types/ModelsType';
 import useGlobalStore from '../../hooks/store/useGlobalStore';
-import ProductFlavourCard from '../ProductFlavourCard';
-import {useState} from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
-import {useRoute} from '@react-navigation/native';
+
 import TextAreaComponent from '../TextArea';
+import HeartIcon from '../HeartIcon';
 
 interface PizzaProps {
   currentProduct: Product;
@@ -46,9 +37,7 @@ const ProductDetails: React.FC<PizzaProps> = ({comeBack, currentProduct}) => {
         <Pressable style={styles.CardArrow} onPress={comeBack}>
           <CustomIcon name={'arrow-left'} size={30} pack="Feather" />
         </Pressable>
-        <Pressable style={styles.CardHeart}>
-          <CustomIcon name={'heart'} size={30} pack="Feather" />
-        </Pressable>
+        <HeartIcon productId={currentProduct.id} isProductPage />
       </View>
 
       <View style={styles.containerBox}>
@@ -93,11 +82,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 25,
     left: 20,
-  },
-  CardHeart: {
-    position: 'absolute',
-    top: 25,
-    right: 20,
   },
 
   containerBox: {

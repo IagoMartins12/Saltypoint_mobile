@@ -13,6 +13,7 @@ import {global} from '../../style';
 import {Product} from '../../types/ModelsType';
 import MyText from '../Text';
 import useTheme from '../../hooks/useTheme';
+import HeartIcon from '../HeartIcon';
 
 interface ProductCardHorizontalProps {
   showPoints?: boolean;
@@ -60,9 +61,7 @@ const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
             uri: product.product_image,
           }}
           style={[styles.cardItemImage, styles.imageWithBorder]}>
-          <View style={styles.cardRatingContainer}>
-            <CustomIcon name={'heart'} color={'gray'} size={20} />
-          </View>
+          <HeartIcon productId={product.id} />
         </ImageBackground>
         <View style={styles.cardInfoContainer}>
           <MyText style={styles.productTitle}>{product.name}</MyText>
@@ -147,14 +146,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: COLORS.secondaryRed,
   },
-  cardRatingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    top: 10,
-    right: 10,
-  },
+
   shadow: {
     shadowColor: '#000',
     shadowOffset: {

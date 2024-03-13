@@ -12,6 +12,7 @@ import {global} from '../../style';
 import {Product} from '../../types/ModelsType';
 import useTheme from '../../hooks/useTheme';
 import MyText from '../Text';
+import HeartIcon from '../HeartIcon';
 
 export interface ProductCardProps {
   product: Product;
@@ -19,6 +20,7 @@ export interface ProductCardProps {
 }
 const ProductCard: React.FC<ProductCardProps> = ({product, onPress}) => {
   const getPoints = product.value;
+
   const {currentTheme} = useTheme();
   return (
     <TouchableOpacity
@@ -45,9 +47,7 @@ const ProductCard: React.FC<ProductCardProps> = ({product, onPress}) => {
           uri: product.product_image,
         }}
         style={styles.CartItemImage}>
-        <View style={styles.CardRatingContainer}>
-          <CustomIcon name={'heart'} size={20} />
-        </View>
+        <HeartIcon productId={product.id} />
       </ImageBackground>
 
       <View
@@ -60,7 +60,6 @@ const ProductCard: React.FC<ProductCardProps> = ({product, onPress}) => {
 
         <View style={styles.infoDiv}>
           <MyText style={styles.priceText}>
-            {' '}
             R$ {product.value.toFixed(2)}
           </MyText>
           {/* <CustomIcon name="cart-plus" size={25} /> */}
@@ -108,16 +107,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
 
     color: COLORS.secondaryRed,
-  },
-
-  CardRatingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: SPACING.space_10,
-    position: 'absolute',
-    top: 10,
-    right: 10,
   },
 });
 
