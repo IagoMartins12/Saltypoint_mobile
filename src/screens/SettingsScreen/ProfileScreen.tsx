@@ -30,6 +30,7 @@ import {UpdateUserDto} from '../../types/Dtos';
 import {updatedMe} from '../../services';
 import CallToast from '../../components/Toast';
 import {User} from '../../types/ModelsType';
+import PhoneInput from '../../components/PhoneInput';
 
 const ProfileScreen = ({
   navigation,
@@ -52,7 +53,6 @@ const ProfileScreen = ({
   };
 
   const onSubmit = async (data: any) => {
-    console.log(data);
     if (!user) return;
     if (data.phone.length !== 15 && data.phone)
       return showToast('Insira um numero valido', 'error');
@@ -62,6 +62,8 @@ const ProfileScreen = ({
       phone: data.phone !== '' ? data.phone : null,
       user_Adress_id: onChangeDropdown !== '' ? onChangeDropdown : null,
     } as UpdateUserDto;
+
+    console.log('object', object);
     try {
       await updatedMe(object);
 
@@ -100,7 +102,7 @@ const ProfileScreen = ({
     setValue('name', user.name);
     setValue('email', user.email);
     setValue('phone', user?.phone);
-    setOnChangeDropdown(user.id);
+    setOnChangeDropdown(user.user_Adress_id);
   }, [user]);
 
   if (user) {
@@ -165,11 +167,10 @@ const ProfileScreen = ({
                   icon="email-outline"
                   disabled
                 />
-                <StyledInputComponent
+                <PhoneInput
                   control={control}
                   name="phone"
                   placeholder="Telefone: "
-                  icon="email-outline"
                 />
                 <Dropdown
                   setOnChangeDropdown={setOnChangeDropdown}

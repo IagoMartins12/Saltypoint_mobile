@@ -4,6 +4,7 @@ import {BORDERRADIUS, COLORS} from '../../theme/theme';
 import CustomIcon from '../CustomIcon';
 import useTheme from '../../hooks/useTheme';
 import usePrivateStore from '../../hooks/store/usePrivateStore';
+import {User_Adress} from '../../types/ModelsType';
 
 interface CustomPickerStyle {
   value: string | null;
@@ -34,13 +35,17 @@ const SelectComponent: React.FC<CustomPickerStyle> = ({
 
   const Placeholder = {label: 'Selecione um endereço', value: value};
 
-  const addressArr = address.map((address, i) => {
-    return {
-      label: `${address.address}, ${address.number} / ${address.district}`,
-      value: address.id,
-    };
-  });
+  const addressArr = address
+    .filter((c: User_Adress) => c.isActive === 0)
+    .map((address, i) => {
+      return {
+        label: `${address.address}, ${address.number} / ${address.district}`,
+        value: address.id,
+      };
+    });
 
+  console.log('value', value);
+  console.log('addressArr', addressArr);
   const viewStyle: ViewStyle = {
     height: 50,
     borderRadius: BORDERRADIUS.radius_10,
@@ -77,6 +82,7 @@ const SelectComponent: React.FC<CustomPickerStyle> = ({
         }}
         //@ts-ignore
         Icon={CustomSelectIcon}
+        value={value}
         onValueChange={value => setOnChangeDropdown(value)}
         placeholder={Placeholder}
         itemStyle={{

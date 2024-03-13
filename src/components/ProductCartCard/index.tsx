@@ -71,7 +71,7 @@ const ProductCartCard: React.FC<ProductCardProps> = ({
       <View style={styles.image}>
         <ImageBackground
           source={{
-            uri: getProductImage(cartProduct.product_id),
+            uri: getProductImage(cartProduct?.product_id),
           }}
           style={styles.CartItemImage}
         />
@@ -79,7 +79,7 @@ const ProductCartCard: React.FC<ProductCardProps> = ({
 
       <View style={styles.content}>
         <MyText style={styles.textName}>
-          {getProductName2(cartProduct.product_id, cartProduct.size)}{' '}
+          {getProductName2(cartProduct?.product_id, cartProduct.size)}{' '}
         </MyText>
 
         <View

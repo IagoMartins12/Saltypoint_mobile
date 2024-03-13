@@ -127,6 +127,12 @@ export const visibleCategories = (
   ];
 };
 
+export const handleInputChange = (event: string) => {
+  event = formatPhoneNumber(event);
+
+  return event;
+};
+
 export const iconSize = 30;
 export const iconColor = '#000000';
 export const enableGoBack = (navigation: NativeStackNavigationProp<any>) => {

@@ -32,7 +32,7 @@ const Stack = createNativeStackNavigator();
 const App = () => {
   const [mainScreen, setMainScreen] = useState(''); // Definindo estado inicial
 
-  const {isLogged} = useAuth();
+  const {isLogged, token} = useAuth();
 
   useEffect(() => {
     if (isLogged) {
@@ -41,6 +41,10 @@ const App = () => {
       setMainScreen('Intro');
     }
   }, [isLogged]);
+
+  useEffect(() => {
+    checkAndSetToken();
+  }, []);
   return (
     <>
       <NavigationContainer>
