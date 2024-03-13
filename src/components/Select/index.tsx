@@ -3,20 +3,22 @@ import RNPickerSelect from 'react-native-picker-select';
 import {BORDERRADIUS, COLORS} from '../../theme/theme';
 import CustomIcon from '../CustomIcon';
 import useTheme from '../../hooks/useTheme';
-import usePrivateStore from '../../hooks/store/usePrivateStore';
-import {User_Adress} from '../../types/ModelsType';
 
 interface CustomPickerStyle {
   value: string | null;
   setOnChangeDropdown: React.Dispatch<React.SetStateAction<string>>;
+  arr: {
+    label: string;
+    value: string;
+  }[];
 }
 
 const SelectComponent: React.FC<CustomPickerStyle> = ({
   value,
   setOnChangeDropdown,
+  arr,
 }) => {
   const {currentTheme} = useTheme();
-  const {address, user} = usePrivateStore();
 
   const CustomSelectIcon = () => {
     return (
@@ -35,17 +37,6 @@ const SelectComponent: React.FC<CustomPickerStyle> = ({
 
   const Placeholder = {label: 'Selecione um endereço', value: value};
 
-  const addressArr = address
-    .filter((c: User_Adress) => c.isActive === 0)
-    .map((address, i) => {
-      return {
-        label: `${address.address}, ${address.number} / ${address.district}`,
-        value: address.id,
-      };
-    });
-
-  console.log('value', value);
-  console.log('addressArr', addressArr);
   const viewStyle: ViewStyle = {
     height: 50,
     borderRadius: BORDERRADIUS.radius_10,
@@ -88,7 +79,7 @@ const SelectComponent: React.FC<CustomPickerStyle> = ({
         itemStyle={{
           backgroundColor: '#FFFFFF',
         }}
-        items={addressArr}
+        items={arr}
       />
     </View>
   );

@@ -42,8 +42,10 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
   const handleDeleteAddress = async () => {
     if (currentAddress) {
       if (user?.user_Adress_id === currentAddress) {
+        handleOverlayPress();
+
         return showToast(
-          'Não é possível excluir o endereço que está vinculado a sua conta!',
+          'Não é possível excluir o endereço vinculado a sua conta!',
           'error',
         );
       }

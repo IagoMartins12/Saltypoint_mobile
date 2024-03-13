@@ -18,9 +18,7 @@ import {global} from '../../style';
 import {COLORS, FONTSIZE} from '../../theme/theme';
 import {useForm} from 'react-hook-form';
 import StyledInputComponent from '../../components/Input';
-import Dropdown from '../../components/Select';
 import ComeBack from '../../components/ComeBack';
-import useKeyboardOpen from '../../hooks/useKeyboardOpen';
 import ForgetPasswordModal from '../../components/Modals/ForgetPasswordModal';
 import {useSharedValue, withTiming} from 'react-native-reanimated';
 import useTheme from '../../hooks/useTheme';
@@ -29,8 +27,9 @@ import usePrivateStore from '../../hooks/store/usePrivateStore';
 import {UpdateUserDto} from '../../types/Dtos';
 import {updatedMe} from '../../services';
 import CallToast from '../../components/Toast';
-import {User} from '../../types/ModelsType';
+import {User, User_Adress} from '../../types/ModelsType';
 import PhoneInput from '../../components/PhoneInput';
+import SelectComponent from '../../components/Select';
 
 const ProfileScreen = ({
   navigation,
@@ -41,7 +40,7 @@ const ProfileScreen = ({
   const [onChangeDropdown, setOnChangeDropdown] = useState<null | string>(null);
   const {control, handleSubmit, setValue} = useForm();
   const {currentTheme} = useTheme();
-  const {user, setUser} = usePrivateStore();
+  const {user, setUser, address} = usePrivateStore();
   const {showToast} = CallToast();
 
   const setUserWithCallback = (callback: (user: User) => User) => {
@@ -81,6 +80,16 @@ const ProfileScreen = ({
       showToast('Erro ao atualizar o perfil.', 'error');
     }
   };
+
+  const addressArr = address
+    .filter((c: User_Adress) => c.isActive === 0)
+    .map((address, i) => {
+      return {
+        label: `${address.address}, ${address.number} / ${address.district}`,
+        value: address.id,
+      };
+    });
+
   const translateY = useSharedValue(Dimensions.get('window').height);
 
   const onSwipeLeft = () => {
@@ -172,9 +181,10 @@ const ProfileScreen = ({
                   name="phone"
                   placeholder="Telefone: "
                 />
-                <Dropdown
+                <SelectComponent
                   setOnChangeDropdown={setOnChangeDropdown}
                   value={onChangeDropdown}
+                  arr={addressArr}
                 />
               </View>
 

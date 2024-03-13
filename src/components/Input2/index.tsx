@@ -36,7 +36,6 @@ const StyledInputComponent2: React.FC<CepInputProps> = ({
     <Controller
       name={id}
       control={control}
-      rules={{required: required}}
       render={({field: {onChange, onBlur, value}}) => (
         <View style={styles.container}>
           <MyText style={[styles.label, focus && styles.labelFocus]}>

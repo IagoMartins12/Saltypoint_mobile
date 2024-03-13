@@ -18,17 +18,30 @@ import {COLORS} from '../../theme/theme';
 import {checkIfAddressIsValid} from '../../utils';
 import {User, User_Adress} from '../../types/ModelsType';
 import CustomIcon from '../../components/CustomIcon';
-import SelectComponent from '../../components/Select';
-import SelectButton from '../../components/SelectButton';
 import MyText from '../../components/Text';
 import CallToast from '../../components/Toast';
 import {sendAddressUser, updatedMe} from '../../services';
 import {UpdateUserDto} from '../../types/Dtos';
 import usePrivateStore from '../../hooks/store/usePrivateStore';
 import CepInput from '../../components/CepInput';
+import SelectComponent2 from '../../components/Select2';
 
 export const onlyDistrict = ['sublocality', 'postal_code'];
 
+const addressArr = [
+  {
+    label: 'Sol nascente',
+    value: 'Sol nascente',
+  },
+  {
+    label: 'Décima área',
+    value: 'Décima área',
+  },
+  {
+    label: 'Vila sulina',
+    value: 'Vila sulina',
+  },
+];
 export const addressTypes = [
   'street_address',
   'route',
@@ -43,6 +56,8 @@ const SaveAddressScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const [typeAddress, setTypeAddress] = useState(null);
+  const [onChangeDropdown, setOnChangeDropdown] = useState<null | string>(null);
+
   const {currentTheme} = useTheme();
   const teste = useRoute();
 
@@ -60,18 +75,20 @@ const SaveAddressScreen = ({
   const response = teste.params?.response;
   //@ts-ignore
   const geometryResponse = teste.params?.result;
+
   const {showToast} = CallToast();
   const {setAddress, address, user, setUser} = usePrivateStore();
+
+  const {handleSubmit, setValue, control, reset} = useForm<FieldValues>({
+    defaultValues: {
+      reference: '',
+      cep: '',
+    },
+  });
+
   const comeBack = () => {
     navigation.pop();
   };
-
-  const {register, handleSubmit, setValue, control, reset} =
-    useForm<FieldValues>({
-      defaultValues: {
-        complement: '',
-      },
-    });
 
   const setUserWithCallback = (callback: (user: User) => User) => {
     if (!user) return;
@@ -82,7 +99,11 @@ const SaveAddressScreen = ({
   };
 
   const checkEmptyCamps = (data: any) => {
-    const requiredFields = ['address', 'number', 'district', 'city', 'uf'];
+    let requiredFields = ['address', 'number', 'city', 'uf'];
+
+    if (response) {
+      requiredFields.push('district');
+    }
     const missingFields = requiredFields.filter(field => !data[field]);
     console.log(missingFields);
     // Se houver campos obrigatórios em falta, exibir um toast informando o usuário
@@ -112,12 +133,17 @@ const SaveAddressScreen = ({
       return showToast('Selecione o tipo de endereço.', 'error');
     }
 
+    if (!response && onChangeDropdown === null) {
+      return showToast('Selecione o bairro.', 'error');
+    }
     const message = checkEmptyCamps(data);
 
     if (message) {
       return showToast(message, 'error');
     }
-    const checkAddress = checkIfAddressIsValid(data.district);
+    const checkAddress = checkIfAddressIsValid(
+      response ? data.district : onChangeDropdown,
+    );
     if (!checkAddress)
       return showToast(
         'Esse bairro não está na nossa área de entrega.',
@@ -128,29 +154,29 @@ const SaveAddressScreen = ({
       address: data.address,
       cep: data.cep !== '' || !data.cep !== undefined ? data.cep : null,
       number: data.number,
-      reference: data.complement !== '' ? data.complement : null,
-      district: data.district,
+      reference: data.reference !== '' ? data.reference : '',
+      district: response ? data.district : onChangeDropdown,
       city: data.city,
       uf: data.uf,
       type_adress: typeAddress,
     } as User_Adress;
 
-    console.log('data', data);
-    const response = await sendAddressUser(object);
+    const myResponse = await sendAddressUser(object);
+    console.log('object', object);
 
-    if (response.status === 201) {
-      setAddress([...address, response.data]);
+    if (myResponse.status === 201) {
+      setAddress([...address, myResponse.data]);
       reset();
 
       const object = {
-        user_Adress_id: response.data.id,
+        user_Adress_id: myResponse.data.id,
       } as UpdateUserDto;
 
       await updatedMe(object);
 
       setUserWithCallback(oldUser => ({
         ...oldUser,
-        user_Adress_id: response.data.id,
+        user_Adress_id: myResponse.data.id,
       }));
 
       navigation.push('Address');
@@ -230,7 +256,13 @@ const SaveAddressScreen = ({
             flex: 1,
             gap: 20,
           }}>
-          <CepInput handleOnChange={handleOnChange} control={control} />
+          {response || geometryResponse ? (
+            <CepInput
+              handleOnChange={handleOnChange}
+              control={control}
+              required={false}
+            />
+          ) : null}
 
           <StyledInputComponent2
             name="Endereço"
@@ -246,15 +278,23 @@ const SaveAddressScreen = ({
             onChangeFunction={handleOnChange}
           />
 
-          <StyledInputComponent2
-            name="Bairro"
-            id="district"
-            control={control}
-            onChangeFunction={handleOnChange}
-          />
+          {response ? (
+            <StyledInputComponent2
+              name="Bairro"
+              id="district"
+              control={control}
+              onChangeFunction={handleOnChange}
+            />
+          ) : (
+            <SelectComponent2
+              setOnChangeDropdown={setOnChangeDropdown}
+              value={onChangeDropdown}
+              arr={addressArr}
+            />
+          )}
           <StyledInputComponent2
             name="Referência"
-            id="complement"
+            id="reference"
             control={control}
             onChangeFunction={handleOnChange}
           />

@@ -53,7 +53,7 @@ const AddressScreen = ({
   };
 
   const comeBack = () => {
-    navigation.pop();
+    navigation.navigate('Settings');
   };
 
   const addAddress = () => {
