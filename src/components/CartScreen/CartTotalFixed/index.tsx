@@ -4,30 +4,31 @@ import MyText from '../../Text';
 import {BORDERRADIUS, COLORS} from '../../../theme/theme';
 import {global} from '../../../style';
 import useTheme from '../../../hooks/useTheme';
+import usePrivateStore from '../../../hooks/store/usePrivateStore';
+import {Cart_product} from '../../../types/ModelsType';
 
 interface CartTotalProps {
   onPress?: () => void;
   title?: string;
-  quantity?: number;
-  value?: number;
   lastStep?: boolean;
 }
 
 const CartTotalFixed: React.FC<CartTotalProps> = ({
   onPress,
-  quantity,
   title,
-  value,
   lastStep,
 }) => {
   const {currentTheme} = useTheme();
+  const {cart_product} = usePrivateStore();
 
-  const renderLastStep = () => (
-    <TouchableOpacity style={[styles.lastButton]} onPress={onPress}>
-      <MyText style={styles.buttonText}>
-        Finalizar pedido • R$ {value.toFixed(2)}
-      </MyText>
-    </TouchableOpacity>
+  const cartProductTotal = (cart_product as Cart_product[]).reduce(
+    (total, item) => total + Number(item.value),
+    0,
+  );
+
+  const cartProductLength = (cart_product as Cart_product[]).reduce(
+    (total, item) => total + Number(item.quantity),
+    0,
   );
 
   const renderContinueButton = () => (
@@ -55,7 +56,7 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
             onPress();
           }}>
           <MyText style={styles.buttonText}>
-            Finalizar pedido • R$ {value.toFixed(2)}
+            Finalizar pedido • R$ {cartProductTotal.toFixed(2)}
           </MyText>
         </TouchableOpacity>
       ) : (
@@ -65,8 +66,11 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
         <View>
           <MyText style={styles.subTitleTotal}>{title}</MyText>
           <MyText style={styles.titleTotal}>
-            R$ {value.toFixed(2)}
-            <MyText style={styles.subTitleTotal}> / {quantity} itens</MyText>
+            R$ {cartProductTotal.toFixed(2)}
+            <MyText style={styles.subTitleTotal}>
+              {' '}
+              / {cartProductLength} itens
+            </MyText>
           </MyText>
         </View>
       )}

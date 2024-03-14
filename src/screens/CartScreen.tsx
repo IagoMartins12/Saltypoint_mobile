@@ -15,6 +15,7 @@ import {COLORS} from '../theme/theme';
 import {global} from '../style';
 import useTheme from '../hooks/useTheme';
 import usePrivateStore from '../hooks/store/usePrivateStore';
+import {Cart_product} from '../types/ModelsType';
 
 const CartScreen = ({
   navigation,
@@ -27,8 +28,13 @@ const CartScreen = ({
   const {currentTheme} = useTheme();
   const {products} = useGlobalStore();
   const {cart_product, user} = usePrivateStore();
+
+  const cartProductTotal = (cart_product as Cart_product[]).reduce(
+    (total, item) => total + Number(item.value),
+    0,
+  );
+
   const ListRef = useRef<FlatList>();
-  const cartNotEmpty = true;
 
   const showModal = () => {
     translateY.value = withTiming(0, {duration: 500});
@@ -78,25 +84,27 @@ const CartScreen = ({
                     //       : COLORS.cardColorLight,
                     // },
                   ]}>
-                  {cart_product.map((p, i) => (
-                    <View key={i}>
-                      <ProductCartCard product={p} />
+                  {cart_product.map((p: Cart_product, i) => {
+                    return (
+                      <View key={i}>
+                        <ProductCartCard cartProduct={p} onPress={onPress} />
 
-                      {i !== totalProducts.length - 1 ? (
-                        <View
-                          style={[
-                            global.hrStyle,
-                            {
-                              borderColor:
-                                currentTheme === 'dark'
-                                  ? COLORS.borderColorDark
-                                  : COLORS.borderColorLight,
-                            },
-                          ]}
-                        />
-                      ) : null}
-                    </View>
-                  ))}
+                        {i !== totalProducts.length - 1 ? (
+                          <View
+                            style={[
+                              styles.hrStyle,
+                              {
+                                borderColor:
+                                  currentTheme === 'dark'
+                                    ? COLORS.borderColorDark
+                                    : COLORS.borderColorLight,
+                              },
+                            ]}
+                          />
+                        ) : null}
+                      </View>
+                    );
+                  })}
                 </View>
 
                 <MyText style={styles.textFlatList}> Peça também</MyText>
@@ -159,16 +167,14 @@ const CartScreen = ({
 
                 {/* Cart infos  */}
                 <View style={[styles.paddingView, styles.couponView]}>
-                  <CartInfo label="Subtotal" text="R$ 57,80" />
+                  <CartInfo
+                    label="Subtotal"
+                    text={`R$ ${cartProductTotal.toFixed(2)}`}
+                  />
                 </View>
               </ScrollView>
 
-              <CartTotalFixed
-                onPress={accressStep}
-                quantity={2}
-                value={57}
-                title="Total"
-              />
+              <CartTotalFixed onPress={accressStep} title="Total" />
               <CouponsModal
                 modalOpen={modalOpen}
                 setModalOpen={setModalOpen}
@@ -270,6 +276,11 @@ const styles = StyleSheet.create({
   titleTotal: {
     fontSize: 16,
     fontWeight: '700',
+  },
+  hrStyle: {
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+    paddingVertical: 8,
   },
 });
 

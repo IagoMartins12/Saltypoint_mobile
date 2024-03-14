@@ -5,8 +5,9 @@ import {COLORS} from '../../theme/theme';
 
 interface teste {
   label?: string;
+  setObservation: React.Dispatch<React.SetStateAction<string>>;
 }
-const TextAreaComponent: React.FC<teste> = ({label}) => {
+const TextAreaComponent: React.FC<teste> = ({label, setObservation}) => {
   const {currentTheme} = useTheme();
   return (
     <View
@@ -16,6 +17,9 @@ const TextAreaComponent: React.FC<teste> = ({label}) => {
       }}>
       <MyText>{label}</MyText>
       <TextInput
+        onChangeText={text => {
+          setObservation(text);
+        }}
         style={[
           styles.input,
           {

@@ -22,9 +22,24 @@ interface PizzaProps {
   comeBack: () => void;
   value: string | number;
   setValue: React.Dispatch<React.SetStateAction<string | number>>;
+  setObservation: React.Dispatch<React.SetStateAction<string>>;
   quantity: number;
   scrollToSection: (options: 'Size' | 'Flavour') => void;
   scrollToCornicione: () => void;
+  selectedOptions: {
+    size: string;
+    flavour: string;
+    flavour2: any;
+    flavour3: any;
+  };
+  setSelectedOptions: React.Dispatch<
+    React.SetStateAction<{
+      size: string;
+      flavour: string;
+      flavour2: any;
+      flavour3: any;
+    }>
+  >;
 }
 
 const PizzaDetails: React.FC<PizzaProps> = ({
@@ -35,13 +50,10 @@ const PizzaDetails: React.FC<PizzaProps> = ({
   value,
   scrollToSection,
   scrollToCornicione,
+  setObservation,
+  selectedOptions,
+  setSelectedOptions,
 }) => {
-  const [selectedOptions, setSelectedOptions] = useState({
-    size: '0',
-    flavour: '0',
-    flavour2: null,
-    flavour3: null,
-  });
   const [otherProductsValue, setOtherProductsValue] = useState<number | string>(
     0,
   );
@@ -64,10 +76,6 @@ const PizzaDetails: React.FC<PizzaProps> = ({
       (p.name.toUpperCase().includes(searchText.toUpperCase()) ||
         p.description.toUpperCase().includes(searchText.toUpperCase())),
   );
-  const brotinhoList = filteredProducts.map(p => ({
-    ...p,
-    name: p.name.replace('Pizza', 'Brotinho'),
-  }));
 
   const getCategory = categorys.find(
     (c: Category) => c.id === currentProduct.category_id,
@@ -265,7 +273,7 @@ const PizzaDetails: React.FC<PizzaProps> = ({
           )}
         </View>
 
-        <TextAreaComponent label="Observação" />
+        <TextAreaComponent label="Observação" setObservation={setObservation} />
       </View>
     </ScrollView>
   );

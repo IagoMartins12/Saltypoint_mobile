@@ -1,4 +1,4 @@
-import {Reward} from '../../types/ModelsType';
+import {Reward, User_Rewards} from '../../types/ModelsType';
 import {
   View,
   TouchableOpacity,
@@ -11,7 +11,7 @@ import useTheme from '../../hooks/useTheme';
 import {COLORS} from '../../theme/theme';
 
 export interface RewardCardHorizontalProps {
-  reward: Reward;
+  reward: User_Rewards;
   onClick?: (reward: Reward) => void;
 }
 
@@ -32,7 +32,7 @@ const RewardCardHorizontal: React.FC<RewardCardHorizontalProps> = ({
         },
       ]}>
       <View style={styles.imageContainer}>
-        <Image source={{uri: reward.image}} style={styles.image} />
+        <Image source={{uri: reward.rewardImage}} style={styles.image} />
       </View>
 
       <View
@@ -43,18 +43,12 @@ const RewardCardHorizontal: React.FC<RewardCardHorizontalProps> = ({
           gap: 10,
         }}>
         <View style={styles.rewardNameContainer}>
-          <MyText style={styles.rewardName}>{reward.name} </MyText>
+          <MyText style={styles.rewardName}>{reward.rewardName} </MyText>
         </View>
 
         <View style={styles.rewardCodeContainer}>
-          <MyText style={styles.rewardCode}> #F3S564 </MyText>
+          <MyText style={styles.rewardCode}> #{reward.reward_code} </MyText>
         </View>
-
-        {/* <View style={styles.rewardCodeContainer}>
-          <MyText style={styles.rewardPoints}>
-            {reward.quantity_points} pontos
-          </MyText>
-        </View> */}
       </View>
     </TouchableOpacity>
   );

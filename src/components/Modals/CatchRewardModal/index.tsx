@@ -18,6 +18,10 @@ import RewardAnimation from '../../Lottie/RewardAnimation';
 import useTheme from '../../../hooks/useTheme';
 import {COLORS} from '../../../theme/theme';
 import ModalIcon from '../ModalIcon';
+import usePrivateStore from '../../../hooks/store/usePrivateStore';
+import {CreateRewardDto} from '../../../types/Dtos';
+import {postReward} from '../../../services';
+import CallToast from '../../Toast';
 
 export interface ModalProps {
   modalOpen: boolean;
@@ -35,19 +39,44 @@ const CatchRewardModal: React.FC<ModalProps> = ({
   selectedReward,
 }) => {
   const [hasPlayed, setHasPlayed] = useState(false);
-
+  const {user, userReward, setUser, setUserReward} = usePrivateStore();
+  const {currentTheme} = useTheme();
+  const {showToast} = CallToast();
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
     };
   });
+
+  const catchReward = async () => {
+    if (user?.points) {
+      const object = {
+        rewardId: selectedReward.id,
+      } as CreateRewardDto;
+      const response = await postReward(object);
+
+      if (response) {
+        setHasPlayed(true);
+        const updatedRewards = [...userReward, response];
+        setUserReward(updatedRewards);
+        const updatedPoints = user?.points - selectedReward.quantity_points;
+        const updatedUser = {...user, points: updatedPoints}; //
+        setUser(updatedUser);
+      }
+    }
+  };
+
   const handleOverlayPress = () => {
     hideModal();
     setTimeout(() => setModalOpen(!modalOpen), 300);
     setTimeout(() => setHasPlayed(false), 600);
   };
 
-  const {currentTheme} = useTheme();
+  const onFinish = () => {
+    handleOverlayPress();
+
+    showToast('Recompensa resgatada', 'success');
+  };
 
   let body = (
     <View style={styles.container}>
@@ -85,10 +114,7 @@ const CatchRewardModal: React.FC<ModalProps> = ({
                     size={25}
                     pack="MaterialCommunityIcons"
                   />
-                  <MyText style={styles.boldText}>
-                    {/* {user?.points} */}
-                    200
-                  </MyText>
+                  <MyText style={styles.boldText}>{user?.points}</MyText>
                 </View>
               </View>
 
@@ -115,8 +141,7 @@ const CatchRewardModal: React.FC<ModalProps> = ({
                     />
                   </View>
                   <MyText style={styles.boldText}>
-                    {/* {user?.points - warningModal.currentItem.quantity_points} */}
-                    125
+                    {user?.points - selectedReward.quantity_points}
                   </MyText>
                 </View>
               </View>
@@ -130,11 +155,7 @@ const CatchRewardModal: React.FC<ModalProps> = ({
           onPress={handleOverlayPress}>
           <MyText style={styles.buttonText}>Cancelar</MyText>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.rewardButton}
-          onPress={() => {
-            setHasPlayed(true);
-          }}>
+        <TouchableOpacity style={styles.rewardButton} onPress={catchReward}>
           <MyText style={styles.buttonText}>Resgatar recompensa</MyText>
         </TouchableOpacity>
       </View>
@@ -144,7 +165,7 @@ const CatchRewardModal: React.FC<ModalProps> = ({
   if (hasPlayed) {
     body = (
       <View style={styles.container}>
-        <RewardAnimation />
+        <RewardAnimation onFinish={onFinish} />
       </View>
     );
   }
@@ -263,7 +284,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontWeight: 'bold',
     fontSize: 16,
-    color: 'white',
+    color: '#000000',
   },
 
   warningIconBox: {

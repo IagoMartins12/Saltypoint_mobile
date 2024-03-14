@@ -71,6 +71,12 @@ export type RemoveCartProductDto = {
   cart_product_id: string;
 };
 
+export type UpdateCartProductDto = {
+  id: string;
+  quantity: number;
+  value: string;
+};
+
 export type CreateOrderDto = {
   total_amount: number;
   type_delivery: number;

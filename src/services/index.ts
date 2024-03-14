@@ -11,6 +11,7 @@ import {
   LoginUserDto,
   RecoverPasswordDto,
   RemoveCartProductDto,
+  UpdateCartProductDto,
   UpdatePasswordDto,
   UpdateUserDto,
 } from '../types/Dtos';
@@ -264,6 +265,17 @@ export const removeCartProduct = async (
     const response = await Api.delete('/cart/delete', {
       data: removeProductCartDto,
     });
+    return response;
+  } catch (error: any) {
+    return error;
+  }
+};
+
+export const updateCartProduct = async (
+  updateCartDto: UpdateCartProductDto,
+) => {
+  try {
+    const response = await Api.put('/cart/update', updateCartDto);
     return response;
   } catch (error: any) {
     return error;

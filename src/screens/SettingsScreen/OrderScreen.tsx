@@ -14,6 +14,7 @@ import {COLORS} from '../../theme/theme';
 import {enableGoBack} from '../../utils';
 import useTheme from '../../hooks/useTheme';
 import usePrivateStore from '../../hooks/store/usePrivateStore';
+import EmptyAnimation from '../../components/Lottie/EmptyAnimation';
 
 const OrderScreen = ({
   navigation,
@@ -61,12 +62,17 @@ const OrderScreen = ({
                     : COLORS.backgroundColorDark,
               },
             ]}>
-            <View style={{gap: 10, flex: 1}}>
-              <OrderCard onPress={goToOrder} />
-              <OrderCard onPress={goToOrder} />
-              <OrderCard onPress={goToOrder} />
-              <OrderCard onPress={goToOrder} />
-            </View>
+            {orders.length > 0 ? (
+              <View style={{gap: 10, flex: 1}}>
+                {orders.map(order => (
+                  <OrderCard onPress={goToOrder} />
+                ))}
+              </View>
+            ) : (
+              <View style={{flex: 1}}>
+                <EmptyAnimation text="Você ainda não fez nenhum pedido" />
+              </View>
+            )}
           </ScrollView>
         </View>
       </PanGestureHandler>

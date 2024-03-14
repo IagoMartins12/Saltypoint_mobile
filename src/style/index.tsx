@@ -71,7 +71,7 @@ export const global = StyleSheet.create({
   hrStyle: {
     borderBottomColor: 'black',
     borderBottomWidth: 1,
-    paddingTop: 10,
-    marginHorizontal: 10,
+    paddingTop: 8,
+    marginHorizontal: 8,
   },
 });

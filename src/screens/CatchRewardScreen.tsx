@@ -13,6 +13,8 @@ import CatchRewardModal from '../components/Modals/CatchRewardModal';
 import {Reward} from '../types/ModelsType';
 import useTheme from '../hooks/useTheme';
 import {COLORS} from '../theme/theme';
+import usePrivateStore from '../hooks/store/usePrivateStore';
+import CallToast from '../components/Toast';
 
 const CatchRewardScreen = ({
   navigation,
@@ -27,9 +29,14 @@ const CatchRewardScreen = ({
     [number, number] | null
   >(null);
 
+  const {user} = usePrivateStore();
+  const {showToast} = CallToast();
   const translateY = useSharedValue(Dimensions.get('window').height);
 
   const showModal = (reward: Reward) => {
+    if (reward.quantity_points > user.points) {
+      return showToast('Quantidade de pontos insuficientes', 'error');
+    }
     setSelectedReward(reward);
     setModalOpen(!modalOpen);
     translateY.value = withTiming(0, {duration: 500});

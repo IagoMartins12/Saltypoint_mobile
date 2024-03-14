@@ -18,6 +18,7 @@ interface CartTotalProps {
   value?: number;
   increaseQuantity: () => void;
   decreaseQuantity: () => void;
+  disabled: boolean;
 }
 
 const ProductFixed: React.FC<CartTotalProps> = ({
@@ -25,10 +26,19 @@ const ProductFixed: React.FC<CartTotalProps> = ({
   quantity,
   value,
   decreaseQuantity,
+  disabled,
   increaseQuantity,
 }) => {
   const renderContinueButton = () => (
-    <TouchableOpacity style={styles.buttonView} onPress={onPress}>
+    <TouchableOpacity
+      style={[
+        styles.buttonView,
+        {
+          backgroundColor: disabled ? '#cccccc' : COLORS.secondaryRed,
+        },
+      ]}
+      onPress={onPress}
+      disabled={disabled}>
       <CustomIcon name="plus" size={20} pack="Feather" />
       <MyText style={styles.buttonText}>Adicionar</MyText>
       <MyText style={styles.buttonText}> • </MyText>
@@ -102,7 +112,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 10,
-    backgroundColor: COLORS.secondaryRed,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

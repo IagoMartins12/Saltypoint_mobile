@@ -1,33 +1,34 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   Dimensions,
-  GestureResponderEvent,
+  Image,
   Modal,
-  Pressable,
-  ScrollView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
-import CustomIcon from '../../CustomIcon';
+import Animated, {useAnimatedStyle} from 'react-native-reanimated';
 import {ModalProps} from '../ForgetPasswordModal';
 import {COLORS} from '../../../theme/theme';
 import MyText from '../../Text';
 import CouponCard from '../../CouponCard';
-import useKeyboardOpen from '../../../hooks/useKeyboardOpen';
 import EmptyAnimation from '../../Lottie/EmptyAnimation';
-import useGlobalStore from '../../../hooks/store/useGlobalStore';
-import RewardCard from '../../RewardCard';
 import RewardCardHorizontal from '../../RewardCardHorizontal';
 import OptionsTittle from '../../OptionsTittle';
 import useTheme from '../../../hooks/useTheme';
 import ModalIcon from '../ModalIcon';
+import usePrivateStore from '../../../hooks/store/usePrivateStore';
+import {User_Rewards} from '../../../types/ModelsType';
+
+const options = [
+  {
+    name: 'Cupons',
+  },
+  {
+    name: 'Recompensas',
+  },
+];
 
 const CouponsModal: React.FC<ModalProps> = ({
   modalOpen,
@@ -37,29 +38,12 @@ const CouponsModal: React.FC<ModalProps> = ({
 }) => {
   const [searchText, setSearchText] = useState('');
   const [selectedOption, setSelectedOption] = useState(0);
-  const isOpen = useKeyboardOpen();
 
-  // Altura compartilhada animada
-  const modalHeight = useSharedValue(
-    isOpen
-      ? Dimensions.get('screen').height * 0.6
-      : Dimensions.get('screen').height * 0.9,
-  );
-
-  // Atualizar a altura compartilhada animada quando o teclado for aberto/fechado
-  useEffect(() => {
-    modalHeight.value = withTiming(
-      isOpen
-        ? Dimensions.get('screen').height * 0.6
-        : Dimensions.get('screen').height * 0.9,
-      {duration: 150}, // Duração da animação de 150 milissegundos
-    );
-  }, [isOpen]);
-  // Estilo animado para o modal
+  const {cart} = usePrivateStore();
+  //@ts-ignore
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
-      height: modalHeight.value,
     };
   });
 
@@ -69,22 +53,54 @@ const CouponsModal: React.FC<ModalProps> = ({
     setSearchText('');
   };
 
-  const options = [
-    {
-      name: 'Cupons',
-    },
-    {
-      name: 'Recompensas',
-    },
-  ];
-
-  const {reward} = useGlobalStore();
   const {currentTheme} = useTheme();
+  const {coupons, userReward} = usePrivateStore();
+
+  const renderNullCard = (
+    <TouchableOpacity
+      style={[
+        styles.container,
+        {
+          borderColor:
+            currentTheme === 'dark'
+              ? COLORS.borderColorDark
+              : COLORS.borderColorLight,
+        },
+      ]}>
+      <View style={styles.imageContainer}>
+        <Image
+          source={require('../../../assets/coupon.png')}
+          style={styles.image}
+        />
+      </View>
+
+      <View
+        style={{
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+          width: '60%',
+          gap: 10,
+        }}>
+        <View style={styles.rewardNameContainer}>
+          {selectedOption === 0 ? (
+            <MyText style={styles.rewardName}>Sem cupom </MyText>
+          ) : (
+            <MyText style={styles.rewardName}>Sem recompensa </MyText>
+          )}
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+
   return (
     <View style={styles.centeredView}>
       <Modal animationType="none" transparent={true} visible={modalOpen}>
         <View style={styles.overlay}>
-          <Animated.View
+          <Animated.ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              alignItems: 'center',
+            }}
             style={[
               styles.modalContainer,
               animatedStyle,
@@ -96,105 +112,91 @@ const CouponsModal: React.FC<ModalProps> = ({
               },
             ]}>
             <ModalIcon handleOverlayPress={handleOverlayPress} height="5%" />
-            <View style={{width: '100%', marginTop: 30}}>
+            <View
+              style={{
+                width: '100%',
+                marginTop: 30,
+              }}>
               <OptionsTittle
                 options={options}
                 selectedOption={selectedOption}
                 setSelectedOption={setSelectedOption}
               />
-              {selectedOption === 0 ? (
-                <ScrollView>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <TextInput
-                      placeholder="Código de cupom"
-                      style={[
-                        styles.inputStyle,
-                        {
-                          color:
-                            currentTheme === 'dark'
-                              ? COLORS.textColorDark
-                              : COLORS.textColorLight,
-                          borderColor:
-                            currentTheme === 'dark'
-                              ? COLORS.borderColorDark
-                              : COLORS.borderColorLight,
-                        },
-                      ]}
-                      value={searchText}
-                      onChangeText={ev => setSearchText(ev)}
-                      placeholderTextColor={
-                        currentTheme === 'dark'
-                          ? COLORS.textColorDark
-                          : COLORS.textColorLight
-                      }
-                    />
-                    <MyText
-                      style={{
-                        color: searchText
-                          ? COLORS.secondaryRed
-                          : currentTheme === 'light'
-                          ? COLORS.textColorLight
-                          : COLORS.textColorDark,
-                      }}>
-                      Adicionar
-                    </MyText>
-                  </View>
-                  <View style={styles.cardView}>
-                    {/* <EmptyAnimation text="Sem cupons disponiveis" /> */}
-                    <CouponCard />
-                    <CouponCard />
-                    <CouponCard />
-                    <CouponCard />
-                    <CouponCard />
-                  </View>
-                </ScrollView>
-              ) : (
-                <ScrollView>
-                  {/* <EmptyAnimation text="Sem cupons disponiveis" /> */}
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <TextInput
-                      placeholder="Procurar recompensa"
-                      style={[
-                        styles.inputStyle,
-                        {
-                          color:
-                            currentTheme === 'dark'
-                              ? COLORS.textColorDark
-                              : COLORS.textColorLight,
-                          borderColor:
-                            currentTheme === 'dark'
-                              ? COLORS.borderColorDark
-                              : COLORS.borderColorLight,
-                        },
-                      ]}
-                      value={searchText}
-                      onChangeText={ev => setSearchText(ev)}
-                      placeholderTextColor={
-                        currentTheme === 'dark'
-                          ? COLORS.textColorDark
-                          : COLORS.textColorLight
-                      }
-                    />
-                    <MyText
-                      style={{
-                        color: searchText
-                          ? COLORS.secondaryRed
-                          : currentTheme === 'light'
-                          ? COLORS.textColorLight
-                          : COLORS.textColorDark,
-                      }}>
-                      Adicionar
-                    </MyText>
-                  </View>
-                  <View style={styles.cardView}>
-                    {reward.map(r => (
-                      <RewardCardHorizontal reward={r} key={r.id} />
-                    ))}
-                  </View>
-                </ScrollView>
-              )}
+              <View
+                style={{
+                  height: Dimensions.get('screen').height * 0.9,
+                }}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <TextInput
+                    placeholder={
+                      selectedOption === 0
+                        ? 'Código do cupom'
+                        : 'Código da recompensa'
+                    }
+                    style={[
+                      styles.inputStyle,
+                      {
+                        color:
+                          currentTheme === 'dark'
+                            ? COLORS.textColorDark
+                            : COLORS.textColorLight,
+                        borderColor:
+                          currentTheme === 'dark'
+                            ? COLORS.borderColorDark
+                            : COLORS.borderColorLight,
+                      },
+                    ]}
+                    value={searchText}
+                    onChangeText={ev => setSearchText(ev)}
+                    placeholderTextColor={
+                      currentTheme === 'dark'
+                        ? COLORS.textColorDark
+                        : COLORS.textColorLight
+                    }
+                  />
+                  <MyText
+                    style={{
+                      color: searchText
+                        ? COLORS.secondaryRed
+                        : currentTheme === 'light'
+                        ? COLORS.textColorLight
+                        : COLORS.textColorDark,
+                    }}>
+                    Adicionar
+                  </MyText>
+                </View>
+                <View style={styles.cardView}>
+                  {selectedOption === 0 ? (
+                    <>
+                      {coupons.length > 0 ? (
+                        <View style={{gap: 15, flex: 1}}>
+                          {renderNullCard}
+                          {coupons.map((c, i) => (
+                            <CouponCard key={i} coupon={c} />
+                          ))}
+                        </View>
+                      ) : (
+                        <EmptyAnimation text="Você não possui nenhum cupom disponivel" />
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {userReward.length > 0 ? (
+                        <View style={{gap: 15, flex: 1}}>
+                          {renderNullCard}
+                          {userReward.map((r: User_Rewards, i) => (
+                            <RewardCardHorizontal key={i} reward={r} />
+                          ))}
+                        </View>
+                      ) : (
+                        <EmptyAnimation text="Você não possui nenhuma recompensa disponivel" />
+                      )}
+                    </>
+                  )}
+                </View>
+              </View>
             </View>
-          </Animated.View>
+          </Animated.ScrollView>
         </View>
       </Modal>
     </View>
@@ -213,10 +215,8 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: '100%',
-    backgroundColor: '#fffbfb',
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
-    alignItems: 'center',
     paddingBottom: 80,
   },
   iconStyle: {
@@ -244,6 +244,38 @@ const styles = StyleSheet.create({
     width: '65%',
     marginHorizontal: 20,
     marginVertical: 10,
+  },
+  container: {
+    height: Dimensions.get('screen').height / 8,
+    flexDirection: 'row',
+    width: '100%',
+    borderWidth: 1,
+    borderRadius: 10,
+    borderStyle: 'dashed',
+  },
+  imageContainer: {
+    width: '35%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    padding: 10,
+  },
+  image: {
+    width: '90%',
+    height: '90%',
+    alignSelf: 'center',
+    borderRadius: 10,
+  },
+  rewardNameContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  rewardName: {
+    fontWeight: '600',
+    fontSize: 18,
+    textAlign: 'center',
   },
 });
 

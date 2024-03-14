@@ -24,25 +24,79 @@ import ProductFixed from '../components/ProductFixed';
 import ProductDetails from '../components/ProductDetails';
 import CartAnimation from '../components/Lottie/CartAnimation';
 import useTheme from '../hooks/useTheme';
+import usePrivateStore from '../hooks/store/usePrivateStore';
+import CallToast from '../components/Toast';
+import {addCartProduct} from '../services';
 
 export type NavigationProps = {
   navigation: NativeStackNavigationProp<any>;
 };
 
 const ProductScreen = ({navigation}: NavigationProps) => {
+  const [selectedOptions, setSelectedOptions] = useState({
+    size: '0',
+    flavour: '0',
+    flavour2: null,
+    flavour3: null,
+  });
+
   const [quantity, setQuantity] = useState(1);
   const [value, setValue] = useState<number | string>(0);
   const [disabled, setDisabled] = useState(true);
   const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
   const [hasPlayed, setHasPlayed] = useState(false);
-
+  const [observation, setObservation] = useState('');
   const {products} = useGlobalStore();
-  const router = useRoute();
+  const {user, cart_product, setCart_product} = usePrivateStore();
+  const {showToast} = CallToast();
   const {currentTheme} = useTheme();
+
+  const router = useRoute();
   const scrollViewRef = useRef<ScrollView>(null); // Ref para o ScrollView
 
-  const onSubmit = () => {
-    setHasPlayed(true);
+  const onSubmit = async () => {
+    if (!user)
+      return showToast('Faça o login para adicionar o produto', 'error');
+    if (isPizza) {
+      const response = await addCartProduct({
+        product_id: productId,
+        product_id_2: selectedOptions.flavour2,
+        product_id_3: selectedOptions.flavour3,
+        observation: observation,
+        quantity: quantity,
+        value: String(value),
+        size: Number(selectedOptions.size),
+      });
+
+      if (response) {
+        const updatedCartProduct = [...cart_product, response];
+        setCart_product(updatedCartProduct);
+        setHasPlayed(true);
+        setQuantity(1);
+        return showToast('Produto adicionado', 'success');
+      }
+
+      showToast('Erro ao adicionar produto', 'error');
+      return;
+    }
+
+    const response = await addCartProduct({
+      product_id: productId,
+      observation: observation,
+      quantity: quantity,
+      value: String((Number(currentProduct.value) * quantity).toFixed(2)),
+      size: 0,
+    });
+
+    if (response) {
+      const updatedCartProduct = [...cart_product, response];
+      setCart_product(updatedCartProduct);
+      setHasPlayed(true);
+      setQuantity(1);
+      return showToast('Produto adicionado', 'success');
+    }
+
+    showToast('Erro ao adicionar produto', 'error');
   };
   //@ts-ignore
   const productId: string = router.params?.id;
@@ -154,11 +208,15 @@ const ProductScreen = ({navigation}: NavigationProps) => {
                 quantity={quantity}
                 scrollToSection={scrollToSection}
                 scrollToCornicione={scrollToCornicione}
+                setObservation={setObservation}
+                selectedOptions={selectedOptions}
+                setSelectedOptions={setSelectedOptions}
               />
             ) : (
               <ProductDetails
                 comeBack={comeBack}
                 currentProduct={currentProduct}
+                setObservation={setObservation}
               />
             )}
           </ScrollView>
@@ -177,6 +235,7 @@ const ProductScreen = ({navigation}: NavigationProps) => {
               decreaseQuantity={decreaseQuantity}
               increaseQuantity={increaseQuantity}
               onPress={onSubmit}
+              disabled={disabled}
             />
           )}
         </View>

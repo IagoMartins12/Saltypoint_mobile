@@ -3,7 +3,6 @@ import CustomIcon from '../CustomIcon';
 import MyText from '../Text';
 import {COLORS} from '../../theme/theme';
 import {Product} from '../../types/ModelsType';
-import useGlobalStore from '../../hooks/store/useGlobalStore';
 
 import TextAreaComponent from '../TextArea';
 import HeartIcon from '../HeartIcon';
@@ -11,23 +10,24 @@ import HeartIcon from '../HeartIcon';
 interface PizzaProps {
   currentProduct: Product;
   comeBack: () => void;
+  setObservation: React.Dispatch<React.SetStateAction<string>>;
 }
-const ProductDetails: React.FC<PizzaProps> = ({comeBack, currentProduct}) => {
-  const isPizza = currentProduct?.name.toUpperCase().includes('PIZZA');
-
-  const {products} = useGlobalStore();
-
+const ProductDetails: React.FC<PizzaProps> = ({
+  comeBack,
+  currentProduct,
+  setObservation,
+}) => {
   return (
     <View style={styles.container}>
       <View
         style={[
           styles.productImage,
           {
-            paddingVertical: isPizza ? 50 : 0,
+            paddingVertical: 0,
           },
         ]}>
         <Image
-          resizeMode={isPizza ? 'contain' : 'cover'}
+          resizeMode={'cover'}
           source={{
             uri: currentProduct?.product_image ?? '',
           }}
@@ -58,7 +58,7 @@ const ProductDetails: React.FC<PizzaProps> = ({comeBack, currentProduct}) => {
           </MyText>
         </View>
 
-        <TextAreaComponent label="Observação" />
+        <TextAreaComponent label="Observação" setObservation={setObservation} />
       </View>
     </View>
   );

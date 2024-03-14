@@ -5,7 +5,7 @@ import {COLORS, FONTFAMILY, FONTSIZE} from '../../../theme/theme';
 import CallToast from '../../Toast';
 import useTheme from '../../../hooks/useTheme';
 
-const RewardAnimation = () => {
+const RewardAnimation = ({onFinish}: {onFinish: () => void}) => {
   const {showToast} = CallToast();
   const {currentTheme} = useTheme();
   const lottieSource =
@@ -21,7 +21,7 @@ const RewardAnimation = () => {
         autoPlay
         loop={false}
         onAnimationFinish={() => {
-          showToast('Recompensa resgatada', 'success');
+          onFinish();
         }}
       />
     </View>
