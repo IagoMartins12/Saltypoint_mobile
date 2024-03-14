@@ -1,4 +1,4 @@
-import {Reward, User_Rewards} from '../../types/ModelsType';
+import {Cart_product, Reward, User_Rewards} from '../../types/ModelsType';
 import {
   View,
   TouchableOpacity,
@@ -9,28 +9,44 @@ import {
 import MyText from '../Text';
 import useTheme from '../../hooks/useTheme';
 import {COLORS} from '../../theme/theme';
+import useCurrrentCode from '../../hooks/reward';
+import usePrivateStore from '../../hooks/store/usePrivateStore';
 
 export interface RewardCardHorizontalProps {
   reward: User_Rewards;
-  onClick?: (reward: Reward) => void;
 }
 
 const RewardCardHorizontal: React.FC<RewardCardHorizontalProps> = ({
   reward,
-  onClick,
 }) => {
   const {currentTheme} = useTheme();
+  const {currentCode, setCurrentCode} = useCurrrentCode();
+  const {cart_product, setCart_product} = usePrivateStore();
+
+  const removeItemCart = () => {
+    const filteredCart = cart_product.filter(
+      (item: Cart_product) => item.observation !== 'Recompensa',
+    );
+    setCart_product(filteredCart);
+  };
+
   return (
     <TouchableOpacity
       style={[
         styles.container,
         {
           borderColor:
-            currentTheme === 'dark'
+            currentCode === reward
+              ? COLORS.secondaryRed
+              : currentTheme === 'dark'
               ? COLORS.borderColorDark
               : COLORS.borderColorLight,
         },
-      ]}>
+      ]}
+      onPress={() => {
+        removeItemCart();
+        setCurrentCode(reward);
+      }}>
       <View style={styles.imageContainer}>
         <Image source={{uri: reward.rewardImage}} style={styles.image} />
       </View>
@@ -61,7 +77,6 @@ const styles = StyleSheet.create({
     width: '100%',
     borderWidth: 1,
     borderRadius: 10,
-    borderStyle: 'dashed',
   },
   imageContainer: {
     width: '35%',

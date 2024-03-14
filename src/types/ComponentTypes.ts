@@ -201,6 +201,11 @@ export interface GeoLocationStore {
   setGeoAddress: (address: GoogleMapsApiResponse) => void;
 }
 
+export interface RewardHookStore {
+  currentCode: User_Rewards | Discount_cupom | null;
+  setCurrentCode: (reward: User_Rewards | Discount_cupom | null) => void;
+}
+
 export interface ImageComponentType {
   src: string;
   alt: string;

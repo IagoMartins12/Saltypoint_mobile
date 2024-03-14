@@ -19,7 +19,9 @@ import OptionsTittle from '../../OptionsTittle';
 import useTheme from '../../../hooks/useTheme';
 import ModalIcon from '../ModalIcon';
 import usePrivateStore from '../../../hooks/store/usePrivateStore';
-import {User_Rewards} from '../../../types/ModelsType';
+import {Discount_cupom, User_Rewards} from '../../../types/ModelsType';
+import useCurrrentCode from '../../../hooks/reward';
+import CouponCardSelected from '../../CouponCardSelected';
 
 const options = [
   {
@@ -40,6 +42,7 @@ const CouponsModal: React.FC<ModalProps> = ({
   const [selectedOption, setSelectedOption] = useState(0);
 
   const {cart} = usePrivateStore();
+  const {currentCode, setCurrentCode} = useCurrrentCode();
   //@ts-ignore
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -55,16 +58,23 @@ const CouponsModal: React.FC<ModalProps> = ({
 
   const {currentTheme} = useTheme();
   const {coupons, userReward} = usePrivateStore();
+  const filteredCoupons = coupons.filter(
+    (coupon: Discount_cupom) => coupon.type_coupon === 0,
+  );
 
   const renderNullCard = (
     <TouchableOpacity
+      onPress={() => {
+        setCurrentCode(null);
+      }}
       style={[
         styles.container,
         {
-          borderColor:
-            currentTheme === 'dark'
-              ? COLORS.borderColorDark
-              : COLORS.borderColorLight,
+          borderColor: !currentCode
+            ? COLORS.secondaryRed
+            : currentTheme === 'dark'
+            ? COLORS.borderColorDark
+            : COLORS.borderColorLight,
         },
       ]}>
       <View style={styles.imageContainer}>
@@ -168,11 +178,11 @@ const CouponsModal: React.FC<ModalProps> = ({
                 <View style={styles.cardView}>
                   {selectedOption === 0 ? (
                     <>
-                      {coupons.length > 0 ? (
+                      {filteredCoupons.length > 0 ? (
                         <View style={{gap: 15, flex: 1}}>
                           {renderNullCard}
-                          {coupons.map((c, i) => (
-                            <CouponCard key={i} coupon={c} />
+                          {filteredCoupons.map((c, i) => (
+                            <CouponCardSelected key={i} coupon={c} />
                           ))}
                         </View>
                       ) : (
@@ -251,7 +261,6 @@ const styles = StyleSheet.create({
     width: '100%',
     borderWidth: 1,
     borderRadius: 10,
-    borderStyle: 'dashed',
   },
   imageContainer: {
     width: '35%',

@@ -5,8 +5,7 @@ import CustomIcon from '../CustomIcon';
 import MyText from '../Text';
 
 const ProgressBar = ({points}) => {
-  const maxWidth = 620;
-  const maxPoints = window.innerWidth < maxWidth ? 250 : 250;
+  const maxPoints = 250;
   const step = 50;
   const numBalls = Math.ceil(maxPoints / step);
 
@@ -58,22 +57,19 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
+    position: 'relative',
   },
   barContainer: {
     position: 'absolute',
     width: '100%',
     height: 5,
-    backgroundColor: 'transparent',
-    zIndex: -20,
   },
   bar: {
-    position: 'absolute',
     height: '100%',
+    width: '90%',
     backgroundColor: 'red',
   },
   ballsContainer: {
-    alignItems: 'center',
     flexDirection: 'row',
     marginTop: 10,
     width: '100%',

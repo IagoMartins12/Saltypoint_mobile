@@ -15,6 +15,7 @@ import CouponCard from '../../components/CouponCard';
 import useTheme from '../../hooks/useTheme';
 import usePrivateStore from '../../hooks/store/usePrivateStore';
 import EmptyAnimation from '../../components/Lottie/EmptyAnimation';
+import {Discount_cupom} from '../../types/ModelsType';
 
 const CouponsScreen = ({
   navigation,
@@ -29,6 +30,10 @@ const CouponsScreen = ({
   const comeBack = () => {
     navigation.pop();
   };
+
+  const filteredCoupons = coupons.filter(
+    (coupon: Discount_cupom) => coupon.type_coupon === 0,
+  );
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
@@ -53,9 +58,9 @@ const CouponsScreen = ({
                     : COLORS.backgroundColorDark,
               },
             ]}>
-            {coupons.length > 0 ? (
+            {filteredCoupons.length > 0 ? (
               <View style={{gap: 15, flex: 1}}>
-                {coupons.map((c, i) => (
+                {filteredCoupons.map((c, i) => (
                   <CouponCard key={i} coupon={c} />
                 ))}
               </View>

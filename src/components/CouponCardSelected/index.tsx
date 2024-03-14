@@ -1,7 +1,5 @@
-import React from 'react';
 import {
   View,
-  Text,
   TouchableOpacity,
   Image,
   StyleSheet,
@@ -10,32 +8,40 @@ import {
 import {COLORS} from '../../theme/theme';
 import MyText from '../Text';
 import useTheme from '../../hooks/useTheme';
-import {Discount_cupom} from '../../types/ModelsType';
+import {Cart_product, Discount_cupom} from '../../types/ModelsType';
 import {formatDate} from '../../utils';
 import useCurrrentCode from '../../hooks/reward';
+import usePrivateStore from '../../hooks/store/usePrivateStore';
 
-const CouponCard = ({coupon}: {coupon: Discount_cupom}) => {
-  const handleCopyLink = async () => {
-    // try {
-    //   await Clipboard.setString(coupon.cupom_name); // Import Clipboard from react-native
-    //   toast.success('Copiado!');
-    // } catch (error) {
-    //   console.error('Error copying to clipboard:', error);
-    // }
+const CouponCardSelected = ({coupon}: {coupon: Discount_cupom}) => {
+  const {currentTheme} = useTheme();
+  const {currentCode, setCurrentCode} = useCurrrentCode();
+  const {cart_product, setCart_product} = usePrivateStore();
+
+  const removeItemCart = () => {
+    const filteredCart = cart_product.filter(
+      (item: Cart_product) => item.observation !== 'Recompensa',
+    );
+    setCart_product(filteredCart);
   };
 
-  const {currentTheme} = useTheme();
   return (
     <TouchableOpacity
       style={[
         styles.container,
         {
           borderColor:
-            currentTheme === 'dark'
+            currentCode === coupon
+              ? COLORS.secondaryRed
+              : currentTheme === 'dark'
               ? COLORS.borderColorDark
               : COLORS.borderColorLight,
         },
-      ]}>
+      ]}
+      onPress={() => {
+        removeItemCart();
+        setCurrentCode(coupon);
+      }}>
       <View style={styles.imageContainer}>
         <Image
           source={require('../../assets/coupon.png')}
@@ -117,4 +123,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CouponCard;
+export default CouponCardSelected;

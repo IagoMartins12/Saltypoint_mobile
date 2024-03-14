@@ -198,9 +198,17 @@ const ProductCartCard: React.FC<ProductCardProps> = ({
 
           <View style={[styles.addItemsDiv]}>
             {/* {count === 1 ? ( */}
-            <Pressable style={[styles.iconBox]} onPress={handleDeleteAddress}>
-              <CustomIcon name="trash-2" size={20} color="red" pack="Feather" />
-            </Pressable>
+            {+cartProduct.value !== 0 && (
+              <Pressable style={[styles.iconBox]} onPress={handleDeleteAddress}>
+                <CustomIcon
+                  name="trash-2"
+                  size={20}
+                  color="red"
+                  pack="Feather"
+                />
+              </Pressable>
+            )}
+
             {/* ) : (
               <Pressable style={[styles.iconBox]} onPress={decreaseCount}>
                 <CustomIcon name="minus" size={20} color="red" pack="Feather" />
