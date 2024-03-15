@@ -1,15 +1,6 @@
 import React from 'react';
-import {
-  Dimensions,
-  GestureResponderEvent,
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Dimensions, Modal, StyleSheet, View, ViewStyle} from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import CustomIcon from '../../CustomIcon';
 import {ModalProps} from '../ForgetPasswordModal';
 import {COLORS, FONTSIZE} from '../../../theme/theme';
@@ -24,14 +15,13 @@ const ContactModal: React.FC<ModalProps> = ({
   translateY,
 }) => {
   const {currentTheme} = useTheme();
-  //@ts-ignore
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
-    };
+    } as Animated.AnimateStyle<ViewStyle>;
   });
+
   const handleOverlayPress = () => {
-    // Clique fora do modal, executa o hideModal
     hideModal();
     setTimeout(() => setModalOpen(!modalOpen), 300);
   };

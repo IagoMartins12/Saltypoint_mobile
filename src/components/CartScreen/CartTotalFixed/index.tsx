@@ -11,20 +11,30 @@ interface CartTotalProps {
   onPress?: () => void;
   title?: string;
   lastStep?: boolean;
+  deliveryFee?: number;
 }
 
 const CartTotalFixed: React.FC<CartTotalProps> = ({
   onPress,
   title,
   lastStep,
+  deliveryFee,
 }) => {
   const {currentTheme} = useTheme();
   const {cart_product} = usePrivateStore();
 
-  const cartProductTotal = (cart_product as Cart_product[]).reduce(
-    (total, item) => total + Number(item.value),
-    0,
-  );
+  const getTotal = () => {
+    let cartProductTotal = (cart_product as Cart_product[]).reduce(
+      (total, item) => total + Number(item.value),
+      0,
+    );
+
+    if (deliveryFee) {
+      return cartProductTotal + deliveryFee;
+    }
+
+    return cartProductTotal;
+  };
 
   const cartProductLength = (cart_product as Cart_product[]).reduce(
     (total, item) => total + Number(item.quantity),
@@ -56,7 +66,7 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
             onPress();
           }}>
           <MyText style={styles.buttonText}>
-            Finalizar pedido • R$ {cartProductTotal.toFixed(2)}
+            Finalizar pedido • R$ {getTotal().toFixed(2)}
           </MyText>
         </TouchableOpacity>
       ) : (
@@ -66,7 +76,7 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
         <View>
           <MyText style={styles.subTitleTotal}>{title}</MyText>
           <MyText style={styles.titleTotal}>
-            R$ {cartProductTotal.toFixed(2)}
+            R$ {getTotal().toFixed(2)}
             <MyText style={styles.subTitleTotal}>
               {' '}
               / {cartProductLength} itens

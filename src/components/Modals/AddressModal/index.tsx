@@ -1,30 +1,24 @@
 import React, {useState, useEffect} from 'react';
 import {
   Dimensions,
-  GestureResponderEvent,
   Modal,
-  Pressable,
   ScrollView,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, {useAnimatedStyle} from 'react-native-reanimated';
 import CustomIcon from '../../CustomIcon';
 import {ModalProps} from '../ForgetPasswordModal';
 import MyText from '../../Text';
-import useKeyboardOpen from '../../../hooks/useKeyboardOpen';
 import EmptyAnimation from '../../Lottie/EmptyAnimation';
 import AddressCardSelected from '../../AddressCardSelected';
-import {userOptions} from '../../../screens/CartSceens/ResumeScreen';
 import useTheme from '../../../hooks/useTheme';
 import {COLORS} from '../../../theme/theme';
 import ModalIcon from '../ModalIcon';
+import usePrivateStore from '../../../hooks/store/usePrivateStore';
+import {User_Adress} from '../../../types/ModelsType';
 
 interface AddressModalProps extends ModalProps {
   addAddress: () => void;
@@ -37,40 +31,28 @@ const AddressModal: React.FC<AddressModalProps> = ({
   addAddress,
 }) => {
   const [selectedAddress, setSelectedAddress] = useState<null | string>(null);
+  const {address, user} = usePrivateStore();
+  const {currentTheme} = useTheme();
 
-  const isOpen = useKeyboardOpen();
-
-  // Altura compartilhada animada
-  const modalHeight = useSharedValue(
-    isOpen
-      ? Dimensions.get('screen').height * 0.6
-      : Dimensions.get('screen').height * 0.9,
-  );
-
-  // Atualizar a altura compartilhada animada quando o teclado for aberto/fechado
-  useEffect(() => {
-    modalHeight.value = withTiming(
-      isOpen
-        ? Dimensions.get('screen').height * 0.6
-        : Dimensions.get('screen').height * 0.9,
-      {duration: 150}, // Duração da animação de 150 milissegundos
-    );
-  }, [isOpen]);
-  // Estilo animado para o modal
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
-      height: modalHeight.value,
-    };
+    } as Animated.AnimateStyle<ViewStyle>;
   });
-  const {currentTheme} = useTheme();
 
   const handleOverlayPress = () => {
     hideModal();
     setTimeout(() => setModalOpen(!modalOpen), 300);
   };
 
-  const notEmpty = true;
+  const filtedAddress = address.filter(
+    (address: User_Adress) => address.isActive === 0,
+  );
+
+  useEffect(() => {
+    setSelectedAddress(user.user_Adress_id);
+  }, [user.user_Adress_id]);
+  // Estilo animado para o modal
 
   return (
     <View style={styles.centeredView}>
@@ -89,12 +71,12 @@ const AddressModal: React.FC<AddressModalProps> = ({
             ]}>
             <ModalIcon handleOverlayPress={handleOverlayPress} height="5%" />
             <View style={{width: '100%', marginTop: 30}}>
-              {notEmpty ? (
+              {filtedAddress.length > 0 ? (
                 <ScrollView>
                   <View
                     style={{flexDirection: 'row', alignItems: 'center'}}></View>
                   <View style={{gap: 15, marginHorizontal: 20, marginTop: 10}}>
-                    {userOptions.map((op, i) => (
+                    {filtedAddress.map((op, i) => (
                       <AddressCardSelected
                         address={op}
                         selectedAddress={selectedAddress}
@@ -142,6 +124,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: '100%',
+    height: Dimensions.get('screen').height * 0.9,
     backgroundColor: '#fffbfb',
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,

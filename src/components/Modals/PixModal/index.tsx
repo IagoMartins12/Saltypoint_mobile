@@ -1,15 +1,6 @@
 import React from 'react';
-import {
-  Dimensions,
-  GestureResponderEvent,
-  Modal,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Dimensions, Modal, StyleSheet, View, ViewStyle} from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
-import CustomIcon from '../../CustomIcon';
 import useTheme from '../../../hooks/useTheme';
 import {COLORS} from '../../../theme/theme';
 import {ModalProps} from '../ForgetPasswordModal';
@@ -25,15 +16,13 @@ const PixModal: React.FC<ModalProps> = ({
 }) => {
   const {currentTheme} = useTheme();
   const {generalData} = useGlobalStore();
-  // const {  } = useGlobalStore()
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
-    };
+    } as Animated.AnimateStyle<ViewStyle>;
   });
 
   const handleOverlayPress = () => {
-    // Clique fora do modal, executa o hideModal
     hideModal();
     setTimeout(() => setModalOpen(!modalOpen), 300);
   };

@@ -1,17 +1,14 @@
 import React, {useState} from 'react';
 import {
   Dimensions,
-  GestureResponderEvent,
   Modal,
-  Pressable,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
 import CustomIcon from '../../CustomIcon';
-
 import {Reward} from '../../../types/ModelsType';
 import MyText from '../../Text';
 import RewardAnimation from '../../Lottie/RewardAnimation';
@@ -42,10 +39,11 @@ const CatchRewardModal: React.FC<ModalProps> = ({
   const {user, userReward, setUser, setUserReward} = usePrivateStore();
   const {currentTheme} = useTheme();
   const {showToast} = CallToast();
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
-    };
+    } as Animated.AnimateStyle<ViewStyle>;
   });
 
   const catchReward = async () => {
@@ -74,7 +72,6 @@ const CatchRewardModal: React.FC<ModalProps> = ({
 
   const onFinish = () => {
     handleOverlayPress();
-
     showToast('Recompensa resgatada', 'success');
   };
 

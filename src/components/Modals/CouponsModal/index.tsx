@@ -7,12 +7,12 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
 import {ModalProps} from '../ForgetPasswordModal';
 import {COLORS} from '../../../theme/theme';
 import MyText from '../../Text';
-import CouponCard from '../../CouponCard';
 import EmptyAnimation from '../../Lottie/EmptyAnimation';
 import RewardCardHorizontal from '../../RewardCardHorizontal';
 import OptionsTittle from '../../OptionsTittle';
@@ -41,13 +41,18 @@ const CouponsModal: React.FC<ModalProps> = ({
   const [searchText, setSearchText] = useState('');
   const [selectedOption, setSelectedOption] = useState(0);
 
-  const {cart} = usePrivateStore();
   const {currentCode, setCurrentCode} = useCurrrentCode();
-  //@ts-ignore
+  const {currentTheme} = useTheme();
+  const {coupons, userReward} = usePrivateStore();
+
+  const filteredCoupons = coupons.filter(
+    (coupon: Discount_cupom) => coupon.type_coupon === 0,
+  );
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
-    };
+    } as Animated.AnimateStyle<ViewStyle>;
   });
 
   const handleOverlayPress = () => {
@@ -55,12 +60,6 @@ const CouponsModal: React.FC<ModalProps> = ({
     setTimeout(() => setModalOpen(!modalOpen), 300);
     setSearchText('');
   };
-
-  const {currentTheme} = useTheme();
-  const {coupons, userReward} = usePrivateStore();
-  const filteredCoupons = coupons.filter(
-    (coupon: Discount_cupom) => coupon.type_coupon === 0,
-  );
 
   const renderNullCard = (
     <TouchableOpacity

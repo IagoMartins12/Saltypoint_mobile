@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet, TouchableOpacity} from 'react-native';
+import {Pressable, TouchableOpacity} from 'react-native';
 import {COLORS} from '../../../theme/theme';
 import CustomIcon from '../../CustomIcon';
 import useTheme from '../../../hooks/useTheme';
@@ -22,8 +22,15 @@ const ModalIcon = ({
       }}>
       <TouchableOpacity
         style={[
-          styles.iconStyle,
           {
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 35,
+            width: 35,
+            borderRadius: 100,
+            top: 15,
+            left: 20,
+            position: 'absolute',
             backgroundColor:
               currentTheme === 'light' ? COLORS.iconBgLight : COLORS.iconBgDark,
           },
@@ -45,19 +52,5 @@ const ModalIcon = ({
     </Pressable>
   );
 };
-
-const styles = StyleSheet.create({
-  iconStyle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 35,
-    width: 35,
-    backgroundColor: '#f0efef',
-    borderRadius: 100,
-    top: 15,
-    left: 20,
-    position: 'absolute',
-  },
-});
 
 export default ModalIcon;

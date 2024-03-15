@@ -62,7 +62,6 @@ const ProfileScreen = ({
       user_Adress_id: onChangeDropdown !== '' ? onChangeDropdown : null,
     } as UpdateUserDto;
 
-    console.log('object', object);
     try {
       await updatedMe(object);
 

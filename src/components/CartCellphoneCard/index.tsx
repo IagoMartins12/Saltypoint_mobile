@@ -1,12 +1,11 @@
 import {Pressable, StyleSheet, TouchableOpacity, View} from 'react-native';
 import CustomIcon from '../CustomIcon';
-import {COLORS} from '../../theme/theme';
 import React from 'react';
 import MyText from '../Text';
 
 interface AddressProps {
   icon: JSX.Element;
-  cellphone?: string;
+  cellphone?: string | null;
   showModal?: (currentTarget: 'Address' | 'Cellphone') => void;
 }
 const CartCellphoneCard: React.FC<AddressProps> = ({
@@ -24,6 +23,9 @@ const CartCellphoneCard: React.FC<AddressProps> = ({
           <MyText style={styles.addressText}>{cellphone}</MyText>
         ) : (
           <MyText
+            onPress={() => {
+              showModal('Cellphone');
+            }}
             style={[
               styles.addressText,
               {

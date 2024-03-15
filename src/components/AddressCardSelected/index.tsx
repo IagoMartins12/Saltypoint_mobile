@@ -4,6 +4,10 @@ import {COLORS} from '../../theme/theme';
 import React from 'react';
 import MyText from '../Text';
 import SelectButton from '../SelectButton';
+import {updatedMe} from '../../services';
+import CallToast from '../Toast';
+import usePrivateStore from '../../hooks/store/usePrivateStore';
+import {User} from '../../types/ModelsType';
 
 interface AddressProps {
   address: any;
@@ -15,6 +19,35 @@ const AddressCardSelected: React.FC<AddressProps> = ({
   selectedAddress,
   setSelectedAddress,
 }) => {
+  const {user, setUser} = usePrivateStore();
+  const {showToast} = CallToast();
+
+  const setUserWithCallback = (callback: (user: User) => User) => {
+    if (!user) return;
+
+    const updatedUser = callback(user);
+
+    setUser(updatedUser);
+  };
+
+  const onSubmit = async (id: string) => {
+    setSelectedAddress(id);
+    try {
+      await updatedMe({
+        user_Adress_id: id,
+      });
+
+      setUserWithCallback(oldUser => ({
+        ...oldUser,
+        user_Adress_id: id,
+      }));
+    } catch (error) {
+      // Handle errors here
+      console.error(error);
+      showToast('Erro ao atualizar o perfil.', 'error');
+    }
+  };
+
   return (
     <View
       style={[
@@ -52,7 +85,7 @@ const AddressCardSelected: React.FC<AddressProps> = ({
       <SelectButton
         address={address}
         selectedDelivery={selectedAddress}
-        setSelectedDelivery={setSelectedAddress}
+        setSelectedDelivery={onSubmit}
       />
     </View>
   );

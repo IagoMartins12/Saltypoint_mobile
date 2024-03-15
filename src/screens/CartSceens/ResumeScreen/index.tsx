@@ -11,7 +11,7 @@ import CartInfo from '../../../components/CartInfo';
 import {global} from '../../../style';
 import CartAddressCard from '../../../components/CartAddressCard';
 import {Type_Pagament} from '../../../types/ModelsType';
-import {getIcon} from '../AddressCartScreen';
+import {getIcon, pizzariaDelivery} from '../AddressCartScreen';
 import PaymentCard from '../../../components/PaymentCard';
 import CartCellphoneCard from '../../../components/CartCellphoneCard';
 import {iconColor, iconSize} from '../../../utils';
@@ -174,7 +174,12 @@ const ResumeCartScreen = ({
             {response.selectedDelivery === '0' ? (
               <CartAddressCard address={userOptions[0]} />
             ) : (
-              <CartAddressCard address={userOptions[1]} />
+              <CartAddressCard
+                address={pizzariaDelivery}
+                withBorder
+                name="Retirar na loja"
+                icon={pizzariaDelivery.icon}
+              />
             )}
           </View>
         </View>
@@ -221,13 +226,7 @@ const ResumeCartScreen = ({
         </View>
       </ScrollView>
 
-      <CartTotalFixed
-        quantity={2}
-        value={57}
-        title="Total"
-        lastStep
-        onPress={finishOrder}
-      />
+      <CartTotalFixed title="Total" lastStep onPress={finishOrder} />
     </View>
   );
 };

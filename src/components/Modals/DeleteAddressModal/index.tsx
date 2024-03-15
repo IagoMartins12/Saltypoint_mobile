@@ -1,25 +1,23 @@
 import React from 'react';
 import {
   Dimensions,
-  GestureResponderEvent,
   Modal,
-  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
 import CustomIcon from '../../CustomIcon';
-import LargeButton from '../../Button';
 import {BORDERRADIUS, COLORS} from '../../../theme/theme';
-import {global} from '../../../style';
 import useTheme from '../../../hooks/useTheme';
 import MyText from '../../Text';
 import ModalIcon from '../ModalIcon';
 import usePrivateStore from '../../../hooks/store/usePrivateStore';
 import CallToast from '../../Toast';
 import {deleteAddress} from '../../../services';
+import {User_Adress} from '../../../types/ModelsType';
 
 export interface ModalProps {
   modalOpen: boolean;
@@ -39,6 +37,18 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
   const {currentTheme} = useTheme();
   const {address, setAddress, user} = usePrivateStore();
   const {showToast} = CallToast();
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{translateY: translateY.value}],
+    } as Animated.AnimateStyle<ViewStyle>;
+  });
+
+  const handleOverlayPress = () => {
+    hideModal();
+    setTimeout(() => setModalOpen(!modalOpen), 300);
+  };
+
   const handleDeleteAddress = async () => {
     if (currentAddress) {
       if (user?.user_Adress_id === currentAddress) {
@@ -53,7 +63,7 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
 
       if (response.status === 200) {
         const updatedAddressList = address.filter(
-          address => address.id !== currentAddress,
+          (address: User_Adress) => address.id !== currentAddress,
         );
         setAddress(updatedAddressList);
         handleOverlayPress();
@@ -62,16 +72,6 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
         return showToast('Erro ao deletar endereço', 'error');
       }
     }
-  };
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{translateY: translateY.value}],
-    };
-  });
-  const handleOverlayPress = () => {
-    hideModal();
-    setTimeout(() => setModalOpen(!modalOpen), 300);
   };
 
   return (

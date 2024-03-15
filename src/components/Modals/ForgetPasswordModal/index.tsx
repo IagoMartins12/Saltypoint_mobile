@@ -1,15 +1,6 @@
 import React from 'react';
-import {
-  Dimensions,
-  GestureResponderEvent,
-  Modal,
-  Pressable,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {Dimensions, Modal, StyleSheet, View, ViewStyle} from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import CustomIcon from '../../CustomIcon';
 import {useForm} from 'react-hook-form';
 import StyledInputComponent from '../../Input';
 import LargeButton from '../../Button';
@@ -30,20 +21,21 @@ const ForgetPasswordModal: React.FC<ModalProps> = ({
   hideModal,
   translateY,
 }) => {
-  //@ts-ignore
+  const {currentTheme} = useTheme();
+  const {control, handleSubmit} = useForm();
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
-    };
+    } as Animated.AnimateStyle<ViewStyle>;
   });
-  const {control, handleSubmit} = useForm();
-  const onSubmit = (data: any) => console.log(data);
+
   const handleOverlayPress = () => {
     hideModal();
     setTimeout(() => setModalOpen(!modalOpen), 300);
   };
 
-  const {currentTheme} = useTheme();
+  const onSubmit = (data: any) => console.log(data);
 
   return (
     <View style={styles.centeredView}>

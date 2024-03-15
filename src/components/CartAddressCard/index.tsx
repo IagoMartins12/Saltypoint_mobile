@@ -3,16 +3,15 @@ import {COLORS} from '../../theme/theme';
 import React from 'react';
 import MyText from '../Text';
 import SelectButton from '../SelectButton';
+import {User_Adress} from '../../types/ModelsType';
 
 export type userOptions = {
   id: string;
-  name: string;
   address: string;
-  number: string;
+  number: number;
   district: string;
   city: string;
   uf: string;
-  icon: JSX.Element;
   reference?: string;
 };
 interface AddressProps {
@@ -20,12 +19,16 @@ interface AddressProps {
   selectedDelivery?: string;
   setSelectedDelivery?: (id: string) => void;
   withBorder?: boolean;
+  icon?: JSX.Element;
+  name: string;
 }
 const CartAddressCard: React.FC<AddressProps> = ({
   address,
   withBorder,
   selectedDelivery,
   setSelectedDelivery,
+  icon,
+  name,
 }) => {
   return (
     <View
@@ -36,10 +39,10 @@ const CartAddressCard: React.FC<AddressProps> = ({
           borderColor: withBorder ? 'gray' : null,
         },
       ]}>
-      <View style={styles.iconContainer}>{address.icon}</View>
+      <View style={styles.iconContainer}>{icon}</View>
 
       <View style={styles.textContainer}>
-        <MyText style={styles.addressType}>{address.name}</MyText>
+        <MyText style={styles.addressType}>{name}</MyText>
         <MyText style={styles.addressText}>
           {address.address}, {address.number}
         </MyText>

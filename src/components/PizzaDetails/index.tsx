@@ -94,7 +94,6 @@ const PizzaDetails: React.FC<PizzaProps> = ({
 
   const handleFlavourSelect = (flavourId: string | null) => {
     setSelectedOptions({...selectedOptions, flavour: flavourId});
-
     if (flavourId === '1') {
       scrollToSection('Flavour');
     }
@@ -148,7 +147,7 @@ const PizzaDetails: React.FC<PizzaProps> = ({
       if (!product) return;
 
       //Se um segundo sabor for selecionado
-      if (selectedOptions.flavour2 && otherProductsCheck) {
+      if (selectedOptions.flavour2) {
         if (isBrotinho) {
           const newValue =
             +otherProductsValue * quantity + product.value * quantity;
@@ -179,7 +178,7 @@ const PizzaDetails: React.FC<PizzaProps> = ({
     }
 
     //Se um segundo sabor for selecionado
-    if (selectedOptions.flavour2 && otherProductsCheck) {
+    if (selectedOptions.flavour2) {
       if (isBrotinho) {
         return setValue(
           (+otherProductsValue * quantity - brotinhoPrice).toFixed(2),
