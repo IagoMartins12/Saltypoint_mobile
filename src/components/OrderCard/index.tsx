@@ -12,7 +12,7 @@ import {formatOrderDate} from '../../utils';
 
 interface OrderProps {
   order: OrderType;
-  onPress: () => void;
+  onPress: (id: string) => void;
 }
 const OrderCard: React.FC<OrderProps> = ({onPress, order}) => {
   const {currentTheme} = useTheme();
@@ -44,7 +44,9 @@ const OrderCard: React.FC<OrderProps> = ({onPress, order}) => {
               : COLORS.cardColorDark,
         },
       ]}
-      onPress={onPress}>
+      onPress={() => {
+        onPress(order.id);
+      }}>
       <View style={styles.cardContainer}>
         <View style={styles.header}>
           <View style={styles.logoContainer}>

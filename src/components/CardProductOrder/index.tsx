@@ -4,26 +4,30 @@ import {COLORS} from '../../theme/theme';
 import CustomIcon from '../CustomIcon';
 import MyText from '../Text';
 import useTheme from '../../hooks/useTheme';
+import {Cart_product, Product} from '../../types/ModelsType';
+import useGlobalStore from '../../hooks/store/useGlobalStore';
 
-interface CartProductCardType {}
-const CardProductOrder: React.FC<CartProductCardType> = ({}) => {
+interface CartProductCardType {
+  cart_product: Cart_product;
+}
+const CardProductOrder: React.FC<CartProductCardType> = ({cart_product}) => {
   const {currentTheme} = useTheme();
-  //   const {products} = useGlobalStore();
+  const {products} = useGlobalStore();
 
-  //   const getProductName2 = (productId: string, size: number | null) => {
-  //     let name: string;
-  //     const product = products.find(p => p.id === productId);
+  const getProductName2 = (productId: string, size: number | null) => {
+    let name: string;
+    const product = products.find((p: Product) => p.id === productId);
 
-  //     if (!product) {
-  //       return 'Produto desconhecido';
-  //     }
+    if (!product) {
+      return 'Produto desconhecido';
+    }
 
-  //     if (size === 1) {
-  //       return product?.name.replace('Pizza', 'Brotinho');
-  //     } else {
-  //       return product?.name;
-  //     }
-  //   };
+    if (size === 1) {
+      return product?.name.replace('Pizza', 'Brotinho');
+    } else {
+      return product?.name;
+    }
+  };
 
   return (
     <View>
@@ -31,59 +35,61 @@ const CardProductOrder: React.FC<CartProductCardType> = ({}) => {
         <View style={styles.infoContainer}>
           <View style={styles.titleContainer}>
             <MyText style={styles.titleText}>
-              2x{' '}
-              {/* {getProductName2(cart_product.product_id, cart_product.size)} */}
-              Pizza de mussarela
+              {cart_product.quantity}x{' '}
+              {getProductName2(cart_product.product_id, cart_product.size)}
             </MyText>
-            <MyText style={styles.priceText}>R$ 30,00</MyText>
+            <MyText style={styles.priceText}> R$ {cart_product.value}</MyText>
           </View>
           <View style={styles.productInfoContainer}>
-            {/* {cart_product.product_id_2 ? (
-            <>
-              {[cart_product.product_id, cart_product.product_id_2].map(
-                (productId, index) => (
-                  <Text key={index} style={styles.productText}>
-                    {cart_product.quantity}x 1/2{' '}
-                    {getProductName2(productId, cart_product.size)}
-                  </Text>
-                ),
-              )}
-            </>
-          ) : ( */}
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <View>
-                <CustomIcon pack="Entypo" name="dot-single" size={25} />
+            {cart_product.product_id_2 ? (
+              <>
+                {[cart_product.product_id, cart_product.product_id_2].map(
+                  (productId, index) => (
+                    <View
+                      style={{flexDirection: 'row', alignItems: 'center'}}
+                      key={index}>
+                      <View>
+                        <CustomIcon pack="Entypo" name="dot-single" size={25} />
+                      </View>
+                      <MyText style={styles.productText}>
+                        {cart_product.quantity}x 1/2{' '}
+                        {getProductName2(productId, cart_product.size)}
+                      </MyText>
+                    </View>
+                  ),
+                )}
+              </>
+            ) : null}
+
+            {cart_product.product_id_3 ? (
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View>
+                  <CustomIcon pack="Entypo" name="dot-single" size={25} />
+                </View>
+                <MyText style={styles.productText}>
+                  {cart_product.quantity}x{' '}
+                  {getProductName2(
+                    cart_product.product_id_3,
+                    cart_product.size,
+                  )}
+                  y
+                </MyText>
               </View>
-              <MyText style={styles.productText}>2x Pizza de mussarela</MyText>
-            </View>
+            ) : null}
 
-            {/* )} */}
-
-            {/* {cart_product.product_id_3 ? (
-            <Text style={styles.productText}>
-              {cart_product.quantity}x{' '}
-              {getProductName2(cart_product.product_id_3, cart_product.size)}
-            </Text>
-          ) : null} */}
-
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <View>
-                <CustomIcon pack="Entypo" name="dot-single" size={25} />
+            {cart_product.observation ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingLeft: 22,
+                }}>
+                <MyText style={styles.observationText}>
+                  {' '}
+                  {cart_product.observation}
+                </MyText>
               </View>
-              <MyText style={styles.productText}>2x Borda de catupiry</MyText>
-            </View>
-
-            {/* {cart_product.observation ? ( */}
-
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                paddingLeft: 22,
-              }}>
-              <MyText style={styles.observationText}> Bem passada</MyText>
-            </View>
-            {/* ) : null} */}
+            ) : null}
           </View>
         </View>
       </View>
@@ -125,6 +131,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontWeight: '600',
     fontSize: 20,
+    width: '75%',
   },
   priceText: {
     fontWeight: '400',

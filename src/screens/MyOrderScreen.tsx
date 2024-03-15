@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
@@ -8,21 +8,30 @@ import {
   State,
 } from 'react-native-gesture-handler';
 import SectionTitle from '../components/SectionTitle';
-import {global} from '../style';
 import {COLORS} from '../theme/theme';
 import CustomIcon from '../components/CustomIcon';
 import CardProductOrder from '../components/CardProductOrder';
 import CurrentOrderInfo from '../components/OrderInfo';
 import CartAnimation from '../components/Lottie/CartAnimation';
-import LoginAnimation from '../components/Lottie/LoginAnimation';
 import useTheme from '../hooks/useTheme';
+import {useRoute} from '@react-navigation/native';
+import {Order, OrderType} from '../types/ModelsType';
+import usePrivateStore from '../hooks/store/usePrivateStore';
 
+type responseType = {
+  params: {
+    id: string;
+  };
+};
 const MyOrderScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const [currentOrder, setCurrentOrder] = useState<null | OrderType>(null);
   const [hasPlayed, setHasPlayed] = useState(false);
+  const {orders} = usePrivateStore();
+  const route = useRoute();
 
   const {currentTheme} = useTheme();
   const onSwipeLeft = () => {
@@ -31,6 +40,16 @@ const MyOrderScreen = ({
   const comeBack = () => {
     navigation.pop();
   };
+
+  useEffect(() => {
+    const orderId = route.params?.id;
+
+    const myOrder = orders.find((o: Order) => o.id === orderId);
+
+    if (myOrder) {
+      setCurrentOrder(myOrder);
+    }
+  }, [route]);
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <PanGestureHandler
@@ -56,15 +75,15 @@ const MyOrderScreen = ({
             ]}>
             <View style={{flex: 1, paddingBottom: 15}}>
               <View>
-                <View>
-                  {/* {currentOrder.map(order =>
-                    order.orderItems.map(item => (
-                      <CartProductCardOrder cart_product={item} key={item.id} />
-                    )),
-                  )} */}
-                  <CardProductOrder />
-                  <CardProductOrder />
-                </View>
+                {currentOrder?.orderItems.length > 0 ? (
+                  <>
+                    <View>
+                      {currentOrder.orderItems.map(item => (
+                        <CardProductOrder cart_product={item} key={item.id} />
+                      ))}
+                    </View>
+                  </>
+                ) : null}
 
                 <View>
                   {/* {currentOrder.map((order, i) => (

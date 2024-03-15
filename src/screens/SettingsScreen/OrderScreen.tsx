@@ -32,8 +32,10 @@ const OrderScreen = ({
     navigation.navigate('Settings');
   };
 
-  const goToOrder = () => {
-    navigation.navigate('MyOrder');
+  const goToOrder = (id: string) => {
+    navigation.navigate('MyOrder', {
+      id,
+    });
   };
 
   useEffect(() => {
