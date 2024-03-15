@@ -87,6 +87,7 @@ export type CreateOrderDto = {
   state_id: string;
   discount_value?: number | null;
   contact_phone: string;
+  user_adress_id?: string | null;
 };
 
 export type CreateRewardDto = {

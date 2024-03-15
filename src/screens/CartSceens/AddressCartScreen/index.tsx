@@ -72,14 +72,17 @@ const AddressCartScreen = ({
   const [modalAddressOpen, setModalAddressOpen] = useState(false);
   const [modalPixOpen, setModalPixOpen] = useState(false);
   const [title, setTittle] = useState('Total');
-
   const [currentUserAddress, setCurrentUserAddress] =
     useState<null | userOptions>(null);
 
+  const {user, address} = usePrivateStore();
+  const {typePagament} = useGlobalStore();
+  const {currentTheme} = useTheme();
+
+  const {showToast} = CallToast();
+
   const translateY = useSharedValue(Dimensions.get('window').height);
 
-  console.log('translateY', translateY);
-  const {user, address} = usePrivateStore();
   const showModal = (currentTarget: 'Address' | 'Cellphone' | 'Pix') => {
     translateY.value = withTiming(0, {duration: 500});
     if (currentTarget === 'Cellphone') {
@@ -98,9 +101,6 @@ const AddressCartScreen = ({
       duration: 500,
     });
   };
-  const {typePagament} = useGlobalStore();
-
-  const {showToast} = CallToast();
 
   const comeBack = () => {
     navigation.pop();
@@ -120,20 +120,18 @@ const AddressCartScreen = ({
     navigation.navigate('ResumeCart', {
       selectedPayment,
       selectedDelivery,
+      currentUserAddress,
     });
   };
 
   const setTitle = (id: string) => {
     setSelectedDelivery(id);
-    console.log('delivery option', id);
     if (id === '1') {
       setTittle('Total');
     } else {
       setTittle('Total com entrega');
     }
   };
-
-  const {currentTheme} = useTheme();
 
   const getUserAddress = () => {
     if (user.user_Adress_id) {

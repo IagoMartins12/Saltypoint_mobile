@@ -1,8 +1,16 @@
 import {ChangeEvent} from 'react';
-import {Category} from '../types/ModelsType';
+import {
+  Cart_product,
+  Category,
+  Discount_cupom,
+  User,
+  User_Adress,
+  User_Rewards,
+} from '../types/ModelsType';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {Dimensions} from 'react-native';
 import {useSharedValue} from 'react-native-reanimated';
+import {APP_SETTINGS} from '../config';
 
 export const formatDate = (dateString: string, numericOnly = false): string => {
   const date = new Date(dateString);
@@ -131,6 +139,68 @@ export const handleInputChange = (event: string) => {
   event = formatPhoneNumber(event);
 
   return event;
+};
+
+export const getCartTotal = (cart_product: Cart_product[]) => {
+  return cart_product.reduce((total, item) => total + Number(item.value), 0);
+};
+export const getCartTotalLenght = (cart_product: Cart_product[]) => {
+  return cart_product.reduce((total, item) => total + Number(item.quantity), 0);
+};
+
+export const getDiscount = (discount: number, cartProductTotal: number) => {
+  const orderDiscount = (discount / 100) * cartProductTotal;
+  return orderDiscount;
+};
+
+export const getAddressInfo = (address: User_Adress[], user: User) => {
+  const userAddress = address.find(a => a.id === user?.user_Adress_id);
+  return userAddress;
+};
+
+export const getTaxa = (district: String | undefined) => {
+  if (!district) return;
+  const lowercaseAddress = district.toLowerCase();
+
+  const rate = APP_SETTINGS.districtRate.some(district =>
+    lowercaseAddress.includes(district.toLowerCase()),
+  );
+
+  return rate;
+};
+
+export const getTotal = (
+  cart_product: Cart_product[],
+  currentCode: User_Rewards | Discount_cupom,
+  isCoupon: boolean,
+  isReward: boolean,
+  deliveryFee?: number,
+) => {
+  let cartProductTotal = getCartTotal(cart_product);
+
+  if (currentCode && isCoupon) {
+    cartProductTotal -= getDiscount(
+      (currentCode as Discount_cupom).discount,
+      cartProductTotal,
+    );
+  }
+
+  if (
+    currentCode &&
+    isReward &&
+    (currentCode as User_Rewards).rewardType === 0
+  ) {
+    cartProductTotal -= getDiscount(
+      (currentCode as User_Rewards).rewardDiscount,
+      cartProductTotal,
+    );
+  }
+
+  if (deliveryFee) {
+    return cartProductTotal + deliveryFee;
+  }
+
+  return cartProductTotal;
 };
 
 export const iconSize = 30;

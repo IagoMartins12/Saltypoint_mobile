@@ -23,6 +23,7 @@ import {
 } from '../types/ModelsType';
 import useCurrrentCode from '../hooks/reward';
 import {addCartProduct} from '../services';
+import {getCartTotal, getDiscount} from '../utils';
 
 const CartScreen = ({
   navigation,
@@ -30,23 +31,21 @@ const CartScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const translateY = useSharedValue(Dimensions.get('window').height);
 
   const {currentTheme} = useTheme();
   const {products} = useGlobalStore();
   const {cart_product, user, setCart_product} = usePrivateStore();
   const {currentCode} = useCurrrentCode();
-  const cartProductTotal = (cart_product as Cart_product[]).reduce(
-    (total, item) => total + Number(item.value),
-    0,
-  );
-
-  const getDiscount = (discount: number) => {
-    const orderDiscount = (discount / 100) * cartProductTotal;
-    return orderDiscount;
-  };
 
   const ListRef = useRef<FlatList>();
+  const translateY = useSharedValue(Dimensions.get('window').height);
+  const cartProductTotal = getCartTotal(cart_product);
+
+  const totalProducts = products.slice(0, 4);
+  const totalProducts2 = products.slice(5, 9);
+
+  const isCoupon = !(currentCode as User_Rewards)?.rewardPoints;
+  const isReward = !!(currentCode as User_Rewards)?.rewardPoints;
 
   const showModal = () => {
     translateY.value = withTiming(0, {duration: 500});
@@ -58,14 +57,6 @@ const CartScreen = ({
       duration: 500,
     });
   };
-
-  const totalProducts = products.slice(0, 4);
-  const totalProducts2 = products.slice(5, 9);
-
-  //@ts-ignore
-  const isCoupon = !currentCode?.rewardPoints;
-  //@ts-ignore
-  const isReward = !!currentCode?.rewardPoints;
 
   const accressStep = () => {
     navigation.push('AddressCart');
@@ -272,6 +263,7 @@ const CartScreen = ({
                       color="green"
                       text={`- R$ ${getDiscount(
                         (currentCode as Discount_cupom).discount,
+                        getCartTotal(cart_product),
                       ).toFixed(2)}`}
                     />
                   )}
@@ -284,6 +276,7 @@ const CartScreen = ({
                         color="green"
                         text={`- R$ ${getDiscount(
                           (currentCode as User_Rewards).rewardDiscount,
+                          getCartTotal(cart_product),
                         ).toFixed(2)}`}
                       />
                     )}

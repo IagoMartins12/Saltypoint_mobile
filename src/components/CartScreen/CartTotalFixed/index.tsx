@@ -5,7 +5,15 @@ import {BORDERRADIUS, COLORS} from '../../../theme/theme';
 import {global} from '../../../style';
 import useTheme from '../../../hooks/useTheme';
 import usePrivateStore from '../../../hooks/store/usePrivateStore';
-import {Cart_product} from '../../../types/ModelsType';
+import {User_Rewards} from '../../../types/ModelsType';
+import {
+  getAddressInfo,
+  getCartTotalLenght,
+  getTaxa,
+  getTotal,
+} from '../../../utils';
+import useCurrrentCode from '../../../hooks/reward';
+import useGlobalStore from '../../../hooks/store/useGlobalStore';
 
 interface CartTotalProps {
   onPress?: () => void;
@@ -21,25 +29,19 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
   deliveryFee,
 }) => {
   const {currentTheme} = useTheme();
-  const {cart_product} = usePrivateStore();
+  const {generalData} = useGlobalStore();
+  const {cart_product, address, user} = usePrivateStore();
+  const cartProductLength = getCartTotalLenght(cart_product);
+  const {currentCode} = useCurrrentCode();
 
-  const getTotal = () => {
-    let cartProductTotal = (cart_product as Cart_product[]).reduce(
-      (total, item) => total + Number(item.value),
-      0,
-    );
+  const taxa = deliveryFee
+    ? getTaxa(getAddressInfo(address, user)?.district)
+      ? generalData?.deliveryFeeOutside
+      : generalData?.deliveryFeeInside
+    : null;
 
-    if (deliveryFee) {
-      return cartProductTotal + deliveryFee;
-    }
-
-    return cartProductTotal;
-  };
-
-  const cartProductLength = (cart_product as Cart_product[]).reduce(
-    (total, item) => total + Number(item.quantity),
-    0,
-  );
+  const isCoupon = !(currentCode as User_Rewards)?.rewardPoints;
+  const isReward = !!(currentCode as User_Rewards)?.rewardPoints;
 
   const renderContinueButton = () => (
     <TouchableOpacity style={styles.buttonView} onPress={onPress}>
@@ -66,7 +68,14 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
             onPress();
           }}>
           <MyText style={styles.buttonText}>
-            Finalizar pedido • R$ {getTotal().toFixed(2)}
+            Finalizar pedido • R${' '}
+            {getTotal(
+              cart_product,
+              currentCode,
+              isCoupon,
+              isReward,
+              deliveryFee,
+            ).toFixed(2)}
           </MyText>
         </TouchableOpacity>
       ) : (
@@ -76,7 +85,14 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
         <View>
           <MyText style={styles.subTitleTotal}>{title}</MyText>
           <MyText style={styles.titleTotal}>
-            R$ {getTotal().toFixed(2)}
+            R${' '}
+            {getTotal(
+              cart_product,
+              currentCode,
+              isCoupon,
+              isReward,
+              taxa,
+            ).toFixed(2)}
             <MyText style={styles.subTitleTotal}>
               {' '}
               / {cartProductLength} itens

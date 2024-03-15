@@ -9,42 +9,33 @@ import {useRoute} from '@react-navigation/native';
 import CartTittleSection from '../../../components/CartTittleSection';
 import CartInfo from '../../../components/CartInfo';
 import {global} from '../../../style';
-import CartAddressCard from '../../../components/CartAddressCard';
-import {Type_Pagament} from '../../../types/ModelsType';
+import CartAddressCard, {
+  userOptions,
+} from '../../../components/CartAddressCard';
+import {
+  Cart_product,
+  Discount_cupom,
+  Product,
+  Type_Pagament,
+  User_Rewards,
+} from '../../../types/ModelsType';
 import {getIcon, pizzariaDelivery} from '../AddressCartScreen';
 import PaymentCard from '../../../components/PaymentCard';
 import CartCellphoneCard from '../../../components/CartCellphoneCard';
-import {iconColor, iconSize} from '../../../utils';
+import {
+  getCartTotal,
+  getDiscount,
+  getTaxa,
+  getTotal,
+  iconSize,
+} from '../../../utils';
 import OrderAnimation from '../../../components/Lottie/OrderAnimation';
 import CallToast from '../../../components/Toast';
 import useTheme from '../../../hooks/useTheme';
 import {COLORS} from '../../../theme/theme';
-
-export const userOptions = [
-  {
-    id: '0',
-    name: 'Delivery',
-    address: 'Luiza maria rosa',
-    number: '222',
-    district: 'Décima area',
-    city: 'São paulo',
-    uf: 'SP',
-    reference: 'Esquina',
-    icon: (
-      <CustomIcon name="delivery-dining" size={iconSize} pack="MaterialIcons" />
-    ),
-  },
-  {
-    id: '1',
-    name: 'Retirar na loja',
-    address: 'Estrada de ligação',
-    number: '22',
-    district: 'Sol nascente',
-    city: 'São paulo',
-    uf: 'SP',
-    icon: <CustomIcon name="home" size={iconSize} pack="MaterialIcons" />,
-  },
-];
+import usePrivateStore from '../../../hooks/store/usePrivateStore';
+import useCurrrentCode from '../../../hooks/reward';
+import {addCartProduct, createOrder} from '../../../services';
 
 export enum STEPS {
   CART = 0,
@@ -54,6 +45,7 @@ export enum STEPS {
 type responseType = {
   selectedDelivery: '0' | '1';
   selectedPayment: string;
+  currentUserAddress?: userOptions;
 };
 
 export const cellPhoneIcon = (
@@ -71,10 +63,126 @@ const ResumeCartScreen = ({
 
   //@ts-ignore
   const response: responseType = route.params;
-  const {currentTheme} = useTheme();
 
-  const finishOrder = () => {
-    setHasPlayed(true);
+  const {currentTheme} = useTheme();
+  const {typePagament, generalData, products} = useGlobalStore();
+  const {
+    cart_product,
+    user,
+    setCart_product,
+    orders,
+    setOrders,
+    setCoupons,
+    setUserReward,
+    coupons,
+    userReward,
+  } = usePrivateStore();
+  const {currentCode, setCurrentCode} = useCurrrentCode();
+
+  const isCoupon = !(currentCode as User_Rewards)?.rewardPoints;
+  const isReward = !!(currentCode as User_Rewards)?.rewardPoints;
+  const total = getCartTotal(cart_product);
+
+  const addItemToCart = async (product: Product, isOrdered = false) => {
+    const checkSize = (currentCode as User_Rewards)?.rewardName
+      .toUpperCase()
+      .includes('BROTINHO');
+    const newCart = {
+      product_id: product.id,
+      quantity: 1,
+      observation: 'Recompensa',
+      value: '0',
+      size: checkSize ? 1 : 0,
+    } as Cart_product;
+
+    if (isOrdered) {
+      const response = await addCartProduct({
+        product_id: product.id,
+        observation: 'Recompensa',
+        quantity: 1,
+        value: '0',
+        size: 0,
+      });
+      return response;
+    }
+
+    const updatedCartProduct = [...cart_product, newCart];
+    setCart_product(updatedCartProduct);
+  };
+
+  const finishOrder = async () => {
+    if (currentCode && (currentCode as User_Rewards).rewardType === 1) {
+      const newItem = products.find(
+        (product: Product) =>
+          product.id === (currentCode as User_Rewards).rewardProductId,
+      );
+
+      if (newItem) {
+        addItemToCart(newItem, true);
+      }
+    }
+
+    const request = await createOrder({
+      total_amount: getTotal(
+        cart_product,
+        currentCode,
+        isCoupon,
+        isReward,
+        response.selectedDelivery !== '1'
+          ? getTaxa(response.currentUserAddress?.district)
+            ? generalData?.deliveryFeeOutside
+            : generalData?.deliveryFeeInside
+          : null,
+      ),
+      type_pagament_id: response.selectedPayment,
+      user_adress_id:
+        response.selectedDelivery !== '1' ? response.selectedDelivery : null,
+      type_delivery: response.selectedDelivery === '1' ? 1 : 0,
+      discount_coupon_id: currentCode && isCoupon ? currentCode.id : null,
+      state_id: '6526e4b833e69bf2bb97bc9e', //Em análise,
+      discount_value:
+        currentCode && isCoupon
+          ? getDiscount(
+              (currentCode as Discount_cupom).discount,
+              getCartTotal(cart_product),
+            )
+          : isReward && (currentCode as User_Rewards).rewardType === 0
+          ? getDiscount(
+              (currentCode as User_Rewards).rewardDiscount,
+              getCartTotal(cart_product),
+            )
+          : 0,
+      contact_phone: user.phone,
+      reward_id: currentCode && isReward ? currentCode.id : null,
+    });
+
+    if (request) {
+      const newOrder = {...request, orderItems: cart_product};
+      const updatedOrders = [...orders, newOrder];
+      setHasPlayed(true);
+
+      if (currentCode && isCoupon) {
+        const filteredCoupons = coupons.filter(
+          (c: Discount_cupom) => c.id !== currentCode?.id,
+        );
+        setCoupons(filteredCoupons);
+        setCurrentCode(null);
+      }
+
+      if (currentCode && isReward) {
+        const filteredRewards = userReward.filter(
+          (c: User_Rewards) => c.id !== currentCode?.id,
+        );
+        setUserReward(filteredRewards);
+        setCurrentCode(null);
+      }
+
+      setCart_product([]);
+      setOrders(updatedOrders);
+      return;
+    } else {
+      showToast('Erro ao fazer pedido', 'error');
+    }
   };
 
   const getBack = () => {
@@ -82,7 +190,6 @@ const ResumeCartScreen = ({
     navigation.navigate('Order');
     setHasPlayed(false);
   };
-  const {typePagament} = useGlobalStore();
 
   const comeBack = () => {
     navigation.pop();
@@ -142,17 +249,71 @@ const ResumeCartScreen = ({
           <View style={styles.wFull}>
             <CartTittleSection title="Resumo de valores" />
             <View style={{gap: 10}}>
-              <CartInfo label="Subtotal" text="R$ 57,80" />
-              {response?.selectedDelivery === '0' ? (
-                <CartInfo label="Taxa de entrega" text="R$ 9,00" />
+              <CartInfo label="Subtotal" text={`R$ ${total.toFixed(2)}`} />
+              {response.selectedDelivery !== '1' &&
+              response.currentUserAddress ? (
+                <CartInfo
+                  label="Taxa de entrega"
+                  text={`R$ ${
+                    getTaxa(response.currentUserAddress?.district)
+                      ? generalData?.deliveryFeeOutside.toFixed(2)
+                      : generalData?.deliveryFeeInside.toFixed(2)
+                  }`}
+                />
               ) : null}
 
-              <CartInfo label="Cupom" text="- R$ 12,80" color="green" />
+              {currentCode && isCoupon ? (
+                <CartInfo
+                  label="Cupom"
+                  text={`- R$ ${getDiscount(
+                    (currentCode as Discount_cupom).discount,
+                    total,
+                  ).toFixed(2)}`}
+                  color="green"
+                />
+              ) : null}
+
+              {currentCode &&
+              isReward &&
+              (currentCode as User_Rewards).rewardType === 0 ? (
+                <CartInfo
+                  label="Recompensa"
+                  text={`- R$ ${getDiscount(
+                    (currentCode as User_Rewards).rewardDiscount,
+                    total,
+                  ).toFixed(2)}`}
+                  color="green"
+                />
+              ) : null}
+
+              {currentCode &&
+              isReward &&
+              (currentCode as User_Rewards).rewardType === 1 ? (
+                <CartInfo
+                  label="Recompensa"
+                  text={`${(currentCode as User_Rewards).rewardName}`}
+                  color="green"
+                />
+              ) : null}
 
               <View style={global.hrStyle} />
             </View>
 
-            <CartInfo label="Total" text="R$ 52,80" boldText />
+            <CartInfo
+              label="Total"
+              text={`R$ ${getTotal(
+                cart_product,
+                currentCode,
+                isCoupon,
+                isReward,
+                response.selectedDelivery !== '1'
+                  ? getTaxa(response.currentUserAddress?.district)
+                    ? generalData?.deliveryFeeOutside
+                    : generalData?.deliveryFeeInside
+                  : null,
+              ).toFixed(2)}`}
+              boldText
+            />
           </View>
         </View>
 
@@ -171,8 +332,19 @@ const ResumeCartScreen = ({
           ]}>
           <View style={styles.wFull}>
             <CartTittleSection title="Entrega em" />
-            {response.selectedDelivery === '0' ? (
-              <CartAddressCard address={userOptions[0]} />
+            {response.selectedDelivery !== '1' &&
+            response.currentUserAddress ? (
+              <CartAddressCard
+                name="Entregar no endereço"
+                icon={
+                  <CustomIcon
+                    name="delivery-dining"
+                    size={iconSize}
+                    pack="MaterialIcons"
+                  />
+                }
+                address={response.currentUserAddress}
+              />
             ) : (
               <CartAddressCard
                 address={pizzariaDelivery}
@@ -226,7 +398,18 @@ const ResumeCartScreen = ({
         </View>
       </ScrollView>
 
-      <CartTotalFixed title="Total" lastStep onPress={finishOrder} />
+      <CartTotalFixed
+        title="Total"
+        lastStep
+        onPress={finishOrder}
+        deliveryFee={
+          response.selectedDelivery !== '1'
+            ? getTaxa(response.currentUserAddress?.district)
+              ? generalData?.deliveryFeeOutside
+              : generalData?.deliveryFeeInside
+            : null
+        }
+      />
     </View>
   );
 };
