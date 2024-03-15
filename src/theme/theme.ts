@@ -77,6 +77,7 @@ export const COLORS = {
   borderColorDark: '#FFFFFF',
   secondBackgroundDark: '#3a3b3c',
   secondBackgroundLight: '#ffffff',
+  primaryYellow: '#D1D100',
 };
 
 interface FontFamily {

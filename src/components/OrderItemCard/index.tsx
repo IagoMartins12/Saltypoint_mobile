@@ -2,31 +2,42 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {COLORS} from '../../theme/theme';
 import MyText from '../Text';
+import {Cart_product, Product} from '../../types/ModelsType';
+import useGlobalStore from '../../hooks/store/useGlobalStore';
 
-const OrderItemCard = () => {
-  //   const {products} = useGlobalStore();
+interface OrderItemCardProps {
+  cart_product: Cart_product;
+  quantity: number;
+  formattedData: string;
+}
+const OrderItemCard = ({
+  cart_product,
+  quantity,
+  formattedData,
+}: OrderItemCardProps) => {
+  const {products} = useGlobalStore();
 
-  //   const getProductName2 = (productId, size) => {
-  //     const product = products.find(p => p.id === productId);
+  const getProductName2 = (productId, size) => {
+    const product = products.find((p: Product) => p.id === productId);
 
-  //     if (!product) {
-  //       return 'Produto desconhecido';
-  //     }
+    if (!product) {
+      return 'Produto desconhecido';
+    }
 
-  //     if (size === 1) {
-  //       return product?.name.replace('Pizza', 'Brotinho');
-  //     } else {
-  //       return product?.name;
-  //     }
-  //   };
+    if (size === 1) {
+      return product?.name.replace('Pizza', 'Brotinho');
+    } else {
+      return product?.name;
+    }
+  };
 
-  //   const getQuantity = () => {
-  //     if (quantity > 1) {
-  //       return quantity - 1;
-  //     }
+  const getQuantity = () => {
+    if (quantity > 1) {
+      return quantity - 1;
+    }
 
-  //     return null;
-  //   };
+    return null;
+  };
 
   return (
     <View style={styles.container}>
@@ -34,13 +45,28 @@ const OrderItemCard = () => {
         <View style={styles.itemInfo}>
           <View style={styles.quantityContainer}>
             <View style={styles.quantityBadge}>
-              <MyText style={styles.quantityText}>10</MyText>
+              <MyText style={styles.quantityText}>
+                {cart_product.quantity}
+              </MyText>
             </View>
           </View>
-          <MyText style={styles.productName}>Pizza de portuguesa</MyText>
+          <MyText style={styles.productName}>
+            {getProductName2(cart_product.product_id, cart_product.size)}
+          </MyText>
         </View>
 
-        <MyText style={styles.moreItemsText}>mais 2 itens</MyText>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginTop: 5,
+          }}>
+          <MyText style={styles.moreItemsText}>
+            mais {getQuantity()} itens
+          </MyText>
+          <MyText style={styles.data}>{formattedData}</MyText>
+        </View>
       </View>
     </View>
   );
@@ -89,6 +115,11 @@ const styles = StyleSheet.create({
   },
   moreItemsText: {
     fontSize: 12,
+    fontWeight: 'bold',
+  },
+
+  data: {
+    fontSize: 14,
     fontWeight: 'bold',
   },
 });

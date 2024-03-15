@@ -5,13 +5,34 @@ import OrderItemCard from '../OrderItemCard';
 import {COLORS} from '../../theme/theme';
 import useTheme from '../../hooks/useTheme';
 import MyText from '../Text';
+import {Order, OrderType} from '../../types/ModelsType';
+import useGlobalStore from '../../hooks/store/useGlobalStore';
+import usePrivateStore from '../../hooks/store/usePrivateStore';
+import {formatOrderDate} from '../../utils';
 
 interface OrderProps {
+  order: OrderType;
   onPress: () => void;
 }
-const OrderCard: React.FC<OrderProps> = ({onPress}) => {
+const OrderCard: React.FC<OrderProps> = ({onPress, order}) => {
   const {currentTheme} = useTheme();
+  const {states} = useGlobalStore();
+  const {orders} = usePrivateStore();
+  const getState = () => {
+    return (
+      states.find(s => s.id === order.state_id)?.state_name ??
+      'Status desconhecido'
+    );
+  };
 
+  const color =
+    getState().toUpperCase() === 'ENTREGUE'
+      ? COLORS.primaryGreenHex
+      : getState().toUpperCase() === 'CANCELADO'
+      ? COLORS.secondaryRed
+      : COLORS.primaryYellow; //Botar amarelo dps
+
+  const formattedData = formatOrderDate(order.order_date);
   return (
     <TouchableOpacity
       style={[
@@ -35,7 +56,15 @@ const OrderCard: React.FC<OrderProps> = ({onPress}) => {
 
           <View style={styles.infoContainer}>
             <MyText style={styles.title}>Pizzaria Salty Point</MyText>
-            <MyText style={styles.subtitle}>Em analise</MyText>
+            <MyText
+              style={[
+                styles.subtitle,
+                {
+                  color,
+                },
+              ]}>
+              {getState()}
+            </MyText>
           </View>
 
           <View style={{alignItems: 'center', justifyContent: 'center'}}>
@@ -44,7 +73,14 @@ const OrderCard: React.FC<OrderProps> = ({onPress}) => {
         </View>
 
         <View style={styles.itemsContainer}>
-          <OrderItemCard />
+          {order.orderItems.slice(0, 1).map(item => (
+            <OrderItemCard
+              cart_product={item}
+              formattedData={formattedData}
+              quantity={order.orderItems.length}
+              key={item.id}
+            />
+          ))}
         </View>
       </View>
     </TouchableOpacity>

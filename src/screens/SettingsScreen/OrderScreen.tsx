@@ -64,8 +64,8 @@ const OrderScreen = ({
             ]}>
             {orders.length > 0 ? (
               <View style={{gap: 10, flex: 1}}>
-                {orders.map(order => (
-                  <OrderCard onPress={goToOrder} />
+                {orders.map((order, i) => (
+                  <OrderCard onPress={goToOrder} order={order} key={i} />
                 ))}
               </View>
             ) : (

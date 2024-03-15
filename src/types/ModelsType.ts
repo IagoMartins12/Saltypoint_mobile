@@ -213,6 +213,10 @@ export type Reward = {
   name: string;
 };
 
+export interface OrderType extends Order {
+  orderItems: Cart_product[];
+}
+
 export type Reward_Orders = {
   id: string;
   reward_id: string;
