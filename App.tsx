@@ -1,9 +1,7 @@
-import {StyleSheet} from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import Toast, {ToastRef} from 'react-native-toast-message';
-
+import {NavigationContainer} from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 import TabNavigator from './src/navigators/TabNavigator';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
@@ -33,44 +31,39 @@ const Stack = createNativeStackNavigator();
 const App = () => {
   const [mainScreen, setMainScreen] = useState(''); // Definindo estado inicial
 
-  const {isLogged, token} = useAuth();
+  const {isLogged} = useAuth();
+
+  const checkIfFirstUse = async () => {
+    try {
+      const isFirstUse = await checkIntro();
+      if (isFirstUse) {
+        console.log('primeiro acesso');
+        return setMainScreen('Intro');
+      }
+      const haveToken = await checkUser();
+      if (haveToken) {
+        console.log('está logado');
+        return setMainScreen('Tab');
+      }
+
+      console.log('não está logado e nem é o primeiro acesso');
+      return setMainScreen('Main');
+    } catch (error) {
+      console.error('Erro ao verificar o acesso inicial:', error);
+      setMainScreen('Main'); // Em caso de erro, assumindo que não é o primeiro acesso
+    }
+  };
 
   useEffect(() => {
-    const checkIfFirstUse = async () => {
-      try {
-        const isFirstUse = await checkIntro();
-        if (isFirstUse) {
-          console.log('primeiro acesso');
-          return setMainScreen('Intro');
-        }
-        const haveToken = await checkUser();
-        console.log('have token', haveToken);
-        if (haveToken) {
-          console.log('está logado');
-          return setMainScreen('Tab');
-        }
-
-        console.log('não está logado e nem é o primeiro acesso');
-        return setMainScreen('Main');
-      } catch (error) {
-        console.error('Erro ao verificar o acesso inicial:', error);
-        setMainScreen('Main'); // Em caso de erro, assumindo que não é o primeiro acesso
-      }
-    };
-
     checkIfFirstUse();
   }, [isLogged]);
 
-  useEffect(() => {
-    if (mainScreen !== '') {
-    }
-  }, [mainScreen]);
   useEffect(() => {
     checkAndSetToken();
   }, []);
 
   if (mainScreen === '') {
-    return <></>;
+    return null;
   }
   return (
     <>
@@ -211,7 +204,5 @@ const App = () => {
     </>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default App;

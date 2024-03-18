@@ -1,22 +1,14 @@
-// import {StyleSheet, Text, View} from 'react-native';
-// import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-// interface teste {
-//   testee?: string;
-// }
-// const ProductSkeleton: React.FC<teste> = ({testee}) => {
-//   return (
-//     <SkeletonPlaceholder borderRadius={4}>
-//       <SkeletonPlaceholder.Item flexDirection="row" alignItems="center">
-//         <SkeletonPlaceholder.Item width={60} height={60} borderRadius={50} />
-//         <SkeletonPlaceholder.Item marginLeft={20}>
-//           <SkeletonPlaceholder.Item width={120} height={20} />
-//           <SkeletonPlaceholder.Item marginTop={6} width={80} height={20} />
-//         </SkeletonPlaceholder.Item>
-//       </SkeletonPlaceholder.Item>
-//     </SkeletonPlaceholder>
-//   );
-// };
+import ContentLoader, {Rect} from 'react-content-loader/native';
 
-// const styles = StyleSheet.create({});
+const ProductCardSkeleton = () => (
+  <ContentLoader
+    height={220}
+    width={'48%'}
+    style={{
+      borderRadius: 15,
+    }}>
+    <Rect rx="3" ry="3" width="100%" height="100%" />
+  </ContentLoader>
+);
 
-// export default ProductSkeleton;
+export default ProductCardSkeleton;

@@ -22,6 +22,11 @@ import CarouselHome from '../components/Carrousel';
 import IMAGES from '../assets';
 import ClosedView from '../components/ClosedView';
 import usePrivateStore from '../hooks/store/usePrivateStore';
+import ProductCardSkeleton from '../components/Skeletons/ProductSkeleton';
+import CategoryTextSkeleton from '../components/Skeletons/CategoryTextSkeleton';
+import CarouselSkeleton from '../components/Skeletons/CarouselSkeleton';
+import useAuth from '../hooks/auth/useAuth';
+import UserNameSkeleton from '../components/Skeletons/UserNameSkeleton';
 
 const data = [
   {
@@ -54,6 +59,7 @@ const HomeScreen = ({
   const {products, categorys} = useGlobalStore();
   const {currentTheme} = useTheme();
   const {user} = usePrivateStore();
+  const {isLogged} = useAuth();
   const buttonPressHandler = () => {
     navigation.push('Search');
   };
@@ -69,6 +75,7 @@ const HomeScreen = ({
   useEffect(() => {
     enableGoBack(navigation);
   }, []);
+
   return (
     <View
       style={[
@@ -85,13 +92,23 @@ const HomeScreen = ({
           style={[
             styles.textDiv,
             {
-              justifyContent: user ? 'space-between' : 'flex-end',
+              justifyContent: isLogged ? 'space-between' : 'flex-end',
             },
           ]}>
-          {user ? (
+          {isLogged ? (
             <MyText style={styles.mainText}>
               Olá,{' '}
-              <Text style={{color: COLORS.primaryRedHex}}>{user.name}! </Text>
+              {!user ? (
+                <View
+                  style={{
+                    height: 15,
+                    width: 150,
+                  }}>
+                  <UserNameSkeleton />
+                </View>
+              ) : (
+                <Text style={{color: COLORS.primaryRedHex}}>{user.name}! </Text>
+              )}
             </MyText>
           ) : null}
 
@@ -114,26 +131,53 @@ const HomeScreen = ({
           style={{
             height: Dimensions.get('screen').height * 0.3,
           }}>
-          <CarouselHome entries={data} />
+          {products.length > 0 ? (
+            <CarouselHome entries={data} />
+          ) : (
+            <CarouselSkeleton />
+          )}
         </View>
 
-        {visibleCategories(categorys).map((category, index) => (
-          <View key={index} style={styles.categoryContainer}>
-            <MyText style={styles.categoryTitle}>
-              {category.category_name}
-            </MyText>
-            <FlatList
-              data={products.filter(
-                (product: Product) => product.category_id === category.id,
-              )}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.flatListView}
-              keyExtractor={item => item.id}
-              renderItem={renderProductItem}
-            />
+        {products.length > 0 ? (
+          <>
+            {visibleCategories(categorys).map((category, index) => (
+              <View key={index} style={styles.categoryContainer}>
+                <MyText style={styles.categoryTitle}>
+                  {category.category_name}
+                </MyText>
+                <FlatList
+                  data={products.filter(
+                    (product: Product) => product.category_id === category.id,
+                  )}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.flatListView}
+                  keyExtractor={item => item.id}
+                  renderItem={renderProductItem}
+                />
+              </View>
+            ))}
+          </>
+        ) : (
+          <View
+            style={{
+              marginTop: 8,
+            }}>
+            {[1, 2, 3].map(i => (
+              <View style={styles.categoryContainer} key={i}>
+                <CategoryTextSkeleton />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    gap: 15,
+                  }}>
+                  <ProductCardSkeleton />
+                  <ProductCardSkeleton />
+                </View>
+              </View>
+            ))}
           </View>
-        ))}
+        )}
       </ScrollView>
       <ClosedView />
     </View>
@@ -151,6 +195,9 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   mainText: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
     fontSize: FONTSIZE.size_24,
     fontWeight: '700',
   },
