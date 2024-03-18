@@ -3,6 +3,7 @@ const IMAGES = {
   WALLET: require('./images/Wallet.png'),
   PUSH: require('./images/Push.png'),
   PROFILE: require('./images/Profile.png'),
+
   CAROUSEL: {
     PIZZA: require('./images/Pizza.png'),
     ESFIHA: require('./images/Esfiha.png'),

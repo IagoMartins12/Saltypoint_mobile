@@ -43,7 +43,15 @@ const MyText: React.FC<TextProps> = ({
   ]; // Combinando estilos dinâmicos com os estilos adicionais
 
   return (
-    <Text style={[textStyles]} {...props} onPress={onPress}>
+    <Text
+      style={[
+        textStyles,
+        {
+          fontFamily: 'Inter',
+        },
+      ]}
+      {...props}
+      onPress={onPress}>
       {children}
     </Text>
   ); // Passando children para o componente Text
