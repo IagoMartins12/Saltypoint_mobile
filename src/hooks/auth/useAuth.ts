@@ -1,6 +1,7 @@
 import {create} from 'zustand';
 import {AuthStore} from '../../types/ComponentTypes';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import usePrivateStore from '../store/usePrivateStore';
 
 const useAuth = create<AuthStore>(set => ({
   isLogged: false,
@@ -23,9 +24,12 @@ export const checkAndSetToken = async () => {
   }
 };
 
-export const removeToken = () => {
+export const removeToken = async () => {
+  console.log('removing token');
+
   try {
-    AsyncStorage.removeItem('secret');
+    console.log('remove');
+    await AsyncStorage.removeItem('secret');
     useAuth.getState().setToken(null);
     useAuth.getState().setLogout();
   } catch (error) {

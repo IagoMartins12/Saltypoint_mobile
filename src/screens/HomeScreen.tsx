@@ -22,6 +22,7 @@ import CarouselHome from '../components/Carrousel';
 import IMAGES from '../assets';
 import ClosedView from '../components/ClosedView';
 import usePrivateStore from '../hooks/store/usePrivateStore';
+import ProductSkeleton from '../components/Skeletons/ProductSkeleton';
 
 const data = [
   {
@@ -116,6 +117,8 @@ const HomeScreen = ({
           }}>
           <CarouselHome entries={data} />
         </View>
+
+        <ProductSkeleton />
         {visibleCategories(categorys).map((category, index) => (
           <View key={index} style={styles.categoryContainer}>
             <MyText style={styles.categoryTitle}>

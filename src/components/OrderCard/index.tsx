@@ -7,7 +7,6 @@ import useTheme from '../../hooks/useTheme';
 import MyText from '../Text';
 import {Order, OrderType} from '../../types/ModelsType';
 import useGlobalStore from '../../hooks/store/useGlobalStore';
-import usePrivateStore from '../../hooks/store/usePrivateStore';
 import {formatOrderDate} from '../../utils';
 
 interface OrderProps {
@@ -17,7 +16,6 @@ interface OrderProps {
 const OrderCard: React.FC<OrderProps> = ({onPress, order}) => {
   const {currentTheme} = useTheme();
   const {states} = useGlobalStore();
-  const {orders} = usePrivateStore();
   const getState = () => {
     return (
       states.find(s => s.id === order.state_id)?.state_name ??

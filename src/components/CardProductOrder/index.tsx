@@ -59,7 +59,22 @@ const CardProductOrder: React.FC<CartProductCardType> = ({cart_product}) => {
                   ),
                 )}
               </>
-            ) : null}
+            ) : (
+              <>
+                {[cart_product.product_id].map((productId, index) => (
+                  <View
+                    style={{flexDirection: 'row', alignItems: 'center'}}
+                    key={index}>
+                    <View>
+                      <CustomIcon pack="Entypo" name="dot-single" size={25} />
+                    </View>
+                    <MyText style={styles.productText}>
+                      {getProductName2(productId, cart_product.size)}
+                    </MyText>
+                  </View>
+                ))}
+              </>
+            )}
 
             {cart_product.product_id_3 ? (
               <View style={{flexDirection: 'row', alignItems: 'center'}}>

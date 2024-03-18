@@ -17,6 +17,8 @@ import useTheme from '../hooks/useTheme';
 import {useRoute} from '@react-navigation/native';
 import {Order, OrderType} from '../types/ModelsType';
 import usePrivateStore from '../hooks/store/usePrivateStore';
+import CallToast from '../components/Toast';
+import {addCartProduct} from '../services';
 
 type responseType = {
   params: {
@@ -30,8 +32,36 @@ const MyOrderScreen = ({
 }) => {
   const [currentOrder, setCurrentOrder] = useState<null | OrderType>(null);
   const [hasPlayed, setHasPlayed] = useState(false);
-  const {orders} = usePrivateStore();
+  const {orders, cart_product, setCart_product} = usePrivateStore();
+  const {showToast} = CallToast();
   const route = useRoute();
+
+  const handleRepeatOrder = async () => {
+    let success = true; // Variável de controle para verificar se tudo ocorreu bem
+    const updatedCartProduct = [...cart_product]; // Novo array temporário
+    setHasPlayed(true);
+
+    const filteredOrderItems = currentOrder.orderItems.filter(
+      item => item.value !== '0',
+    );
+
+    for (const product of filteredOrderItems) {
+      try {
+        const response = await addCartProduct(product);
+
+        updatedCartProduct.push(response); // Adiciona o produto ao novo array temporário
+      } catch (error) {
+        showToast('Erro ao adicionar produto', 'error');
+        success = false; // Define a variável de sucesso como false em caso de erro
+      }
+    }
+
+    if (success) {
+      setCart_product(updatedCartProduct); // Atualiza o estado com o novo array temporário
+      showToast('Produtos adicionados', 'success');
+      return;
+    }
+  };
 
   const {currentTheme} = useTheme();
   const onSwipeLeft = () => {
@@ -42,6 +72,7 @@ const MyOrderScreen = ({
   };
 
   useEffect(() => {
+    //@ts-ignore
     const orderId = route.params?.id;
 
     const myOrder = orders.find((o: Order) => o.id === orderId);
@@ -85,13 +116,11 @@ const MyOrderScreen = ({
                   </>
                 ) : null}
 
-                <View>
-                  {/* {currentOrder.map((order, i) => (
-                    <CurrentOrderInfo order={order} key={i} />
-                  ))} */}
-
-                  <CurrentOrderInfo />
-                </View>
+                {currentOrder ? (
+                  <View>
+                    <CurrentOrderInfo order={currentOrder} />
+                  </View>
+                ) : null}
               </View>
               {hasPlayed ? (
                 <View style={styles.buttonContainer}>
@@ -100,7 +129,7 @@ const MyOrderScreen = ({
               ) : (
                 <TouchableOpacity
                   style={[styles.buttonContainer, {backgroundColor: 'red'}]}
-                  onPress={() => setHasPlayed(true)}>
+                  onPress={handleRepeatOrder}>
                   <CustomIcon name="shopping-cart" pack="Feather" size={22} />
                   <Text style={styles.buttonText}>Repetir pedido</Text>
                 </TouchableOpacity>

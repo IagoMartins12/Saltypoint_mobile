@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE} from '../../theme/theme';
 import CustomIcon from '../CustomIcon';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import useTheme from '../../hooks/useTheme';
 import MyText from '../Text';
 
@@ -61,8 +60,10 @@ const SearchComponent: React.FC<SearchProps> = ({
           />
         </TouchableOpacity>
       ) : null}
-      <KeyboardAwareScrollView
-        contentContainerStyle={{
+      <View
+        style={{
+          marginVertical: 10,
+          width: onFocus ? '75%' : '90%',
           alignSelf: 'flex-end',
         }}>
         <View
@@ -117,7 +118,7 @@ const SearchComponent: React.FC<SearchProps> = ({
             />
           </TouchableOpacity>
         </View>
-      </KeyboardAwareScrollView>
+      </View>
 
       {onFocus ? (
         <MyText style={styles.cancelText} onPress={onCancelPress}>

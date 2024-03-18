@@ -17,6 +17,8 @@ import ThemeSwitch from '../components/ThemeSwitch';
 import useTheme from '../hooks/useTheme';
 import MyText from '../components/Text';
 import usePrivateStore from '../hooks/store/usePrivateStore';
+import {removeToken} from '../hooks/auth/useAuth';
+import CallToast from '../components/Toast';
 
 const SettingsScreen = ({
   navigation,
@@ -29,8 +31,8 @@ const SettingsScreen = ({
   const [imageBackground, setImageBackground] = useState(null);
   const {currentTheme} = useTheme();
 
-  const {user, address} = usePrivateStore();
-
+  const {user, setUser} = usePrivateStore();
+  const {showToast} = CallToast();
   const handleNavigate = (name: string) => {
     navigation.push(name);
   };
@@ -88,8 +90,11 @@ const SettingsScreen = ({
       label: 'Sair',
       icon: 'logout',
       pack: 'SimpleLineIcons' as PackNames,
-      onClick: () => {
+      onClick: async () => {
+        await removeToken();
         handleNavigate('Main');
+        setUser(null);
+        showToast('Deslogado com sucesso', 'success');
       },
     },
   ];
@@ -175,7 +180,7 @@ const SettingsScreen = ({
               style={styles.profilePhotoDiv}>
               <Image
                 style={styles.CartItemImage}
-                source={user.image ?? require('../assets/profile.png')}
+                source={user.image ?? require('../assets/images/user.png')}
               />
             </TouchableOpacity>
           </View>
@@ -213,7 +218,7 @@ const SettingsScreen = ({
             onPress={() => setImageModalVisible(false)}>
             <Image
               style={styles.modalImage}
-              source={require('../assets/profile.png')}
+              source={user.image ?? require('../assets/images/user.png')}
             />
           </Pressable>
         </Modal>

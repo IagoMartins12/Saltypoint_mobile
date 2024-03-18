@@ -3,14 +3,25 @@ import React from 'react';
 import LottieView from 'lottie-react-native';
 import {COLORS, FONTFAMILY, FONTSIZE} from '../../../theme/theme';
 import MyText from '../../Text';
+import useTheme from '../../../hooks/useTheme';
 
 interface EmptyAnimationProps {
   text?: string;
 }
 
 const EmptyAnimation: React.FC<EmptyAnimationProps> = ({text}) => {
+  const {currentTheme} = useTheme();
   return (
-    <View style={styles.EmptyCartContainer}>
+    <View
+      style={[
+        styles.EmptyCartContainer,
+        {
+          backgroundColor:
+            currentTheme === 'light'
+              ? COLORS.backgroundColorLight
+              : COLORS.backgroundColorDark,
+        },
+      ]}>
       <LottieView
         style={styles.LottieStyle}
         source={require('../../../lottie/empty.json')}

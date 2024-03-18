@@ -13,6 +13,7 @@ import CustomIcon from '../../components/CustomIcon';
 import MyText from '../../components/Text';
 import {COLORS} from '../../theme/theme';
 import useTheme from '../../hooks/useTheme';
+import {setIntro} from '../../utils';
 
 const IntroScreen = ({
   navigation,
@@ -78,6 +79,7 @@ const IntroScreen = ({
 
   const handleNext = () => {
     if (activeDotIndex === 3) {
+      setIntro();
       navigation.navigate('Main');
     } else {
       _carousel.current?.snapToItem(activeDotIndex + 1);
@@ -112,6 +114,7 @@ const IntroScreen = ({
             marginTop: 15,
           }}
           onPress={() => {
+            setIntro();
             navigation.navigate('Main');
           }}>
           <MyText

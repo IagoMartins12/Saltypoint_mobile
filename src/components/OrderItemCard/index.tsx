@@ -59,12 +59,15 @@ const OrderItemCard = ({
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            justifyContent: getQuantity() > 0 ? 'space-between' : 'flex-end',
             marginTop: 5,
           }}>
-          <MyText style={styles.moreItemsText}>
-            mais {getQuantity()} itens
-          </MyText>
+          {getQuantity() > 0 ? (
+            <MyText style={styles.moreItemsText}>
+              mais {getQuantity()} itens
+            </MyText>
+          ) : null}
+
           <MyText style={styles.data}>{formattedData}</MyText>
         </View>
       </View>

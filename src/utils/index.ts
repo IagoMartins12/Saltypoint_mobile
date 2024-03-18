@@ -11,6 +11,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {Dimensions} from 'react-native';
 import {useSharedValue} from 'react-native-reanimated';
 import {APP_SETTINGS} from '../config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const formatDate = (dateString: string, numericOnly = false): string => {
   const date = new Date(dateString);
@@ -168,7 +169,26 @@ export const getTaxa = (district: String | undefined) => {
 
   return rate;
 };
+export const setIntro = async () => {
+  await AsyncStorage.setItem('intro', 'true');
+};
 
+export const checkIntro = async () => {
+  try {
+    const getIntro = await AsyncStorage.getItem('intro');
+    if (getIntro !== null) {
+      // O valor existe, então não é o primeiro acesso
+      return false;
+    } else {
+      // O valor não existe, então é o primeiro acesso
+      return true;
+    }
+  } catch (error) {
+    // Tratar erros aqui, se necessário
+    console.error('Erro ao verificar o acesso inicial:', error);
+    return false; // Assumindo que um erro significa que não é o primeiro acesso
+  }
+};
 export const getTotal = (
   cart_product: Cart_product[],
   currentCode: User_Rewards | Discount_cupom,
