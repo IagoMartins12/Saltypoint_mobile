@@ -27,7 +27,7 @@ import IntroScreen from './src/screens/Intro/IntroScreen';
 import ForgetPasswordScreen from './src/screens/ForgetPasswordScreen';
 import FetchData from './src/components/FetchData/index';
 import useAuth, {checkAndSetToken} from './src/hooks/auth/useAuth';
-import {checkIntro} from './src/utils';
+import {checkIntro, checkUser} from './src/utils';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -41,14 +41,17 @@ const App = () => {
         const isFirstUse = await checkIntro();
         if (isFirstUse) {
           console.log('primeiro acesso');
-          setMainScreen('Intro');
-        } else if (isLogged) {
-          console.log('está logado');
-          setMainScreen('Tab');
-        } else {
-          console.log('não está logado e nem é o primeiro acesso');
-          setMainScreen('Main');
+          return setMainScreen('Intro');
         }
+        const haveToken = await checkUser();
+        console.log('have token', haveToken);
+        if (haveToken) {
+          console.log('está logado');
+          return setMainScreen('Tab');
+        }
+
+        console.log('não está logado e nem é o primeiro acesso');
+        return setMainScreen('Main');
       } catch (error) {
         console.error('Erro ao verificar o acesso inicial:', error);
         setMainScreen('Main'); // Em caso de erro, assumindo que não é o primeiro acesso
@@ -65,6 +68,10 @@ const App = () => {
   useEffect(() => {
     checkAndSetToken();
   }, []);
+
+  if (mainScreen === '') {
+    return <></>;
+  }
   return (
     <>
       <NavigationContainer>

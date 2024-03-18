@@ -189,6 +189,21 @@ export const checkIntro = async () => {
     return false; // Assumindo que um erro significa que não é o primeiro acesso
   }
 };
+
+export const checkUser = async () => {
+  try {
+    const getUser = await AsyncStorage.getItem('secret');
+    if (getUser !== null) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    // Tratar erros aqui, se necessário
+    console.error('Erro ao verificar o acesso inicial:', error);
+    return false; // Assumindo que um erro significa que não é o primeiro acesso
+  }
+};
 export const getTotal = (
   cart_product: Cart_product[],
   currentCode: User_Rewards | Discount_cupom,
