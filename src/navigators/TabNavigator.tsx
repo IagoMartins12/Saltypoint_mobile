@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {COLORS} from '../theme/theme';
 import HomeScreen from '../screens/HomeScreen';
@@ -8,6 +8,9 @@ import FavoriteScreen from '../screens/FavoriteScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import RewardScreen from '../screens/RewardScreen';
 import useTheme from '../hooks/useTheme';
+import MyText from '../components/Text';
+import usePrivateStore from '../hooks/store/usePrivateStore';
+import {getCartTotalLenght} from '../utils';
 
 const Tab = createBottomTabNavigator();
 
@@ -75,20 +78,56 @@ const TabNavigator = () => {
         name="Cart"
         component={CartScreen}
         options={{
-          tabBarIcon: ({focused, color, size}) => (
-            <CustomIcon
-              name="shopping-cart"
-              size={25}
-              color={
-                focused
-                  ? COLORS.primaryRedHex
-                  : currentTheme === 'dark'
-                  ? COLORS.iconColorDark
-                  : COLORS.iconColorLight
-              }
-              pack="Feather"
-            />
-          ),
+          tabBarIcon: ({focused, color, size}) => {
+            const {cart_product, user} = usePrivateStore();
+            const cartProductLength = getCartTotalLenght(cart_product);
+
+            return (
+              <View
+                style={{
+                  position: 'relative',
+                }}>
+                {user && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: -12,
+                      left: 6,
+                      width: 16,
+                      height: 16,
+                      borderRadius: 10000,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor:
+                        currentTheme === 'dark'
+                          ? COLORS.iconBgDark
+                          : COLORS.iconBgLight,
+                    }}>
+                    <MyText
+                      style={{
+                        fontSize: 11,
+                        fontWeight: 'bold',
+                      }}>
+                      {cartProductLength}
+                    </MyText>
+                  </View>
+                )}
+
+                <CustomIcon
+                  name="shopping-cart"
+                  size={25}
+                  color={
+                    focused
+                      ? COLORS.primaryRedHex
+                      : currentTheme === 'dark'
+                      ? COLORS.iconColorDark
+                      : COLORS.iconColorLight
+                  }
+                  pack="Feather"
+                />
+              </View>
+            );
+          },
         }}
       />
 

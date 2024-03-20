@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Dimensions,
   Modal,
@@ -16,6 +16,7 @@ import ModalIcon from '../ModalIcon';
 import MyText from '../../Text';
 import CallToast from '../../Toast';
 import {updatedPassword} from '../../../services';
+import LoadingIndicator from '../../Loading';
 
 export interface ModalProps {
   modalOpen: boolean;
@@ -30,9 +31,12 @@ const ForgetPasswordModal: React.FC<ModalProps> = ({
   hideModal,
   translateY,
 }) => {
+  const [loading, setLoading] = useState(false);
+
   const {currentTheme} = useTheme();
   const {control, handleSubmit} = useForm();
   const {showToast} = CallToast();
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
@@ -47,7 +51,7 @@ const ForgetPasswordModal: React.FC<ModalProps> = ({
   const onSubmit = async (data: any) => {
     if (data.newPassword !== data.confirmNewPassword)
       return showToast('As senhas não coincidem', 'error');
-
+    setLoading(true);
     const object = {
       newPassword: data.newPassword,
     };
@@ -55,8 +59,10 @@ const ForgetPasswordModal: React.FC<ModalProps> = ({
     const response = await updatedPassword(object);
     if (response.status === 200) {
       showToast('Senha alterada com sucesso', 'success');
+      setLoading(false);
       return handleOverlayPress();
     } else {
+      setLoading(false);
       return showToast(response.data.message, 'error');
     }
   };
@@ -97,10 +103,18 @@ const ForgetPasswordModal: React.FC<ModalProps> = ({
                 <TouchableOpacity
                   onPress={handleSubmit(onSubmit)}
                   style={styles.buttonStyle}>
-                  <MyText
-                    style={{color: '#FFFFFF', paddingRight: 10, fontSize: 16}}>
-                    Redefinir senha
-                  </MyText>
+                  {loading ? (
+                    <LoadingIndicator />
+                  ) : (
+                    <MyText
+                      style={{
+                        color: '#FFFFFF',
+                        paddingRight: 10,
+                        fontSize: 16,
+                      }}>
+                      Redefinir senha
+                    </MyText>
+                  )}
                 </TouchableOpacity>
               </View>
             </View>

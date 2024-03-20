@@ -18,43 +18,30 @@ import CallToast from '../../components/Toast';
 import CustomIcon from '../../components/CustomIcon';
 import useTheme from '../../hooks/useTheme';
 import {COLORS} from '../../theme/theme';
+import LoadingIndicator from '../../components/Loading';
 
 const CepStepScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const [loading, setLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const {showToast} = CallToast();
+
   const onSubmit: SubmitHandler<FieldValues> = async data => {
+    setLoading(true);
     const validateCpf = data.cep.replace('-', '');
 
     const response = await getAddressPerCep(validateCpf);
 
     if (response?.erro) {
+      setLoading(false);
       return showToast('CEP não encontrado', 'error');
       // return toast.error('CEP não encontrado');
     }
-
+    setLoading(false);
     navigation.navigate('SaveAddress', {response});
-
-    //   if (response) {
-    //     setStep(STEPS.ADDRESS_INFO);
-    //     // Mapeia os campos do formulário com as propriedades de CEPInfoDto
-    //     const fieldMappings: Record<string, keyof CEPInfoDto> = {
-    //       district: 'bairro',
-    //       city: 'localidade',
-    //       address: 'logradouro',
-    //       uf: 'uf',
-    //     };
-    //     // Define os valores nos campos do formulário após a busca
-    //     Object.keys(fieldMappings).forEach(fieldName => {
-    //       const field = fieldMappings[fieldName];
-    //       if (response[field]) {
-    //         setValue(fieldName, response[field]);
-    //       }
-    //     });
-    //   }
   };
 
   const goToGeoAddress = () => {
@@ -63,17 +50,7 @@ const CepStepScreen = ({
 
   const {currentTheme} = useTheme();
 
-  const {register, handleSubmit, setValue, control} = useForm<FieldValues>({
-    defaultValues: {
-      cep: '',
-      district: '',
-      number: '',
-      complement: '',
-      address: '',
-      city: '',
-      uf: '',
-    },
-  });
+  const {handleSubmit, setValue, control} = useForm();
 
   const handleOnChange = (value: string) => {
     setIsValid(value.length === 9);
@@ -81,7 +58,7 @@ const CepStepScreen = ({
   };
 
   const comeBack = () => {
-    navigation.pop();
+    navigation.navigate('Settings');
   };
   return (
     <View style={{flex: 1}}>
@@ -96,13 +73,7 @@ const CepStepScreen = ({
                 : COLORS.backgroundColorDark,
           },
         ]}>
-        <View style={{width: '100%'}}>
-          <CepInput
-            handleOnChange={handleOnChange}
-            register={register}
-            control={control}
-          />
-        </View>
+        <CepInput handleOnChange={handleOnChange} control={control} />
         <View style={{gap: 10, marginTop: 10}}>
           <TouchableOpacity
             onPress={handleSubmit(onSubmit)}
@@ -112,13 +83,19 @@ const CepStepScreen = ({
               !isValid && styles.buttonDisabled,
             ]}
             disabled={!isValid}>
-            <CustomIcon
-              name="magnifier"
-              size={20}
-              pack="SimpleLineIcons"
-              color="black"
-            />
-            <Text style={global.notRoundedButtonText}>Buscar CEP</Text>
+            {loading ? (
+              <LoadingIndicator />
+            ) : (
+              <>
+                <CustomIcon
+                  name="magnifier"
+                  size={20}
+                  pack="SimpleLineIcons"
+                  color="black"
+                />
+                <Text style={global.notRoundedButtonText}>Buscar CEP</Text>
+              </>
+            )}
           </TouchableOpacity>
           <TouchableOpacity
             style={global.notRoundedButton}

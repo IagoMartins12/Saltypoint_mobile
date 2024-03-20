@@ -31,7 +31,6 @@ const CartScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
-
   const {currentTheme} = useTheme();
   const {products} = useGlobalStore();
   const {cart_product, user, setCart_product} = usePrivateStore();
@@ -41,7 +40,6 @@ const CartScreen = ({
   const translateY = useSharedValue(Dimensions.get('window').height);
   const cartProductTotal = getCartTotal(cart_product);
 
-  const totalProducts = products.slice(0, 4);
   const totalProducts2 = products.slice(5, 9);
 
   const isCoupon = !(currentCode as User_Rewards)?.rewardPoints;
@@ -130,7 +128,7 @@ const CartScreen = ({
                       <View key={i}>
                         <ProductCartCard cartProduct={p} onPress={onPress} />
 
-                        {i !== totalProducts.length - 1 ? (
+                        {i !== cart_product.length - 1 ? (
                           <View
                             style={[
                               styles.hrStyle,
@@ -391,6 +389,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'black',
     borderBottomWidth: 1,
     paddingVertical: 8,
+    marginHorizontal: 5,
   },
 
   couponBox: {

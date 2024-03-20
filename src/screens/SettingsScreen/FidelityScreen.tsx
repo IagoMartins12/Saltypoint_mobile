@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
@@ -21,6 +20,7 @@ import FidelityAccordeonSection from '../../components/FidelityAccordeonSection'
 import useTheme from '../../hooks/useTheme';
 import MyText from '../../components/Text';
 import usePrivateStore from '../../hooks/store/usePrivateStore';
+import useGlobalStore from '../../hooks/store/useGlobalStore';
 
 const FidelityScreen = ({
   navigation,
@@ -29,9 +29,18 @@ const FidelityScreen = ({
 }) => {
   const {currentTheme} = useTheme();
   const {user} = usePrivateStore();
+  const {reward} = useGlobalStore();
+
+  const sortedRewards = reward.sort(
+    (a, b) => a.quantity_points - b.quantity_points,
+  );
+  // Pegar os 10 primeiros itens
+  const slicedRewards = sortedRewards.slice(0, 10);
+
   const comeBack = () => {
     navigation.pop();
   };
+
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <PanGestureHandler
@@ -143,15 +152,17 @@ const FidelityScreen = ({
                       : COLORS.cardColorDark,
                 },
               ]}>
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((i, key) => (
+              {slicedRewards.map((i, key) => (
                 <View
                   key={key}
                   style={{
                     paddingHorizontal: 20,
                     gap: 10,
                   }}>
-                  <RewardInfo />
-                  {i !== 8 ? <View style={styles.hrStyle} /> : null}
+                  <RewardInfo reward={i} />
+                  {key !== reward.length - 1 ? (
+                    <View style={styles.hrStyle} />
+                  ) : null}
                 </View>
               ))}
             </View>

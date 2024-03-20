@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Dimensions,
   Image,
   StyleSheet,
@@ -24,12 +25,12 @@ import {useSharedValue, withTiming} from 'react-native-reanimated';
 import useTheme from '../../hooks/useTheme';
 import MyText from '../../components/Text';
 import usePrivateStore from '../../hooks/store/usePrivateStore';
-import {UpdateUserDto} from '../../types/Dtos';
 import {updatedMe} from '../../services';
 import CallToast from '../../components/Toast';
 import {User, User_Adress} from '../../types/ModelsType';
 import PhoneInput from '../../components/PhoneInput';
 import SelectComponent from '../../components/Select';
+import LoadingIndicator from '../../components/Loading';
 
 const ProfileScreen = ({
   navigation,
@@ -37,7 +38,9 @@ const ProfileScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [onChangeDropdown, setOnChangeDropdown] = useState<null | string>(null);
+
   const {control, handleSubmit, setValue} = useForm();
   const {currentTheme} = useTheme();
   const {user, setUser, address} = usePrivateStore();
@@ -56,11 +59,12 @@ const ProfileScreen = ({
     if (data.phone.length !== 15 && data.phone)
       return showToast('Insira um numero valido', 'error');
 
+    setLoading(true);
     const object = {
       name: data.name,
       phone: data.phone !== '' ? data.phone : null,
       user_Adress_id: onChangeDropdown !== '' ? onChangeDropdown : null,
-    } as UpdateUserDto;
+    };
 
     try {
       await updatedMe(object);
@@ -77,6 +81,8 @@ const ProfileScreen = ({
       // Handle errors here
       console.error(error);
       showToast('Erro ao atualizar o perfil.', 'error');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -196,7 +202,11 @@ const ProfileScreen = ({
                 <TouchableOpacity
                   onPress={handleSubmit(onSubmit)}
                   style={global.buttonStyle}>
-                  <Text style={{color: '#FFFFFF'}}>Editar</Text>
+                  {loading ? (
+                    <LoadingIndicator />
+                  ) : (
+                    <Text style={{color: '#FFFFFF'}}>Editar</Text>
+                  )}
                 </TouchableOpacity>
                 <Text
                   onPress={() => {

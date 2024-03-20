@@ -25,6 +25,7 @@ import {UpdateUserDto} from '../../types/Dtos';
 import usePrivateStore from '../../hooks/store/usePrivateStore';
 import CepInput from '../../components/CepInput';
 import SelectComponent2 from '../../components/Select2';
+import LoadingIndicator from '../../components/Loading';
 
 export const onlyDistrict = ['sublocality', 'postal_code'];
 
@@ -55,6 +56,7 @@ const SaveAddressScreen = ({
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const [loading, setLoading] = useState(false);
   const [typeAddress, setTypeAddress] = useState(null);
   const [onChangeDropdown, setOnChangeDropdown] = useState<null | string>(null);
 
@@ -105,7 +107,6 @@ const SaveAddressScreen = ({
       requiredFields.push('district');
     }
     const missingFields = requiredFields.filter(field => !data[field]);
-    console.log(missingFields);
     // Se houver campos obrigatórios em falta, exibir um toast informando o usuário
     if (missingFields.length > 0) {
       const missingFieldsNames = missingFields.map(field => {
@@ -150,6 +151,7 @@ const SaveAddressScreen = ({
         'error',
       );
 
+    setLoading(true);
     const object = {
       address: data.address,
       cep: data.cep !== '' || !data.cep !== undefined ? data.cep : null,
@@ -166,7 +168,6 @@ const SaveAddressScreen = ({
 
     if (myResponse.status === 201) {
       setAddress([...address, myResponse.data]);
-      reset();
 
       const object = {
         user_Adress_id: myResponse.data.id,
@@ -180,8 +181,11 @@ const SaveAddressScreen = ({
       }));
 
       navigation.push('Address');
+      setLoading(false);
+      reset();
       return showToast('Endereço criado!', 'success');
     } else {
+      setLoading(false);
       return showToast('Erro ao cadastrar endereço', 'error');
     }
   };
@@ -355,7 +359,11 @@ const SaveAddressScreen = ({
               marginBottom: 50,
             },
           ]}>
-          <Text style={global.notRoundedButtonText}>Salvar endereço</Text>
+          {loading ? (
+            <LoadingIndicator />
+          ) : (
+            <MyText style={global.notRoundedButtonText}>Salvar endereço</MyText>
+          )}
         </TouchableOpacity>
       </ScrollView>
     </View>

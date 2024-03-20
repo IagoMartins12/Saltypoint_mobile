@@ -101,6 +101,30 @@ const SearchScreen = ({
 
       {onFocus && searchText !== '' && renderProductList()}
 
+      {onFocus && searchText !== '' && productState.length <= 0 && (
+        <View
+          style={{
+            alignSelf: 'flex-start',
+            width: '100%',
+            height: '100%',
+          }}>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+            }}>
+            <MyText
+              style={{
+                fontSize: 24,
+                fontWeight: 'bold',
+              }}>
+              Sem resultados
+            </MyText>
+          </View>
+        </View>
+      )}
+
       {!onFocus && (
         <View style={{marginVertical: 20, gap: 10}}>
           <MyText style={styles.categoryText}>Categorias</MyText>
@@ -141,25 +165,7 @@ const SearchScreen = ({
             ))}
           </ScrollView>
 
-          {currentCategory === null ? (
-            <View style={{marginVertical: 20, gap: 20}}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                <MyText style={styles.categoryText}>Recentes</MyText>
-                <MyText style={styles.categoryText}>Limpar</MyText>
-              </View>
-
-              <View style={styles.searchTextHistory}>
-                <SearchText text="Calabresa" />
-                <SearchText text="Calabresa" />
-                <SearchText text="Calabresa" />
-              </View>
-            </View>
-          ) : (
+          {currentCategory === null ? null : (
             <ScrollView
               contentContainerStyle={styles.productDiv}
               showsVerticalScrollIndicator={false}>
@@ -196,8 +202,9 @@ const styles = StyleSheet.create({
   },
 
   categoryBoxName: {
-    fontSize: FONTSIZE.size_14,
-    fontWeight: '500',
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#000000',
   },
 
   CategoryScrollViewStyle: {
