@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  ViewStyle,
 } from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
 import CustomIcon from '../../CustomIcon';
@@ -43,7 +42,7 @@ const CatchRewardModal: React.FC<ModalProps> = ({
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
-    } as Animated.AnimateStyle<ViewStyle>;
+    };
   });
 
   const catchReward = async () => {

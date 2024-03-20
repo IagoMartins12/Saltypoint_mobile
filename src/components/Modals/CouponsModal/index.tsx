@@ -7,7 +7,6 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  ViewStyle,
 } from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
 import {ModalProps} from '../ForgetPasswordModal';
@@ -52,7 +51,7 @@ const CouponsModal: React.FC<ModalProps> = ({
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
-    } as Animated.AnimateStyle<ViewStyle>;
+    };
   });
 
   const handleOverlayPress = () => {

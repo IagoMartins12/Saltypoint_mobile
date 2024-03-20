@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, Modal, StyleSheet, View, ViewStyle} from 'react-native';
+import {Dimensions, Modal, StyleSheet, View} from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
 import useTheme from '../../../hooks/useTheme';
 import {COLORS} from '../../../theme/theme';
@@ -21,7 +21,7 @@ const NotOpenModal: React.FC<ModalProps> = ({
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
-    } as Animated.AnimateStyle<ViewStyle>;
+    };
   });
 
   const handleOverlayPress = () => {

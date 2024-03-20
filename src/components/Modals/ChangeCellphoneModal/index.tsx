@@ -5,11 +5,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  ViewStyle,
 } from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
 import {useForm} from 'react-hook-form';
-import StyledInputComponent from '../../Input';
 import useTheme from '../../../hooks/useTheme';
 import {BORDERRADIUS, COLORS} from '../../../theme/theme';
 import ModalIcon from '../ModalIcon';
@@ -48,7 +46,7 @@ const ChangeCellphoneModal: React.FC<ModalProps> = ({
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
-    } as Animated.AnimateStyle<ViewStyle>;
+    };
   });
 
   const handleOverlayPress = () => {

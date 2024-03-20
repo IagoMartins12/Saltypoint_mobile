@@ -41,7 +41,7 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
-    } as Animated.AnimateStyle<ViewStyle>;
+    };
   });
 
   const handleOverlayPress = () => {

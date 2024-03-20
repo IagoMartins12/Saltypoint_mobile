@@ -1,12 +1,21 @@
 import React from 'react';
-import {Dimensions, Modal, StyleSheet, View, ViewStyle} from 'react-native';
+import {
+  Dimensions,
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
 import {useForm} from 'react-hook-form';
 import StyledInputComponent from '../../Input';
-import LargeButton from '../../Button';
 import useTheme from '../../../hooks/useTheme';
-import {COLORS} from '../../../theme/theme';
+import {BORDERRADIUS, COLORS} from '../../../theme/theme';
 import ModalIcon from '../ModalIcon';
+import MyText from '../../Text';
+import CallToast from '../../Toast';
+import {updatedPassword} from '../../../services';
 
 export interface ModalProps {
   modalOpen: boolean;
@@ -23,11 +32,11 @@ const ForgetPasswordModal: React.FC<ModalProps> = ({
 }) => {
   const {currentTheme} = useTheme();
   const {control, handleSubmit} = useForm();
-
+  const {showToast} = CallToast();
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
-    } as Animated.AnimateStyle<ViewStyle>;
+    };
   });
 
   const handleOverlayPress = () => {
@@ -35,7 +44,22 @@ const ForgetPasswordModal: React.FC<ModalProps> = ({
     setTimeout(() => setModalOpen(!modalOpen), 300);
   };
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = async (data: any) => {
+    if (data.newPassword !== data.confirmNewPassword)
+      return showToast('As senhas não coincidem', 'error');
+
+    const object = {
+      newPassword: data.newPassword,
+    };
+
+    const response = await updatedPassword(object);
+    if (response.status === 200) {
+      showToast('Senha alterada com sucesso', 'success');
+      return handleOverlayPress();
+    } else {
+      return showToast(response.data.message, 'error');
+    }
+  };
 
   return (
     <View style={styles.centeredView}>
@@ -58,23 +82,26 @@ const ForgetPasswordModal: React.FC<ModalProps> = ({
               <View style={{gap: 20}}>
                 <StyledInputComponent
                   control={control}
-                  name="password"
-                  placeholder="Senha: "
-                  icon="asterisk"
-                  isPassword
-                />
-                <StyledInputComponent
-                  control={control}
                   name="newPassword"
                   placeholder="Nova senha: "
                   icon="asterisk"
                   isPassword
                 />
-                <LargeButton
-                  handleSubmit={handleSubmit}
-                  onSubmit={onSubmit}
-                  text="Redefinir senha"
+                <StyledInputComponent
+                  control={control}
+                  name="confirmNewPassword"
+                  placeholder="Confirme a nova senha: "
+                  icon="asterisk"
+                  isPassword
                 />
+                <TouchableOpacity
+                  onPress={handleSubmit(onSubmit)}
+                  style={styles.buttonStyle}>
+                  <MyText
+                    style={{color: '#FFFFFF', paddingRight: 10, fontSize: 16}}>
+                    Redefinir senha
+                  </MyText>
+                </TouchableOpacity>
               </View>
             </View>
           </Animated.View>
@@ -129,6 +156,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '90%',
     height: '60%',
+  },
+  buttonStyle: {
+    width: Dimensions.get('screen').width / 1.25,
+    borderRadius: BORDERRADIUS.radius_20,
+    backgroundColor: COLORS.primaryRedHex,
+    height: 45,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
