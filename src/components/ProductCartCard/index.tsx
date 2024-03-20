@@ -141,6 +141,7 @@ const ProductCartCard: React.FC<ProductCardProps> = ({
       }}>
       <View style={styles.image}>
         <ImageBackground
+          borderRadius={1000}
           imageStyle={{
             objectFit: 'fill',
           }}
@@ -231,23 +232,27 @@ const ProductCartCard: React.FC<ProductCardProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    height: Dimensions.get('screen').height / 5,
+    height: Dimensions.get('screen').height / 5.75,
     gap: 15,
   },
 
   image: {
     width: '35%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   CartItemImage: {
-    height: '100%',
-    width: '100%',
+    height: 120,
+    width: 120,
+    // height: '100%',
+    // width: '100%',
   },
 
   content: {
     gap: 10,
     justifyContent: 'center',
-    width: '64%',
+    width: '63%',
   },
 
   addItemsDiv: {

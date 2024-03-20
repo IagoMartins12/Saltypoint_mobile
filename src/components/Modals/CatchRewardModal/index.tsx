@@ -177,7 +177,7 @@ const CatchRewardModal: React.FC<ModalProps> = ({
               {
                 backgroundColor:
                   currentTheme === 'dark'
-                    ? COLORS.backgroundColorDark
+                    ? COLORS.cardColorDark
                     : COLORS.backgroundColorLight,
               },
             ]}>

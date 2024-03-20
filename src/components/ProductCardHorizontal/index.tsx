@@ -55,14 +55,23 @@ const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
       }}>
       {renderPointsText()}
       <View style={styles.cardContainer}>
-        <ImageBackground
-          resizeMode={'contain'}
-          source={{
-            uri: product.product_image,
-          }}
-          style={[styles.cardItemImage, styles.imageWithBorder]}>
-          <HeartIcon productId={product.id} />
-        </ImageBackground>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+          }}>
+          <ImageBackground
+            borderRadius={1000}
+            resizeMode={'contain'}
+            source={{
+              uri: product.product_image,
+            }}
+            style={[styles.cardItemImage]}>
+            <HeartIcon productId={product.id} />
+          </ImageBackground>
+        </View>
+
         <View style={styles.cardInfoContainer}>
           <MyText style={styles.productTitle}>{product.name}</MyText>
 
@@ -73,7 +82,6 @@ const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
               {' '}
               R$ {product.value.toFixed(2)}
             </MyText>
-            {/* <CustomIcon name="cart-plus" size={25} /> */}
           </View>
         </View>
       </View>
@@ -103,18 +111,11 @@ const styles = StyleSheet.create({
   cardContainer: {
     flexDirection: 'row',
     flex: 1,
-    borderRadius: 50,
-  },
-  imageWithBorder: {
-    borderRadius: 15,
-    overflow: 'hidden',
-    height: '98%',
-    alignSelf: 'center',
-    margin: 7,
+    gap: 15,
   },
   cardItemImage: {
-    width: Dimensions.get('window').width / 2.25,
-    borderRadius: 50,
+    width: 125,
+    height: 125,
   },
   cardInfoContainer: {
     paddingLeft: 7,
