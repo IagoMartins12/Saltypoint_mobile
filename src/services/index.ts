@@ -101,7 +101,7 @@ export const getStates = async (): Promise<State[]> => {
 
 export const getCoupons = async (): Promise<Discount_cupom[]> => {
   try {
-    const response = await Api.get('/coupon');
+    const response = await Api.get('/coupons');
     return response.data as Discount_cupom[];
   } catch (error: any) {
     return error;

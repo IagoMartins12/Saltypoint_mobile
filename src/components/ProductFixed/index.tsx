@@ -11,6 +11,7 @@ import {BORDERRADIUS, COLORS} from '../../theme/theme';
 import CustomIcon from '../CustomIcon';
 import {global} from '../../style';
 import useTheme from '../../hooks/useTheme';
+import SlidingCounter from '../SlidingCounter';
 
 interface CartTotalProps {
   onPress?: () => void;
@@ -95,6 +96,8 @@ const ProductFixed: React.FC<CartTotalProps> = ({
           <CustomIcon name="plus" size={17} color="#000" pack="Feather" />
         </Pressable>
       </View>
+
+      {/* <SlidingCounter /> */}
     </View>
   );
 };
