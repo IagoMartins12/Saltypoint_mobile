@@ -151,7 +151,7 @@ const ProfileScreen = ({
                     source={
                       user.image
                         ? user.image
-                        : require('../../assets/profile.png')
+                        : require('../../assets/profile.jpg')
                     }
                   />
                 </View>

@@ -11,11 +11,16 @@ import useTheme from '../hooks/useTheme';
 import MyText from '../components/Text';
 import usePrivateStore from '../hooks/store/usePrivateStore';
 import {getCartTotalLenght} from '../utils';
+import useAuth from '../hooks/auth/useAuth';
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   const {currentTheme} = useTheme();
+  const {isLogged} = useAuth();
+
+  const {user} = usePrivateStore();
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -91,8 +96,8 @@ const TabNavigator = () => {
                   <View
                     style={{
                       position: 'absolute',
-                      top: -12,
-                      left: 6,
+                      top: -10,
+                      left: 8,
                       width: 16,
                       height: 16,
                       borderRadius: 10000,

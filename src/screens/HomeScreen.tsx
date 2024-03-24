@@ -41,14 +41,6 @@ const data = [
     id: 3,
     image: IMAGES.CAROUSEL.CAROUSEL3,
   },
-  {
-    id: 4,
-    image: IMAGES.CAROUSEL.PIZZA,
-  },
-  {
-    id: 5,
-    image: IMAGES.CAROUSEL.ESFIHA,
-  },
 ];
 
 const HomeScreen = ({

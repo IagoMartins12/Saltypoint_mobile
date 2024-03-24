@@ -133,8 +133,8 @@ const PizzaDetails: React.FC<PizzaProps> = ({
   const checkValue = () => {
     let newValue = currentProduct.value * quantity;
 
-    const otherProductsCheck =
-      otherProductsValue !== 0 && +otherProductsValue > currentProduct.value;
+    // const otherProductsCheck =
+    // otherProductsValue !== 0 && +otherProductsValue > currentProduct.value;
 
     const isBrotinho = selectedOptions.size === '1';
 

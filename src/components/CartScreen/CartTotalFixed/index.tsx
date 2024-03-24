@@ -14,13 +14,6 @@ import {
 } from '../../../utils';
 import useCurrrentCode from '../../../hooks/reward';
 import useGlobalStore from '../../../hooks/store/useGlobalStore';
-import Animated, {
-  FadeIn,
-  useAnimatedStyle,
-  useDerivedValue,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
 
 interface CartTotalProps {
   onPress?: () => void;
@@ -35,17 +28,6 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
   lastStep,
   deliveryFee,
 }) => {
-  const animatedValue = useSharedValue(0);
-  // const animatedDerivedValue = useDerivedValue(() => {
-  //   return withTiming(animatedValue.value, {duration: 1000});
-  // });
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: 0,
-    };
-  });
-
   const {currentTheme} = useTheme();
   const {generalData} = useGlobalStore();
   const {cart_product, address, user} = usePrivateStore();
@@ -102,7 +84,7 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
       {!lastStep && (
         <View>
           <MyText style={styles.subTitleTotal}>{title}</MyText>
-          <Animated.Text style={styles.titleTotal}>
+          <Text style={styles.titleTotal}>
             R${' '}
             {getTotal(
               cart_product,
@@ -115,7 +97,7 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
               {' '}
               / {cartProductLength} itens
             </MyText>
-          </Animated.Text>
+          </Text>
         </View>
       )}
     </View>

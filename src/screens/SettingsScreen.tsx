@@ -180,7 +180,9 @@ const SettingsScreen = ({
               style={styles.profilePhotoDiv}>
               <Image
                 style={styles.CartItemImage}
-                source={user.image ?? require('../assets/images/user.png')}
+                source={{
+                  uri: user.image ?? require('../assets/images/user.png'),
+                }}
               />
             </TouchableOpacity>
           </View>
@@ -218,7 +220,9 @@ const SettingsScreen = ({
             onPress={() => setImageModalVisible(false)}>
             <Image
               style={styles.modalImage}
-              source={user.image ?? require('../assets/images/user.png')}
+              source={{
+                uri: user.image ?? require('../assets/images/user.png'),
+              }}
             />
           </Pressable>
         </Modal>
@@ -261,12 +265,10 @@ const SettingsScreen = ({
       />
       <View style={styles.profileContainer}>
         <View style={styles.profilePhotoDiv}>
-          <TouchableOpacity
-            onPress={() => setImageModalVisible(true)}
-            style={styles.profilePhotoDiv}>
+          <TouchableOpacity style={styles.profilePhotoDiv}>
             <Image
               style={styles.CartItemImage}
-              source={require('../assets/profile.png')}
+              source={require('../assets/images/user.png')}
             />
           </TouchableOpacity>
         </View>
@@ -286,20 +288,6 @@ const SettingsScreen = ({
         </View>
         <ThemeSwitch moveView={moveView} />
       </View>
-
-      <Modal
-        animationType={isImageModalVisible ? 'fade' : 'none'}
-        transparent={true}
-        visible={isImageModalVisible}>
-        <Pressable
-          style={styles.modalContainer}
-          onPress={() => setImageModalVisible(false)}>
-          <Image
-            style={styles.modalImage}
-            source={require('../assets/profile.png')}
-          />
-        </Pressable>
-      </Modal>
     </View>
   );
 };
