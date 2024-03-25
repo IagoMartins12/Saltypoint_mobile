@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -14,12 +14,11 @@ import CustomIcon from '../components/CustomIcon';
 import ProductCard from '../components/ProductCard';
 import {global} from '../style';
 import useGlobalStore from '../hooks/store/useGlobalStore';
-import {Product} from '../types/ModelsType';
+import {Carousel_Images, Product} from '../types/ModelsType';
 import {enableGoBack, visibleCategories} from '../utils';
 import useTheme from '../hooks/useTheme';
 import MyText from '../components/Text';
 import CarouselHome from '../components/Carrousel';
-import IMAGES from '../assets';
 import ClosedView from '../components/ClosedView';
 import usePrivateStore from '../hooks/store/usePrivateStore';
 import ProductCardSkeleton from '../components/Skeletons/ProductSkeleton';
@@ -27,27 +26,17 @@ import CategoryTextSkeleton from '../components/Skeletons/CategoryTextSkeleton';
 import CarouselSkeleton from '../components/Skeletons/CarouselSkeleton';
 import useAuth from '../hooks/auth/useAuth';
 import UserNameSkeleton from '../components/Skeletons/UserNameSkeleton';
-
-const data = [
-  {
-    id: 1,
-    image: IMAGES.CAROUSEL.CAROUSEL,
-  },
-  {
-    id: 2,
-    image: IMAGES.CAROUSEL.CAROUSEL2,
-  },
-  {
-    id: 3,
-    image: IMAGES.CAROUSEL.CAROUSEL3,
-  },
-];
+import {getCarouselImages} from '../services';
 
 const HomeScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const [carouselImages, setCarouselImages] = useState<[] | Carousel_Images[]>(
+    [],
+  );
+
   const {products, categorys} = useGlobalStore();
   const {currentTheme} = useTheme();
   const {user} = usePrivateStore();
@@ -66,6 +55,16 @@ const HomeScreen = ({
 
   useEffect(() => {
     enableGoBack(navigation);
+  }, []);
+
+  const getImages = async () => {
+    try {
+      const response = await getCarouselImages();
+      setCarouselImages(response);
+    } catch (error) {}
+  };
+  useEffect(() => {
+    getImages();
   }, []);
 
   return (
@@ -123,8 +122,8 @@ const HomeScreen = ({
           style={{
             height: Dimensions.get('screen').height * 0.3,
           }}>
-          {products.length > 0 ? (
-            <CarouselHome entries={data} />
+          {carouselImages ? (
+            <CarouselHome entries={carouselImages} />
           ) : (
             <CarouselSkeleton />
           )}

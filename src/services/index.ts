@@ -16,6 +16,7 @@ import {
   UpdateUserDto,
 } from '../types/Dtos';
 import {
+  Carousel_Images,
   Cart_product,
   Category,
   Discount_cupom,
@@ -142,6 +143,15 @@ export const getAddressPerCep = async (cep: string): Promise<CEPInfoDto> => {
     return response.data;
   } catch (error: any) {
     return error.response;
+  }
+};
+
+export const getCarouselImages = async (): Promise<Carousel_Images[]> => {
+  try {
+    const response = await Api.get('/carousel/admin');
+    return response.data as Carousel_Images[];
+  } catch (error: any) {
+    return error;
   }
 };
 

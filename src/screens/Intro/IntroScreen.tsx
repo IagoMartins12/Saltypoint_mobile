@@ -61,7 +61,7 @@ const IntroScreen = ({
         <Image
           source={item.image}
           style={{
-            height: Dimensions.get('window').width * 0.95,
+            height: Dimensions.get('window').width * 0.99,
             width: Dimensions.get('window').width * 0.9,
             alignSelf: 'center',
           }}

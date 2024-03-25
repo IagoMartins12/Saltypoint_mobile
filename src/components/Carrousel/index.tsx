@@ -9,7 +9,10 @@ const MyCarousel = ({entries}) => {
     return (
       <View style={styles.slide}>
         <Image
-          source={item.image}
+          source={{
+            uri: item.image,
+            cache: 'only-if-cached',
+          }}
           resizeMode="stretch"
           style={styles.image}
           borderRadius={8}

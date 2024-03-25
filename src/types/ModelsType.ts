@@ -252,3 +252,7 @@ export type General_data = {
   deliveryFeeInside: number;
   deliveryFeeOutside: number;
 };
+
+export type Carousel_Images = {
+  image: string;
+};
