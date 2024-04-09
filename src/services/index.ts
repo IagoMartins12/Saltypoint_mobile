@@ -148,7 +148,7 @@ export const getAddressPerCep = async (cep: string): Promise<CEPInfoDto> => {
 
 export const getCarouselImages = async (): Promise<Carousel_Images[]> => {
   try {
-    const response = await Api.get('/carousel/admin');
+    const response = await Api.get('/carousel');
     return response.data as Carousel_Images[];
   } catch (error: any) {
     return error;

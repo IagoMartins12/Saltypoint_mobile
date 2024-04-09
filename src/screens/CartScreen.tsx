@@ -90,6 +90,48 @@ const CartScreen = ({
     setCart_product(updatedCartProduct);
   };
 
+  const cartGuardian = () => {
+    const promo1 = products.find(
+      (p: Product) => p.name.toLowerCase() === 'combo 1',
+    );
+    const dollyPromo = products.find(
+      (p: Product) => p.name.toLowerCase() === 'dolly promoção',
+    );
+
+    if (promo1 && dollyPromo) {
+      const hasPromo1 = cart_product.some(
+        (cartProduct: Cart_product) => cartProduct.product_id === promo1.id,
+      );
+      const hasDollyPromo = cart_product.some(
+        (cartProduct: Cart_product) => cartProduct.product_id === dollyPromo.id,
+      );
+
+      if (hasPromo1 && !hasDollyPromo) {
+        const newCart = {
+          product_id: dollyPromo.id,
+          quantity: 1,
+          observation: null,
+          value: '0',
+          size: 0,
+        };
+
+        const updatedCartProduct = [...cart_product, newCart];
+        //@ts-ignore
+        setCart_product(updatedCartProduct);
+      } else if (!hasPromo1 && hasDollyPromo) {
+        const updatedCartProduct = cart_product.filter(
+          (cartProduct: Cart_product) =>
+            cartProduct.product_id !== dollyPromo.id,
+        );
+        setCart_product(updatedCartProduct);
+      }
+    }
+  };
+
+  useEffect(() => {
+    cartGuardian();
+  }, [cart_product]);
+
   useEffect(() => {
     if (
       currentCode &&
