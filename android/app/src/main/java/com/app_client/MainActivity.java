@@ -15,7 +15,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "app_client";
+    return "Salty point";
   }
 
   @Override

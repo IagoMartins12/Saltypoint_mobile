@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "app_client.app"
-               BlueprintName = "app_client"
-               ReferencedContainer = "container:app_client.xcodeproj">
+               BuildableName = "Saltypoint.app"
+               BlueprintName = "Saltypoint"
+               ReferencedContainer = "container:Saltypoint.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "app_clientTests.xctest"
-               BlueprintName = "app_clientTests"
-               ReferencedContainer = "container:app_client.xcodeproj">
+               BuildableName = "SaltypointTests.xctest"
+               BlueprintName = "SaltypointTests"
+               ReferencedContainer = "container:Saltypoint.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "app_client.app"
-            BlueprintName = "app_client"
-            ReferencedContainer = "container:app_client.xcodeproj">
+            BuildableName = "Saltypoint.app"
+            BlueprintName = "Saltypoint"
+            ReferencedContainer = "container:Saltypoint.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "app_client.app"
-            BlueprintName = "app_client"
-            ReferencedContainer = "container:app_client.xcodeproj">
+            BuildableName = "Saltypoint.app"
+            BlueprintName = "Saltypoint"
+            ReferencedContainer = "container:Saltypoint.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
