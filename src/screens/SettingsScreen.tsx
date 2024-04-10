@@ -178,12 +178,19 @@ const SettingsScreen = ({
             <TouchableOpacity
               onPress={() => setImageModalVisible(true)}
               style={styles.profilePhotoDiv}>
-              <Image
-                style={styles.CartItemImage}
-                source={{
-                  uri: user.image ?? require('../assets/images/user.png'),
-                }}
-              />
+              {user.image ? (
+                <Image
+                  style={styles.CartItemImage}
+                  source={{
+                    uri: user.image,
+                  }}
+                />
+              ) : (
+                <Image
+                  style={styles.CartItemImage}
+                  source={require('../assets/images/user.png')}
+                />
+              )}
             </TouchableOpacity>
           </View>
           <MyText
@@ -218,12 +225,19 @@ const SettingsScreen = ({
           <Pressable
             style={styles.modalContainer}
             onPress={() => setImageModalVisible(false)}>
-            <Image
-              style={styles.modalImage}
-              source={{
-                uri: user.image ?? require('../assets/images/user.png'),
-              }}
-            />
+            {user.image ? (
+              <Image
+                style={styles.modalImage}
+                source={{
+                  uri: user.image,
+                }}
+              />
+            ) : (
+              <Image
+                style={styles.modalImage}
+                source={require('../assets/images/user.png')}
+              />
+            )}
           </Pressable>
         </Modal>
       </View>

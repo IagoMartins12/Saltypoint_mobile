@@ -1,6 +1,6 @@
 import React, {useRef} from 'react';
 import {Dimensions, Image, StyleSheet, View} from 'react-native';
-import Carousel from 'react-native-snap-carousel';
+import Carousel from 'react-native-reanimated-carousel';
 
 const MyCarousel = ({entries}) => {
   const carouselRef = useRef(null);
@@ -27,14 +27,11 @@ const MyCarousel = ({entries}) => {
     <Carousel
       ref={carouselRef}
       data={entries}
+      vertical={false}
+      width={sliderWidth}
+      autoPlay
+      autoPlayInterval={1000 * 5}
       renderItem={renderItem}
-      sliderWidth={sliderWidth}
-      layout="stack"
-      layoutCardOffset={18}
-      itemWidth={sliderWidth}
-      autoplay={true}
-      autoplayDelay={1000}
-      autoplayInterval={3000}
       loop
     />
   );

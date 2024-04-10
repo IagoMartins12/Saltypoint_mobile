@@ -148,10 +148,7 @@ const ProfileScreen = ({
                 <View style={styles.profilePhotoDiv}>
                   <Image
                     style={styles.CartItemImage}
-                    source={{
-                      uri:
-                        user.image ?? require('../../assets/images/user.png'),
-                    }}
+                    source={require('../../assets/images/user.png')}
                   />
                 </View>
                 <MyText

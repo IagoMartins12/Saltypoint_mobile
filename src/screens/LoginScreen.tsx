@@ -48,9 +48,10 @@ const LoginScreen = ({
   const onSubmit = async (data: any) => {
     const loginUserDto = data as LoginUserDto;
     const response = await loginUser(loginUserDto);
+    console.log(response.status);
     if (response.status === 400 || response.status === 401) {
       return showToast(response.data.message, 'error');
-    } else if (response.status === 200) {
+    } else if (response.status === 200 || response.status) {
       setUserLocalStorage(response.data.access_token);
       navigation.push('Tab');
       reset();
