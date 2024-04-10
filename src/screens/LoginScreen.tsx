@@ -138,7 +138,7 @@ const LoginScreen = ({
                     style={global.buttonStyle}>
                     <Text style={{color: '#FFFFFF'}}>Continuar</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     onPress={handleSubmit(onSubmit)}
                     style={global.buttonStyleWhite}>
                     <View
@@ -157,7 +157,7 @@ const LoginScreen = ({
                     </View>
 
                     <MyText textSize="mediumText2">Continuar com Google</MyText>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                   <View style={styles.registerText}>
                     <MyText textSize="mediumText2">
                       Não possui conta?{' '}

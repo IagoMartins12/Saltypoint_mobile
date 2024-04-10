@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useCallback, useState} from 'react';
 import {COLORS, FONTFAMILY, FONTSIZE} from '../theme/theme';
 import {useForm} from 'react-hook-form';
@@ -13,6 +13,10 @@ import LargeButton from '../components/Button';
 import useTheme from '../hooks/useTheme';
 import MyText from '../components/Text';
 import ForgetAnimation from '../components/Lottie/ForgetAnimation';
+import {global} from '../style';
+import {recoverPassword} from '../services';
+import CallToast from '../components/Toast';
+import LoadingIndicator from '../components/Loading';
 
 enum STEPS {
   EMAIL = 0,
@@ -24,9 +28,34 @@ const ForgetPasswordScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const [step, setStep] = useState(STEPS.EMAIL);
+  const [loading, setLoading] = useState(false);
 
-  const {control, handleSubmit} = useForm();
-  const onSubmit = (data: any) => console.log(data);
+  const {showToast} = CallToast();
+  const {control, handleSubmit, reset} = useForm();
+  const onSubmit = async (data: any) => {
+    if (!data.email.includes('@'))
+      return showToast('Favor inserir email', 'error');
+    try {
+      setLoading(true);
+      const object = {
+        to: data.email,
+      };
+
+      const response = await recoverPassword(object);
+      setLoading(false);
+      if (response.status === 400) {
+        return showToast(response.data.message, 'error');
+      }
+      if (response.status === 201) {
+        reset();
+        return setStep(STEPS.FORGET_PASSWORD);
+      } else {
+        showToast('Erro ao enviar o email!', 'error');
+      }
+    } catch (error) {
+      showToast('Erro ao buscar o email', 'error');
+    }
+  };
 
   const onSwipeRight = useCallback(() => {
     navigation.navigate('Login');
@@ -42,38 +71,40 @@ const ForgetPasswordScreen = ({
     navigation.navigate('Login');
   };
 
-  console.log('step', step);
-
   const {currentTheme} = useTheme();
 
-  let body = <></>;
+  let body = (
+    <View style={[styles.subContainer]}>
+      <View style={styles.brandwView}>
+        <MyText style={styles.brandwViewText}>Recupere a sua senha! </MyText>
+        <MyText style={styles.brandwViewSubText}>
+          Insira o email para podermos enviar sua redefinição de senha
+        </MyText>
+      </View>
+      {/* Form  */}
 
-  if (step === STEPS.EMAIL) {
-    body = (
-      <View style={[styles.subContainer]}>
-        <View style={styles.brandwView}>
-          <MyText style={styles.brandwViewText}>Recupere a sua senha! </MyText>
-          <MyText style={styles.brandwViewSubText}>
-            Insira o email para podermos enviar sua redefinição de senha
-          </MyText>
-        </View>
-        {/* Form  */}
+      <View style={styles.mainContainer}>
+        <StyledInputComponent
+          control={control}
+          name="email"
+          placeholder="Email: "
+          icon="email-outline"
+        />
 
-        <View style={styles.mainContainer}>
-          <StyledInputComponent
-            control={control}
-            name="Email"
-            placeholder="Email: "
-            icon="email-outline"
-          />
-
-          <View style={styles.buttonDiv}>
-            <LargeButton onSubmit={setNewStep} text="Enviar" />
-          </View>
+        <View style={styles.buttonDiv}>
+          {loading ? (
+            <LoadingIndicator />
+          ) : (
+            <TouchableOpacity
+              onPress={handleSubmit(onSubmit)}
+              style={global.buttonStyle}>
+              <Text style={{color: '#FFFFFF', paddingRight: 10}}>Enviar</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
-    );
-  }
+    </View>
+  );
 
   if (step === STEPS.FORGET_PASSWORD) {
     body = (

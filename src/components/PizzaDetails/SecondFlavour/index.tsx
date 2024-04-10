@@ -50,17 +50,46 @@ const SecondFlavour: React.FC<SecondFlavourProps> = ({
 
   return (
     <Animated.View style={[animatedStyle]}>
-      <View style={[styles.hrStyle, {borderColor: COLORS.borderColorDark}]}>
+      <View
+        style={[
+          styles.hrStyle,
+          {
+            borderColor:
+              currentTheme === 'dark'
+                ? COLORS.borderColorDark
+                : COLORS.borderColorLight,
+          },
+        ]}>
         <MyText>Selecione o sabor? </MyText>
       </View>
       <View
-        style={[styles.inputContainer, {borderColor: COLORS.borderColorDark}]}>
+        style={[
+          styles.inputContainer,
+          {
+            borderColor:
+              currentTheme === 'dark'
+                ? COLORS.borderColorDark
+                : COLORS.borderColorLight,
+          },
+        ]}>
         <TextInput
           placeholder="Calabresa / Mussarela"
           value={searchText}
           onChangeText={setSearchText}
-          placeholderTextColor={COLORS.textColorDark}
-          style={[styles.textInput, {color: COLORS.textColorDark}]}
+          placeholderTextColor={
+            currentTheme === 'dark'
+              ? COLORS.textColorDark
+              : COLORS.textColorLight
+          }
+          style={[
+            styles.textInput,
+            {
+              color:
+                currentTheme === 'dark'
+                  ? COLORS.textColorDark
+                  : COLORS.textColorLight,
+            },
+          ]}
         />
         <TouchableOpacity>
           <CustomIcon name="search" size={18} />

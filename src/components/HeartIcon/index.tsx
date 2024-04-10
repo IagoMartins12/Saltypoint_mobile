@@ -13,7 +13,7 @@ const HeartIcon = ({
   productId: string;
   isProductPage?: boolean;
 }) => {
-  const {favorites, setFavorites} = usePrivateStore();
+  const {favorites, setFavorites, user} = usePrivateStore();
 
   const {showToast} = CallToast();
 
@@ -22,6 +22,8 @@ const HeartIcon = ({
   );
 
   const handleFavorite = async () => {
+    if (!user)
+      return showToast('Faça o login para favoritar o produto', 'error');
     const isFavorite = checkFavorite;
 
     try {

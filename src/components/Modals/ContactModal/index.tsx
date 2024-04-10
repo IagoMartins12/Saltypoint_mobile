@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, Modal, StyleSheet, View} from 'react-native';
+import {Dimensions, Linking, Modal, StyleSheet, View} from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
 import CustomIcon from '../../CustomIcon';
 import {ModalProps} from '../ForgetPasswordModal';
@@ -7,6 +7,7 @@ import {COLORS, FONTSIZE} from '../../../theme/theme';
 import useTheme from '../../../hooks/useTheme';
 import MyText from '../../Text';
 import ModalIcon from '../ModalIcon';
+import useGlobalStore from '../../../hooks/store/useGlobalStore';
 
 const ContactModal: React.FC<ModalProps> = ({
   modalOpen,
@@ -15,6 +16,7 @@ const ContactModal: React.FC<ModalProps> = ({
   translateY,
 }) => {
   const {currentTheme} = useTheme();
+  const {generalData} = useGlobalStore();
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
@@ -24,6 +26,14 @@ const ContactModal: React.FC<ModalProps> = ({
   const handleOverlayPress = () => {
     hideModal();
     setTimeout(() => setModalOpen(!modalOpen), 300);
+  };
+
+  const openWhatsAppChat = () => {
+    Linking.openURL(`whatsapp://send?phone=${generalData.cellphone}`);
+  };
+
+  const openPhoneCall = (phoneNumber: string) => {
+    Linking.openURL(`tel:${phoneNumber}`);
   };
 
   return (
@@ -43,11 +53,7 @@ const ContactModal: React.FC<ModalProps> = ({
             ]}>
             <ModalIcon handleOverlayPress={handleOverlayPress} height="10%" />
 
-            <View
-              style={{
-                paddingTop: 15,
-                width: '100%',
-              }}>
+            <View style={{paddingTop: 15, width: '100%'}}>
               <View style={{gap: 20}}>
                 <View style={{gap: 10}}>
                   <MyText style={styles.textTitle}>Whatsapp</MyText>
@@ -72,11 +78,15 @@ const ContactModal: React.FC<ModalProps> = ({
                       </View>
 
                       <MyText style={styles.textNumber}>
-                        (11) 98859-8530{' '}
+                        {generalData.cellphone}
                       </MyText>
                     </View>
 
-                    <MyText style={styles.textAction}>Iniciar chat</MyText>
+                    <MyText
+                      style={styles.textAction}
+                      onPress={openWhatsAppChat}>
+                      Iniciar chat
+                    </MyText>
                   </View>
                 </View>
 
@@ -104,41 +114,49 @@ const ContactModal: React.FC<ModalProps> = ({
                         </View>
 
                         <MyText style={styles.textNumber}>
-                          {' '}
-                          (11) 3943-3038{' '}
+                          {generalData.telephone}
                         </MyText>
                       </View>
 
-                      <MyText style={styles.textAction}>Ligar agora</MyText>
+                      <MyText
+                        style={styles.textAction}
+                        onPress={() => openPhoneCall(generalData.telephone)}>
+                        Ligar agora
+                      </MyText>
                     </View>
 
-                    <View style={[styles.boxInfo]}>
-                      <View style={styles.iconContainer}>
-                        <View
-                          style={[
-                            styles.iconBox,
-                            {
-                              backgroundColor:
-                                currentTheme === 'light'
-                                  ? COLORS.iconBgLight
-                                  : COLORS.iconBgDark,
-                            },
-                          ]}>
-                          <CustomIcon
-                            name="phone"
-                            size={18}
-                            pack="SimpleLineIcons"
-                          />
+                    {generalData.telephone2 ? (
+                      <View style={[styles.boxInfo]}>
+                        <View style={styles.iconContainer}>
+                          <View
+                            style={[
+                              styles.iconBox,
+                              {
+                                backgroundColor:
+                                  currentTheme === 'light'
+                                    ? COLORS.iconBgLight
+                                    : COLORS.iconBgDark,
+                              },
+                            ]}>
+                            <CustomIcon
+                              name="phone"
+                              size={18}
+                              pack="SimpleLineIcons"
+                            />
+                          </View>
+
+                          <MyText style={styles.textNumber}>
+                            {generalData.telephone2}
+                          </MyText>
                         </View>
 
-                        <MyText style={styles.textNumber}>
-                          {' '}
-                          (11) 3943-3038{' '}
+                        <MyText
+                          style={styles.textAction}
+                          onPress={() => openPhoneCall(generalData.telephone2)}>
+                          Ligar agora
                         </MyText>
                       </View>
-
-                      <MyText style={styles.textAction}>Ligar agora</MyText>
-                    </View>
+                    ) : null}
                   </View>
                 </View>
               </View>
