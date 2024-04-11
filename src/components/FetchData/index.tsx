@@ -14,8 +14,12 @@ import useTheme from '../../hooks/useTheme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import usePrivateStore from '../../hooks/store/usePrivateStore';
 import useAuth from '../../hooks/auth/useAuth';
+import useError from '../../hooks/Error/useError';
 
-const FetchData = () => {
+interface FetchProps {
+  redirectToErrorScreen: () => void;
+}
+const FetchData = ({redirectToErrorScreen}: FetchProps) => {
   const {
     setProducts,
     setCategorys,
@@ -36,6 +40,7 @@ const FetchData = () => {
   } = usePrivateStore();
   const {setCurrentTheme} = useTheme();
   const colorScheme = useColorScheme();
+  const {setHasError} = useError();
   const {isLogged} = useAuth();
 
   const fetchTheme = async () => {
@@ -68,6 +73,18 @@ const FetchData = () => {
         getRewards(),
         getGeneralData(),
       ]);
+      if (
+        typeof categoryData === 'number' ||
+        typeof productData === 'number' ||
+        typeof typePagamentData === 'number' ||
+        typeof statesDate === 'number' ||
+        typeof rewardData === 'number' ||
+        typeof generalData === 'number'
+      ) {
+        redirectToErrorScreen();
+        return setHasError(true);
+      }
+      setHasError(false);
 
       setCategorys(categoryData);
       setProducts(productData);
@@ -76,6 +93,7 @@ const FetchData = () => {
       setReward(rewardData);
       setGeneralData(generalData);
     } catch (error) {
+      console.log('caiu aqui');
       console.log(error);
     }
   };

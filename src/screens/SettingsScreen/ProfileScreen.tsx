@@ -1,13 +1,13 @@
 import {
-  ActivityIndicator,
   Dimensions,
   Image,
+  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
@@ -31,6 +31,7 @@ import {User, User_Adress} from '../../types/ModelsType';
 import PhoneInput from '../../components/PhoneInput';
 import SelectComponent from '../../components/Select';
 import LoadingIndicator from '../../components/Loading';
+import OptionsImageModal from '../../components/Modals/OptionsImageModal';
 
 const ProfileScreen = ({
   navigation,
@@ -38,6 +39,8 @@ const ProfileScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen2, setModalOpen2] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [onChangeDropdown, setOnChangeDropdown] = useState<null | string>(null);
 
@@ -78,7 +81,6 @@ const ProfileScreen = ({
 
       showToast('Perfil atualizado com sucesso!', 'success');
     } catch (error) {
-      // Handle errors here
       console.error(error);
       showToast('Erro ao atualizar o perfil.', 'error');
     } finally {
@@ -95,12 +97,11 @@ const ProfileScreen = ({
       };
     });
 
-  const translateY = useSharedValue(Dimensions.get('window').height);
-
   const onSwipeLeft = () => {
-    // Navegar para a página desejada
     navigation.navigate('Settings');
   };
+
+  const translateY = useSharedValue(Dimensions.get('window').height);
 
   const showModal = () => {
     translateY.value = withTiming(0, {duration: 500});
@@ -112,6 +113,18 @@ const ProfileScreen = ({
     });
   };
 
+  const translateY2 = useSharedValue(Dimensions.get('window').height);
+
+  const showModal2 = () => {
+    translateY2.value = withTiming(0, {duration: 500});
+  };
+
+  const hideModal2 = () => {
+    translateY2.value = withTiming(Dimensions.get('window').height, {
+      duration: 500,
+    });
+  };
+
   useEffect(() => {
     setValue('name', user.name);
     setValue('email', user.email);
@@ -119,115 +132,125 @@ const ProfileScreen = ({
     setOnChangeDropdown(user.user_Adress_id);
   }, [user]);
 
-  if (user) {
-    return (
-      <GestureHandlerRootView style={{flex: 1}}>
-        <PanGestureHandler
-          onHandlerStateChange={({nativeEvent}) => {
-            if (
-              nativeEvent.state === State.END &&
-              nativeEvent.translationX > 50
-            ) {
-              onSwipeLeft();
-            }
-          }}>
-          <ScrollView
-            contentContainerStyle={{}}
-            style={[
-              styles.mainContainer,
-              {
-                backgroundColor:
-                  currentTheme === 'light'
-                    ? COLORS.backgroundColorLight
-                    : COLORS.backgroundColorDark,
-              },
-            ]}>
-            <View style={[global.shadow, styles.profileContainer]}>
-              <ComeBack navigation={navigation} />
-              <View style={styles.photoContainer}>
-                <View style={styles.profilePhotoDiv}>
-                  <Image
-                    style={styles.CartItemImage}
-                    source={require('../../assets/images/user.png')}
-                  />
-                </View>
-                <MyText
-                  style={{
-                    fontSize: FONTSIZE.size_18,
-                    fontWeight: '500',
-                    marginTop: 10,
-                  }}>
-                  {user.name}
-                </MyText>
-              </View>
-            </View>
-
-            <View style={styles.listContainer}>
-              <View style={{gap: 12}}>
-                <StyledInputComponent
-                  control={control}
-                  name="name"
-                  icon="account-circle-outline"
-                  placeholder="Nome: "
-                />
-                <StyledInputComponent
-                  control={control}
-                  name="email"
-                  placeholder="Email: "
-                  icon="email-outline"
-                  disabled
-                />
-                <PhoneInput
-                  control={control}
-                  name="phone"
-                  placeholder="Telefone: "
-                />
-                <SelectComponent
-                  setOnChangeDropdown={setOnChangeDropdown}
-                  value={onChangeDropdown}
-                  arr={addressArr}
-                />
-              </View>
-
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: 10,
+  return (
+    <GestureHandlerRootView style={{flex: 1}}>
+      <PanGestureHandler
+        onHandlerStateChange={({nativeEvent}) => {
+          if (
+            nativeEvent.state === State.END &&
+            nativeEvent.translationX > 50
+          ) {
+            onSwipeLeft();
+          }
+        }}>
+        <ScrollView
+          contentContainerStyle={{}}
+          style={[
+            styles.mainContainer,
+            {
+              backgroundColor:
+                currentTheme === 'light'
+                  ? COLORS.backgroundColorLight
+                  : COLORS.backgroundColorDark,
+            },
+          ]}>
+          <View style={[global.shadow, styles.profileContainer]}>
+            <ComeBack navigation={navigation} />
+            <View style={styles.photoContainer}>
+              <Pressable
+                style={styles.profilePhotoDiv}
+                onPress={() => {
+                  showModal2();
+                  setModalOpen2(true);
                 }}>
-                <TouchableOpacity
-                  onPress={handleSubmit(onSubmit)}
-                  style={global.buttonStyle}>
-                  {loading ? (
-                    <LoadingIndicator />
-                  ) : (
-                    <Text style={{color: '#FFFFFF'}}>Editar</Text>
-                  )}
-                </TouchableOpacity>
-                <Text
-                  onPress={() => {
-                    showModal();
-                    setModalOpen(true);
-                  }}
-                  style={{
-                    color: COLORS.primaryRedHex,
-                    textDecorationLine: 'underline',
-                  }}>
-                  Alterar senha
-                </Text>
-              </View>
+                <Image
+                  style={styles.CartItemImage}
+                  source={require('../../assets/images/user.png')}
+                />
+              </Pressable>
+              <MyText
+                style={{
+                  fontSize: FONTSIZE.size_18,
+                  fontWeight: '500',
+                  marginTop: 10,
+                }}>
+                {user.name}
+              </MyText>
             </View>
-            <ForgetPasswordModal
-              modalOpen={modalOpen}
-              setModalOpen={setModalOpen}
-              hideModal={hideModal}
-              translateY={translateY}
-            />
-          </ScrollView>
-        </PanGestureHandler>
-      </GestureHandlerRootView>
-    );
-  }
+          </View>
+
+          <View style={styles.listContainer}>
+            <View style={{gap: 12}}>
+              <StyledInputComponent
+                control={control}
+                name="name"
+                icon="account-circle-outline"
+                placeholder="Nome: "
+              />
+              <StyledInputComponent
+                control={control}
+                name="email"
+                placeholder="Email: "
+                icon="email-outline"
+                disabled
+              />
+              <PhoneInput
+                control={control}
+                name="phone"
+                placeholder="Telefone: "
+              />
+              <SelectComponent
+                setOnChangeDropdown={setOnChangeDropdown}
+                value={onChangeDropdown}
+                arr={addressArr}
+              />
+            </View>
+
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: 10,
+              }}>
+              <TouchableOpacity
+                onPress={handleSubmit(onSubmit)}
+                style={global.buttonStyle}>
+                {loading ? (
+                  <LoadingIndicator />
+                ) : (
+                  <Text style={{color: '#FFFFFF'}}>Editar</Text>
+                )}
+              </TouchableOpacity>
+              <Text
+                onPress={() => {
+                  showModal();
+                  setModalOpen(true);
+                }}
+                style={{
+                  color: COLORS.primaryRedHex,
+                  textDecorationLine: 'underline',
+                }}>
+                Alterar senha
+              </Text>
+            </View>
+          </View>
+          <ForgetPasswordModal
+            modalOpen={modalOpen}
+            setModalOpen={setModalOpen}
+            hideModal={hideModal}
+            translateY={translateY}
+          />
+
+          <OptionsImageModal
+            modalOpen={modalOpen2}
+            setModalOpen={setModalOpen2}
+            hideModal={hideModal2}
+            translateY={translateY2}
+          />
+        </ScrollView>
+      </PanGestureHandler>
+    </GestureHandlerRootView>
+  );
 };
 
 const styles = StyleSheet.create({

@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import TabNavigator from './src/navigators/TabNavigator';
 import LoginScreen from './src/screens/LoginScreen';
+import ErrorScreen from './src/screens/ErrorScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import MainScreen from './src/screens/MainScreen';
 import SearchScreen from './src/screens/SearchScreen';
@@ -26,16 +27,23 @@ import ForgetPasswordScreen from './src/screens/ForgetPasswordScreen';
 import FetchData from './src/components/FetchData/index';
 import useAuth, {checkAndSetToken} from './src/hooks/auth/useAuth';
 import {checkIntro, checkUser} from './src/utils';
+import useError from './src/hooks/Error/useError';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   const [mainScreen, setMainScreen] = useState(''); // Definindo estado inicial
 
   const {isLogged} = useAuth();
+  const {hasError} = useError();
+
+  const redirectToErrorScreen = () => {
+    setMainScreen('Error');
+  };
 
   const checkIfFirstUse = async () => {
     try {
       const isFirstUse = await checkIntro();
+
       if (isFirstUse) {
         console.log('primeiro acesso');
         return setMainScreen('Intro');
@@ -46,8 +54,7 @@ const App = () => {
         return setMainScreen('Tab');
       }
 
-      console.log('não está logado e nem é o primeiro acesso');
-      return setMainScreen('Main');
+      return setMainScreen('Tab');
     } catch (error) {
       console.error('Erro ao verificar o acesso inicial:', error);
       setMainScreen('Main'); // Em caso de erro, assumindo que não é o primeiro acesso
@@ -71,6 +78,12 @@ const App = () => {
         <Stack.Navigator
           initialRouteName={mainScreen}
           screenOptions={{headerShown: false}}>
+          <Stack.Screen
+            name="Error"
+            component={ErrorScreen}
+            options={{animation: 'slide_from_bottom'}}
+          />
+
           <Stack.Screen
             name="Intro"
             component={IntroScreen}
@@ -198,9 +211,9 @@ const App = () => {
             />
           </Stack.Group>
         </Stack.Navigator>
+        <FetchData redirectToErrorScreen={redirectToErrorScreen} />
       </NavigationContainer>
       <Toast />
-      <FetchData />
     </>
   );
 };

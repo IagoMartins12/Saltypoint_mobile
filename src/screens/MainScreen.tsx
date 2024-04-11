@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {BORDERRADIUS, COLORS, FONTSIZE} from '../theme/theme';
 import {
   GestureHandlerRootView,
@@ -15,8 +15,15 @@ import {
 } from 'react-native-gesture-handler';
 import MyText from '../components/Text';
 import useTheme from '../hooks/useTheme';
+import RedirectError from '../hooks/Error/RedirectError';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import useError from '../hooks/Error/useError';
 
-const MainScreen = ({navigation}: any) => {
+const MainScreen = ({
+  navigation,
+}: {
+  navigation: NativeStackNavigationProp<any>;
+}) => {
   const buttonRegister = () => {
     navigation.push('Register');
   };
@@ -38,6 +45,11 @@ const MainScreen = ({navigation}: any) => {
   };
 
   const {currentTheme} = useTheme();
+  const {redirectToErrorScreen} = RedirectError({navigation});
+  const {hasError} = useError();
+  useEffect(() => {
+    redirectToErrorScreen();
+  }, [hasError]);
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <PanGestureHandler

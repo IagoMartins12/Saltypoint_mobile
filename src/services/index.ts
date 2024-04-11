@@ -73,30 +73,30 @@ export const sendAddressUser = async (addressUserDto: User_Adress) => {
   }
 };
 
-export const getCategories = async (): Promise<Category[]> => {
+export const getCategories = async (): Promise<Category[] | number> => {
   try {
     const response = await Api.get('/category');
     return response.data as Category[];
   } catch (error: any) {
-    return error;
+    return 200;
   }
 };
 
-export const getTypePagaments = async (): Promise<Type_Pagament[]> => {
+export const getTypePagaments = async (): Promise<Type_Pagament[] | number> => {
   try {
     const response = await Api.get('/typePagament');
     return response.data as Type_Pagament[];
   } catch (error: any) {
-    return error;
+    return 200;
   }
 };
 
-export const getStates = async (): Promise<State[]> => {
+export const getStates = async (): Promise<State[] | number> => {
   try {
     const response = await Api.get('/state');
     return response.data as State[];
   } catch (error: any) {
-    return error;
+    return 200;
   }
 };
 
@@ -118,12 +118,12 @@ export const getOrders = async (): Promise<OrderType[]> => {
   }
 };
 
-export const getProducts = async (): Promise<Product[]> => {
+export const getProducts = async (): Promise<Product[] | number> => {
   try {
     const response = await Api.get('/product');
     return response.data as Product[];
   } catch (error: any) {
-    return error;
+    return 200;
   }
 };
 
@@ -303,12 +303,12 @@ export const createOrder = async (
   }
 };
 
-export const getRewards = async (): Promise<Reward[]> => {
+export const getRewards = async (): Promise<Reward[] | number> => {
   try {
     const response = await Api.get('/reward');
     return response.data;
   } catch (error: any) {
-    return error;
+    return 200;
   }
 };
 
@@ -346,7 +346,7 @@ export const getGeneralData = async () => {
     const response = await Api.get('/general-data');
     return response.data;
   } catch (error: any) {
-    return error;
+    return 200;
   }
 };
 

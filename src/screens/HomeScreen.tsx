@@ -27,6 +27,8 @@ import CarouselSkeleton from '../components/Skeletons/CarouselSkeleton';
 import useAuth from '../hooks/auth/useAuth';
 import UserNameSkeleton from '../components/Skeletons/UserNameSkeleton';
 import {getCarouselImages} from '../services';
+import RedirectError from '../hooks/Error/RedirectError';
+import useError from '../hooks/Error/useError';
 
 const HomeScreen = ({
   navigation,
@@ -41,6 +43,9 @@ const HomeScreen = ({
   const {currentTheme} = useTheme();
   const {user} = usePrivateStore();
   const {isLogged} = useAuth();
+  const {redirectToErrorScreen} = RedirectError({navigation});
+  const {hasError} = useError();
+
   const buttonPressHandler = () => {
     navigation.push('Search');
   };
@@ -67,112 +72,124 @@ const HomeScreen = ({
     getImages();
   }, []);
 
-  return (
-    <View
-      style={[
-        styles.mainContainer,
-        {
-          backgroundColor:
-            currentTheme === 'light'
-              ? COLORS.backgroundColorLight
-              : COLORS.backgroundColorDark,
-        },
-      ]}>
-      <View style={[global.shadow, styles.headerContainer]}>
-        <View
-          style={[
-            styles.textDiv,
-            {
-              justifyContent: isLogged ? 'space-between' : 'flex-end',
-            },
-          ]}>
-          {isLogged ? (
-            <MyText style={styles.mainText}>
-              Olá,{' '}
-              {!user ? (
-                <View
-                  style={{
-                    height: 15,
-                    width: 150,
-                  }}>
-                  <UserNameSkeleton />
-                </View>
-              ) : (
-                <Text style={{color: COLORS.primaryRedHex}}>{user.name}! </Text>
-              )}
-            </MyText>
-          ) : null}
+  useEffect(() => {
+    redirectToErrorScreen();
+  }, [hasError]);
 
-          <TouchableOpacity
-            onPress={buttonPressHandler}
-            style={styles.searchIcon}>
-            <CustomIcon
-              name="search"
-              size={25}
-              color={COLORS.primaryOrangeHex}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
+  console.log('hasError', hasError);
 
-      <ScrollView
-        contentContainerStyle={[styles.productsDiv]}
-        showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            height: Dimensions.get('screen').height * 0.3,
-          }}>
-          {carouselImages ? (
-            <CarouselHome entries={carouselImages} />
-          ) : (
-            <CarouselSkeleton />
-          )}
+  if (hasError === false) {
+    return (
+      <View
+        style={[
+          styles.mainContainer,
+          {
+            backgroundColor:
+              currentTheme === 'light'
+                ? COLORS.backgroundColorLight
+                : COLORS.backgroundColorDark,
+          },
+        ]}>
+        <View style={[global.shadow, styles.headerContainer]}>
+          <View
+            style={[
+              styles.textDiv,
+              {
+                justifyContent: isLogged ? 'space-between' : 'flex-end',
+              },
+            ]}>
+            {isLogged ? (
+              <MyText style={styles.mainText}>
+                Olá,{' '}
+                {!user ? (
+                  <View
+                    style={{
+                      height: 15,
+                      width: 150,
+                    }}>
+                    <UserNameSkeleton />
+                  </View>
+                ) : (
+                  <Text style={{color: COLORS.primaryRedHex}}>
+                    {user.name}!{' '}
+                  </Text>
+                )}
+              </MyText>
+            ) : null}
+
+            <TouchableOpacity
+              onPress={buttonPressHandler}
+              style={styles.searchIcon}>
+              <CustomIcon
+                name="search"
+                size={25}
+                color={COLORS.primaryOrangeHex}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
 
-        {products.length > 0 ? (
-          <>
-            {visibleCategories(categorys).map((category, index) => (
-              <View key={index} style={styles.categoryContainer}>
-                <MyText style={styles.categoryTitle}>
-                  {category.category_name}
-                </MyText>
-                <FlatList
-                  data={products.filter(
-                    (product: Product) => product.category_id === category.id,
-                  )}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={styles.flatListView}
-                  keyExtractor={item => item.id}
-                  renderItem={renderProductItem}
-                />
-              </View>
-            ))}
-          </>
-        ) : (
+        <ScrollView
+          contentContainerStyle={[styles.productsDiv]}
+          showsVerticalScrollIndicator={false}>
           <View
             style={{
-              marginTop: 8,
+              height: Dimensions.get('screen').height * 0.3,
             }}>
-            {[1, 2, 3].map(i => (
-              <View style={styles.categoryContainer} key={i}>
-                <CategoryTextSkeleton />
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    gap: 15,
-                  }}>
-                  <ProductCardSkeleton />
-                  <ProductCardSkeleton />
-                </View>
-              </View>
-            ))}
+            {carouselImages ? (
+              <CarouselHome entries={carouselImages} />
+            ) : (
+              <CarouselSkeleton />
+            )}
           </View>
-        )}
-      </ScrollView>
-      <ClosedView />
-    </View>
-  );
+
+          {products.length > 0 ? (
+            <>
+              {visibleCategories(categorys).map((category, index) => (
+                <View key={index} style={styles.categoryContainer}>
+                  <MyText style={styles.categoryTitle}>
+                    {category.category_name}
+                  </MyText>
+                  <FlatList
+                    data={products.filter(
+                      (product: Product) => product.category_id === category.id,
+                    )}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.flatListView}
+                    keyExtractor={item => item.id}
+                    renderItem={renderProductItem}
+                  />
+                </View>
+              ))}
+            </>
+          ) : (
+            <View
+              style={{
+                marginTop: 8,
+              }}>
+              {[1, 2, 3].map(i => (
+                <View style={styles.categoryContainer} key={i}>
+                  <CategoryTextSkeleton />
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      gap: 15,
+                    }}>
+                    <ProductCardSkeleton />
+                    <ProductCardSkeleton />
+                  </View>
+                </View>
+              ))}
+            </View>
+          )}
+        </ScrollView>
+        <ClosedView />
+      </View>
+    );
+  }
+
+  return <></>;
 };
 
 const styles = StyleSheet.create({
