@@ -15,9 +15,9 @@ import useTheme from '../../../hooks/useTheme';
 import MyText from '../../Text';
 import ModalIcon from '../ModalIcon';
 import usePrivateStore from '../../../hooks/store/usePrivateStore';
-import CallToast from '../../Toast';
 import {deleteAddress} from '../../../services';
 import {User_Adress} from '../../../types/ModelsType';
+import useShowToast from '../../../hooks/customHooks/useShowToast';
 
 export interface ModalProps {
   modalOpen: boolean;
@@ -36,7 +36,7 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
 }) => {
   const {currentTheme} = useTheme();
   const {address, setAddress, user} = usePrivateStore();
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
 
   const animatedStyle = useAnimatedStyle(() => {
     return {

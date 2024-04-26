@@ -4,7 +4,7 @@ import usePrivateStore from '../../hooks/store/usePrivateStore';
 import {Favorite} from '../../types/ModelsType';
 import {addFavorites, deleteFavorite} from '../../services';
 import {DeleteFavoritesDto, FavoritesDto} from '../../types/Dtos';
-import CallToast from '../Toast';
+import useShowToast from '../../hooks/customHooks/useShowToast';
 
 const HeartIcon = ({
   productId,
@@ -15,8 +15,7 @@ const HeartIcon = ({
 }) => {
   const {favorites, setFavorites, user} = usePrivateStore();
 
-  const {showToast} = CallToast();
-
+  const {showToast} = useShowToast();
   const checkFavorite = favorites.find(
     (f: Favorite) => f.product_id === productId,
   );

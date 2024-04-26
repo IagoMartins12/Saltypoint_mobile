@@ -14,9 +14,9 @@ import useTheme from '../../../hooks/useTheme';
 import {BORDERRADIUS, COLORS} from '../../../theme/theme';
 import ModalIcon from '../ModalIcon';
 import MyText from '../../Text';
-import CallToast from '../../Toast';
 import {updatedPassword} from '../../../services';
 import LoadingIndicator from '../../Loading';
+import useShowToast from '../../../hooks/customHooks/useShowToast';
 
 export interface ModalProps {
   modalOpen: boolean;
@@ -35,7 +35,7 @@ const ForgetPasswordModal: React.FC<ModalProps> = ({
 
   const {currentTheme} = useTheme();
   const {control, handleSubmit} = useForm();
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
 
   const animatedStyle = useAnimatedStyle(() => {
     return {

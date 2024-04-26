@@ -15,8 +15,8 @@ import MyText from '../components/Text';
 import ForgetAnimation from '../components/Lottie/ForgetAnimation';
 import {global} from '../style';
 import {recoverPassword} from '../services';
-import CallToast from '../components/Toast';
 import LoadingIndicator from '../components/Loading';
+import useShowToast from '../hooks/customHooks/useShowToast';
 
 enum STEPS {
   EMAIL = 0,
@@ -30,7 +30,7 @@ const ForgetPasswordScreen = ({
   const [step, setStep] = useState(STEPS.EMAIL);
   const [loading, setLoading] = useState(false);
 
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
   const {control, handleSubmit, reset} = useForm();
   const onSubmit = async (data: any) => {
     if (!data.email.includes('@'))

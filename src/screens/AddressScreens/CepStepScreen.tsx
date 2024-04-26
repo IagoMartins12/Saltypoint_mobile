@@ -1,11 +1,10 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Dimensions,
 } from 'react-native';
 
 import CepInput from '../../components/CepInput';
@@ -14,11 +13,11 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import SectionTitle from '../../components/SectionTitle';
 import {global} from '../../style';
 import {getAddressPerCep} from '../../services';
-import CallToast from '../../components/Toast';
 import CustomIcon from '../../components/CustomIcon';
 import useTheme from '../../hooks/useTheme';
 import {COLORS} from '../../theme/theme';
 import LoadingIndicator from '../../components/Loading';
+import useShowToast from '../../hooks/customHooks/useShowToast';
 
 const CepStepScreen = ({
   navigation,
@@ -27,7 +26,7 @@ const CepStepScreen = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
 
   const onSubmit: SubmitHandler<FieldValues> = async data => {
     setLoading(true);

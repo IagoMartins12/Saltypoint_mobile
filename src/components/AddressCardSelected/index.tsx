@@ -5,9 +5,9 @@ import React from 'react';
 import MyText from '../Text';
 import SelectButton from '../SelectButton';
 import {updatedMe} from '../../services';
-import CallToast from '../Toast';
 import usePrivateStore from '../../hooks/store/usePrivateStore';
 import {User} from '../../types/ModelsType';
+import useShowToast from '../../hooks/customHooks/useShowToast';
 
 interface AddressProps {
   address: any;
@@ -20,7 +20,7 @@ const AddressCardSelected: React.FC<AddressProps> = ({
   setSelectedAddress,
 }) => {
   const {user, setUser} = usePrivateStore();
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
 
   const setUserWithCallback = (callback: (user: User) => User) => {
     if (!user) return;

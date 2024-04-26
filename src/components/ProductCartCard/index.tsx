@@ -14,7 +14,7 @@ import {useState} from 'react';
 import useGlobalStore from '../../hooks/store/useGlobalStore';
 import usePrivateStore from '../../hooks/store/usePrivateStore';
 import {removeCartProduct, updateCartProduct} from '../../services';
-import CallToast from '../Toast';
+import useShowToast from '../../hooks/customHooks/useShowToast';
 
 interface ProductCardProps {
   cartProduct: Cart_product;
@@ -27,7 +27,7 @@ const ProductCartCard: React.FC<ProductCardProps> = ({
 }) => {
   const [count, setCount] = useState(cartProduct.quantity);
   const {products} = useGlobalStore();
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
   const {cart_product, setCart_product} = usePrivateStore();
 
   const handleDeleteAddress = async () => {

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
-import Toast from 'react-native-toast-message';
 import TabNavigator from './src/navigators/TabNavigator';
 import LoginScreen from './src/screens/LoginScreen';
 import ErrorScreen from './src/screens/ErrorScreen';
@@ -25,16 +24,18 @@ import ProductScreen from './src/screens/ProductScreen';
 import IntroScreen from './src/screens/Intro/IntroScreen';
 import ForgetPasswordScreen from './src/screens/ForgetPasswordScreen';
 import FetchData from './src/components/FetchData/index';
+import ToastComponent from './src/components/Message';
 import useAuth, {checkAndSetToken} from './src/hooks/auth/useAuth';
 import {checkIntro, checkUser} from './src/utils';
 import useError from './src/hooks/Error/useError';
+import useToast from './src/hooks/useToast';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   const [mainScreen, setMainScreen] = useState(''); // Definindo estado inicial
+  const {isOpen, title, onClose, type} = useToast();
 
   const {isLogged} = useAuth();
-  const {hasError} = useError();
 
   const redirectToErrorScreen = () => {
     setMainScreen('Error');
@@ -211,9 +212,9 @@ const App = () => {
             />
           </Stack.Group>
         </Stack.Navigator>
+        <ToastComponent isOpen={isOpen} onClose={onClose} />
         <FetchData redirectToErrorScreen={redirectToErrorScreen} />
       </NavigationContainer>
-      <Toast />
     </>
   );
 };

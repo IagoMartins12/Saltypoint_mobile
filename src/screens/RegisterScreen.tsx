@@ -21,7 +21,7 @@ import useTheme from '../hooks/useTheme';
 import MyText from '../components/Text';
 import {createUser} from '../services';
 import {CreateUserDto} from '../types/Dtos';
-import CallToast from '../components/Toast';
+import useShowToast from '../hooks/customHooks/useShowToast';
 
 const RegisterScreen = ({
   navigation,
@@ -30,7 +30,7 @@ const RegisterScreen = ({
 }) => {
   const {control, handleSubmit, reset} = useForm();
   const {currentTheme} = useTheme();
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
   const onSubmit = async data => {
     const createUserDto = data as CreateUserDto;
     const response = await createUser(createUserDto);

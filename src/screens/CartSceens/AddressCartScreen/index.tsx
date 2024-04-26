@@ -15,7 +15,6 @@ import CartAddressCard, {
   userOptions,
 } from '../../../components/CartAddressCard';
 import CartTittleSection from '../../../components/CartTittleSection';
-import CallToast from '../../../components/Toast';
 import {global} from '../../../style';
 import {iconColor, iconSize} from '../../../utils';
 import {cellPhoneIcon} from '../ResumeScreen';
@@ -23,6 +22,7 @@ import useTheme from '../../../hooks/useTheme';
 import {COLORS} from '../../../theme/theme';
 import PixModal from '../../../components/Modals/PixModal';
 import usePrivateStore from '../../../hooks/store/usePrivateStore';
+import useShowToast from '../../../hooks/customHooks/useShowToast';
 
 export const getIcon = (options: Type_Pagament) => {
   if (options.type_pagament_name.toUpperCase().includes('CREDITO')) {
@@ -79,7 +79,7 @@ const AddressCartScreen = ({
   const {typePagament} = useGlobalStore();
   const {currentTheme} = useTheme();
 
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
 
   const translateY = useSharedValue(Dimensions.get('window').height);
 

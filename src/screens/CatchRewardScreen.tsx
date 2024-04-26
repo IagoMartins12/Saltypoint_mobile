@@ -14,7 +14,7 @@ import {Reward} from '../types/ModelsType';
 import useTheme from '../hooks/useTheme';
 import {COLORS} from '../theme/theme';
 import usePrivateStore from '../hooks/store/usePrivateStore';
-import CallToast from '../components/Toast';
+import useShowToast from '../hooks/customHooks/useShowToast';
 
 const CatchRewardScreen = ({
   navigation,
@@ -30,7 +30,7 @@ const CatchRewardScreen = ({
   >(null);
 
   const {user} = usePrivateStore();
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
   const translateY = useSharedValue(Dimensions.get('window').height);
 
   const showModal = (reward: Reward) => {

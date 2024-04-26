@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
@@ -17,8 +17,8 @@ import useTheme from '../hooks/useTheme';
 import {useRoute} from '@react-navigation/native';
 import {Order, OrderType} from '../types/ModelsType';
 import usePrivateStore from '../hooks/store/usePrivateStore';
-import CallToast from '../components/Toast';
 import {addCartProduct} from '../services';
+import useShowToast from '../hooks/customHooks/useShowToast';
 
 type responseType = {
   params: {
@@ -33,7 +33,7 @@ const MyOrderScreen = ({
   const [currentOrder, setCurrentOrder] = useState<null | OrderType>(null);
   const [hasPlayed, setHasPlayed] = useState(false);
   const {orders, cart_product, setCart_product} = usePrivateStore();
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
   const route = useRoute();
 
   const handleRepeatOrder = async () => {

@@ -17,7 +17,7 @@ import ModalIcon from '../ModalIcon';
 import usePrivateStore from '../../../hooks/store/usePrivateStore';
 import {CreateRewardDto} from '../../../types/Dtos';
 import {postReward} from '../../../services';
-import CallToast from '../../Toast';
+import useShowToast from '../../../hooks/customHooks/useShowToast';
 
 export interface ModalProps {
   modalOpen: boolean;
@@ -37,7 +37,7 @@ const CatchRewardModal: React.FC<ModalProps> = ({
   const [hasPlayed, setHasPlayed] = useState(false);
   const {user, userReward, setUser, setUserReward} = usePrivateStore();
   const {currentTheme} = useTheme();
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
 
   const animatedStyle = useAnimatedStyle(() => {
     return {

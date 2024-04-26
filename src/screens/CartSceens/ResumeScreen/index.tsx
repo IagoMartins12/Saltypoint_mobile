@@ -30,7 +30,6 @@ import {
   iconSize,
 } from '../../../utils';
 import OrderAnimation from '../../../components/Lottie/OrderAnimation';
-import CallToast from '../../../components/Toast';
 import useTheme from '../../../hooks/useTheme';
 import {COLORS} from '../../../theme/theme';
 import usePrivateStore from '../../../hooks/store/usePrivateStore';
@@ -40,6 +39,7 @@ import {
   createOrder,
   getEstimativeDate,
 } from '../../../services';
+import useShowToast from '../../../hooks/customHooks/useShowToast';
 
 export enum STEPS {
   CART = 0,
@@ -64,7 +64,7 @@ const ResumeCartScreen = ({
   const [hasPlayed, setHasPlayed] = useState(false);
   const [estimativeDate, setEstimativeData] = useState<null | string>(null);
 
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
   const route = useRoute();
 
   //@ts-ignore

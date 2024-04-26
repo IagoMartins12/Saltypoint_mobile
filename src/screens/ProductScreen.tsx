@@ -1,12 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  StyleSheet,
-  Dimensions,
-  Pressable,
-  Image,
-  View,
-  Text,
-} from 'react-native';
+import {useEffect, useRef, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
@@ -25,8 +18,8 @@ import ProductDetails from '../components/ProductDetails';
 import CartAnimation from '../components/Lottie/CartAnimation';
 import useTheme from '../hooks/useTheme';
 import usePrivateStore from '../hooks/store/usePrivateStore';
-import CallToast from '../components/Toast';
 import {addCartProduct} from '../services';
+import useShowToast from '../hooks/customHooks/useShowToast';
 
 export type NavigationProps = {
   navigation: NativeStackNavigationProp<any>;
@@ -48,7 +41,7 @@ const ProductScreen = ({navigation}: NavigationProps) => {
   const [observation, setObservation] = useState('');
   const {products} = useGlobalStore();
   const {user, cart_product, setCart_product} = usePrivateStore();
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
   const {currentTheme} = useTheme();
 
   const router = useRoute();

@@ -15,8 +15,8 @@ import MyText from '../../Text';
 import usePrivateStore from '../../../hooks/store/usePrivateStore';
 import PhoneInput from '../../PhoneInput';
 import {User} from '../../../types/ModelsType';
-import CallToast from '../../Toast';
 import {updatedMe} from '../../../services';
+import useShowToast from '../../../hooks/customHooks/useShowToast';
 
 export interface ModalProps {
   modalOpen: boolean;
@@ -34,7 +34,7 @@ const ChangeCellphoneModal: React.FC<ModalProps> = ({
   const {currentTheme} = useTheme();
   const {user, setUser} = usePrivateStore();
   const {control, handleSubmit, setValue} = useForm();
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
   const setUserWithCallback = (callback: (user: User) => User) => {
     if (!user) return;
 

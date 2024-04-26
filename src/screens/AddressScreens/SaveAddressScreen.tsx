@@ -1,12 +1,6 @@
 import {useRoute} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import SectionTitle from '../../components/SectionTitle';
 import {global} from '../../style';
 import StyledInputComponent2 from '../../components/Input2';
@@ -19,13 +13,13 @@ import {checkIfAddressIsValid} from '../../utils';
 import {User, User_Adress} from '../../types/ModelsType';
 import CustomIcon from '../../components/CustomIcon';
 import MyText from '../../components/Text';
-import CallToast from '../../components/Toast';
 import {sendAddressUser, updatedMe} from '../../services';
 import {UpdateUserDto} from '../../types/Dtos';
 import usePrivateStore from '../../hooks/store/usePrivateStore';
 import CepInput from '../../components/CepInput';
 import SelectComponent2 from '../../components/Select2';
 import LoadingIndicator from '../../components/Loading';
+import useShowToast from '../../hooks/customHooks/useShowToast';
 
 export const onlyDistrict = ['sublocality', 'postal_code'];
 
@@ -78,7 +72,7 @@ const SaveAddressScreen = ({
   //@ts-ignore
   const geometryResponse = teste.params?.result;
 
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
   const {setAddress, address, user, setUser} = usePrivateStore();
 
   const {handleSubmit, setValue, control, reset} = useForm<FieldValues>({

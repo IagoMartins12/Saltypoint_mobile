@@ -25,7 +25,7 @@ import useTheme from '../../hooks/useTheme';
 import usePrivateStore from '../../hooks/store/usePrivateStore';
 import MyText from '../../components/Text';
 import {User_Adress} from '../../types/ModelsType';
-import CallToast from '../../components/Toast';
+import useShowToast from '../../hooks/customHooks/useShowToast';
 
 const AddressScreen = ({
   navigation,
@@ -37,7 +37,7 @@ const AddressScreen = ({
   const {currentTheme} = useTheme();
   const {address} = usePrivateStore();
   const translateY = useSharedValue(Dimensions.get('window').height);
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
   const showModal = () => {
     translateY.value = withTiming(0, {duration: 500});
   };

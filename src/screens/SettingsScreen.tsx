@@ -18,7 +18,7 @@ import useTheme from '../hooks/useTheme';
 import MyText from '../components/Text';
 import usePrivateStore from '../hooks/store/usePrivateStore';
 import {removeToken} from '../hooks/auth/useAuth';
-import CallToast from '../components/Toast';
+import useShowToast from '../hooks/customHooks/useShowToast';
 
 const SettingsScreen = ({
   navigation,
@@ -32,7 +32,7 @@ const SettingsScreen = ({
   const {currentTheme} = useTheme();
 
   const {user, setUser} = usePrivateStore();
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
   const handleNavigate = (name: string) => {
     navigation.push(name);
   };

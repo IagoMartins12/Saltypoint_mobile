@@ -26,12 +26,12 @@ import useTheme from '../../hooks/useTheme';
 import MyText from '../../components/Text';
 import usePrivateStore from '../../hooks/store/usePrivateStore';
 import {updatedMe} from '../../services';
-import CallToast from '../../components/Toast';
 import {User, User_Adress} from '../../types/ModelsType';
 import PhoneInput from '../../components/PhoneInput';
 import SelectComponent from '../../components/Select';
 import LoadingIndicator from '../../components/Loading';
 import OptionsImageModal from '../../components/Modals/OptionsImageModal';
+import useShowToast from '../../hooks/customHooks/useShowToast';
 
 const ProfileScreen = ({
   navigation,
@@ -47,7 +47,7 @@ const ProfileScreen = ({
   const {control, handleSubmit, setValue} = useForm();
   const {currentTheme} = useTheme();
   const {user, setUser, address} = usePrivateStore();
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
 
   const setUserWithCallback = (callback: (user: User) => User) => {
     if (!user) return;

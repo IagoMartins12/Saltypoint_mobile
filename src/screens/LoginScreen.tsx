@@ -1,6 +1,5 @@
 import {
   Dimensions,
-  Image,
   Pressable,
   StyleSheet,
   Text,
@@ -20,14 +19,13 @@ import {
 } from 'react-native-gesture-handler';
 import StyledInputComponent from '../components/Input';
 import {global} from '../style';
-import LargeButton from '../components/Button';
 import useTheme from '../hooks/useTheme';
 import MyText from '../components/Text';
 import {LoginUserDto} from '../types/Dtos';
 import {loginUser} from '../services';
 import useAuth from '../hooks/auth/useAuth';
-import CallToast from '../components/Toast';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import useShowToast from '../hooks/customHooks/useShowToast';
 
 const LoginScreen = ({
   navigation,
@@ -36,7 +34,7 @@ const LoginScreen = ({
 }) => {
   const {control, handleSubmit, reset} = useForm();
   const auth = useAuth();
-  const {showToast} = CallToast();
+  const {showToast} = useShowToast();
   const {currentTheme} = useTheme();
 
   const setUserLocalStorage = async (acessToken: string) => {
