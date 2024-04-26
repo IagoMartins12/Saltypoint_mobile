@@ -119,7 +119,7 @@ const OptionsImageModal: React.FC<ModalProps> = ({
                   width: '100%',
                 }}>
                 {options.map((op, i) => (
-                  <Pressable
+                  <TouchableOpacity
                     onPress={op.onClick}
                     key={i}
                     style={[
@@ -143,7 +143,7 @@ const OptionsImageModal: React.FC<ModalProps> = ({
                       ]}>
                       {op.name}
                     </MyText>
-                  </Pressable>
+                  </TouchableOpacity>
                 ))}
               </View>
             </View>

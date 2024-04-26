@@ -61,9 +61,8 @@ const ForgetPasswordScreen = ({
     navigation.navigate('Login');
   }, [navigation]);
 
-  const setNewStep = () => {
-    setStep(STEPS.FORGET_PASSWORD);
-    console.log('clicou');
+  const comeBack = () => {
+    navigation.pop();
   };
 
   const changePage = () => {
@@ -101,6 +100,17 @@ const ForgetPasswordScreen = ({
               <Text style={{color: '#FFFFFF', paddingRight: 10}}>Enviar</Text>
             </TouchableOpacity>
           )}
+
+          <TouchableOpacity
+            onPress={comeBack}
+            style={[
+              global.buttonStyle,
+              {
+                backgroundColor: 'transparent',
+              },
+            ]}>
+            <Text style={{color: '#FFFFFF', paddingRight: 10}}>Voltar</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

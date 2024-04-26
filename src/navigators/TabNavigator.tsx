@@ -17,9 +17,6 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   const {currentTheme} = useTheme();
-  const {isLogged} = useAuth();
-
-  const {user} = usePrivateStore();
 
   return (
     <Tab.Navigator

@@ -4,7 +4,7 @@ import CartTotalFixed from '../../../components/CartScreen/CartTotalFixed';
 import SectionTitle from '../../../components/SectionTitle';
 import CustomIcon from '../../../components/CustomIcon';
 import useGlobalStore from '../../../hooks/store/useGlobalStore';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useRoute} from '@react-navigation/native';
 import CartTittleSection from '../../../components/CartTittleSection';
 import CartInfo from '../../../components/CartInfo';
@@ -35,7 +35,11 @@ import useTheme from '../../../hooks/useTheme';
 import {COLORS} from '../../../theme/theme';
 import usePrivateStore from '../../../hooks/store/usePrivateStore';
 import useCurrrentCode from '../../../hooks/reward';
-import {addCartProduct, createOrder} from '../../../services';
+import {
+  addCartProduct,
+  createOrder,
+  getEstimativeDate,
+} from '../../../services';
 
 export enum STEPS {
   CART = 0,
@@ -58,6 +62,8 @@ const ResumeCartScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const [hasPlayed, setHasPlayed] = useState(false);
+  const [estimativeDate, setEstimativeData] = useState<null | string>(null);
+
   const {showToast} = CallToast();
   const route = useRoute();
 
@@ -205,6 +211,66 @@ const ResumeCartScreen = ({
     return <PaymentCard icon={icon} typePagament={typePagamentOptions} />;
   };
 
+  const fetchEstimateData = async () => {
+    try {
+      const estimateNumber = await getEstimativeDate();
+      const currentTime = new Date();
+
+      // Adiciona o estimateNumber à hora atual
+      const estimatedTimeStart = new Date(
+        currentTime.getTime() + estimateNumber * 60000,
+      );
+
+      // Adiciona 20 minutos ao tempo estimado para obter o horário final
+      const estimatedTimeEnd = new Date(
+        estimatedTimeStart.getTime() + 20 * 60000,
+      );
+
+      // Se for delivery
+      if (response.selectedDelivery !== '1') {
+        const formattedStartTime = `${String(
+          estimatedTimeStart.getHours(),
+        ).padStart(2, '0')}:${String(estimatedTimeStart.getMinutes()).padStart(
+          2,
+          '0',
+        )}`;
+        const formattedEndTime = `${String(
+          estimatedTimeEnd.getHours(),
+        ).padStart(2, '0')}:${String(estimatedTimeEnd.getMinutes()).padStart(
+          2,
+          '0',
+        )}`;
+
+        // Combina os horários formatados em um intervalo
+        const finalEstimatedTime = `${formattedStartTime} - ${formattedEndTime}`;
+
+        setEstimativeData(finalEstimatedTime);
+      } else {
+        const formattedStartTime = `${String(
+          estimatedTimeStart.getHours(),
+        ).padStart(2, '0')}:${String(
+          estimatedTimeStart.getMinutes() - 10,
+        ).padStart(2, '0')}`;
+        const formattedEndTime = `${String(
+          estimatedTimeEnd.getHours(),
+        ).padStart(2, '0')}:${String(
+          estimatedTimeEnd.getMinutes() - 10,
+        ).padStart(2, '0')}`;
+
+        // Combina os horários formatados em um intervalo
+        const finalEstimatedTime = `${formattedStartTime} - ${formattedEndTime}`;
+
+        setEstimativeData(finalEstimatedTime);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchEstimateData();
+  }, []);
+
   if (hasPlayed) {
     return (
       <View
@@ -259,6 +325,13 @@ const ResumeCartScreen = ({
                       ? generalData?.deliveryFeeOutside.toFixed(2)
                       : generalData?.deliveryFeeInside.toFixed(2)
                   }`}
+                />
+              ) : null}
+
+              {estimativeDate ? (
+                <CartInfo
+                  label="Tempo estimado de entrega"
+                  text={estimativeDate}
                 />
               ) : null}
 

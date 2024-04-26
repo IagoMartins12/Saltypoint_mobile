@@ -358,3 +358,12 @@ export const getUserInfos = async () => {
     return error;
   }
 };
+
+export const getEstimativeDate = async (): Promise<number> => {
+  try {
+    const response = await Api.get('/order/estimativeDate');
+    return response.data;
+  } catch (error: any) {
+    return error;
+  }
+};

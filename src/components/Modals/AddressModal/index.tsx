@@ -83,7 +83,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
                         key={i}
                       />
                     ))}
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                       style={styles.addButton}
                       onPress={addAddress}>
                       <CustomIcon
@@ -95,7 +95,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
                       <MyText style={styles.addButtonText}>
                         Adicionar endereço
                       </MyText>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                   </View>
                 </ScrollView>
               ) : (
