@@ -94,19 +94,22 @@ const StyledInputComponent: React.FC<InputProps> = ({
               value={value}
               style={inputStyle}
               secureTextEntry={typeState}
-              editable={!disabled} // <-- Desativa o campo se disabled for verdadeiro
+              editable={!disabled}
             />
             {(isFocused || value) && (
               <MyText
                 style={[
                   styles.placeholder,
-
                   {
                     color: isFocused
                       ? COLORS.primaryRedHex
                       : currentTheme === 'light'
                       ? COLORS.textColorLight
                       : COLORS.textColorDark,
+                    backgroundColor:
+                      currentTheme === 'light'
+                        ? COLORS.backgroundColorLight
+                        : COLORS.backgroundColorDark,
                   },
                 ]}>
                 {placeholder}
@@ -150,13 +153,11 @@ const styles = StyleSheet.create({
   placeholder: {
     position: 'absolute',
     left: 50,
-    top: -10,
+    top: -11,
     fontWeight: 'bold',
-    zIndex: 50,
     paddingHorizontal: 4,
     fontSize: FONTSIZE.size_14,
   },
-
   iconContainer: {
     position: 'absolute',
     top: 15,

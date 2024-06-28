@@ -4,11 +4,10 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Dimensions,
   Pressable,
 } from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {BORDERRADIUS, COLORS, FONTSIZE} from '../theme/theme';
+import {BORDERRADIUS, COLORS} from '../theme/theme';
 import ProgressBar from '../components/ProgressBar';
 import {global} from '../style';
 import MyText from '../components/Text';
@@ -19,16 +18,23 @@ import RewardCard from '../components/RewardCard';
 import FidelityAccordeonSection from '../components/FidelityAccordeonSection';
 import useTheme from '../hooks/useTheme';
 import usePrivateStore from '../hooks/store/usePrivateStore';
-import EmptyAnimation from '../components/Lottie/EmptyAnimation';
+import NoAuth from '../components/NoAuth';
+import {useEffect, useState} from 'react';
+import {Reward} from '../types/ModelsType';
 
 const RewardScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const [randomRewards, setRandomRewards] = useState<Reward[]>([]);
   const {reward} = useGlobalStore();
   const {currentTheme} = useTheme();
   const {user} = usePrivateStore();
+
+  const goToLogin = () => {
+    return navigation.navigate('Login');
+  };
   const goToInfo = () => {
     return navigation.navigate('Fidelity');
   };
@@ -36,6 +42,18 @@ const RewardScreen = ({
   const goToCatchReward = () => {
     return navigation.navigate('CatchReward');
   };
+
+  const getRandomRewards = (rewards: typeof reward, count: number) => {
+    const shuffled = [...rewards].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  };
+
+  useEffect(() => {
+    if (user) {
+      const randomR = getRandomRewards(reward, 10);
+      setRandomRewards(randomR);
+    }
+  }, []);
 
   if (user) {
     return (
@@ -67,7 +85,7 @@ const RewardScreen = ({
                 style={{
                   flexDirection: 'row',
                   alignItems: 'flex-end',
-                  gap: 5,
+                  gap: 2,
                 }}>
                 <MyText style={styles.numberOfPoints}>{user.points}</MyText>
                 <View
@@ -78,8 +96,8 @@ const RewardScreen = ({
                   }}>
                   <MyText style={styles.pointsText}>pontos</MyText>
 
-                  <Pressable onPress={goToInfo}>
-                    <CustomIcon name="info" pack="Feather" size={15} />
+                  <Pressable onPress={goToInfo} style={{marginBottom: 5}}>
+                    <CustomIcon name="info" pack="Feather" size={18} />
                   </Pressable>
                 </View>
               </View>
@@ -140,7 +158,7 @@ const RewardScreen = ({
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={[styles.flatListView]}
-              data={reward}
+              data={randomRewards}
               renderItem={item => (
                 <RewardCard
                   reward={item.item}
@@ -159,7 +177,7 @@ const RewardScreen = ({
     );
   }
 
-  return <EmptyAnimation text="Faça o login para acessar esta pagina" />;
+  return <NoAuth goToLogin={goToLogin} />;
 };
 
 const styles = StyleSheet.create({
@@ -183,7 +201,7 @@ const styles = StyleSheet.create({
   pointsText: {
     fontSize: 20,
     fontWeight: '500',
-    marginBottom: 5,
+    marginBottom: 10,
   },
 
   infoBox: {

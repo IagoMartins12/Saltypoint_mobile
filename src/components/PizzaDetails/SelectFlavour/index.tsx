@@ -16,7 +16,6 @@ const pizzaFlavour = [
 
 interface SelectProps {
   handleFlavourSelect: (flavourId: string | null) => void;
-
   flavour: string;
 }
 const SelectFlavour: React.FC<SelectProps> = ({

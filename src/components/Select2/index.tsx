@@ -22,7 +22,7 @@ const SelectComponent2: React.FC<CustomPickerStyle> = ({
 
   const Placeholder = {label: 'Selecione um endereço', value: value};
 
-  const viewStyle: ViewStyle = {
+  const viewStyle = {
     borderBottomWidth: 1,
     borderColor:
       currentTheme === 'light'
@@ -32,14 +32,18 @@ const SelectComponent2: React.FC<CustomPickerStyle> = ({
 
   return (
     <View>
-      <MyText style={{fontFamily: 'Arial', fontSize: 16, fontWeight: '300'}}>
-        Bairro
-      </MyText>
+      <MyText style={{fontSize: 16, fontWeight: '300'}}>Bairro</MyText>
       <RNPickerSelect
         style={{
           viewContainer: viewStyle,
+          placeholder: {
+            fontWeight: '800',
+            color:
+              currentTheme === 'light'
+                ? COLORS.textColorLight
+                : COLORS.textColorDark,
+          },
         }}
-        //@ts-ignore
         value={value}
         onValueChange={value => setOnChangeDropdown(value)}
         placeholder={Placeholder}

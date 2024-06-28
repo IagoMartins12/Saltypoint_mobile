@@ -32,6 +32,7 @@ import SelectComponent from '../../components/Select';
 import LoadingIndicator from '../../components/Loading';
 import OptionsImageModal from '../../components/Modals/OptionsImageModal';
 import useShowToast from '../../hooks/customHooks/useShowToast';
+import UserImage from '../../components/UserImage';
 
 const ProfileScreen = ({
   navigation,
@@ -163,10 +164,14 @@ const ProfileScreen = ({
                   showModal2();
                   setModalOpen2(true);
                 }}>
-                <Image
-                  style={styles.CartItemImage}
-                  source={require('../../assets/images/user.png')}
-                />
+                {user.image ? (
+                  <UserImage />
+                ) : (
+                  <Image
+                    style={styles.CartItemImage}
+                    source={require('../../assets/images/user.png')}
+                  />
+                )}
               </Pressable>
               <MyText
                 style={{
@@ -277,18 +282,19 @@ const styles = StyleSheet.create({
   profilePhotoDiv: {
     height: 150,
     width: 150,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   CartItemImage: {
     height: '100%',
     width: '100%',
     borderRadius: 100,
-    overflow: 'hidden',
+    resizeMode: 'contain',
   },
   listContainer: {
     paddingHorizontal: 20,
     paddingVertical: 10,
-
     gap: 20,
   },
 });

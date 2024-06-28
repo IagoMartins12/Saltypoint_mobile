@@ -126,7 +126,12 @@ const SearchScreen = ({
       )}
 
       {!onFocus && (
-        <View style={{marginVertical: 20, gap: 10}}>
+        <View
+          style={{
+            marginVertical: 20,
+            gap: 10,
+            flex: onFocus || currentCategory ? 1 : null,
+          }}>
           <MyText style={styles.categoryText}>Categorias</MyText>
 
           <ScrollView
@@ -208,7 +213,7 @@ const styles = StyleSheet.create({
   },
 
   CategoryScrollViewStyle: {
-    columnGap: 15,
+    columnGap: 10,
   },
 
   searchTextHistory: {
@@ -217,10 +222,10 @@ const styles = StyleSheet.create({
 
   productDiv: {
     flexDirection: 'row',
-    rowGap: 25,
-    justifyContent: 'space-around',
     flexWrap: 'wrap',
-    marginTop: 25,
+    justifyContent: 'space-around',
+    paddingVertical: 15,
+    gap: 15,
   },
 });
 

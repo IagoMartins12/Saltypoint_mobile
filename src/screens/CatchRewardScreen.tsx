@@ -10,7 +10,7 @@ import EmptyAnimation from '../components/Lottie/EmptyAnimation';
 import FilterReward from '../components/FilterReward';
 import {useSharedValue, withTiming} from 'react-native-reanimated';
 import CatchRewardModal from '../components/Modals/CatchRewardModal';
-import {Reward} from '../types/ModelsType';
+import {Reward, User_Rewards} from '../types/ModelsType';
 import useTheme from '../hooks/useTheme';
 import {COLORS} from '../theme/theme';
 import usePrivateStore from '../hooks/store/usePrivateStore';
@@ -29,7 +29,7 @@ const CatchRewardScreen = ({
     [number, number] | null
   >(null);
 
-  const {user} = usePrivateStore();
+  const {user, userReward} = usePrivateStore();
   const {showToast} = useShowToast();
   const translateY = useSharedValue(Dimensions.get('window').height);
 
@@ -62,7 +62,6 @@ const CatchRewardScreen = ({
 
   const {reward} = useGlobalStore();
   const {currentTheme} = useTheme();
-  const userReward = false;
 
   const userRewards = reward.map(r => {
     return {
@@ -121,10 +120,14 @@ const CatchRewardScreen = ({
               </View>
             ) : (
               <>
-                {userReward ? (
+                {userRewards.length > 0 ? (
                   <View style={styles.rewardBox}>
-                    {userRewards.map(r => (
-                      <RewardCard reward={r} key={r.id} showCode={r.code} />
+                    {userReward.map((r: User_Rewards) => (
+                      <RewardCard
+                        reward={r}
+                        key={r.id}
+                        showCode={r.reward_code}
+                      />
                     ))}
                   </View>
                 ) : (

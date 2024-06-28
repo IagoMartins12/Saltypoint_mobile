@@ -9,10 +9,6 @@ import {
 } from 'react-native-gesture-handler';
 import CustomIcon from '../CustomIcon';
 import Animated, {
-  FadeInDown,
-  FadeInLeft,
-  FadeInUp,
-  RollInLeft,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -26,13 +22,6 @@ interface MessageProps {
 const ToastComponent: React.FC<MessageProps> = ({isOpen, onClose}) => {
   const {title, type} = useToast();
 
-  useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => {
-        onClose();
-      }, 2000);
-    }
-  }, [isOpen]);
   const opacity = useSharedValue(0); // Variável animada para controlar a opacidade
 
   useEffect(() => {
@@ -60,8 +49,8 @@ const ToastComponent: React.FC<MessageProps> = ({isOpen, onClose}) => {
         animatedStyle,
         styles.container,
         {
-          position: isOpen ? 'absolute' : null,
-          display: isOpen ? 'flex' : 'none',
+          position: 'absolute',
+          zIndex: 9999,
           backgroundColor:
             type === 'success' ? COLORS.primaryGreenHex : COLORS.secondaryRed,
         },
@@ -73,7 +62,6 @@ const ToastComponent: React.FC<MessageProps> = ({isOpen, onClose}) => {
               nativeEvent.state === State.END &&
               nativeEvent.translationX > 100
             ) {
-              console.log('teste');
               onClose();
             }
           }}>
@@ -85,7 +73,6 @@ const ToastComponent: React.FC<MessageProps> = ({isOpen, onClose}) => {
                 size={25}
                 color="#000"
               />
-
               <MyText style={styles.title}> {title}</MyText>
             </View>
 
@@ -101,10 +88,9 @@ const ToastComponent: React.FC<MessageProps> = ({isOpen, onClose}) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: '90%',
+    width: '95%',
     borderRadius: 15,
-    marginHorizontal: 'auto',
-    height: 65,
+    height: 55,
     top: 10,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -113,15 +99,16 @@ const styles = StyleSheet.create({
   },
 
   insideContainer: {
-    width: '90%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    alignSelf: 'center',
     gap: 10,
+    paddingHorizontal: 15,
+    alignSelf: 'center',
+    width: '100%',
   },
 
   textContainer: {
+    width: '90%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -129,9 +116,10 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '700',
-    color: '#000',
+    color: '#1d1b1b',
+    textAlign: 'center',
   },
 });
 export default ToastComponent;

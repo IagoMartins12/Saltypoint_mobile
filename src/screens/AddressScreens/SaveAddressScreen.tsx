@@ -158,7 +158,6 @@ const SaveAddressScreen = ({
     } as User_Adress;
 
     const myResponse = await sendAddressUser(object);
-    console.log('object', object);
 
     if (myResponse.status === 201) {
       setAddress([...address, myResponse.data]);
@@ -381,8 +380,8 @@ const styles = StyleSheet.create({
   },
   roundedButton: {
     marginLeft: 5,
-    width: 15,
-    height: 15,
+    width: 18,
+    height: 18,
     borderRadius: 1000,
     alignItems: 'center',
     justifyContent: 'center',

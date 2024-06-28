@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Dimensions,
   Modal,
@@ -18,6 +18,7 @@ import usePrivateStore from '../../../hooks/store/usePrivateStore';
 import {deleteAddress} from '../../../services';
 import {User_Adress} from '../../../types/ModelsType';
 import useShowToast from '../../../hooks/customHooks/useShowToast';
+import LoadingIndicator from '../../Loading';
 
 export interface ModalProps {
   modalOpen: boolean;
@@ -34,6 +35,8 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
   hideModal,
   translateY,
 }) => {
+  const [loading, setLoading] = useState(false);
+
   const {currentTheme} = useTheme();
   const {address, setAddress, user} = usePrivateStore();
   const {showToast} = useShowToast();
@@ -59,7 +62,10 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
           'error',
         );
       }
+
+      setLoading(true);
       const response = await deleteAddress(currentAddress);
+      setLoading(false);
 
       if (response.status === 200) {
         const updatedAddressList = address.filter(
@@ -111,9 +117,13 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
                 <TouchableOpacity
                   onPress={handleDeleteAddress}
                   style={styles.buttonStyle}>
-                  <Text style={{color: '#FFFFFF', paddingRight: 10}}>
-                    Deletar
-                  </Text>
+                  {loading ? (
+                    <LoadingIndicator />
+                  ) : (
+                    <Text style={{color: '#FFFFFF', paddingRight: 10}}>
+                      Deletar
+                    </Text>
+                  )}
                 </TouchableOpacity>
               </View>
             </View>

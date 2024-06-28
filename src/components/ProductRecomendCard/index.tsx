@@ -40,6 +40,7 @@ const ProductRecomendCard: React.FC<ProductCardProps> = ({
           source={{
             uri: product.product_image,
           }}
+          borderRadius={15}
           style={styles.CartItemImage}
         />
       </View>
@@ -60,16 +61,15 @@ const ProductRecomendCard: React.FC<ProductCardProps> = ({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FFFFFF',
-    height: Dimensions.get('screen').height / 3.4,
-    width: Dimensions.get('screen').width / 2.6,
+    height: Dimensions.get('screen').height / 3.15,
+    width: Dimensions.get('screen').width / 2.5,
     padding: 2,
     borderRadius: BORDERRADIUS.radius_20,
   },
 
   image: {
-    padding: 10,
     width: '100%',
-    height: '50%',
+    height: '60%',
   },
 
   CartItemImage: {
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   content: {
     gap: 10,
     width: '100%',
-    height: '50%',
+    height: '40%',
     paddingHorizontal: 10,
     paddingVertical: 15,
     justifyContent: 'space-between',
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     overflow: 'hidden',
-    maxHeight: '50%',
+    maxHeight: '60%',
   },
   textPrice: {
     fontSize: 14,

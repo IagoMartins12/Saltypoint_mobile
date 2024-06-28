@@ -31,22 +31,28 @@ const ProgressBar = ({points}) => {
     );
   });
 
-  let currentStep = 0;
-  for (let i = 0; i < numBalls; i++) {
-    const nextStep = (i + 1) * step;
-    if (points <= nextStep) {
-      currentStep = i;
-      break;
+  const getNumber = () => {
+    if (points < 50) {
+      return 50;
+    } else if (points > 50 && points <= 99) {
+      return 65;
+    } else if (points > 100 && points <= 149) {
+      return 75;
+    } else if (points > 150 && points <= 199) {
+      return 82;
+    } else {
+      return 85;
     }
-  }
+  };
 
-  const percentage = (points - currentStep * step) / step;
-  const barWidth = (currentStep + percentage) * (91 / numBalls);
+  const currentStep = Math.floor(points / step);
+  const percentage = (points % step) / step;
+  const barWidth = ((currentStep + percentage) / numBalls) * getNumber();
 
   return (
     <View style={styles.container}>
       <View style={styles.barContainer}>
-        <View style={[styles.bar, {width: `${barWidth}%`}]} />
+        <View style={[styles.bar, {width: `${barWidth}%`, maxWidth: '100%'}]} />
       </View>
       <View style={styles.ballsContainer}>{balls}</View>
     </View>

@@ -12,11 +12,13 @@ import MyText from '../components/Text';
 import usePrivateStore from '../hooks/store/usePrivateStore';
 import {getCartTotalLenght} from '../utils';
 import useAuth from '../hooks/auth/useAuth';
+import useGlobalStore from '../hooks/store/useGlobalStore';
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   const {currentTheme} = useTheme();
+  const {products} = useGlobalStore();
 
   return (
     <Tab.Navigator
@@ -110,7 +112,7 @@ const TabNavigator = () => {
                         fontSize: 11,
                         fontWeight: 'bold',
                       }}>
-                      {cartProductLength}
+                      {cart_product.length}
                     </MyText>
                   </View>
                 )}

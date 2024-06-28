@@ -17,6 +17,7 @@ import {
   Discount_cupom,
   Product,
   Type_Pagament,
+  User_Adress,
   User_Rewards,
 } from '../../../types/ModelsType';
 import {getIcon, pizzariaDelivery} from '../AddressCartScreen';
@@ -61,6 +62,7 @@ const ResumeCartScreen = ({
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const [loading, setLoading] = useState(false);
   const [hasPlayed, setHasPlayed] = useState(false);
   const [estimativeDate, setEstimativeData] = useState<null | string>(null);
 
@@ -82,6 +84,7 @@ const ResumeCartScreen = ({
     setUserReward,
     coupons,
     userReward,
+    address,
   } = usePrivateStore();
   const {currentCode, setCurrentCode} = useCurrrentCode();
 
@@ -116,6 +119,140 @@ const ResumeCartScreen = ({
     setCart_product(updatedCartProduct);
   };
 
+  const getProductName = (productId: string, size: number | null) => {
+    const product = products.find((p: Product) => p.id === productId);
+
+    if (!product) {
+      return 'Produto desconhecido';
+    }
+
+    if (size === 1) {
+      return product?.name.replace('Pizza', 'Brotinho');
+    } else {
+      return product?.name;
+    }
+  };
+
+  const getItems = () => {
+    return cart_product
+      .map(product => {
+        let itemString = `\n*${product.quantity}x ${getProductName(
+          product.product_id,
+          product.size,
+        )} - R$ ${product.value}*`;
+
+        if (product.product_id_2) {
+          itemString += `*
+      ${[product.product_id, product.product_id_2].map(
+        productId =>
+          `*${product.quantity}x 1/2 ${getProductName(
+            productId,
+            product.size,
+          )}`,
+      ).join(`
+      `)}*`;
+        }
+
+        if (product.product_id_3) {
+          itemString += `
+      *${product.quantity}x ${getProductName(
+            product.product_id_3,
+            product.size,
+          )}*`;
+        }
+
+        if (product.observation) {
+          itemString += `
+      *Observação*: ${product.observation}`;
+        }
+
+        return itemString;
+      })
+      .join('\n');
+  };
+
+  const getTemplate = () => {
+    let template = {
+      address: '',
+      items: '',
+      totalAmount: '',
+      typePagament: '',
+      estimativeHour: '',
+      discount: null,
+      reward: null,
+    };
+
+    if (currentCode) {
+      if (isReward && (currentCode as User_Rewards).rewardType === 0) {
+        template.discount = `*Desconto aplicado:* R$ ${getDiscount(
+          (currentCode as User_Rewards).rewardDiscount,
+          total,
+        ).toFixed(2)}`;
+        template.reward = `*Recompensa resgatada:* ${
+          (currentCode as User_Rewards).rewardName
+        }`;
+      }
+
+      if (isReward) {
+        template.reward = `*Recompensa resgatada:* ${
+          (currentCode as User_Rewards).rewardName
+        }`;
+      }
+
+      if (isCoupon) {
+        template.discount = `*#Desconto aplicado:* ${
+          (currentCode as Discount_cupom).cupom_name
+        }
+        \n*Valor do desconto:* R$ ${getDiscount(
+          (currentCode as Discount_cupom).discount,
+          total,
+        ).toFixed(2)}`;
+      }
+    }
+
+    if (response.selectedDelivery !== '1') {
+      const addr = address.find(
+        (a: User_Adress) => a.id === user?.user_Adress_id,
+      );
+
+      if (addr) {
+        template.address = `*Delivery:* ${addr.address}, ${addr.number} - ${addr.district} - ${addr.city} / ${addr.uf}`;
+      }
+    } else {
+      template.address = '*Retirada no balcão*';
+    }
+
+    template.totalAmount = `R$ ${getTotal(
+      cart_product,
+      currentCode,
+      isCoupon,
+      isReward,
+      response.selectedDelivery !== '1'
+        ? getTaxa(response.currentUserAddress?.district)
+          ? generalData?.deliveryFeeOutside
+          : generalData?.deliveryFeeInside
+        : null,
+    ).toFixed(2)}`;
+
+    if (response.selectedPayment) {
+      template.typePagament = getTypePagamentName(response.selectedPayment);
+    }
+    template.items = getItems();
+    template.estimativeHour = estimativeDate;
+
+    const templateString = `Pedido feito! Agradecemos pela preferencia. \nSeu pedido ja chegou em nossa central, segue os dados do pedido:
+     ${template.items}
+     \n*Tempo estimado de entrega:* ${template.estimativeHour}
+     \n*Forma de pagamento:* ${template.typePagament}
+     \n${template.address}
+     \n*Total:* ${template.totalAmount}
+     ${template.discount ? `\n${template.discount}` : ''}
+     ${template.reward ? `\n${template.reward}` : ''}
+     \nCaso não reconheça o pedido, pedimos por gentileza que entre em contato com nosso número.`;
+
+    return templateString;
+  };
+
   const finishOrder = async () => {
     if (currentCode && (currentCode as User_Rewards).rewardType === 1) {
       const newItem = products.find(
@@ -128,6 +265,8 @@ const ResumeCartScreen = ({
       }
     }
 
+    const template = getTemplate();
+    setLoading(true);
     const request = await createOrder({
       total_amount: getTotal(
         cart_product,
@@ -160,9 +299,11 @@ const ResumeCartScreen = ({
           : 0,
       contact_phone: user.phone,
       reward_id: currentCode && isReward ? currentCode.id : null,
+      template: template,
     });
 
-    if (request) {
+    setLoading(false);
+    if (request?.id) {
       const newOrder = {...request, orderItems: cart_product};
       const updatedOrders = [...orders, newOrder];
       setHasPlayed(true);
@@ -211,6 +352,14 @@ const ResumeCartScreen = ({
     return <PaymentCard icon={icon} typePagament={typePagamentOptions} />;
   };
 
+  const getTypePagamentName = (id: string) => {
+    const typePagamentOptions = typePagament.find(
+      (type: Type_Pagament) => type.id === id,
+    );
+
+    return typePagamentOptions.type_pagament_name ?? 'Não identificado';
+  };
+
   const fetchEstimateData = async () => {
     try {
       const estimateNumber = await getEstimativeDate();
@@ -251,15 +400,18 @@ const ResumeCartScreen = ({
         ).padStart(2, '0')}:${String(
           estimatedTimeStart.getMinutes() - 10,
         ).padStart(2, '0')}`;
-        const formattedEndTime = `${String(
-          estimatedTimeEnd.getHours(),
-        ).padStart(2, '0')}:${String(
-          estimatedTimeEnd.getMinutes() - 10,
-        ).padStart(2, '0')}`;
+
+        // Ajuste o tempo de término subtraindo 10 minutos
+        const adjustedEndTime = new Date(estimatedTimeEnd.getTime());
+        adjustedEndTime.setMinutes(adjustedEndTime.getMinutes() - 10);
+
+        const formattedEndTime = `${String(adjustedEndTime.getHours()).padStart(
+          2,
+          '0',
+        )}:${String(adjustedEndTime.getMinutes()).padStart(2, '0')}`;
 
         // Combina os horários formatados em um intervalo
         const finalEstimatedTime = `${formattedStartTime} - ${formattedEndTime}`;
-
         setEstimativeData(finalEstimatedTime);
       }
     } catch (error) {
@@ -482,6 +634,7 @@ const ResumeCartScreen = ({
               : generalData?.deliveryFeeInside
             : null
         }
+        loading={loading}
       />
     </View>
   );

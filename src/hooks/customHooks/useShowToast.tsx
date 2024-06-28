@@ -1,9 +1,5 @@
 import useToast from '../useToast';
 
-interface ShowToastProps {
-  text: string;
-  type: 'sucess' | 'error';
-}
 const useShowToast = () => {
   const {onOpen, setTitle, setType} = useToast();
 

@@ -2,21 +2,22 @@ import React from 'react';
 import {
   Dimensions,
   Modal,
-  Pressable,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
-import {BORDERRADIUS, COLORS} from '../../../theme/theme';
+import {COLORS} from '../../../theme/theme';
 import useTheme from '../../../hooks/useTheme';
 import MyText from '../../Text';
 import ModalIcon from '../ModalIcon';
-import usePrivateStore from '../../../hooks/store/usePrivateStore';
-
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {ModalProps} from '../ForgetPasswordModal';
-// import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import usePrivateStore from '../../../hooks/store/usePrivateStore';
+import {User} from '../../../types/ModelsType';
+import {updatedMe} from '../../../services';
+import useShowToast from '../../../hooks/customHooks/useShowToast';
+import useProfileLoading from '../../../hooks/useProfileLoading';
 
 const OptionsImageModal: React.FC<ModalProps> = ({
   modalOpen,
@@ -25,6 +26,17 @@ const OptionsImageModal: React.FC<ModalProps> = ({
   translateY,
 }) => {
   const {currentTheme} = useTheme();
+  const {setUser, user} = usePrivateStore();
+  const {setLoading} = useProfileLoading();
+  const {showToast} = useShowToast();
+
+  const setUserWithCallback = (callback: (user: User) => User) => {
+    if (!user) return;
+
+    const updatedUser = callback(user);
+
+    setUser(updatedUser);
+  };
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -36,37 +48,78 @@ const OptionsImageModal: React.FC<ModalProps> = ({
     hideModal();
     setTimeout(() => setModalOpen(!modalOpen), 300);
   };
-  const myOPt = {
-    title: 'Select Avatar',
-    customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
-    storageOptions: {
-      skipBackup: true,
-      path: 'images',
-    },
+
+  const uploadImage = async uri => {
+    try {
+      setLoading(true);
+      const data = new FormData();
+      //@ts-ignore
+      data.append('file', {
+        uri: uri,
+        type: 'image/jpeg', // você pode precisar ajustar isso dependendo do tipo de imagem
+        name: 'upload.jpg',
+      });
+      data.append('upload_preset', 'evuh89yc');
+      data.append('cloud_name', 'ds51jm1dx');
+
+      const cloudinaryResponse = await fetch(
+        'https://api.cloudinary.com/v1_1/ds51jm1dx/image/upload',
+        {
+          method: 'POST',
+          body: data,
+        },
+      );
+
+      const result = await cloudinaryResponse.json();
+
+      try {
+        await updatedMe({
+          image: result.url,
+        });
+
+        setUserWithCallback(oldUser => ({
+          ...oldUser,
+          image: result.url,
+        }));
+        showToast('Perfil atualizado com sucesso!', 'success');
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error('Upload failed: ', error);
+    }
   };
 
   const getCamera = async () => {
-    // const result = await launchCamera({
-    //   mediaType: 'photo',
-    // });
+    const result = await launchCamera({
+      mediaType: 'photo',
+      cameraType: 'back',
+    });
+    if (result.assets) {
+      const {uri} = result.assets[0];
+      await uploadImage(uri);
+    }
+    handleOverlayPress();
   };
 
   const getLibrary = async () => {
-    // const result = await launchImageLibrary(
-    //   {
-    //     assetRepresentationMode: 'auto',
-    //     mediaType: 'photo',
-    //   },
-    //   response => {
-    //     console.log(response);
-    //   },
-    // );
+    const result = await launchImageLibrary({
+      mediaType: 'photo',
+    });
+    if (result.assets) {
+      const {uri} = result.assets[0];
+      await uploadImage(uri);
+    }
+    handleOverlayPress();
   };
+
   const options = [
     {
       name: 'Câmera',
       color: currentTheme === 'light' ? '#0000FF' : '#1E90FF',
-      onClick: () => getCamera,
+      onClick: getCamera,
     },
     {
       name: 'Galeria',

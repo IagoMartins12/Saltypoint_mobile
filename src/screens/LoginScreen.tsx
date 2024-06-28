@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useCallback} from 'react';
+import {useCallback, useState} from 'react';
 import {COLORS, FONTFAMILY, FONTSIZE} from '../theme/theme';
 import {useForm} from 'react-hook-form';
 import LoginAnimation from '../components/Lottie/LoginAnimation';
@@ -26,12 +26,14 @@ import {loginUser} from '../services';
 import useAuth from '../hooks/auth/useAuth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useShowToast from '../hooks/customHooks/useShowToast';
+import LoadingIndicator from '../components/Loading';
 
 const LoginScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const [loading, setLoading] = useState(false);
   const {control, handleSubmit, reset} = useForm();
   const auth = useAuth();
   const {showToast} = useShowToast();
@@ -45,8 +47,9 @@ const LoginScreen = ({
 
   const onSubmit = async (data: any) => {
     const loginUserDto = data as LoginUserDto;
+    setLoading(true);
     const response = await loginUser(loginUserDto);
-    console.log(response.status);
+    setLoading(false);
     if (response.status === 400 || response.status === 401) {
       return showToast(response.data.message, 'error');
     } else if (response.status === 200 || response.status) {
@@ -135,7 +138,11 @@ const LoginScreen = ({
                   <TouchableOpacity
                     onPress={handleSubmit(onSubmit)}
                     style={global.buttonStyle}>
-                    <Text style={{color: '#FFFFFF'}}>Continuar</Text>
+                    {loading ? (
+                      <LoadingIndicator />
+                    ) : (
+                      <Text style={{color: '#FFFFFF'}}>Continuar</Text>
+                    )}
                   </TouchableOpacity>
                   {/* <TouchableOpacity
                     onPress={handleSubmit(onSubmit)}

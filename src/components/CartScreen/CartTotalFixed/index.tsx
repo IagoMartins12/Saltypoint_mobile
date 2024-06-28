@@ -14,12 +14,14 @@ import {
 } from '../../../utils';
 import useCurrrentCode from '../../../hooks/reward';
 import useGlobalStore from '../../../hooks/store/useGlobalStore';
+import LoadingIndicator from '../../Loading';
 
 interface CartTotalProps {
   onPress?: () => void;
   title?: string;
   lastStep?: boolean;
   deliveryFee?: number;
+  loading?: boolean;
 }
 
 const CartTotalFixed: React.FC<CartTotalProps> = ({
@@ -27,6 +29,7 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
   title,
   lastStep,
   deliveryFee,
+  loading,
 }) => {
   const {currentTheme} = useTheme();
   const {generalData} = useGlobalStore();
@@ -67,16 +70,22 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
           onPress={() => {
             onPress();
           }}>
-          <MyText style={styles.buttonText}>
-            Finalizar pedido • R${' '}
-            {getTotal(
-              cart_product,
-              currentCode,
-              isCoupon,
-              isReward,
-              deliveryFee,
-            ).toFixed(2)}
-          </MyText>
+          {loading ? (
+            <LoadingIndicator />
+          ) : (
+            <>
+              <MyText style={styles.buttonText}>
+                Finalizar pedido • R${' '}
+                {getTotal(
+                  cart_product,
+                  currentCode,
+                  isCoupon,
+                  isReward,
+                  deliveryFee,
+                ).toFixed(2)}
+              </MyText>
+            </>
+          )}
         </TouchableOpacity>
       ) : (
         renderContinueButton()
@@ -84,7 +93,7 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
       {!lastStep && (
         <View>
           <MyText style={styles.subTitleTotal}>{title}</MyText>
-          <Text style={styles.titleTotal}>
+          <MyText style={styles.titleTotal}>
             R${' '}
             {getTotal(
               cart_product,
@@ -97,7 +106,7 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
               {' '}
               / {cartProductLength} itens
             </MyText>
-          </Text>
+          </MyText>
         </View>
       )}
     </View>

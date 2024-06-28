@@ -104,6 +104,10 @@ const PhoneInput: React.FC<InputProps> = ({
                       : currentTheme === 'light'
                       ? COLORS.textColorLight
                       : COLORS.textColorDark,
+                    backgroundColor:
+                      currentTheme === 'light'
+                        ? COLORS.backgroundColorLight
+                        : COLORS.backgroundColorDark,
                   },
                 ]}>
                 {placeholder}

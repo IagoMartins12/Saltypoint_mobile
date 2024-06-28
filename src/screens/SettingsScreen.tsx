@@ -19,6 +19,7 @@ import MyText from '../components/Text';
 import usePrivateStore from '../hooks/store/usePrivateStore';
 import {removeToken} from '../hooks/auth/useAuth';
 import useShowToast from '../hooks/customHooks/useShowToast';
+import UserImage from '../components/UserImage';
 
 const SettingsScreen = ({
   navigation,
@@ -31,10 +32,15 @@ const SettingsScreen = ({
   const [imageBackground, setImageBackground] = useState(null);
   const {currentTheme} = useTheme();
 
-  const {user, setUser} = usePrivateStore();
+  const {user, setUser, setFavorites} = usePrivateStore();
   const {showToast} = useShowToast();
   const handleNavigate = (name: string) => {
     navigation.push(name);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setFavorites(null);
   };
 
   const settingsOptions = [
@@ -92,8 +98,8 @@ const SettingsScreen = ({
       pack: 'SimpleLineIcons' as PackNames,
       onClick: async () => {
         await removeToken();
+        handleLogout();
         handleNavigate('Main');
-        setUser(null);
         showToast('Deslogado com sucesso', 'success');
       },
     },
@@ -179,12 +185,7 @@ const SettingsScreen = ({
               onPress={() => setImageModalVisible(true)}
               style={styles.profilePhotoDiv}>
               {user.image ? (
-                <Image
-                  style={styles.CartItemImage}
-                  source={{
-                    uri: user.image,
-                  }}
-                />
+                <UserImage />
               ) : (
                 <Image
                   style={styles.CartItemImage}
@@ -330,6 +331,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 100000,
     overflow: 'hidden',
+    resizeMode: 'contain',
   },
   listContainar: {
     flex: 3,
@@ -346,6 +348,7 @@ const styles = StyleSheet.create({
     height: 350,
     width: 350,
     borderRadius: 1000,
+    resizeMode: 'contain',
   },
   box: {
     width: 1,

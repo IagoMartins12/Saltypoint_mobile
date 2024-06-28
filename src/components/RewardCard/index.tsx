@@ -1,9 +1,8 @@
 import useTheme from '../../hooks/useTheme';
 import {COLORS} from '../../theme/theme';
-import {Reward} from '../../types/ModelsType';
+import {Reward, User_Rewards} from '../../types/ModelsType';
 import {
   View,
-  Text,
   TouchableOpacity,
   StyleSheet,
   Dimensions,
@@ -13,8 +12,8 @@ import MyText from '../Text';
 import {global} from '../../style';
 
 export interface RewardCardProps {
-  reward: Reward;
-  onClick?: (reward: Reward) => void;
+  reward: Reward | User_Rewards;
+  onClick?: (reward: Reward | User_Rewards) => void;
   margin?: boolean;
   showCode?: string;
 }
@@ -46,7 +45,7 @@ const RewardCard: React.FC<RewardCardProps> = ({
       }}>
       <View style={styles.imageContainer}>
         <ImageBackground
-          source={{uri: reward.image}}
+          source={{uri: 'image' in reward ? reward.image : reward.rewardImage}}
           style={styles.image}
           borderTopLeftRadius={20}
           borderTopRightRadius={20}
@@ -64,17 +63,22 @@ const RewardCard: React.FC<RewardCardProps> = ({
           },
         ]}>
         <View style={styles.rewardNameContainer}>
-          <MyText style={styles.rewardName}>{reward.name}</MyText>
+          <MyText style={styles.rewardName}>
+            {'name' in reward ? reward.name : reward.rewardName}
+          </MyText>
         </View>
 
         {showCode ? (
           <View style={styles.rewardCodeContainer}>
-            <MyText style={styles.rewardCode}>{showCode}</MyText>
+            <MyText style={styles.rewardCode}>#{showCode}</MyText>
           </View>
         ) : (
           <View style={styles.rewardCodeContainer}>
             <MyText style={styles.rewardCode}>
-              {reward.quantity_points} pontos
+              {'quantity_points' in reward
+                ? reward.quantity_points
+                : reward.rewardPoints}{' '}
+              pontos
             </MyText>
           </View>
         )}
@@ -82,7 +86,6 @@ const RewardCard: React.FC<RewardCardProps> = ({
     </TouchableOpacity>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',

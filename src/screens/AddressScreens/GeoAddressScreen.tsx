@@ -16,6 +16,7 @@ import {global} from '../../style';
 import useTheme from '../../hooks/useTheme';
 import {COLORS} from '../../theme/theme';
 import MyText from '../../components/Text';
+import useShowToast from '../../hooks/customHooks/useShowToast';
 
 const GeoAddressScreen = ({
   navigation,
@@ -25,7 +26,7 @@ const GeoAddressScreen = ({
   const location = useGeoLocation();
   const {setGeoAddress, GeoAddress} = useGeoAddressLocation();
   const apiKey = 'AIzaSyAHf2daxc7jfa2_Z6ShUv_FRyW3vUR2Ja8';
-
+  const {showToast} = useShowToast();
   const requiredTypes = [
     'street_address',
     'route',
@@ -51,11 +52,11 @@ const GeoAddressScreen = ({
       result,
     });
     if (!isValidAddress) {
-      return;
-      //   return toast.error('Esse bairro não está na nossa área de entrega.');
+      return showToast(
+        'Esse bairro não está na nossa área de entrega.',
+        'error',
+      );
     }
-    // setResult(result);
-    // setStep(3);
   };
 
   const comeBack = () => {
@@ -138,7 +139,7 @@ const GeoAddressScreen = ({
               Selecione um dos resultados abaixo
             </MyText>
             <ScrollView style={styles.scrollContainer}>
-              {GeoAddress?.results ? (
+              {GeoAddress?.results && GeoAddress.results.length > 0 ? (
                 <>
                   {GeoAddress.results
                     .filter(result =>
@@ -179,13 +180,28 @@ const GeoAddressScreen = ({
                   </TouchableOpacity>
                 </>
               ) : (
-                <TouchableOpacity
-                  // onPress={() => {
-                  //   setStep(3);
-                  // }}
-                  style={styles.button}>
-                  <Text style={styles.buttonText}>Não achei meu endereço</Text>
-                </TouchableOpacity>
+                <>
+                  {GeoAddress?.error_message ? (
+                    <>
+                      <MyText>Ocorreu um erro ao buscar seu endereço.</MyText>
+                      <TouchableOpacity
+                        onPress={goToAddressScreen}
+                        style={styles.button}>
+                        <MyText style={styles.buttonText}>
+                          Cadastrar manualmente
+                        </MyText>
+                      </TouchableOpacity>
+                    </>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={goToAddressScreen}
+                      style={styles.button}>
+                      <Text style={styles.buttonText}>
+                        Não achei meu endereço
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                </>
               )}
             </ScrollView>
           </View>
@@ -238,12 +254,13 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingVertical: 10,
     borderRadius: 8,
-    backgroundColor: 'red',
-    marginTop: 30,
+    backgroundColor: COLORS.primaryRedHex,
+    marginTop: 20,
   },
   buttonText: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '600',
+    textAlign: 'center',
     color: 'white',
   },
   resultContainer: {

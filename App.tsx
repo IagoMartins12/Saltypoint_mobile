@@ -27,13 +27,12 @@ import FetchData from './src/components/FetchData/index';
 import ToastComponent from './src/components/Message';
 import useAuth, {checkAndSetToken} from './src/hooks/auth/useAuth';
 import {checkIntro, checkUser} from './src/utils';
-import useError from './src/hooks/Error/useError';
 import useToast from './src/hooks/useToast';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   const [mainScreen, setMainScreen] = useState(''); // Definindo estado inicial
-  const {isOpen, title, onClose, type} = useToast();
+  const {isOpen, onClose} = useToast();
 
   const {isLogged} = useAuth();
 
@@ -55,7 +54,7 @@ const App = () => {
         return setMainScreen('Tab');
       }
 
-      return setMainScreen('Tab');
+      return setMainScreen('Main');
     } catch (error) {
       console.error('Erro ao verificar o acesso inicial:', error);
       setMainScreen('Main'); // Em caso de erro, assumindo que não é o primeiro acesso

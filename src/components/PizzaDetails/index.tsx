@@ -1,8 +1,7 @@
 import {StyleSheet, View} from 'react-native';
-
 import {Category, Product} from '../../types/ModelsType';
 import useGlobalStore from '../../hooks/store/useGlobalStore';
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import TextAreaComponent from '../TextArea';
 import {
@@ -17,6 +16,7 @@ import PizzaSize from './PizzaSize';
 import PizzaContainer from './PizzaContainer';
 import PizzaImage from './PizzaImage';
 import ProductFlavourCard from '../ProductFlavourCard';
+
 interface PizzaProps {
   currentProduct: Product;
   comeBack: () => void;
@@ -54,9 +54,6 @@ const PizzaDetails: React.FC<PizzaProps> = ({
   selectedOptions,
   setSelectedOptions,
 }) => {
-  const [otherProductsValue, setOtherProductsValue] = useState<number | string>(
-    0,
-  );
   const [searchText, setSearchText] = useState<string>('');
 
   const {products, categorys} = useGlobalStore();
@@ -93,17 +90,27 @@ const PizzaDetails: React.FC<PizzaProps> = ({
   };
 
   const handleFlavourSelect = (flavourId: string | null) => {
-    setSelectedOptions({...selectedOptions, flavour: flavourId});
-    if (flavourId === '1') {
-      scrollToSection('Flavour');
+    if (flavourId === '0') {
+      setSelectedOptions({
+        ...selectedOptions,
+        flavour: flavourId,
+        flavour2: null, // Redefinir o segundo sabor
+      });
+    } else {
+      setSelectedOptions({...selectedOptions, flavour: flavourId});
+      if (flavourId === '1') {
+        scrollToSection('Flavour');
+      }
     }
   };
 
   const handleSecondFlavour = (flavourId: string | null) => {
-    setSelectedOptions({
+    const newArr = {
       ...selectedOptions,
       flavour2: flavourId,
-    });
+    };
+
+    setSelectedOptions(newArr);
 
     if (flavourId) scrollToCornicione();
   };
@@ -124,87 +131,81 @@ const PizzaDetails: React.FC<PizzaProps> = ({
     setSelectedOptions({...selectedOptions, flavour3: cornicioneId});
   };
 
+  const handleSecondFlavourRemove = () => {
+    setSelectedOptions({...selectedOptions, flavour2: null});
+  };
   const checkDiference = (product: Product) => {
     const value = product.value - currentProduct.value;
-
     return value.toFixed(2);
   };
 
-  const checkValue = () => {
-    let newValue = currentProduct.value * quantity;
+  const calculateBaseValue = (
+    productValue: number,
+    quantity: number,
+    isBrotinho: boolean,
+  ) => {
+    return productValue * quantity - (isBrotinho ? brotinhoPrice : 0);
+  };
 
-    // const otherProductsCheck =
-    // otherProductsValue !== 0 && +otherProductsValue > currentProduct.value;
+  const calculateTotalValue = (baseValue: number, additionalValue: number) => {
+    return (baseValue + additionalValue).toFixed(2);
+  };
+
+  const getAdditionalValue = (
+    secondProductValue: number,
+    thirdProductValue: number,
+    quantity: number,
+  ) => {
+    let additionalValue = 0;
+    if (secondProductValue) {
+      additionalValue =
+        Math.max(0, secondProductValue - currentProduct.value) * quantity;
+    }
+    if (thirdProductValue) {
+      additionalValue += thirdProductValue * quantity;
+    }
+    return additionalValue;
+  };
+
+  const checkValue = () => {
+    if (!currentProduct || quantity === 0) {
+      return setValue((0).toFixed(2));
+    }
 
     const isBrotinho = selectedOptions.size === '1';
+    const baseValue = calculateBaseValue(
+      currentProduct.value,
+      quantity,
+      isBrotinho,
+    );
 
-    //Se uma borda for selecionado
-    if (selectedOptions.flavour3 && currentProduct) {
-      const product = products.find(
+    let additionalValue = 0;
+
+    if (selectedOptions.flavour2) {
+      const secondProduct = products.find(
+        (p: Product) => p.id === selectedOptions.flavour2,
+      );
+      if (secondProduct) {
+        additionalValue = getAdditionalValue(secondProduct.value, 0, quantity);
+      }
+    }
+
+    if (selectedOptions.flavour3) {
+      const thirdProduct = products.find(
         (p: Product) => p.id === selectedOptions.flavour3,
       );
-
-      if (!product) return;
-
-      //Se um segundo sabor for selecionado
-      if (selectedOptions.flavour2) {
-        if (isBrotinho) {
-          const newValue =
-            +otherProductsValue * quantity + product.value * quantity;
-          return setValue((newValue - brotinhoPrice).toFixed(2));
-        }
-        return setValue(
-          (+otherProductsValue * quantity + product.value * quantity).toFixed(
-            2,
-          ),
-        );
-      } else {
-        if (isBrotinho) {
-          return setValue(
-            (
-              currentProduct.value * quantity +
-              product.value * quantity -
-              brotinhoPrice
-            ).toFixed(2),
-          );
-        }
-
-        return setValue(
-          (currentProduct.value * quantity + product.value * quantity).toFixed(
-            2,
-          ),
-        );
+      if (thirdProduct) {
+        additionalValue += getAdditionalValue(0, thirdProduct.value, quantity);
       }
     }
 
-    //Se um segundo sabor for selecionado
-    if (selectedOptions.flavour2) {
-      if (isBrotinho) {
-        return setValue(
-          (+otherProductsValue * quantity - brotinhoPrice).toFixed(2),
-        );
-      }
-
-      return setValue((+otherProductsValue * quantity).toFixed(2));
-    }
-
-    //Se nenhum outro produto foi selecionado
-    if (!selectedOptions.flavour3 && !selectedOptions.flavour2) {
-      if (isBrotinho) {
-        const newValue = currentProduct.value * quantity - brotinhoPrice;
-        return setValue(newValue.toFixed(2));
-      }
-
-      const newValue = currentProduct.value * quantity;
-      return setValue(newValue.toFixed(2));
-    }
-
-    return setValue(newValue.toFixed(2));
+    const newValue = calculateTotalValue(baseValue, additionalValue);
+    setValue(newValue);
   };
 
   useEffect(() => {
     checkValue();
-  }, [value, quantity, selectedOptions, otherProductsValue]);
+  }, [selectedOptions, brotinhoPrice, products]);
 
   useEffect(() => {
     if (selectedOptions.flavour === '1') {
@@ -212,25 +213,12 @@ const PizzaDetails: React.FC<PizzaProps> = ({
     } else {
       fadeInOpacity.value = withTiming(0, {duration: 500});
     }
-
-    if (selectedOptions.flavour2) {
-      const product = products.find(
-        (p: Product) => p.id === selectedOptions.flavour2,
-      );
-
-      if (product) {
-        const maxValue = Math.max(currentProduct?.value, product.value);
-
-        setOtherProductsValue(maxValue);
-      }
-    }
-  }, [selectedOptions.flavour2, selectedOptions.flavour]);
+  }, [selectedOptions.flavour]);
 
   return (
     <ScrollView contentContainerStyle={styles.contentContainer}>
       <PizzaImage comeBack={comeBack} currentProduct={currentProduct} />
       <View style={styles.containerBox}>
-        {/* Pizza Details  */}
         <PizzaContainer
           currentProduct={currentProduct}
           getName={getName}
@@ -238,20 +226,16 @@ const PizzaDetails: React.FC<PizzaProps> = ({
         />
 
         <View style={styles.contentBox}>
-          {/* Pizza size */}
           <PizzaSize
             handleSizeSelect={handleSizeSelect}
             size={selectedOptions.size}
           />
-
-          {/* Pizza flavour select  */}
           <SelectFlavour
             flavour={selectedOptions.flavour}
             handleFlavourSelect={handleFlavourSelect}
           />
 
-          {/* Pizza second flavour */}
-          {selectedOptions.flavour === '1' ? (
+          {selectedOptions.flavour === '1' && (
             <SecondFlavour
               animatedStyle={animatedStyle}
               filteredProducts={filteredProducts}
@@ -260,9 +244,8 @@ const PizzaDetails: React.FC<PizzaProps> = ({
               size={selectedOptions.size}
               returnCard={returnCard}
             />
-          ) : null}
+          )}
 
-          {/* Cornicione  */}
           {getCategory && !getCategory.includes('Doces') && (
             <Cornicione
               filteredProducts={filteredProducts}
@@ -287,14 +270,12 @@ const styles = StyleSheet.create({
     gap: 20,
     paddingBottom: 20,
   },
-
   containerBox: {
     width: '90%',
     alignSelf: 'center',
     gap: 20,
     flex: 1,
   },
-
   contentBox: {
     gap: 15,
     flex: 1,

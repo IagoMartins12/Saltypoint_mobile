@@ -125,7 +125,7 @@ const HomeScreen = ({
           style={{
             height: Dimensions.get('screen').height * 0.3,
           }}>
-          {carouselImages ? (
+          {carouselImages.length > 0 ? (
             <CarouselHome entries={carouselImages} />
           ) : (
             <CarouselSkeleton />

@@ -12,18 +12,19 @@ import ProductRecomendCard from '../components/ProductRecomendCard';
 import ProductCartCard from '../components/ProductCartCard';
 import CartInfo from '../components/CartInfo';
 import {COLORS} from '../theme/theme';
-import {global} from '../style';
 import useTheme from '../hooks/useTheme';
 import usePrivateStore from '../hooks/store/usePrivateStore';
 import {
   Cart_product,
+  Category,
   Discount_cupom,
   Product,
   User_Rewards,
 } from '../types/ModelsType';
 import useCurrrentCode from '../hooks/reward';
 import {addCartProduct} from '../services';
-import {getCartTotal, getDiscount} from '../utils';
+import {categoriesToExclude, getCartTotal, getDiscount} from '../utils';
+import NoAuth from '../components/NoAuth';
 
 const CartScreen = ({
   navigation,
@@ -31,8 +32,9 @@ const CartScreen = ({
   navigation: NativeStackNavigationProp<any>;
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [recommendations, setRecommendations] = useState<Product[]>([]);
   const {currentTheme} = useTheme();
-  const {products} = useGlobalStore();
+  const {products, categorys} = useGlobalStore();
   const {cart_product, user, setCart_product} = usePrivateStore();
   const {currentCode} = useCurrrentCode();
 
@@ -58,6 +60,10 @@ const CartScreen = ({
 
   const accressStep = () => {
     navigation.push('AddressCart');
+  };
+
+  const goToLogin = () => {
+    return navigation.navigate('Login');
   };
 
   const onPress = (id: string) => {
@@ -128,7 +134,45 @@ const CartScreen = ({
     }
   };
 
+  const rewardGuardian = () => {
+    const existsReward = cart_product?.find(
+      (cartProduct: Cart_product) => cartProduct.observation === 'Recompensa',
+    );
+
+    if (existsReward && !currentCode) {
+      const newArr = cart_product.filter(
+        (c: Cart_product) => c.id !== existsReward.id,
+      );
+      setCart_product(newArr);
+    }
+  };
+
+  // Lógica para buscar produtos recomendados aleatórios
+  const getRecommendedProducts = () => {
+    const excludedCategoryIds = categorys
+      .filter((cat: Category) =>
+        categoriesToExclude.includes(cat.category_name),
+      )
+      .map(cat => cat.id);
+
+    // Filtra produtos por categorias excluídas
+    const filteredProducts = products.filter(
+      (product: Product) => !excludedCategoryIds.includes(product.category_id),
+    );
+
+    // Seleciona aleatoriamente 12 produtos
+    const randomProducts = [];
+    while (randomProducts.length < 12 && filteredProducts.length > 0) {
+      const randomIndex = Math.floor(Math.random() * filteredProducts.length);
+      const randomProduct = filteredProducts.splice(randomIndex, 1)[0];
+      randomProducts.push(randomProduct);
+    }
+
+    setRecommendations(randomProducts);
+  };
+
   useEffect(() => {
+    rewardGuardian();
     cartGuardian();
   }, [cart_product]);
 
@@ -148,6 +192,10 @@ const CartScreen = ({
       }
     }
   }, [currentCode]);
+
+  useEffect(() => {
+    getRecommendedProducts();
+  }, []);
 
   if (user) {
     return (
@@ -193,7 +241,7 @@ const CartScreen = ({
                 {/* Cart Recomendations  */}
                 <FlatList
                   ref={ListRef}
-                  data={totalProducts2}
+                  data={recommendations}
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={[
@@ -345,7 +393,7 @@ const CartScreen = ({
     );
   }
 
-  return <EmptyAnimation text="Faça o login para acessar esta pagina" />;
+  return <NoAuth goToLogin={goToLogin} />;
 };
 
 const styles = StyleSheet.create({

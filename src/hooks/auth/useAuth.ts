@@ -25,10 +25,7 @@ export const checkAndSetToken = async () => {
 };
 
 export const removeToken = async () => {
-  console.log('removing token');
-
   try {
-    console.log('remove');
     await AsyncStorage.removeItem('secret');
     useAuth.getState().setToken(null);
     useAuth.getState().setLogout();

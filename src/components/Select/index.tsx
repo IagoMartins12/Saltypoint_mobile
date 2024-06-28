@@ -66,6 +66,10 @@ const SelectComponent: React.FC<CustomPickerStyle> = ({
           },
           placeholder: {
             marginLeft: 40,
+            color:
+              currentTheme === 'light'
+                ? COLORS.textColorLight
+                : COLORS.textColorDark,
           },
           inputAndroid: {
             marginLeft: 40,

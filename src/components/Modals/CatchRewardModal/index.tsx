@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: '90%',
     alignSelf: 'center',
-    height: Dimensions.get('window').height * 0.7,
+    height: Dimensions.get('window').height * 0.65,
     borderRadius: 20,
     alignItems: 'center',
     gap: 20,

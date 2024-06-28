@@ -22,26 +22,33 @@ import MyText from '../components/Text';
 import {createUser} from '../services';
 import {CreateUserDto} from '../types/Dtos';
 import useShowToast from '../hooks/customHooks/useShowToast';
+import {useState} from 'react';
+import LoadingIndicator from '../components/Loading';
 
 const RegisterScreen = ({
   navigation,
 }: {
   navigation: NativeStackNavigationProp<any>;
 }) => {
+  const [loading, setLoading] = useState(false);
   const {control, handleSubmit, reset} = useForm();
   const {currentTheme} = useTheme();
   const {showToast} = useShowToast();
   const onSubmit = async data => {
     const createUserDto = data as CreateUserDto;
+    setLoading(true);
     const response = await createUser(createUserDto);
 
     if (response.status === 400) {
+      setLoading(false);
       return showToast(response.data.message, 'success');
     } else if (response.status === 201) {
+      setLoading(false);
       showToast('conta criada com sucesso!', 'success');
       navigation.navigate('Login');
       reset();
     } else {
+      setLoading(false);
       showToast('Erro ao realizar cadastro!', 'error');
     }
   };
@@ -117,7 +124,11 @@ const RegisterScreen = ({
                   <TouchableOpacity
                     onPress={handleSubmit(onSubmit)}
                     style={global.buttonStyle}>
-                    <Text style={{color: '#FFFFFF'}}>Registrar</Text>
+                    {loading ? (
+                      <LoadingIndicator />
+                    ) : (
+                      <Text style={{color: '#FFFFFF'}}>Registrar</Text>
+                    )}
                   </TouchableOpacity>
                 </View>
 
@@ -132,7 +143,6 @@ const RegisterScreen = ({
                       }}
                       textSize="mediumText2"
                       onPress={buttonPressHandler}>
-                      {' '}
                       Faça o login
                     </MyText>
                   </MyText>

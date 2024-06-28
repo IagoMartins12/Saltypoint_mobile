@@ -41,6 +41,7 @@ export interface Result {
 }
 
 export interface GoogleMapsApiResponse {
+  error_message: any;
   plus_code?: PlusCode;
   results: Result[];
   status: string;

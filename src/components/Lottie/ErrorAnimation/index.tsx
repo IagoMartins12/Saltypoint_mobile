@@ -26,7 +26,7 @@ const ErrorAnimation: React.FC<ErrorAnimationProps> = ({text}) => {
         style={styles.LottieStyle}
         source={require('../../../lottie/error.json')}
         autoPlay
-        duration={3500}
+        duration={4000}
         loop
       />
 

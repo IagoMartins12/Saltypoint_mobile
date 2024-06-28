@@ -143,10 +143,13 @@ export const handleInputChange = (event: string) => {
 };
 
 export const getCartTotal = (cart_product: Cart_product[]) => {
-  return cart_product.reduce((total, item) => total + Number(item.value), 0);
+  return cart_product?.reduce((total, item) => total + Number(item.value), 0);
 };
 export const getCartTotalLenght = (cart_product: Cart_product[]) => {
-  return cart_product.reduce((total, item) => total + Number(item.quantity), 0);
+  return cart_product?.reduce(
+    (total, item) => total + Number(item.quantity),
+    0,
+  );
 };
 
 export const getDiscount = (discount: number, cartProductTotal: number) => {

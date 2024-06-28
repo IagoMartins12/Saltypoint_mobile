@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -18,9 +18,16 @@ import OptionsTittle from '../../OptionsTittle';
 import useTheme from '../../../hooks/useTheme';
 import ModalIcon from '../ModalIcon';
 import usePrivateStore from '../../../hooks/store/usePrivateStore';
-import {Discount_cupom, User_Rewards} from '../../../types/ModelsType';
+import {
+  Cart_product,
+  Discount_cupom,
+  User_Rewards,
+} from '../../../types/ModelsType';
 import useCurrrentCode from '../../../hooks/reward';
 import CouponCardSelected from '../../CouponCardSelected';
+import useShowToast from '../../../hooks/customHooks/useShowToast';
+import ToastComponent from '../../Message';
+import useToast from '../../../hooks/useToast';
 
 const options = [
   {
@@ -37,17 +44,40 @@ const CouponsModal: React.FC<ModalProps> = ({
   hideModal,
   translateY,
 }) => {
+  const [filteredCoupons, setFilteredCoupons] = useState<Discount_cupom[]>([]);
   const [searchText, setSearchText] = useState('');
   const [selectedOption, setSelectedOption] = useState(0);
 
+  const {isOpen, onClose} = useToast();
+
   const {currentCode, setCurrentCode} = useCurrrentCode();
   const {currentTheme} = useTheme();
-  const {coupons, userReward} = usePrivateStore();
+  const {coupons, userReward, cart_product, setCart_product} =
+    usePrivateStore();
 
-  const filteredCoupons = coupons.filter(
-    (coupon: Discount_cupom) => coupon.type_coupon === 0,
-  );
+  const {showToast} = useShowToast();
 
+  const getHiddenCoupons = () => {
+    const hiddenCoupon = coupons.find(
+      (c: Discount_cupom) => c.cupom_name === searchText,
+    );
+
+    if (hiddenCoupon) {
+      const alreadyExists = filteredCoupons.find(
+        (c: Discount_cupom) => c.id === hiddenCoupon.id,
+      );
+
+      if (alreadyExists) return;
+
+      const newArr = [...filteredCoupons, hiddenCoupon];
+      setFilteredCoupons(newArr);
+      showToast('Cupom Resgatado', 'success');
+      return;
+    }
+
+    showToast('Cupom não encontrado', 'error');
+    return;
+  };
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
@@ -64,6 +94,12 @@ const CouponsModal: React.FC<ModalProps> = ({
     <TouchableOpacity
       onPress={() => {
         setCurrentCode(null);
+        if (selectedOption === 1) {
+          const filteredCart = cart_product.filter(
+            (p: Cart_product) => p.observation !== 'Recompensa',
+          );
+          setCart_product(filteredCart);
+        }
       }}
       style={[
         styles.container,
@@ -100,6 +136,13 @@ const CouponsModal: React.FC<ModalProps> = ({
     </TouchableOpacity>
   );
 
+  useEffect(() => {
+    const filteredCoup = coupons.filter(
+      (coupon: Discount_cupom) => coupon.type_coupon === 0,
+    );
+
+    setFilteredCoupons(filteredCoup);
+  }, []);
   return (
     <View style={styles.centeredView}>
       <Modal animationType="none" transparent={true} visible={modalOpen}>
@@ -119,6 +162,7 @@ const CouponsModal: React.FC<ModalProps> = ({
                     : COLORS.backgroundColorDark,
               },
             ]}>
+            <ToastComponent isOpen={isOpen} onClose={onClose} />
             <ModalIcon handleOverlayPress={handleOverlayPress} height="5%" />
             <View
               style={{
@@ -163,6 +207,7 @@ const CouponsModal: React.FC<ModalProps> = ({
                     }
                   />
                   <MyText
+                    onPress={getHiddenCoupons}
                     style={{
                       color: searchText
                         ? COLORS.secondaryRed
@@ -222,7 +267,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   modalContainer: {
-    width: '100%',
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
     paddingBottom: 80,

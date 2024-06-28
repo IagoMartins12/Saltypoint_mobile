@@ -73,6 +73,7 @@ const FetchData = ({redirectToErrorScreen}: FetchProps) => {
         getRewards(),
         getGeneralData(),
       ]);
+
       if (
         typeof categoryData === 'number' ||
         typeof productData === 'number' ||
@@ -93,7 +94,6 @@ const FetchData = ({redirectToErrorScreen}: FetchProps) => {
       setReward(rewardData);
       setGeneralData(generalData);
     } catch (error) {
-      console.log('caiu aqui');
       console.log(error);
     }
   };

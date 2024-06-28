@@ -15,6 +15,7 @@ import useGlobalStore from '../../hooks/store/useGlobalStore';
 import usePrivateStore from '../../hooks/store/usePrivateStore';
 import {removeCartProduct, updateCartProduct} from '../../services';
 import useShowToast from '../../hooks/customHooks/useShowToast';
+import LoadingIndicator from '../Loading';
 
 interface ProductCardProps {
   cartProduct: Cart_product;
@@ -25,17 +26,18 @@ const ProductCartCard: React.FC<ProductCardProps> = ({
   cartProduct,
   onPress,
 }) => {
-  const [count, setCount] = useState(cartProduct.quantity);
+  const [loading, setLoading] = useState(false);
   const {products} = useGlobalStore();
   const {showToast} = useShowToast();
   const {cart_product, setCart_product} = usePrivateStore();
 
   const handleDeleteAddress = async () => {
     if (cartProduct) {
+      setLoading(true);
       const response = await removeCartProduct({
         cart_product_id: cartProduct.id,
       });
-
+      setLoading(false);
       if (response.status === 200) {
         const updateCart = cart_product.filter(
           (cart: Cart_product) => cart.id !== cartProduct.id,
@@ -45,63 +47,6 @@ const ProductCartCard: React.FC<ProductCardProps> = ({
       } else {
         return showToast('Erro ao deletar produto', 'error');
       }
-    }
-  };
-
-  const handleUpdateProduct = async (productCount: number) => {
-    const response = await updateCartProduct({
-      id: cartProduct.id,
-      quantity: productCount,
-      value: String(
-        (
-          Number(+cartProduct.value / cartProduct.quantity) * productCount
-        ).toFixed(2),
-      ),
-    });
-
-    if (response.status === 200) {
-      // Encontrar o índice do objeto no array cart_product
-      const index = cart_product.findIndex(
-        (item: Cart_product) => item.id === cartProduct.id,
-      );
-      if (index !== -1) {
-        // Criar uma cópia do array cart_product
-        const updatedCartProduct = [...cart_product];
-        // Atualizar a propriedade quantity do objeto correspondente com o novo valor
-        updatedCartProduct[index].quantity = productCount;
-        (updatedCartProduct[index].value = String(
-          (
-            Number(+cartProduct.value / cartProduct.quantity) * productCount
-          ).toFixed(2),
-        )),
-          // Atualizar o estado cart_product com o array atualizado
-          setCart_product(updatedCartProduct);
-      }
-      // Mostrar mensagem de sucesso
-      showToast('Produto atualizado', 'success');
-      return true;
-    } else {
-      // Mostrar mensagem de erro
-      showToast('Erro ao atualizar produto', 'error');
-      return false;
-    }
-  };
-
-  const increaseCount = async () => {
-    const response = await handleUpdateProduct(count + 1); // Atualiza o produto com o novo valor de count
-
-    // if (response) {
-    setCount(prevCount => prevCount + 1);
-    // }
-  };
-
-  const decreaseCount = async () => {
-    if (count > 1) {
-      const response = await handleUpdateProduct(count - 1); // Atualiza o produto com o novo valor de count
-
-      // if (response) {
-      setCount(prevCount => prevCount - 1);
-      // }
     }
   };
 
@@ -200,28 +145,22 @@ const ProductCartCard: React.FC<ProductCardProps> = ({
           <View style={[styles.addItemsDiv]}>
             {/* {count === 1 ? ( */}
             {+cartProduct.value !== 0 && (
-              <Pressable style={[styles.iconBox]} onPress={handleDeleteAddress}>
-                <CustomIcon
-                  name="trash-2"
-                  size={20}
-                  color="red"
-                  pack="Feather"
-                />
-              </Pressable>
+              <TouchableOpacity
+                style={[styles.iconBox]}
+                onPress={handleDeleteAddress}
+                disabled={loading}>
+                {loading ? (
+                  <LoadingIndicator />
+                ) : (
+                  <CustomIcon
+                    name="trash-2"
+                    size={20}
+                    color="red"
+                    pack="Feather"
+                  />
+                )}
+              </TouchableOpacity>
             )}
-
-            {/* ) : (
-              <Pressable style={[styles.iconBox]} onPress={decreaseCount}>
-                <CustomIcon name="minus" size={20} color="red" pack="Feather" />
-              </Pressable>
-            )} */}
-
-            {/* <View style={[styles.iconBox]}>
-              <MyText textSize="mediumText2"> {count} </MyText>
-            </View>
-            <Pressable style={[styles.iconBox]} onPress={increaseCount}>
-              <CustomIcon name="plus" size={20} color="red" pack="Feather" />
-            </Pressable> */}
           </View>
         </View>
       </View>
@@ -232,7 +171,7 @@ const ProductCartCard: React.FC<ProductCardProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    height: Dimensions.get('screen').height / 5.75,
+    // height: Dimensions.get('screen').height / 5.75,
     gap: 15,
   },
 

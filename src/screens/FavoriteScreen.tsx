@@ -1,11 +1,5 @@
-import React from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {
-  GestureHandlerRootView,
-  PanGestureHandler,
-  State,
-} from 'react-native-gesture-handler';
 import ProductCardHorizontal from '../components/ProductCardHorizontal';
 import TitleSection from '../components/TitleSection';
 import {global} from '../style';
@@ -15,6 +9,7 @@ import useTheme from '../hooks/useTheme';
 import {COLORS} from '../theme/theme';
 import usePrivateStore from '../hooks/store/usePrivateStore';
 import EmptyAnimation from '../components/Lottie/EmptyAnimation';
+import NoAuth from '../components/NoAuth';
 
 const FavoriteScreen = ({
   navigation,
@@ -29,8 +24,12 @@ const FavoriteScreen = ({
     navigation.navigate('Product', {id});
   };
 
+  const goToLogin = () => {
+    return navigation.navigate('Login');
+  };
+
   const renderFavoriteProducts = () => {
-    if (favorites.length > 0) {
+    if (favorites?.length > 0) {
       return favorites.map((favorite, index) => {
         const product = products.find(
           (p: Product) => p.id === favorite.product_id,
@@ -56,31 +55,27 @@ const FavoriteScreen = ({
     }
   };
 
-  const renderContent = () => {
-    if (user) {
-      return (
-        <ScrollView
-          style={[
-            global.mainContainer,
-            {
-              backgroundColor:
-                currentTheme === 'light'
-                  ? COLORS.backgroundColorLight
-                  : COLORS.backgroundColorDark,
-              marginBottom: 50,
-            },
-          ]}
-          showsVerticalScrollIndicator={false}>
-          <TitleSection title="Favoritos" />
-          <View style={styles.productsDiv}>{renderFavoriteProducts()}</View>
-        </ScrollView>
-      );
-    } else {
-      return <EmptyAnimation text="Faça o login para acessar esta página" />;
-    }
-  };
-
-  return renderContent();
+  if (user) {
+    return (
+      <ScrollView
+        style={[
+          global.mainContainer,
+          {
+            backgroundColor:
+              currentTheme === 'light'
+                ? COLORS.backgroundColorLight
+                : COLORS.backgroundColorDark,
+            marginBottom: 50,
+          },
+        ]}
+        showsVerticalScrollIndicator={false}>
+        <TitleSection title="Favoritos" />
+        <View style={styles.productsDiv}>{renderFavoriteProducts()}</View>
+      </ScrollView>
+    );
+  } else {
+    return <NoAuth goToLogin={goToLogin} />;
+  }
 };
 
 const styles = StyleSheet.create({

@@ -47,14 +47,14 @@ const StyledInputComponent2: React.FC<CepInputProps> = ({
                   currentTheme === 'dark'
                     ? COLORS.textColorDark
                     : COLORS.textColorLight,
-                borderColor:
-                  currentTheme === 'dark'
-                    ? COLORS.borderColorDark
-                    : COLORS.borderColorLight,
+                borderColor: focus
+                  ? '#FF0000'
+                  : currentTheme === 'dark'
+                  ? COLORS.borderColorDark
+                  : COLORS.borderColorLight,
               },
               focus && styles.inputError,
             ]}
-            // placeholder={name}
             placeholderTextColor={
               currentTheme === 'dark'
                 ? COLORS.textColorDark
