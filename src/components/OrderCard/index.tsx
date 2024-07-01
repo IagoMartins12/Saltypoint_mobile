@@ -1,11 +1,11 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import {View, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import CustomIcon from '../CustomIcon';
 import OrderItemCard from '../OrderItemCard';
 import {COLORS} from '../../theme/theme';
 import useTheme from '../../hooks/useTheme';
 import MyText from '../Text';
-import {Order, OrderType} from '../../types/ModelsType';
+import {OrderType} from '../../types/ModelsType';
 import useGlobalStore from '../../hooks/store/useGlobalStore';
 import {formatOrderDate} from '../../utils';
 

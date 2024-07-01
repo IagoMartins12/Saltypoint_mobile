@@ -1,5 +1,5 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, {useEffect} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {useEffect} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
@@ -8,7 +8,6 @@ import {
   ScrollView,
 } from 'react-native-gesture-handler';
 import SectionTitle from '../../components/SectionTitle';
-import {global} from '../../style';
 import OrderCard from '../../components/OrderCard';
 import {COLORS} from '../../theme/theme';
 import {enableGoBack} from '../../utils';
@@ -41,6 +40,14 @@ const OrderScreen = ({
   useEffect(() => {
     enableGoBack(navigation);
   }, []);
+
+  // Ordenar as orders pela data de criação da mais recente para a mais antiga
+  const sortedOrders = orders.slice().sort((a, b) => {
+    const dateA = new Date(a.order_date);
+    const dateB = new Date(b.order_date);
+    return dateB.getTime() - dateA.getTime();
+  });
+
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <PanGestureHandler
@@ -64,9 +71,9 @@ const OrderScreen = ({
                     : COLORS.backgroundColorDark,
               },
             ]}>
-            {orders.length > 0 ? (
+            {sortedOrders.length > 0 ? (
               <View style={{gap: 10, flex: 1}}>
-                {orders.map((order, i) => (
+                {sortedOrders.map((order, i) => (
                   <OrderCard onPress={goToOrder} order={order} key={i} />
                 ))}
               </View>

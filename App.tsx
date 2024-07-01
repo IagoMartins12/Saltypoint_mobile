@@ -28,6 +28,8 @@ import ToastComponent from './src/components/Message';
 import useAuth, {checkAndSetToken} from './src/hooks/auth/useAuth';
 import {checkIntro, checkUser} from './src/utils';
 import useToast from './src/hooks/useToast';
+import SplashScreen from 'react-native-splash-screen';
+
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -67,6 +69,10 @@ const App = () => {
 
   useEffect(() => {
     checkAndSetToken();
+  }, []);
+
+  useEffect(() => {
+    SplashScreen.hide();
   }, []);
 
   if (mainScreen === '') {

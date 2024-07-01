@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     height: 150,
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
-    padding: 10,
+    padding: 15,
     objectFit: 'fill',
   },
   productTitle: {
