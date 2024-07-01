@@ -44,7 +44,7 @@ const RegisterScreen = ({
       return showToast(response.data.message, 'success');
     } else if (response.status === 201) {
       setLoading(false);
-      showToast('conta criada com sucesso!', 'success');
+      showToast('Conta criada com sucesso!', 'success');
       navigation.navigate('Login');
       reset();
     } else {
