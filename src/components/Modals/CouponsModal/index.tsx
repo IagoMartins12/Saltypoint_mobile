@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {
   Dimensions,
+  FlatList,
   Image,
   Modal,
+  ScrollView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -45,6 +47,8 @@ const CouponsModal: React.FC<ModalProps> = ({
   translateY,
 }) => {
   const [filteredCoupons, setFilteredCoupons] = useState<Discount_cupom[]>([]);
+  const [filteredRewards, setFilteredRewards] = useState<User_Rewards[]>([]);
+
   const [searchText, setSearchText] = useState('');
   const [selectedOption, setSelectedOption] = useState(0);
 
@@ -142,6 +146,7 @@ const CouponsModal: React.FC<ModalProps> = ({
     );
 
     setFilteredCoupons(filteredCoup);
+    setFilteredRewards(userReward);
   }, []);
   return (
     <View style={styles.centeredView}>
@@ -163,90 +168,93 @@ const CouponsModal: React.FC<ModalProps> = ({
               },
             ]}>
             <ToastComponent isOpen={isOpen} onClose={onClose} />
-            <ModalIcon handleOverlayPress={handleOverlayPress} height="5%" />
-            <View
-              style={{
-                width: '100%',
-                marginTop: 30,
-              }}>
+            <ModalIcon handleOverlayPress={handleOverlayPress} height={50} />
+            <View>
               <OptionsTittle
                 options={options}
                 selectedOption={selectedOption}
                 setSelectedOption={setSelectedOption}
               />
-              <View
-                style={{
-                  height: Dimensions.get('screen').height * 0.9,
-                }}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <TextInput
-                    placeholder={
-                      selectedOption === 0
-                        ? 'Código do cupom'
-                        : 'Código da recompensa'
-                    }
-                    style={[
-                      styles.inputStyle,
-                      {
-                        color:
-                          currentTheme === 'dark'
-                            ? COLORS.textColorDark
-                            : COLORS.textColorLight,
-                        borderColor:
-                          currentTheme === 'dark'
-                            ? COLORS.borderColorDark
-                            : COLORS.borderColorLight,
-                      },
-                    ]}
-                    value={searchText}
-                    onChangeText={ev => setSearchText(ev)}
-                    placeholderTextColor={
-                      currentTheme === 'dark'
-                        ? COLORS.textColorDark
-                        : COLORS.textColorLight
-                    }
-                  />
-                  <MyText
-                    onPress={getHiddenCoupons}
-                    style={{
-                      color: searchText
-                        ? COLORS.secondaryRed
-                        : currentTheme === 'light'
-                        ? COLORS.textColorLight
-                        : COLORS.textColorDark,
-                    }}>
-                    Adicionar
-                  </MyText>
-                </View>
-                <View style={styles.cardView}>
-                  {selectedOption === 0 ? (
-                    <>
-                      {filteredCoupons.length > 0 ? (
-                        <View style={{gap: 15, flex: 1}}>
-                          {renderNullCard}
-                          {filteredCoupons.map((c, i) => (
-                            <CouponCardSelected key={i} coupon={c} />
-                          ))}
-                        </View>
-                      ) : (
+
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <TextInput
+                  placeholder={
+                    selectedOption === 0
+                      ? 'Código do cupom'
+                      : 'Código da recompensa'
+                  }
+                  style={[
+                    styles.inputStyle,
+                    {
+                      color:
+                        currentTheme === 'dark'
+                          ? COLORS.textColorDark
+                          : COLORS.textColorLight,
+                      borderColor:
+                        currentTheme === 'dark'
+                          ? COLORS.borderColorDark
+                          : COLORS.borderColorLight,
+                    },
+                  ]}
+                  value={searchText}
+                  onChangeText={ev => setSearchText(ev)}
+                  placeholderTextColor={
+                    currentTheme === 'dark'
+                      ? COLORS.textColorDark
+                      : COLORS.textColorLight
+                  }
+                />
+                <MyText
+                  onPress={getHiddenCoupons}
+                  style={{
+                    color: searchText
+                      ? COLORS.secondaryRed
+                      : currentTheme === 'light'
+                      ? COLORS.textColorLight
+                      : COLORS.textColorDark,
+                  }}>
+                  Adicionar
+                </MyText>
+              </View>
+              <View style={styles.cardView}>
+                {selectedOption === 0 ? (
+                  <>
+                    {filteredCoupons.length > 0 ? (
+                      <View
+                        style={{
+                          gap: 15,
+                          paddingBottom: 30,
+                        }}>
+                        {renderNullCard}
+
+                        {filteredCoupons.map((c, i) => (
+                          <CouponCardSelected key={i} coupon={c} />
+                        ))}
+                      </View>
+                    ) : (
+                      <View>
                         <EmptyAnimation text="Você não possui nenhum cupom disponivel" />
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {userReward.length > 0 ? (
-                        <View style={{gap: 15, flex: 1}}>
-                          {renderNullCard}
-                          {userReward.map((r: User_Rewards, i) => (
-                            <RewardCardHorizontal key={i} reward={r} />
-                          ))}
-                        </View>
-                      ) : (
-                        <EmptyAnimation text="Você não possui nenhuma recompensa disponivel" />
-                      )}
-                    </>
-                  )}
-                </View>
+                      </View>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {userReward.length > 0 ? (
+                      <View
+                        style={{
+                          gap: 15,
+                          paddingBottom: 30,
+                        }}>
+                        {renderNullCard}
+                        {userReward.map((r: User_Rewards, i) => (
+                          <RewardCardHorizontal key={i} reward={r} />
+                        ))}
+                      </View>
+                    ) : (
+                      <EmptyAnimation text="Você não possui nenhuma recompensa disponivel" />
+                    )}
+                  </>
+                )}
               </View>
             </View>
           </Animated.ScrollView>
@@ -269,26 +277,10 @@ const styles = StyleSheet.create({
   modalContainer: {
     borderTopEndRadius: 20,
     borderTopStartRadius: 20,
-    paddingBottom: 80,
-  },
-  iconStyle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 35,
-    width: 35,
-    backgroundColor: '#f0efef',
-    borderRadius: 100,
-    top: 15,
-    left: 20,
-    position: 'absolute',
   },
   cardView: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 15,
     marginHorizontal: 20,
     marginTop: 20,
-    justifyContent: 'center',
   },
   inputStyle: {
     padding: 10,

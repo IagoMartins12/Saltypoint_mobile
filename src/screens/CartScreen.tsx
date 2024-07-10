@@ -77,7 +77,7 @@ const CartScreen = ({
   };
 
   const goToLogin = () => {
-    return navigation.navigate('Login');
+    return navigation.push('Login');
   };
 
   const onPress = (id: string) => {

@@ -1,10 +1,18 @@
 import React, {useState} from 'react';
 import {Control, Controller, FieldValues} from 'react-hook-form';
-import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  PixelRatio,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import {BORDERRADIUS, COLORS, FONTSIZE} from '../../theme/theme';
 import CustomIcon, {PackNames} from '../CustomIcon';
 import useTheme from '../../hooks/useTheme';
 import MyText from '../Text';
+import {scale} from '../../hooks/scale';
 
 interface InputProps {
   name: string;
@@ -28,6 +36,7 @@ const StyledInputComponent: React.FC<InputProps> = ({
   const [typeState, setTypeState] = useState(isPassword);
   const [isFocused, setIsFocused] = useState(false);
   const {currentTheme} = useTheme();
+  const currentPixelFont = PixelRatio.getFontScale();
 
   const inputStyle = [
     styles.input,
@@ -53,6 +62,7 @@ const StyledInputComponent: React.FC<InputProps> = ({
                   : currentTheme === 'light'
                   ? COLORS.borderColorLight
                   : COLORS.borderColorDark,
+                height: currentPixelFont > 1.5 ? 58 : 50,
               },
             ]}>
             <View
@@ -143,7 +153,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: BORDERRADIUS.radius_10,
     borderWidth: 0.75,
-    height: 50,
   },
   input: {
     flex: 1,
@@ -156,7 +165,7 @@ const styles = StyleSheet.create({
     top: -11,
     fontWeight: 'bold',
     paddingHorizontal: 4,
-    fontSize: FONTSIZE.size_14,
+    fontSize: scale(FONTSIZE.size_14),
   },
   iconContainer: {
     position: 'absolute',

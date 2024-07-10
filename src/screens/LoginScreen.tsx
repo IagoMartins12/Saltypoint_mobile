@@ -27,6 +27,7 @@ import useAuth from '../hooks/auth/useAuth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useShowToast from '../hooks/customHooks/useShowToast';
 import LoadingIndicator from '../components/Loading';
+import {scale} from '../hooks/scale';
 
 const LoginScreen = ({
   navigation,
@@ -107,7 +108,7 @@ const LoginScreen = ({
                 Faça o login para se autenticar e realizar o seu pedido
               </MyText>
             </View>
-            <View style={styles.bottomView}>
+            <View>
               <View style={styles.mainContainer}>
                 <StyledInputComponent
                   control={control}
@@ -128,8 +129,7 @@ const LoginScreen = ({
                   style={styles.forgetPasswordDiv}
                   onPress={navigateForgetPassword}>
                   <MyText
-                    style={{textDecorationLine: 'underline'}}
-                    textSize="mediumText2">
+                    style={{textDecorationLine: 'underline', fontSize: 16}}>
                     Esqueci minha senha
                   </MyText>
                 </Pressable>
@@ -144,34 +144,14 @@ const LoginScreen = ({
                       <Text style={{color: '#FFFFFF'}}>Continuar</Text>
                     )}
                   </TouchableOpacity>
-                  {/* <TouchableOpacity
-                    onPress={handleSubmit(onSubmit)}
-                    style={global.buttonStyleWhite}>
-                    <View
-                      style={{
-                        height: 25,
-                        width: 25,
-                        marginRight: 10,
-                      }}>
-                      <Image
-                        source={require('../assets/googleIcon.png')}
-                        style={{
-                          height: '100%',
-                          width: '100%',
-                        }}
-                      />
-                    </View>
-
-                    <MyText textSize="mediumText2">Continuar com Google</MyText>
-                  </TouchableOpacity> */}
                   <View style={styles.registerText}>
-                    <MyText textSize="mediumText2">
+                    <MyText style={{fontSize: 16}}>
                       Não possui conta?{' '}
                       <MyText
                         style={{
                           color: COLORS.primaryBlue,
                           textDecorationLine: 'underline',
-                          fontSize: 16,
+                          fontSize: scale(16),
                         }}
                         onPress={buttonPressHandler}>
                         Se cadastre
@@ -205,19 +185,17 @@ const styles = StyleSheet.create({
   },
 
   brandwViewText: {
-    fontSize: FONTSIZE.size_28,
+    fontSize: scale(FONTSIZE.size_28),
     fontFamily: FONTFAMILY.poppins_semibold,
     fontWeight: '700',
   },
 
   brandwViewSubText: {
-    fontSize: FONTSIZE.size_18,
+    fontSize: scale(FONTSIZE.size_18),
     fontFamily: FONTFAMILY.poppins_medium,
     textAlign: 'center',
     paddingHorizontal: 60,
   },
-
-  bottomView: {},
 
   mainContainer: {
     marginHorizontal: 40,
@@ -231,7 +209,7 @@ const styles = StyleSheet.create({
   },
 
   optinsText: {
-    fontSize: FONTSIZE.size_18,
+    fontSize: scale(FONTSIZE.size_18),
     textAlign: 'center',
   },
 

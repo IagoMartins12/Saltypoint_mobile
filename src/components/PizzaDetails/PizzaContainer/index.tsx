@@ -29,7 +29,9 @@ const PizzaContainer: React.FC<SelectProps> = ({
         </MyText>
       </View>
 
-      <MyText style={styles.description}>{currentProduct.description}</MyText>
+      <MyText style={styles.description} numberLines={5}>
+        {currentProduct.description}
+      </MyText>
     </View>
   );
 };

@@ -24,6 +24,7 @@ import {CreateUserDto} from '../types/Dtos';
 import useShowToast from '../hooks/customHooks/useShowToast';
 import {useState} from 'react';
 import LoadingIndicator from '../components/Loading';
+import {scale} from '../hooks/scale';
 
 const RegisterScreen = ({
   navigation,
@@ -127,21 +128,20 @@ const RegisterScreen = ({
                     {loading ? (
                       <LoadingIndicator />
                     ) : (
-                      <Text style={{color: '#FFFFFF'}}>Registrar</Text>
+                      <MyText style={{color: '#FFFFFF'}}>Registrar</MyText>
                     )}
                   </TouchableOpacity>
                 </View>
 
                 <View style={styles.registerText}>
-                  <MyText textSize="mediumText2">
+                  <MyText style={{fontSize: 16}} numberLines={1}>
                     Já possui conta?{' '}
                     <MyText
                       style={{
                         color: COLORS.primaryBlue,
                         textDecorationLine: 'underline',
-                        fontSize: 16,
+                        fontSize: scale(16),
                       }}
-                      textSize="mediumText2"
                       onPress={buttonPressHandler}>
                       Faça o login
                     </MyText>
@@ -178,13 +178,13 @@ const styles = StyleSheet.create({
   },
 
   brandwViewText: {
-    fontSize: FONTSIZE.size_28,
+    fontSize: scale(FONTSIZE.size_28),
     fontFamily: FONTFAMILY.poppins_semibold,
     fontWeight: '700',
   },
 
   brandwViewSubText: {
-    fontSize: FONTSIZE.size_18,
+    fontSize: scale(FONTSIZE.size_18),
     fontFamily: FONTFAMILY.poppins_medium,
     textAlign: 'center',
     paddingHorizontal: 60,

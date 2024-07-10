@@ -17,6 +17,7 @@ import {global} from '../style';
 import {recoverPassword} from '../services';
 import LoadingIndicator from '../components/Loading';
 import useShowToast from '../hooks/customHooks/useShowToast';
+import {scale} from '../hooks/scale';
 
 enum STEPS {
   EMAIL = 0,
@@ -177,13 +178,13 @@ const styles = StyleSheet.create({
   },
 
   brandwViewText: {
-    fontSize: FONTSIZE.size_28,
+    fontSize: scale(FONTSIZE.size_28),
     fontFamily: FONTFAMILY.poppins_semibold,
     fontWeight: '700',
   },
 
   brandwViewSubText: {
-    fontSize: FONTSIZE.size_18,
+    fontSize: scale(FONTSIZE.size_18),
     fontFamily: FONTFAMILY.poppins_medium,
     textAlign: 'center',
     paddingHorizontal: 60,

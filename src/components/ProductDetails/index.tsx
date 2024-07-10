@@ -53,7 +53,7 @@ const ProductDetails: React.FC<PizzaProps> = ({
             </MyText>
           </View>
 
-          <MyText style={styles.description}>
+          <MyText style={styles.description} numberLines={3}>
             {currentProduct.description}
           </MyText>
         </View>

@@ -165,7 +165,7 @@ const GeoAddressScreen = ({
                           onPress={() => {
                             handleResultClick(result, isValidAddress);
                           }}>
-                          <MyText textSize="mediumText2">
+                          <MyText style={{fontSize: 16}}>
                             {result.formatted_address}
                           </MyText>
                         </TouchableOpacity>

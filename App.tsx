@@ -47,12 +47,10 @@ const App = () => {
       const isFirstUse = await checkIntro();
 
       if (isFirstUse) {
-        console.log('primeiro acesso');
         return setMainScreen('Intro');
       }
       const haveToken = await checkUser();
       if (haveToken) {
-        console.log('está logado');
         return setMainScreen('Tab');
       }
 

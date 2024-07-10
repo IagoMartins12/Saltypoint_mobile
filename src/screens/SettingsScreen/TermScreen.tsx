@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   text: {
-    fontSize: FONTSIZE.size_18,
+    fontSize: 18,
     fontWeight: '300',
   },
   listItem: {

@@ -23,7 +23,6 @@ const ClosedView = () => {
   };
 
   useEffect(() => {
-    console.log('systemOpeninssg', systemOpening);
     if (systemOpening === false) {
       showModal();
     }

@@ -8,7 +8,7 @@ const ModalIcon = ({
   height,
 }: {
   handleOverlayPress: () => void;
-  height: '5%' | '10%' | '15%';
+  height: '5%' | '10%' | '15%' | number;
 }) => {
   const {currentTheme} = useTheme();
 

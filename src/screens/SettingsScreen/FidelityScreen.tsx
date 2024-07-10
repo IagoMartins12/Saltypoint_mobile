@@ -168,7 +168,7 @@ const FidelityScreen = ({
             </View>
 
             <View style={styles.rewardsText}>
-              <MyText textSize="smallText">*Prêmio não acumulativo</MyText>
+              <MyText>*Prêmio não acumulativo</MyText>
             </View>
 
             <FidelityAccordeonSection showAllContent />

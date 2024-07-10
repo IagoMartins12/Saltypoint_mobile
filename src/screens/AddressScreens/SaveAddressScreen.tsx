@@ -316,7 +316,7 @@ const SaveAddressScreen = ({
           {iconsArr.map((icon, i) => (
             <View key={i} style={styles.iconBox}>
               <CustomIcon name={icon.icon} size={25} pack="Feather" />
-              <MyText textSize="mediumText"> {icon.name}</MyText>
+              <MyText style={{fontSize: 18}}> {icon.name}</MyText>
               <TouchableOpacity
                 style={[
                   styles.roundedButton,
@@ -380,8 +380,8 @@ const styles = StyleSheet.create({
   },
   roundedButton: {
     marginLeft: 5,
-    width: 18,
-    height: 18,
+    width: 20,
+    height: 20,
     borderRadius: 1000,
     alignItems: 'center',
     justifyContent: 'center',
@@ -389,8 +389,8 @@ const styles = StyleSheet.create({
   },
 
   insideRoundedButton: {
-    width: 7.5,
-    height: 7.5,
+    width: 8,
+    height: 8,
     borderRadius: 1000,
   },
 });

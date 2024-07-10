@@ -28,16 +28,6 @@ const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
 }) => {
   const {currentTheme} = useTheme();
 
-  const renderPointsText = () => {
-    if (!showPoints) return null;
-    return (
-      <View style={styles.pointsText}>
-        <CustomIcon name="reply" size={11} color="#ffffff" />
-        <MyText> Ganhe {product.value} pontos </MyText>
-      </View>
-    );
-  };
-
   return (
     <TouchableOpacity
       style={[
@@ -53,7 +43,6 @@ const ProductCardHorizontal: React.FC<ProductCardHorizontalProps> = ({
       onPress={() => {
         onPress(product.id);
       }}>
-      {renderPointsText()}
       <View style={styles.cardContainer}>
         <View
           style={{

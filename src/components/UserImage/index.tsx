@@ -1,12 +1,8 @@
-import {ActivityIndicator, Image, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, Image, StyleSheet, View} from 'react-native';
 import usePrivateStore from '../../hooks/store/usePrivateStore';
 import useProfileLoading from '../../hooks/useProfileLoading';
-import LoadingIndicator from '../Loading';
 
-interface Props {
-  testee?: string;
-}
-const UserImage: React.FC<Props> = ({testee}) => {
+const UserImage = () => {
   const {user} = usePrivateStore();
   const {loading} = useProfileLoading();
 
@@ -24,11 +20,14 @@ const UserImage: React.FC<Props> = ({testee}) => {
       </View>
     );
   }
+  if (!user?.image) {
+    return <></>;
+  }
   return (
     <Image
       style={styles.CartItemImage}
       source={{
-        uri: user.image,
+        uri: user?.image,
       }}
     />
   );

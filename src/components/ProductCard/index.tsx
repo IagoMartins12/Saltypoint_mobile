@@ -39,7 +39,7 @@ const ProductCard: React.FC<ProductCardProps> = ({product, onPress}) => {
       }}>
       <View style={styles.PointsText}>
         <CustomIcon name="reply" size={11} />
-        <MyText textSize="mediumText2"> Ganhe {getPoints} pontos </MyText>
+        <MyText style={{fontSize: 15}}> Ganhe {getPoints} pontos </MyText>
       </View>
 
       <ImageBackground

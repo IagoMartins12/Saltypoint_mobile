@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, Modal, StyleSheet, View} from 'react-native';
+import {Dimensions, Modal, PixelRatio, StyleSheet, View} from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
 import useTheme from '../../../hooks/useTheme';
 import {COLORS} from '../../../theme/theme';
@@ -8,6 +8,7 @@ import ModalIcon from '../ModalIcon';
 import MyText from '../../Text';
 import useGlobalStore from '../../../hooks/store/useGlobalStore';
 import ClosedAnimation from '../../Lottie/ClosedAnimation';
+import {scale} from '../../../hooks/scale';
 
 const NotOpenModal: React.FC<ModalProps> = ({
   modalOpen,
@@ -17,6 +18,8 @@ const NotOpenModal: React.FC<ModalProps> = ({
 }) => {
   const {currentTheme} = useTheme();
   const {generalData} = useGlobalStore();
+  const currentPixelFont = PixelRatio.getFontScale();
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translateY.value}],
@@ -41,6 +44,10 @@ const NotOpenModal: React.FC<ModalProps> = ({
                   currentTheme === 'light'
                     ? COLORS.backgroundColorLight
                     : COLORS.backgroundColorDark,
+                height:
+                  currentPixelFont <= 1.5
+                    ? Dimensions.get('window').height * 0.58
+                    : Dimensions.get('window').height * 0.75,
               },
             ]}>
             <ModalIcon handleOverlayPress={handleOverlayPress} height="10%" />
@@ -57,7 +64,7 @@ const NotOpenModal: React.FC<ModalProps> = ({
                   height: '50%',
                   width: '90%',
                   marginVertical: 'auto',
-                  gap: 5,
+                  gap: 10,
                 }}>
                 <MyText style={styles.title}>Oops!</MyText>
 
@@ -80,7 +87,6 @@ const NotOpenModal: React.FC<ModalProps> = ({
                           gap: 15,
                         }}>
                         <MyText style={styles.subtitle2}>
-                          {' '}
                           {generalData?.openingHours}
                         </MyText>
 
@@ -119,13 +125,12 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: '95%',
     alignSelf: 'center',
-    height: Dimensions.get('window').height * 0.58,
     borderRadius: 20,
     alignItems: 'center',
     gap: 20,
   },
   title: {
-    fontSize: 20,
+    fontSize: scale(20),
     fontWeight: '600',
     textAlign: 'center',
   },
@@ -136,15 +141,14 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   subtitle: {
-    width: '100%',
     fontWeight: '300',
-    fontSize: 18,
+    fontSize: scale(18),
     textAlign: 'center',
   },
 
   subtitle2: {
     fontWeight: '500',
-    fontSize: 18,
+    fontSize: scale(18),
     textAlign: 'center',
   },
 });

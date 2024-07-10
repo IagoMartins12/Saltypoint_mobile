@@ -33,7 +33,7 @@ const RewardScreen = ({
   const {user} = usePrivateStore();
 
   const goToLogin = () => {
-    return navigation.navigate('Login');
+    return navigation.push('Login');
   };
   const goToInfo = () => {
     return navigation.navigate('Fidelity');

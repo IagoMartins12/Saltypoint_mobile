@@ -125,8 +125,8 @@ const styles = StyleSheet.create({
     borderBottomStartRadius: 20,
   },
   rewardName: {
-    fontWeight: 'bold',
-    fontSize: 14,
+    fontWeight: '800',
+    fontSize: 12,
     textAlign: 'center',
   },
   rewardCodeContainer: {

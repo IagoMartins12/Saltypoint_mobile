@@ -18,6 +18,7 @@ import useTheme from '../hooks/useTheme';
 import RedirectError from '../hooks/Error/RedirectError';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import useError from '../hooks/Error/useError';
+import {scale} from '../hooks/scale';
 
 const MainScreen = ({
   navigation,
@@ -47,6 +48,7 @@ const MainScreen = ({
   const {currentTheme} = useTheme();
   const {redirectToErrorScreen} = RedirectError({navigation});
   const {hasError} = useError();
+
   useEffect(() => {
     redirectToErrorScreen();
   }, [hasError]);
@@ -96,15 +98,19 @@ const MainScreen = ({
               ]}>
               <View style={{padding: 40, gap: 20}}>
                 <View>
-                  <MyText style={styles.WelcomeText}>Seja bem vindo a </MyText>
-                  <MyText style={styles.WelcomeSubText}>Salty Point</MyText>
+                  <MyText style={styles.WelcomeText} numberLines={1}>
+                    Seja bem vindo a{' '}
+                  </MyText>
+                  <MyText style={styles.WelcomeSubText} numberLines={1}>
+                    Salty Point
+                  </MyText>
                 </View>
 
                 <View>
-                  <MyText textSize="mediumText2">
+                  <MyText style={{fontSize: 16}}>
                     Bateu aquela fome? Nós resolvemos o seu problema!
                   </MyText>
-                  <MyText textSize="mediumText2">
+                  <MyText style={{fontSize: 16}}>
                     Peça a melhor pizza da região pelo nosso aplicativo
                   </MyText>
                 </View>
@@ -127,7 +133,7 @@ const MainScreen = ({
                       },
                     ]}
                     onPress={buttonLogin}>
-                    <Text
+                    <MyText
                       style={{
                         color:
                           currentTheme === 'dark'
@@ -135,7 +141,7 @@ const MainScreen = ({
                             : COLORS.textColorDark,
                       }}>
                       Login
-                    </Text>
+                    </MyText>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={[
@@ -154,8 +160,7 @@ const MainScreen = ({
                           currentTheme === 'dark'
                             ? COLORS.textColorDark
                             : COLORS.textColorLight,
-                      }}
-                      textSize="mediumText2">
+                      }}>
                       Cadastro
                     </MyText>
                   </TouchableOpacity>
@@ -195,13 +200,13 @@ const styles = StyleSheet.create({
   },
 
   WelcomeText: {
-    fontSize: 36,
+    fontSize: scale(32),
     fontWeight: '700',
     textAlign: 'left',
   },
 
   WelcomeSubText: {
-    fontSize: 36,
+    fontSize: scale(32),
     fontWeight: '700',
     textAlign: 'left',
     fontStyle: 'italic',
@@ -246,7 +251,7 @@ const styles = StyleSheet.create({
   noAuthText: {
     textAlign: 'center',
     textDecorationLine: 'underline',
-    fontSize: 16,
+    fontSize: scale(16),
     marginVertical: 10,
   },
 });

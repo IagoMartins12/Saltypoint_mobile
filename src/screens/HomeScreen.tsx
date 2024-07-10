@@ -27,8 +27,6 @@ import CarouselSkeleton from '../components/Skeletons/CarouselSkeleton';
 import useAuth from '../hooks/auth/useAuth';
 import UserNameSkeleton from '../components/Skeletons/UserNameSkeleton';
 import {getCarouselImages} from '../services';
-import RedirectError from '../hooks/Error/RedirectError';
-import useError from '../hooks/Error/useError';
 
 const HomeScreen = ({
   navigation,

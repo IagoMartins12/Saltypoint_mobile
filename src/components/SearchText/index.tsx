@@ -22,7 +22,7 @@ const SearchText: React.FC<SearchTextProps> = ({text}) => {
               : COLORS.iconColorLight
           }
         />
-        <MyText textSize="mediumText2"> {text} </MyText>
+        <MyText style={{fontSize: 16}}> {text} </MyText>
       </View>
 
       <View>

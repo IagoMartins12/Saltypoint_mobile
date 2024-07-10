@@ -123,7 +123,6 @@ const IntroScreen = ({
             navigation.navigate('Main');
           }}>
           <MyText
-            textSize="mediumText2"
             style={{
               color: COLORS.primaryRedHex,
               fontSize: 16,

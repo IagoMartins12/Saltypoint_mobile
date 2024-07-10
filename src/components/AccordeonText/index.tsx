@@ -52,7 +52,7 @@ const AccordeonText: React.FC<AccordeonTextProps> = ({label, text}) => {
         />
       </Pressable>
       <Animated.View style={[{overflow: 'hidden'}, animatedStyles]}>
-        <MyText textSize="mediumText2">{text}</MyText>
+        <MyText>{text}</MyText>
         <View style={styles.hrStyle} />
       </Animated.View>
     </View>
@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
   },
   accordeonTitle: {
     width: '85%',
-    fontSize: FONTSIZE.size_18,
     fontWeight: 'bold',
   },
   hrStyle: {

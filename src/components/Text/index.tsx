@@ -1,51 +1,49 @@
 import React, {ReactNode} from 'react';
-import {StyleSheet, Text, TextStyle} from 'react-native';
-import {COLORS, FONTSIZE} from '../../theme/theme';
+import {Text, TextStyle} from 'react-native';
+import {COLORS} from '../../theme/theme';
 import useTheme from '../../hooks/useTheme';
+import {scale} from '../../hooks/scale';
 
 interface TextProps {
-  textSize?: 'largeText' | 'mediumText' | 'mediumText2' | 'smallText';
-  style?: TextStyle | TextStyle[]; // Alterado para aceitar qualquer tipo de estilo
+  style?: TextStyle | TextStyle[];
   onPress?: () => void;
-  children?: ReactNode; // Adicionando a propriedade children
+  numberLines?: number;
+  children?: ReactNode;
 }
 
-const MyText: React.FC<TextProps> = ({
-  textSize = 'mediumText',
-  style,
-  onPress,
-  children, // Adicionando children à desestruturação
-  ...props
-}) => {
-  const getTextStyles = () => {
-    switch (textSize) {
-      case 'largeText':
-        return styles.largeText;
-      case 'mediumText':
-        return styles.mediumText;
-      case 'smallText':
-        return styles.smallText;
-      case 'mediumText2':
-        return styles.mediumText2;
-      default:
-        return styles.mediumText;
+const MyText: React.FC<TextProps> = ({style, onPress, children, ...props}) => {
+  const {currentTheme} = useTheme();
+
+  const applyScaleToFontSize = (styles: TextStyle | TextStyle[]) => {
+    if (Array.isArray(styles)) {
+      return styles.map(style => {
+        if (style?.fontSize) {
+          return {...style, fontSize: scale(style.fontSize)};
+        }
+        return style;
+      });
+    } else if (styles?.fontSize) {
+      return {...styles, fontSize: scale(styles.fontSize)};
     }
+    return styles;
   };
 
-  const {currentTheme} = useTheme();
-  const textStyles = [
-    getTextStyles(),
-    {
-      color:
-        currentTheme === 'light' ? COLORS.textColorLight : COLORS.textColorDark,
-    },
-    style,
-  ]; // Combinando estilos dinâmicos com os estilos adicionais
+  const dynamicStyles = {
+    color:
+      currentTheme === 'light' ? COLORS.textColorLight : COLORS.textColorDark,
+  };
+
+  // Combinar estilos e aplicar escala de fontSize
+  const combinedStyles = Array.isArray(style)
+    ? [dynamicStyles, ...style]
+    : [dynamicStyles, style];
+
+  const scaledStyles = applyScaleToFontSize(combinedStyles);
 
   return (
     <Text
       style={[
-        textStyles,
+        scaledStyles,
         {
           fontFamily: 'Inter',
         },
@@ -54,27 +52,7 @@ const MyText: React.FC<TextProps> = ({
       onPress={onPress}>
       {children}
     </Text>
-  ); // Passando children para o componente Text
+  );
 };
-
-const styles = StyleSheet.create({
-  largeText: {
-    fontSize: FONTSIZE.size_24,
-    fontWeight: '700',
-  },
-  mediumText: {
-    fontSize: FONTSIZE.size_18,
-    fontWeight: '500',
-  },
-
-  mediumText2: {
-    fontSize: FONTSIZE.size_14,
-    fontWeight: '500',
-  },
-  smallText: {
-    fontSize: FONTSIZE.size_12,
-    fontWeight: '400',
-  },
-});
 
 export default MyText;
