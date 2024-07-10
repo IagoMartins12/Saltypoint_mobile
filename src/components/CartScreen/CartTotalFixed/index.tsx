@@ -22,6 +22,7 @@ interface CartTotalProps {
   lastStep?: boolean;
   deliveryFee?: number;
   loading?: boolean;
+  disabled?: boolean;
 }
 
 const CartTotalFixed: React.FC<CartTotalProps> = ({
@@ -30,6 +31,7 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
   lastStep,
   deliveryFee,
   loading,
+  disabled,
 }) => {
   const {currentTheme} = useTheme();
   const {generalData} = useGlobalStore();
@@ -47,7 +49,12 @@ const CartTotalFixed: React.FC<CartTotalProps> = ({
   const isReward = !!(currentCode as User_Rewards)?.rewardPoints;
 
   const renderContinueButton = () => (
-    <TouchableOpacity style={styles.buttonView} onPress={onPress}>
+    <TouchableOpacity
+      style={[
+        styles.buttonView,
+        {backgroundColor: disabled ? '#a3a0a0' : COLORS.secondaryRed},
+      ]}
+      onPress={onPress}>
       <Text style={styles.buttonText}>Continuar</Text>
     </TouchableOpacity>
   );
@@ -133,7 +140,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: BORDERRADIUS.radius_10,
-    backgroundColor: COLORS.secondaryRed,
   },
   lastButton: {
     width: '100%',

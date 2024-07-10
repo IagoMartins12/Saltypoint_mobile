@@ -18,6 +18,7 @@ import usePrivateStore from '../../../hooks/store/usePrivateStore';
 import {CreateRewardDto} from '../../../types/Dtos';
 import {postReward} from '../../../services';
 import useShowToast from '../../../hooks/customHooks/useShowToast';
+import LoadingIndicator from '../../Loading';
 
 export interface ModalProps {
   modalOpen: boolean;
@@ -35,6 +36,7 @@ const CatchRewardModal: React.FC<ModalProps> = ({
   selectedReward,
 }) => {
   const [hasPlayed, setHasPlayed] = useState(false);
+  const [loading, setLoading] = useState(null);
   const {user, userReward, setUser, setUserReward} = usePrivateStore();
   const {currentTheme} = useTheme();
   const {showToast} = useShowToast();
@@ -47,10 +49,12 @@ const CatchRewardModal: React.FC<ModalProps> = ({
 
   const catchReward = async () => {
     if (user?.points) {
+      setLoading(true);
       const object = {
         rewardId: selectedReward.id,
       } as CreateRewardDto;
       const response = await postReward(object);
+      setLoading(false);
 
       if (response) {
         setHasPlayed(true);
@@ -152,7 +156,11 @@ const CatchRewardModal: React.FC<ModalProps> = ({
           <MyText style={styles.buttonText}>Cancelar</MyText>
         </TouchableOpacity>
         <TouchableOpacity style={styles.rewardButton} onPress={catchReward}>
-          <MyText style={styles.buttonText}>Resgatar recompensa</MyText>
+          {loading ? (
+            <LoadingIndicator />
+          ) : (
+            <MyText style={styles.buttonText}>Resgatar recompensa</MyText>
+          )}
         </TouchableOpacity>
       </View>
     </View>
@@ -265,14 +273,14 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     paddingHorizontal: 30,
-    paddingVertical: 15,
+    paddingVertical: 16,
     backgroundColor: '#ccc',
     borderRadius: 20,
     alignItems: 'center',
   },
   rewardButton: {
     paddingHorizontal: 30,
-    paddingVertical: 15,
+    paddingVertical: 16,
     backgroundColor: 'red',
     borderRadius: 20,
     alignItems: 'center',

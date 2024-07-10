@@ -25,6 +25,8 @@ import useCurrrentCode from '../hooks/reward';
 import {addCartProduct} from '../services';
 import {categoriesToExclude, getCartTotal, getDiscount} from '../utils';
 import NoAuth from '../components/NoAuth';
+import {useGeneralDataInfo} from '../hooks/generalData';
+import useShowToast from '../hooks/customHooks/useShowToast';
 
 const CartScreen = ({
   navigation,
@@ -34,15 +36,15 @@ const CartScreen = ({
   const [modalOpen, setModalOpen] = useState(false);
   const [recommendations, setRecommendations] = useState<Product[]>([]);
   const {currentTheme} = useTheme();
-  const {products, categorys} = useGlobalStore();
+  const {products, categorys, generalData} = useGlobalStore();
+  const {systemOpening} = useGeneralDataInfo();
   const {cart_product, user, setCart_product} = usePrivateStore();
   const {currentCode} = useCurrrentCode();
+  const {showToast} = useShowToast();
 
   const ListRef = useRef<FlatList>();
   const translateY = useSharedValue(Dimensions.get('window').height);
   const cartProductTotal = getCartTotal(cart_product);
-
-  const totalProducts2 = products.slice(5, 9);
 
   const isCoupon = !(currentCode as User_Rewards)?.rewardPoints;
   const isReward = !!(currentCode as User_Rewards)?.rewardPoints;
@@ -59,6 +61,18 @@ const CartScreen = ({
   };
 
   const accressStep = () => {
+    if (!systemOpening) {
+      if (!generalData.isOpening) {
+        showToast(
+          'Erro no sistema. Entre em contato com nosso número',
+          'error',
+        );
+      } else {
+        showToast('Não estamos em horario de atendimento', 'error');
+      }
+
+      return;
+    }
     navigation.push('AddressCart');
   };
 
@@ -371,7 +385,11 @@ const CartScreen = ({
                 </View>
               </ScrollView>
 
-              <CartTotalFixed onPress={accressStep} title="Total" />
+              <CartTotalFixed
+                onPress={accressStep}
+                title="Total"
+                disabled={systemOpening ? false : true}
+              />
               <CouponsModal
                 modalOpen={modalOpen}
                 setModalOpen={setModalOpen}

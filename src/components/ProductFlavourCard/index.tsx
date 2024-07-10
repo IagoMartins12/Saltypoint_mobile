@@ -4,6 +4,7 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import MyText from '../Text';
 import CustomIcon from '../CustomIcon';
@@ -26,7 +27,12 @@ const ProductFlavourCard: React.FC<ProductCardProps> = ({
   checkDiference,
 }) => {
   return (
-    <View style={[styles.container]}>
+    <TouchableOpacity
+      style={[styles.container]}
+      onPress={() => {
+        if (selectedFlavour2 === product.id) return handleSecondFlavour(null);
+        handleSecondFlavour(product.id);
+      }}>
       <View style={styles.image}>
         <ImageBackground
           source={{
@@ -87,7 +93,7 @@ const ProductFlavourCard: React.FC<ProductCardProps> = ({
           />
         )}
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
 

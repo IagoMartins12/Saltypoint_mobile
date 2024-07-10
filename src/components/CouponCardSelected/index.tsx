@@ -45,9 +45,6 @@ const CouponCardSelected = ({coupon}: {coupon: Discount_cupom}) => {
       <View style={styles.imageContainer}>
         <Image
           source={require('../../assets/coupon.png')}
-          //   source={{
-          //     uri: 'https://res.cloudinary.com/ds51jm1dx/image/upload/v1696436766/wqjyff5dp0yzyyu97jnk.png',
-          //   }}
           style={styles.image}
         />
       </View>

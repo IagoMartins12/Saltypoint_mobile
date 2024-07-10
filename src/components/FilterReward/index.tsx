@@ -90,7 +90,6 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 3,
     paddingVertical: 12,
-    height: Dimensions.get('screen').height / 9,
   },
   option: {
     borderWidth: 1,

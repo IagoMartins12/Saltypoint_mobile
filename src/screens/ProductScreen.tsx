@@ -39,6 +39,7 @@ const ProductScreen = ({navigation}: NavigationProps) => {
   const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
   const [hasPlayed, setHasPlayed] = useState(false);
   const [observation, setObservation] = useState('');
+  const [loading, setLoading] = useState(false);
   const {products} = useGlobalStore();
   const {user, cart_product, setCart_product} = usePrivateStore();
   const {showToast} = useShowToast();
@@ -50,6 +51,8 @@ const ProductScreen = ({navigation}: NavigationProps) => {
   const onSubmit = async () => {
     if (!user)
       return showToast('Faça o login para adicionar o produto', 'error');
+
+    setLoading(true);
     if (isPizza) {
       const response = await addCartProduct({
         product_id: productId,
@@ -60,7 +63,7 @@ const ProductScreen = ({navigation}: NavigationProps) => {
         value: String(value),
         size: Number(selectedOptions.size),
       });
-
+      setLoading(false);
       if (response) {
         const updatedCartProduct = [...cart_product, response];
         setCart_product(updatedCartProduct);
@@ -80,6 +83,7 @@ const ProductScreen = ({navigation}: NavigationProps) => {
       value: String((Number(currentProduct.value) * quantity).toFixed(2)),
       size: 0,
     });
+    setLoading(false);
 
     if (response) {
       const updatedCartProduct = [...cart_product, response];
@@ -228,6 +232,7 @@ const ProductScreen = ({navigation}: NavigationProps) => {
               decreaseQuantity={decreaseQuantity}
               increaseQuantity={increaseQuantity}
               onPress={onSubmit}
+              loading={loading}
               disabled={disabled}
             />
           )}

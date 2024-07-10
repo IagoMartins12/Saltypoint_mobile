@@ -16,7 +16,6 @@ const NotOpenModal: React.FC<ModalProps> = ({
   translateY,
 }) => {
   const {currentTheme} = useTheme();
-
   const {generalData} = useGlobalStore();
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -120,7 +119,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     width: '95%',
     alignSelf: 'center',
-    height: Dimensions.get('window').height * 0.7,
+    height: Dimensions.get('window').height * 0.58,
     borderRadius: 20,
     alignItems: 'center',
     gap: 20,

@@ -29,7 +29,7 @@ export const useGeneralDataInfo = () => {
     };
 
     checkOpeningStatus();
-  }, []);
+  }, [generalData]);
 
   return {
     systemOpening,

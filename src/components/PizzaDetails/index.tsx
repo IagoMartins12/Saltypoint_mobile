@@ -131,9 +131,6 @@ const PizzaDetails: React.FC<PizzaProps> = ({
     setSelectedOptions({...selectedOptions, flavour3: cornicioneId});
   };
 
-  const handleSecondFlavourRemove = () => {
-    setSelectedOptions({...selectedOptions, flavour2: null});
-  };
   const checkDiference = (product: Product) => {
     const value = product.value - currentProduct.value;
     return value.toFixed(2);

@@ -12,6 +12,7 @@ import CustomIcon from '../CustomIcon';
 import {global} from '../../style';
 import useTheme from '../../hooks/useTheme';
 import SlidingCounter from '../SlidingCounter';
+import LoadingIndicator from '../Loading';
 
 interface CartTotalProps {
   onPress?: () => void;
@@ -20,15 +21,17 @@ interface CartTotalProps {
   increaseQuantity: () => void;
   decreaseQuantity: () => void;
   disabled: boolean;
+  loading?: boolean;
 }
 
 const ProductFixed: React.FC<CartTotalProps> = ({
   onPress,
+  decreaseQuantity,
+  increaseQuantity,
   quantity,
   value,
-  decreaseQuantity,
   disabled,
-  increaseQuantity,
+  loading,
 }) => {
   const renderContinueButton = () => (
     <TouchableOpacity
@@ -36,14 +39,21 @@ const ProductFixed: React.FC<CartTotalProps> = ({
         styles.buttonView,
         {
           backgroundColor: disabled ? '#cccccc' : COLORS.secondaryRed,
+          width: '65%',
         },
       ]}
       onPress={onPress}
       disabled={disabled}>
-      <CustomIcon name="plus" size={20} pack="Feather" />
-      <MyText style={styles.buttonText}>Adicionar</MyText>
-      <MyText style={styles.buttonText}> • </MyText>
-      <MyText style={styles.buttonText}> R$ {value.toFixed(2)}</MyText>
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <CustomIcon name="plus" size={20} pack="Feather" />
+          <MyText style={styles.buttonText}>Adicionar</MyText>
+          <MyText style={styles.buttonText}> • </MyText>
+          <MyText style={styles.buttonText}> R$ {value.toFixed(2)}</MyText>
+        </>
+      )}
     </TouchableOpacity>
   );
 

@@ -134,10 +134,10 @@ const SettingsScreen = ({
 
   const moveView = () => {
     setIsMoving(!isMoving);
-    const toValue = isMoving ? 5 : 1;
+    const toValue = isMoving ? 10 : 1;
     Animated.timing(animation, {
       toValue,
-      duration: 1000,
+      duration: 500,
       useNativeDriver: false,
     }).start(() => {
       // Define o background da imagem com base no estado de isMoving
