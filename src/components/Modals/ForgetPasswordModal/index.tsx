@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {
   Dimensions,
   Modal,
+  Pressable,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -70,7 +71,7 @@ const ForgetPasswordModal: React.FC<ModalProps> = ({
   return (
     <View style={styles.centeredView}>
       <Modal animationType="none" transparent={true} visible={modalOpen}>
-        <View style={styles.overlay}>
+        <Pressable style={styles.overlay} onPress={handleOverlayPress}>
           <Animated.View
             style={[
               styles.modalContainer,
@@ -80,8 +81,11 @@ const ForgetPasswordModal: React.FC<ModalProps> = ({
                   currentTheme === 'light'
                     ? COLORS.backgroundColorLight
                     : COLORS.backgroundColorDark,
+                zIndex: 9999,
               },
-            ]}>
+            ]}
+            onStartShouldSetResponder={() => true}
+            onResponderStart={e => e.stopPropagation()}>
             <ModalIcon handleOverlayPress={handleOverlayPress} height="15%" />
 
             <View style={styles.contentDiv}>
@@ -119,7 +123,7 @@ const ForgetPasswordModal: React.FC<ModalProps> = ({
               </View>
             </View>
           </Animated.View>
-        </View>
+        </Pressable>
       </Modal>
     </View>
   );
@@ -147,7 +151,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     justifyContent: 'flex-end',
-    backgroundColor: 'transparent',
     padding: 35,
     zIndex: 10,
   },

@@ -1,10 +1,4 @@
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {BORDERRADIUS, COLORS, FONTFAMILY, FONTSIZE} from '../theme/theme';
 import {useForm} from 'react-hook-form';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';

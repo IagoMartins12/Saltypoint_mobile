@@ -35,7 +35,9 @@ const SelectFlavour: React.FC<SelectProps> = ({
                 : COLORS.borderColorLight,
           },
         ]}>
-        <MyText>Quantos sabores? </MyText>
+        <MyText style={{fontSize: 18, fontWeight: '700'}}>
+          Quantos sabores?{' '}
+        </MyText>
       </View>
 
       {pizzaFlavour.map((p, i) => (
@@ -51,7 +53,7 @@ const SelectFlavour: React.FC<SelectProps> = ({
             },
           ]}
           key={i}>
-          <MyText>{p.name}</MyText>
+          <MyText style={{fontSize: 16}}>{p.name}</MyText>
           <TouchableOpacity
             style={[
               styles.roundedButton,

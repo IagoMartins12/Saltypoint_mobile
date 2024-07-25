@@ -2,12 +2,11 @@ import {
   Dimensions,
   ImageBackground,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
-import {BORDERRADIUS, COLORS, FONTSIZE} from '../theme/theme';
+import {useEffect} from 'react';
+import {BORDERRADIUS, COLORS} from '../theme/theme';
 import {
   GestureHandlerRootView,
   PanGestureHandler,

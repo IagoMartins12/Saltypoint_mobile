@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {global} from '../style';
 import {COLORS, FONTSIZE} from '../theme/theme';
@@ -34,6 +34,7 @@ const SettingsScreen = ({
 
   const {user, setUser, setFavorites} = usePrivateStore();
   const {showToast} = useShowToast();
+
   const handleNavigate = (name: string) => {
     navigation.push(name);
   };
@@ -134,10 +135,11 @@ const SettingsScreen = ({
 
   const moveView = () => {
     setIsMoving(!isMoving);
-    const toValue = isMoving ? 10 : 1;
+    const toValue = isMoving ? 8 : 1;
+
     Animated.timing(animation, {
       toValue,
-      duration: 500,
+      duration: 1000,
       useNativeDriver: false,
     }).start(() => {
       // Define o background da imagem com base no estado de isMoving

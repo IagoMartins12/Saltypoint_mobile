@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   GestureHandlerRootView,
@@ -19,7 +19,6 @@ import {COLORS} from '../../theme/theme';
 import CustomIcon from '../../components/CustomIcon';
 import {useSharedValue, withTiming} from 'react-native-reanimated';
 import DeleteAddressModal from '../../components/Modals/DeleteAddressModal';
-
 import AddressCard from '../../components/AddressCard';
 import useTheme from '../../hooks/useTheme';
 import usePrivateStore from '../../hooks/store/usePrivateStore';

@@ -30,7 +30,7 @@ const Cornicione: React.FC<CornicioneProps> = ({
                 : COLORS.borderColorLight,
           },
         ]}>
-        <MyText>Bordas? </MyText>
+        <MyText style={{fontSize: 18, fontWeight: '700'}}>Bordas? </MyText>
       </View>
 
       {categorys

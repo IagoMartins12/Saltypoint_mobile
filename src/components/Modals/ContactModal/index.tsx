@@ -1,5 +1,12 @@
 import React from 'react';
-import {Dimensions, Linking, Modal, StyleSheet, View} from 'react-native';
+import {
+  Dimensions,
+  Linking,
+  Modal,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
 import CustomIcon from '../../CustomIcon';
 import {ModalProps} from '../ForgetPasswordModal';
@@ -39,7 +46,7 @@ const ContactModal: React.FC<ModalProps> = ({
   return (
     <View style={styles.centeredView}>
       <Modal animationType="none" transparent={true} visible={modalOpen}>
-        <View style={styles.overlay}>
+        <Pressable style={styles.overlay} onPress={handleOverlayPress}>
           <Animated.View
             style={[
               styles.modalContainer,
@@ -50,7 +57,9 @@ const ContactModal: React.FC<ModalProps> = ({
                     ? COLORS.backgroundColorLight
                     : COLORS.backgroundColorDark,
               },
-            ]}>
+            ]}
+            onStartShouldSetResponder={() => true}
+            onResponderStart={e => e.stopPropagation()}>
             <ModalIcon handleOverlayPress={handleOverlayPress} height="10%" />
 
             <View style={{paddingTop: 15, width: '100%'}}>
@@ -162,7 +171,7 @@ const ContactModal: React.FC<ModalProps> = ({
               </View>
             </View>
           </Animated.View>
-        </View>
+        </Pressable>
       </Modal>
     </View>
   );

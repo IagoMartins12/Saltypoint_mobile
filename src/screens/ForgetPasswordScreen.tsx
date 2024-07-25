@@ -42,7 +42,6 @@ const ForgetPasswordScreen = ({
   const {control, handleSubmit, reset} = useForm();
 
   const onSubmit = async (data: any) => {
-    console.log('oii');
     if (!data.email.includes('@'))
       return showToast('Favor inserir email', 'error');
     try {

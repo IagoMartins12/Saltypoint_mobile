@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import {
   Dimensions,
   Modal,
+  Pressable,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -84,7 +85,7 @@ const ChangeCellphoneModal: React.FC<ModalProps> = ({
   return (
     <View style={styles.centeredView}>
       <Modal animationType="none" transparent={true} visible={modalOpen}>
-        <View style={styles.overlay}>
+        <Pressable style={styles.overlay} onPress={handleOverlayPress}>
           <Animated.View
             style={[
               styles.modalContainer,
@@ -95,7 +96,9 @@ const ChangeCellphoneModal: React.FC<ModalProps> = ({
                     ? COLORS.backgroundColorLight
                     : COLORS.backgroundColorDark,
               },
-            ]}>
+            ]}
+            onStartShouldSetResponder={() => true}
+            onResponderStart={e => e.stopPropagation()}>
             <ModalIcon handleOverlayPress={handleOverlayPress} height="15%" />
             <View style={styles.contentDiv}>
               <View style={{gap: 20}}>
@@ -114,7 +117,7 @@ const ChangeCellphoneModal: React.FC<ModalProps> = ({
               </View>
             </View>
           </Animated.View>
-        </View>
+        </Pressable>
       </Modal>
     </View>
   );

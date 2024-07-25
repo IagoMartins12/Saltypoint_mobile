@@ -1,17 +1,9 @@
-import React, {useState, useEffect} from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {useState, useEffect} from 'react';
+import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import SearchComponent from '../components/SearchComponent';
 import {BORDERRADIUS, COLORS, FONTSIZE} from '../theme/theme';
-import CustomIcon from '../components/CustomIcon';
-import SearchText from '../components/SearchText';
 import ProductCard from '../components/ProductCard';
 import useGlobalStore from '../hooks/store/useGlobalStore';
 import {Product} from '../types/ModelsType';
@@ -221,9 +213,10 @@ const styles = StyleSheet.create({
   },
 
   productDiv: {
+    marginHorizontal: 10,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-around',
+    // justifyContent: 'center',
     paddingVertical: 15,
     gap: 15,
   },

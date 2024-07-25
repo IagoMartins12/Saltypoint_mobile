@@ -1,4 +1,4 @@
-import {Dimensions, FlatList, ScrollView, StyleSheet, View} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import SectionTitle from '../components/SectionTitle';
 import {global} from '../style';

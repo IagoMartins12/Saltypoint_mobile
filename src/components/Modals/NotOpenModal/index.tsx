@@ -1,5 +1,12 @@
 import React from 'react';
-import {Dimensions, Modal, PixelRatio, StyleSheet, View} from 'react-native';
+import {
+  Dimensions,
+  Modal,
+  PixelRatio,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
 import Animated, {useAnimatedStyle} from 'react-native-reanimated';
 import useTheme from '../../../hooks/useTheme';
 import {COLORS} from '../../../theme/theme';
@@ -33,7 +40,7 @@ const NotOpenModal: React.FC<ModalProps> = ({
   return (
     <View style={styles.centeredView}>
       <Modal animationType="none" transparent={true} visible={modalOpen}>
-        <View style={styles.overlay}>
+        <Pressable style={styles.overlay} onPress={handleOverlayPress}>
           <Animated.View
             style={[
               styles.modalContainer,
@@ -48,7 +55,9 @@ const NotOpenModal: React.FC<ModalProps> = ({
                     ? Dimensions.get('window').height * 0.58
                     : Dimensions.get('window').height * 0.75,
               },
-            ]}>
+            ]}
+            onStartShouldSetResponder={() => true}
+            onResponderStart={e => e.stopPropagation()}>
             <ModalIcon handleOverlayPress={handleOverlayPress} height="10%" />
             <View>
               <View
@@ -106,7 +115,7 @@ const NotOpenModal: React.FC<ModalProps> = ({
               </View>
             </View>
           </Animated.View>
-        </View>
+        </Pressable>
       </Modal>
     </View>
   );

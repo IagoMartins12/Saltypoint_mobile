@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {
   Dimensions,
   Modal,
+  Pressable,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -177,7 +178,7 @@ const CatchRewardModal: React.FC<ModalProps> = ({
   return (
     <View style={styles.centeredView}>
       <Modal animationType="none" transparent={true} visible={modalOpen}>
-        <View style={styles.overlay}>
+        <Pressable style={styles.overlay} onPress={handleOverlayPress}>
           <Animated.View
             style={[
               styles.modalContainer,
@@ -188,12 +189,14 @@ const CatchRewardModal: React.FC<ModalProps> = ({
                     ? COLORS.cardColorDark
                     : COLORS.backgroundColorLight,
               },
-            ]}>
+            ]}
+            onStartShouldSetResponder={() => true}
+            onResponderStart={e => e.stopPropagation()}>
             <ModalIcon handleOverlayPress={handleOverlayPress} height="5%" />
 
             {body}
           </Animated.View>
-        </View>
+        </Pressable>
       </Modal>
     </View>
   );

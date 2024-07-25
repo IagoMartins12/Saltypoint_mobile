@@ -1,12 +1,9 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {StyleSheet, View} from 'react-native';
 import LottieView from 'lottie-react-native';
 import {COLORS, FONTFAMILY, FONTSIZE} from '../../../theme/theme';
 import useTheme from '../../../hooks/useTheme';
-import useShowToast from '../../../hooks/customHooks/useShowToast';
 
 const RewardAnimation = ({onFinish}: {onFinish: () => void}) => {
-  const {showToast} = useShowToast();
   const {currentTheme} = useTheme();
   const lottieSource =
     currentTheme === 'light'
@@ -19,6 +16,7 @@ const RewardAnimation = ({onFinish}: {onFinish: () => void}) => {
         style={styles.LottieStyle}
         source={lottieSource}
         autoPlay
+        duration={1500}
         loop={false}
         onAnimationFinish={() => {
           onFinish();

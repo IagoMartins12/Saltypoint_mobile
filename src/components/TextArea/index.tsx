@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {StyleSheet, TextInput, View} from 'react-native';
 import MyText from '../Text';
 import useTheme from '../../hooks/useTheme';
 import {COLORS} from '../../theme/theme';
@@ -15,7 +15,7 @@ const TextAreaComponent: React.FC<teste> = ({label, setObservation}) => {
         flex: 1,
         gap: 15,
       }}>
-      <MyText>{label}</MyText>
+      <MyText style={{fontSize: 18, fontWeight: '700'}}>{label}</MyText>
       <TextInput
         onChangeText={text => {
           setObservation(text);

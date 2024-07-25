@@ -20,6 +20,19 @@ const SelectComponent: React.FC<CustomPickerStyle> = ({
 }) => {
   const {currentTheme} = useTheme();
 
+  const Placeholder = {label: 'Selecione um endereço', value: value};
+
+  const viewStyle: ViewStyle = {
+    height: 50,
+    borderRadius: BORDERRADIUS.radius_10,
+    borderWidth: 1,
+    position: 'relative',
+    borderColor:
+      currentTheme === 'light'
+        ? COLORS.borderColorLight
+        : COLORS.borderColorDark,
+  };
+
   const CustomSelectIcon = () => {
     return (
       <CustomIcon
@@ -33,19 +46,6 @@ const SelectComponent: React.FC<CustomPickerStyle> = ({
         }
       />
     );
-  };
-
-  const Placeholder = {label: 'Selecione um endereço', value: value};
-
-  const viewStyle: ViewStyle = {
-    height: 50,
-    borderRadius: BORDERRADIUS.radius_10,
-    borderWidth: 1,
-    position: 'relative',
-    borderColor:
-      currentTheme === 'light'
-        ? COLORS.borderColorLight
-        : COLORS.borderColorDark,
   };
 
   return (

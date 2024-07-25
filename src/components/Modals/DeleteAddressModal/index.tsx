@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {
   Dimensions,
   Modal,
+  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -83,7 +84,7 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
   return (
     <View style={styles.centeredView}>
       <Modal animationType="none" transparent={true} visible={modalOpen}>
-        <View style={styles.overlay}>
+        <Pressable style={styles.overlay} onPress={handleOverlayPress}>
           <Animated.View
             style={[
               styles.modalContainer,
@@ -94,7 +95,9 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
                     ? COLORS.backgroundColorDark
                     : COLORS.backgroundColorLight,
               },
-            ]}>
+            ]}
+            onStartShouldSetResponder={() => true}
+            onResponderStart={e => e.stopPropagation()}>
             <ModalIcon handleOverlayPress={handleOverlayPress} height="15%" />
 
             <View style={styles.contentDiv}>
@@ -128,7 +131,7 @@ const DeleteAddressModal: React.FC<ModalProps> = ({
               </View>
             </View>
           </Animated.View>
-        </View>
+        </Pressable>
       </Modal>
     </View>
   );

@@ -1,12 +1,11 @@
 import {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {COLORS, FONTSIZE} from '../theme/theme';
+import {COLORS} from '../theme/theme';
 
 import {enableGoBack} from '../utils';
 import useTheme from '../hooks/useTheme';
 import MyText from '../components/Text';
-import EmptyAnimation from '../components/Lottie/EmptyAnimation';
 import ErrorAnimation from '../components/Lottie/ErrorAnimation';
 
 const ErrorScreen = ({

@@ -8,7 +8,6 @@ import {
   ScrollView,
 } from 'react-native-gesture-handler';
 import {useRoute} from '@react-navigation/native';
-
 import {Product} from '../types/ModelsType';
 import useGlobalStore from '../hooks/store/useGlobalStore';
 import {COLORS} from '../theme/theme';

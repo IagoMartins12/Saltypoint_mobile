@@ -1,9 +1,11 @@
-import {StyleSheet, View, ScrollView, ActivityIndicator} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {useState, useEffect, useCallback} from 'react';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
+  FlatList,
   GestureHandlerRootView,
   PanGestureHandler,
+  RefreshControl,
   State,
 } from 'react-native-gesture-handler';
 import SectionTitle from '../../components/SectionTitle';
@@ -42,10 +44,6 @@ const OrderScreen = ({
     });
   };
 
-  useEffect(() => {
-    enableGoBack(navigation);
-  }, []);
-
   const fetchOrders = async () => {
     try {
       const response = await getOrders();
@@ -61,8 +59,6 @@ const OrderScreen = ({
     setRefreshing(true);
     await fetchOrders();
     setRefreshing(false);
-
-    // setRefreshing(false);
   }, []);
 
   // Ordenar as orders pela data de criação da mais recente para a mais antiga
@@ -72,30 +68,57 @@ const OrderScreen = ({
     return dateB.getTime() - dateA.getTime();
   });
 
+  useEffect(() => {
+    enableGoBack(navigation);
+  }, []);
+
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <PanGestureHandler
-        onGestureEvent={({nativeEvent}) => {
-          if (nativeEvent.translationY > 0) {
-            setIsDragging(true);
-          }
-        }}
         onHandlerStateChange={({nativeEvent}) => {
-          if (nativeEvent.state === State.END) {
-            setIsDragging(false);
-            if (nativeEvent.translationY > 50) {
-              onRefresh();
-            }
+          if (
+            nativeEvent.state === State.END &&
+            nativeEvent.translationX > 50
+          ) {
+            onSwipeLeft();
           }
         }}>
         <View style={{flex: 1}}>
-          {refreshing && (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" />
+          <SectionTitle comeBack={comeBack} />
+          {sortedOrders.length > 0 ? (
+            <FlatList
+              data={sortedOrders}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  // refreshing={this.props.refreshing}
+                  // onRefresh={this._onRefresh.bind(this)}
+                />
+              }
+              renderItem={data => (
+                <OrderCard
+                  onPress={goToOrder}
+                  order={data.item}
+                  key={data.index}
+                />
+              )}
+              style={[
+                styles.mainContainer,
+                {
+                  backgroundColor:
+                    currentTheme === 'light'
+                      ? COLORS.backgroundColorLight
+                      : COLORS.backgroundColorDark,
+                },
+              ]}></FlatList>
+          ) : (
+            <View style={{flex: 1}}>
+              <EmptyAnimation text="Você ainda não fez nenhum pedido" />
             </View>
           )}
-          <SectionTitle comeBack={comeBack} />
-          <ScrollView
+
+          {/* <ScrollView
             style={[
               styles.mainContainer,
               {
@@ -116,7 +139,7 @@ const OrderScreen = ({
                 <EmptyAnimation text="Você ainda não fez nenhum pedido" />
               </View>
             )}
-          </ScrollView>
+          </ScrollView> */}
         </View>
       </PanGestureHandler>
     </GestureHandlerRootView>

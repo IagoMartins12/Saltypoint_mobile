@@ -60,7 +60,9 @@ const SecondFlavour: React.FC<SecondFlavourProps> = ({
                 : COLORS.borderColorLight,
           },
         ]}>
-        <MyText>Selecione o sabor? </MyText>
+        <MyText style={{fontSize: 18, fontWeight: '700'}}>
+          Selecione o sabor{' '}
+        </MyText>
       </View>
       <View
         style={[

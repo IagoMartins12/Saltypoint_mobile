@@ -51,7 +51,6 @@ const AddressModal: React.FC<AddressModalProps> = ({
   useEffect(() => {
     setSelectedAddress(user.user_Adress_id);
   }, [user.user_Adress_id]);
-  // Estilo animado para o modal
 
   return (
     <View style={styles.centeredView}>
