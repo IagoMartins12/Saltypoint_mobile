@@ -27,6 +27,10 @@ const TextAreaComponent: React.FC<teste> = ({label, setObservation}) => {
               currentTheme === 'dark'
                 ? COLORS.borderColorDark
                 : COLORS.borderColorLight,
+            color:
+              currentTheme === 'light'
+                ? COLORS.textColorLight
+                : COLORS.textColorDark,
           },
         ]}
       />

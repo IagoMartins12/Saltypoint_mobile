@@ -27,7 +27,6 @@ import useAuth from '../hooks/auth/useAuth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useShowToast from '../hooks/customHooks/useShowToast';
 import LoadingIndicator from '../components/Loading';
-import {scale} from '../hooks/scale';
 
 const LoginScreen = ({
   navigation,
@@ -151,7 +150,7 @@ const LoginScreen = ({
                         style={{
                           color: COLORS.primaryBlue,
                           textDecorationLine: 'underline',
-                          fontSize: scale(16),
+                          fontSize: 16,
                         }}
                         onPress={buttonPressHandler}>
                         Se cadastre
@@ -185,13 +184,13 @@ const styles = StyleSheet.create({
   },
 
   brandwViewText: {
-    fontSize: scale(FONTSIZE.size_28),
+    fontSize: FONTSIZE.size_28,
     fontFamily: FONTFAMILY.poppins_semibold,
     fontWeight: '700',
   },
 
   brandwViewSubText: {
-    fontSize: scale(FONTSIZE.size_18),
+    fontSize: FONTSIZE.size_18,
     fontFamily: FONTFAMILY.poppins_medium,
     textAlign: 'center',
     paddingHorizontal: 60,
@@ -209,7 +208,7 @@ const styles = StyleSheet.create({
   },
 
   optinsText: {
-    fontSize: scale(FONTSIZE.size_18),
+    fontSize: FONTSIZE.size_18,
     textAlign: 'center',
   },
 

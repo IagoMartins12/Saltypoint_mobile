@@ -24,7 +24,6 @@ import {CreateUserDto} from '../types/Dtos';
 import useShowToast from '../hooks/customHooks/useShowToast';
 import {useState} from 'react';
 import LoadingIndicator from '../components/Loading';
-import {scale} from '../hooks/scale';
 
 const RegisterScreen = ({
   navigation,
@@ -140,7 +139,7 @@ const RegisterScreen = ({
                       style={{
                         color: COLORS.primaryBlue,
                         textDecorationLine: 'underline',
-                        fontSize: scale(16),
+                        fontSize: 16,
                       }}
                       onPress={buttonPressHandler}>
                       Faça o login
@@ -178,13 +177,13 @@ const styles = StyleSheet.create({
   },
 
   brandwViewText: {
-    fontSize: scale(FONTSIZE.size_28),
+    fontSize: FONTSIZE.size_28,
     fontFamily: FONTFAMILY.poppins_semibold,
     fontWeight: '700',
   },
 
   brandwViewSubText: {
-    fontSize: scale(FONTSIZE.size_18),
+    fontSize: FONTSIZE.size_18,
     fontFamily: FONTFAMILY.poppins_medium,
     textAlign: 'center',
     paddingHorizontal: 60,

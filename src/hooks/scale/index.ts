@@ -3,7 +3,7 @@ import {PixelRatio} from 'react-native';
 export const scale = (fontSize: number) => {
   const currentPixelFont = PixelRatio.getFontScale();
 
-  if (currentPixelFont === 1) {
+  if (currentPixelFont === 1 || currentPixelFont <= 1) {
     return fontSize; // Sem ajuste
   }
 
@@ -11,11 +11,11 @@ export const scale = (fontSize: number) => {
     return fontSize * 0.9;
   }
 
-  if (currentPixelFont >= 1.5) {
+  if (currentPixelFont >= 1.5 && currentPixelFont <= 1.9) {
     return fontSize * 0.7;
   }
 
-  return fontSize;
+  return fontSize * 0.6;
 };
 
 // import {Dimensions} from 'react-native';

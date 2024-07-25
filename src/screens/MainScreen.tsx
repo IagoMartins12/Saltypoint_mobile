@@ -18,7 +18,6 @@ import useTheme from '../hooks/useTheme';
 import RedirectError from '../hooks/Error/RedirectError';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import useError from '../hooks/Error/useError';
-import {scale} from '../hooks/scale';
 
 const MainScreen = ({
   navigation,
@@ -200,13 +199,13 @@ const styles = StyleSheet.create({
   },
 
   WelcomeText: {
-    fontSize: scale(32),
+    fontSize: 32,
     fontWeight: '700',
     textAlign: 'left',
   },
 
   WelcomeSubText: {
-    fontSize: scale(32),
+    fontSize: 32,
     fontWeight: '700',
     textAlign: 'left',
     fontStyle: 'italic',
@@ -251,7 +250,7 @@ const styles = StyleSheet.create({
   noAuthText: {
     textAlign: 'center',
     textDecorationLine: 'underline',
-    fontSize: scale(16),
+    fontSize: 16,
     marginVertical: 10,
   },
 });

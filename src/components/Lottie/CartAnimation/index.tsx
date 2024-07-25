@@ -6,15 +6,19 @@ import {COLORS, FONTFAMILY, FONTSIZE} from '../../../theme/theme';
 interface AnimationCommponentProps {
   setHasPlayed: React.Dispatch<React.SetStateAction<boolean>>;
   product?: boolean;
-  //   repeat?: boolean;
-  // text?: string;
+  goBack?: () => void;
 }
 const CartAnimation: React.FC<AnimationCommponentProps> = ({
   setHasPlayed,
   product,
+  goBack,
 }) => {
   const endAnimation = () => {
     setHasPlayed(false);
+
+    if (goBack) {
+      goBack();
+    }
   };
   return (
     <View style={styles.EmptyCartContainer}>

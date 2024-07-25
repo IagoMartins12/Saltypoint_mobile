@@ -48,6 +48,10 @@ const ProductScreen = ({navigation}: NavigationProps) => {
   const router = useRoute();
   const scrollViewRef = useRef<ScrollView>(null); // Ref para o ScrollView
 
+  const goBack = () => {
+    navigation.pop();
+  };
+
   const onSubmit = async () => {
     if (!user)
       return showToast('Faça o login para adicionar o produto', 'error');
@@ -219,7 +223,11 @@ const ProductScreen = ({navigation}: NavigationProps) => {
           </ScrollView>
           {hasPlayed ? (
             <View style={styles.buttonContainer}>
-              <CartAnimation setHasPlayed={setHasPlayed} product />
+              <CartAnimation
+                setHasPlayed={setHasPlayed}
+                product
+                goBack={goBack}
+              />
             </View>
           ) : (
             <ProductFixed

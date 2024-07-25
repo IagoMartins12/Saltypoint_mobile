@@ -163,9 +163,9 @@ const SearchScreen = ({
                 <MyText style={styles.categoryBoxName}>
                   {category.category_name}
                 </MyText>
-                {category.id === currentCategory && (
+                {/* {category.id === currentCategory && (
                   <CustomIcon name="close" size={20} pack="Ionicons" />
-                )}
+                )} */}
               </TouchableOpacity>
             ))}
           </ScrollView>

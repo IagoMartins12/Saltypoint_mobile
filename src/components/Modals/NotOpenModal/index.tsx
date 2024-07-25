@@ -8,7 +8,6 @@ import ModalIcon from '../ModalIcon';
 import MyText from '../../Text';
 import useGlobalStore from '../../../hooks/store/useGlobalStore';
 import ClosedAnimation from '../../Lottie/ClosedAnimation';
-import {scale} from '../../../hooks/scale';
 
 const NotOpenModal: React.FC<ModalProps> = ({
   modalOpen,
@@ -45,7 +44,7 @@ const NotOpenModal: React.FC<ModalProps> = ({
                     ? COLORS.backgroundColorLight
                     : COLORS.backgroundColorDark,
                 height:
-                  currentPixelFont <= 1.5
+                  currentPixelFont < 1.25
                     ? Dimensions.get('window').height * 0.58
                     : Dimensions.get('window').height * 0.75,
               },
@@ -130,7 +129,7 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   title: {
-    fontSize: scale(20),
+    fontSize: 20,
     fontWeight: '600',
     textAlign: 'center',
   },
@@ -142,13 +141,13 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontWeight: '300',
-    fontSize: scale(18),
+    fontSize: 18,
     textAlign: 'center',
   },
 
   subtitle2: {
     fontWeight: '500',
-    fontSize: scale(18),
+    fontSize: 18,
     textAlign: 'center',
   },
 });

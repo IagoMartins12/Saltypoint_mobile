@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   Pressable,
+  PixelRatio,
 } from 'react-native';
 import MyText from '../Text';
 import CustomIcon from '../CustomIcon';
@@ -26,9 +27,19 @@ const ProductFlavourCard: React.FC<ProductCardProps> = ({
   handleSecondFlavour,
   checkDiference,
 }) => {
+  const currentPixelFont = PixelRatio.getFontScale();
+
   return (
     <TouchableOpacity
-      style={[styles.container]}
+      style={[
+        styles.container,
+        {
+          height:
+            currentPixelFont >= 1.75
+              ? Dimensions.get('screen').height / 5.75
+              : Dimensions.get('screen').height / 7.25,
+        },
+      ]}
       onPress={() => {
         if (selectedFlavour2 === product.id) return handleSecondFlavour(null);
         handleSecondFlavour(product.id);
@@ -100,7 +111,6 @@ const ProductFlavourCard: React.FC<ProductCardProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    height: Dimensions.get('screen').height / 7.25,
     gap: 15,
     marginVertical: 10,
     position: 'relative',

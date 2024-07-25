@@ -39,7 +39,7 @@ const ProductCard: React.FC<ProductCardProps> = ({product, onPress}) => {
       }}>
       <View style={styles.PointsText}>
         <CustomIcon name="reply" size={11} />
-        <MyText style={{fontSize: 15}}> Ganhe {getPoints} pontos </MyText>
+        <MyText style={{fontSize: 13}}> Ganhe {getPoints} pontos </MyText>
       </View>
 
       <ImageBackground
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     objectFit: 'fill',
   },
   productTitle: {
-    fontSize: FONTSIZE.size_16,
+    fontSize: 14,
     fontWeight: '700',
   },
   infoDiv: {
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   priceText: {
-    fontSize: FONTSIZE.size_16,
+    fontSize: 15,
     fontWeight: '700',
 
     color: COLORS.secondaryRed,

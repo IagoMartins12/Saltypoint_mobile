@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     top: -11,
     fontWeight: 'bold',
     paddingHorizontal: 4,
-    fontSize: scale(FONTSIZE.size_14),
+    fontSize: FONTSIZE.size_14,
   },
   iconContainer: {
     position: 'absolute',

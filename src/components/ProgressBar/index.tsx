@@ -1,6 +1,4 @@
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {FaCrown} from 'react-icons/fa';
+import {View, StyleSheet} from 'react-native';
 import CustomIcon from '../CustomIcon';
 import MyText from '../Text';
 

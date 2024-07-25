@@ -1,4 +1,10 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {useCallback, useState} from 'react';
 import {COLORS, FONTFAMILY, FONTSIZE} from '../theme/theme';
 import {useForm} from 'react-hook-form';
@@ -17,7 +23,7 @@ import {global} from '../style';
 import {recoverPassword} from '../services';
 import LoadingIndicator from '../components/Loading';
 import useShowToast from '../hooks/customHooks/useShowToast';
-import {scale} from '../hooks/scale';
+import CustomIcon from '../components/CustomIcon';
 
 enum STEPS {
   EMAIL = 0,
@@ -32,8 +38,11 @@ const ForgetPasswordScreen = ({
   const [loading, setLoading] = useState(false);
 
   const {showToast} = useShowToast();
+
   const {control, handleSubmit, reset} = useForm();
+
   const onSubmit = async (data: any) => {
+    console.log('oii');
     if (!data.email.includes('@'))
       return showToast('Favor inserir email', 'error');
     try {
@@ -45,6 +54,7 @@ const ForgetPasswordScreen = ({
       const response = await recoverPassword(object);
       setLoading(false);
       if (response.status === 400) {
+        console.log('response error', response);
         return showToast(response.data.message, 'error');
       }
       if (response.status === 201) {
@@ -105,12 +115,13 @@ const ForgetPasswordScreen = ({
           <TouchableOpacity
             onPress={comeBack}
             style={[
-              global.buttonStyle,
               {
                 backgroundColor: 'transparent',
               },
             ]}>
-            <Text style={{color: '#FFFFFF', paddingRight: 10}}>Voltar</Text>
+            <MyText style={{paddingRight: 10, fontWeight: '600'}}>
+              Voltar
+            </MyText>
           </TouchableOpacity>
         </View>
       </View>
@@ -153,8 +164,14 @@ const ForgetPasswordScreen = ({
                 currentTheme === 'light'
                   ? COLORS.backgroundColorLight
                   : COLORS.backgroundColorDark,
+              position: 'relative',
             },
           ]}>
+          <Pressable
+            style={{position: 'absolute', top: 15, left: 15, zIndex: 555}}
+            onPress={comeBack}>
+            <CustomIcon name="close" size={35} pack="Ionicons" />
+          </Pressable>
           <View style={{flex: 0.85}}>
             <ForgetAnimation />
           </View>
@@ -178,13 +195,13 @@ const styles = StyleSheet.create({
   },
 
   brandwViewText: {
-    fontSize: scale(FONTSIZE.size_28),
+    fontSize: FONTSIZE.size_28,
     fontFamily: FONTFAMILY.poppins_semibold,
     fontWeight: '700',
   },
 
   brandwViewSubText: {
-    fontSize: scale(FONTSIZE.size_18),
+    fontSize: FONTSIZE.size_18,
     fontFamily: FONTFAMILY.poppins_medium,
     textAlign: 'center',
     paddingHorizontal: 60,
